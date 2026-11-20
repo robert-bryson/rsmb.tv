@@ -1,0 +1,58 @@
+country,region,candidates,already cataloged,eligible,duplicate,excluded,unresolved
+CA,British Columbia,44,23,5,1,0,15
+US,Washington,19,12,1,1,1,4
+CA,Alberta,33,6,0,0,0,27
+CA,Alberta;British Columbia,1,1,0,0,0,0
+CA,Alberta;Saskatchewan,1,0,0,0,0,1
+CA,Manitoba,8,1,0,0,0,7
+CA,New Brunswick,4,0,0,0,0,4
+CA,Newfoundland and Labrador,5,2,0,0,0,3
+CA,Northwest Territories,1,0,0,0,0,1
+CA,Nova Scotia,4,0,0,0,0,4
+CA,Ontario,56,5,0,0,0,51
+CA,Prince Edward Island,1,0,0,0,0,1
+CA,Quebec,104,17,1,0,0,86
+CA,Saskatchewan,8,0,0,0,0,8
+CA,Yukon,3,0,0,0,0,3
+GL,Kommuneqarfik Sermersooq,1,0,0,0,0,1
+GL,Qeqqata Kommunia,2,0,0,0,0,2
+MX,Coahuila de Zaragoza,1,0,1,0,0,0
+US,Alabama,2,0,0,0,0,2
+US,Alaska,15,8,0,0,0,7
+US,Arizona,3,0,1,0,0,2
+US,California,33,20,0,1,0,12
+US,California;Nevada,1,1,0,0,0,0
+US,Colorado,43,28,0,0,0,15
+US,Connecticut,5,2,0,0,0,3
+US,Idaho,20,13,0,0,0,7
+US,Idaho;Montana,2,1,1,0,0,0
+US,Illinois,5,1,0,0,0,4
+US,Indiana,2,1,0,0,0,1
+US,Iowa,6,1,0,0,0,5
+US,Maine,23,10,0,0,0,13
+US,Maryland,1,1,0,0,0,0
+US,Massachusetts,14,4,0,0,0,10
+US,Massachusetts;New York,1,1,0,0,0,0
+US,Michigan,50,17,0,0,0,33
+US,Minnesota,21,13,0,0,0,8
+US,Missouri,2,2,0,0,0,0
+US,Montana,15,6,2,0,1,6
+US,Nevada,4,0,1,0,0,3
+US,New Hampshire,30,19,0,0,0,11
+US,New Jersey,4,2,0,0,0,2
+US,New Mexico,10,8,0,0,0,2
+US,New York,58,18,0,0,0,40
+US,North Carolina,7,3,0,0,0,4
+US,North Dakota,4,4,0,0,0,0
+US,Ohio,6,4,0,0,0,2
+US,Oregon,12,6,1,0,0,5
+US,Pennsylvania,31,19,0,0,0,12
+US,Rhode Island,2,0,0,0,0,2
+US,South Dakota,5,2,0,0,0,3
+US,Tennessee,1,1,0,0,0,0
+US,Utah,20,10,3,0,1,6
+US,Vermont,35,15,1,0,1,18
+US,Virginia,5,4,0,0,0,1
+US,West Virginia,6,4,0,0,0,2
+US,Wisconsin,35,16,0,0,0,19
+US,Wyoming,13,6,0,0,0,7

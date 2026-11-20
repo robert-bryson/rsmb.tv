@@ -1,0 +1,7124 @@
+{
+  "season": "2026/27",
+  "family": "ikon",
+  "seasonDates": [
+    "2026-06-01",
+    "2027-09-30"
+  ],
+  "products": [
+    {
+      "id": "ikon-pass",
+      "name": "Ikon Pass"
+    },
+    {
+      "id": "ikon-base",
+      "name": "Ikon Base Pass"
+    },
+    {
+      "id": "ikon-session-2",
+      "name": "Ikon Session Pass · 2 days",
+      "totalDays": 2
+    },
+    {
+      "id": "ikon-session-3",
+      "name": "Ikon Session Pass · 3 days",
+      "totalDays": 3
+    },
+    {
+      "id": "ikon-session-4",
+      "name": "Ikon Session Pass · 4 days",
+      "totalDays": 4
+    }
+  ],
+  "rules": [
+    {
+      "areaId": "3-zinnen-dolomites",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "3-zinnen-dolomites",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alpe-lusia-san-pellegrino",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alpe-lusia-san-pellegrino",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alpental",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "The Summit at Snoqualmie and Alpental",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alpental",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "The Summit at Snoqualmie and Alpental",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alpental",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alta",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alta",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Alta and Snowbird",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alta-badia",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alta-badia",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alyeska-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alyeska-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alyeska-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "appi-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "appi-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arabba-marmolada",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arabba-marmolada",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arai-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arai-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arapahoe-basin",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arapahoe-basin",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arapahoe-basin",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "aspen-highlands",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "aspen-highlands",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Aspen Snowmass",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "aspen-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "aspen-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Aspen Snowmass",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "balme-vallorcine",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "balme-vallorcine",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "banff-sunshine",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "SkiBig3",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "banff-sunshine",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "SkiBig3",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "banff-sunshine",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "bear-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "bear-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "bear-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "beidahu-ski-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "beidahu-ski-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "big-sky-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "Tram access requires a separate purchase.",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "big-sky-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "Tram access requires a separate purchase.",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "big-sky-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "Tram access requires a separate purchase.",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "blue-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "blue-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "blue-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "blue-mountain-resort-on",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "blue-mountain-resort-on",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "blue-mountain-resort-on",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "boyne-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "boyne-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "boyne-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "brevent-flegere",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "brevent-flegere",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "brighton-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "brighton-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "brighton-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "buttermilk",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "buttermilk",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Aspen Snowmass",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "camelback-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "camelback-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "camelback-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cervino-ski-paradise",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Valle d’Aosta",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cervino-ski-paradise",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Valle d’Aosta",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "civetta",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "civetta",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "copper-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "copper-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "copper-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "coronet-peak",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "NZSki",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "coronet-peak",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "NZSki",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "coronet-peak",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cortina-d-ampezzo",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cortina-d-ampezzo",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "corvatsch",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "St. Moritz",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "corvatsch",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "St. Moritz",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "corviglia",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "St. Moritz",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "corviglia",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "St. Moritz",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "courmayeur-mont-blanc",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Valle d’Aosta",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "courmayeur-mont-blanc",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Valle d’Aosta",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "crystal-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "crystal-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "crystal-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cypress-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cypress-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cypress-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "deer-valley-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "required",
+      "days": 3,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "deer-valley-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "required",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "diavolezza-lagalb",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "St. Moritz",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "diavolezza-lagalb",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "St. Moritz",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "eldora-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "eldora-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "eldora-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "furano-ski-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "furano-ski-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "grands-montets",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "grands-montets",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "grandvalira",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Grandvalira Resorts Andorra",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "grandvalira",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Grandvalira Resorts Andorra",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "granite-peak",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "granite-peak",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "granite-peak",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "ischgl-samnaun",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "Redeem at the participating Silvretta Arena ticket offices.",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "ischgl-samnaun",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "Redeem at the participating Silvretta Arena ticket offices.",
+      "days": 7,
+      "source": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "jackson-hole-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "jackson-hole-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "required",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "june-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "june-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "june-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "killington",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Killington and Pico",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "killington",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Killington and Pico",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "killington",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "kitzbuehel",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "kitzbuehel",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "kronplatz",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "kronplatz",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "la-thuile-espace-san-bernardo",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Valle d’Aosta",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "la-thuile-espace-san-bernardo",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Valle d’Aosta",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lake-louise",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "SkiBig3",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lake-louise",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "SkiBig3",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lake-louise",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lake-songhua-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lake-songhua-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "le-massif",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "le-massif",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "le-massif",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "les-houches",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "les-houches",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Chamonix Mont-Blanc Valley",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "loon-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "required",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "loon-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "required",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "loon-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "required",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lutsen-mountains",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lutsen-mountains",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "lutsen-mountains",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "madarao-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "madarao-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mammoth-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mammoth-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mammoth-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "megeve",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "megeve",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mona-yongpyong",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mona-yongpyong",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "monterosa-ski",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Valle d’Aosta",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "monterosa-ski",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Valle d’Aosta",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-bachelor",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-bachelor",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-bachelor",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-buller",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-buller",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-buller",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-hutt",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "NZSki",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-hutt",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "NZSki",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-hutt",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-norquay",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "SkiBig3",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-norquay",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "SkiBig3",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-norquay",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-t",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-t",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "myoko-suginohara-ski-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "myoko-suginohara-ski-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "nekoma-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "nekoma-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "niseko-united",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "niseko-united",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "niseko-united",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "ordino-arcalis",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Grandvalira Resorts Andorra",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "ordino-arcalis",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Grandvalira Resorts Andorra",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pal-arinsal",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Grandvalira Resorts Andorra",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pal-arinsal",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Grandvalira Resorts Andorra",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "palisades-tahoe",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "palisades-tahoe",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "palisades-tahoe",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "panorama-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "panorama-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "panorama-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pico-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Killington and Pico",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pico-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Killington and Pico",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pico-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pila",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Valle d’Aosta",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pila",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-05-31"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Valle d’Aosta",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "red-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "red-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "red-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "revelstoke",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "revelstoke",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "revelstoke",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "rio-pusteria-bressanone",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "rio-pusteria-bressanone",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "san-martino-rolle-pass",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "san-martino-rolle-pass",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "schweitzer-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "schweitzer-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "schweitzer-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "shiga-kogen-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "shiga-kogen-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sierra-at-tahoe-ski-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sierra-at-tahoe-ski-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sierra-at-tahoe-ski-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "silverstar-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "silverstar-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "silverstar-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snow-summit",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snow-summit",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snow-summit",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snow-valley-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snow-valley-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snow-valley-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowbasin-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowbasin-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowbird",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowbird",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Alta and Snowbird",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowmass",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowmass",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Aspen Snowmass",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-black-river-basin",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Snowriver Mountain Resort",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-black-river-basin",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Snowriver Mountain Resort",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-black-river-basin",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-jackson-creek-summit",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Snowriver Mountain Resort",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-jackson-creek-summit",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Snowriver Mountain Resort",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-jackson-creek-summit",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowshoe-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowshoe-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowshoe-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "solitude-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "solitude-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "solitude-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "steamboat-ski-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "steamboat-ski-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "steamboat-ski-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "stratton-mountain-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "stratton-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "stratton-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sugarbush-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sugarbush-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sugarbush-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sugarloaf",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sugarloaf",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sugarloaf",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sun-peaks-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sun-peaks-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sun-peaks-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sun-valley-bald-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sun-valley-bald-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Sun Valley and Dollar Mountain",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sun-valley-dollar-mountain",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sun-valley-dollar-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Sun Valley and Dollar Mountain",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sunday-river",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sunday-river",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "sunday-river",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "taos-ski-valley",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "taos-ski-valley",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "taos-ski-valley",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-highlands-at-harbor-springs",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-highlands-at-harbor-springs",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-highlands-at-harbor-springs",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-remarkables",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "NZSki",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-remarkables",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "NZSki",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-remarkables",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-summit-at-snoqualmie",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "The Summit at Snoqualmie and Alpental",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-summit-at-snoqualmie",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "The Summit at Snoqualmie and Alpental",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "the-summit-at-snoqualmie",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "thredbo",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "thredbo",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "tremblant",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "tremblant",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "tremblant",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "val-di-fassa-carezza",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "val-di-fassa-carezza",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "val-di-fiemme-obereggen",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "val-di-fiemme-obereggen",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "val-gardena-alpe-di-siusi",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "shared": "Dolomiti Superski",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "val-gardena-alpe-di-siusi",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-15",
+          "2027-04-15"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "shared": "Dolomiti Superski",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "valle-nevado",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "valle-nevado",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "valle-nevado",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-07-04",
+          "2026-07-19"
+        ],
+        [
+          "2027-07-03",
+          "2027-07-18"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "winter-park-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "winter-park-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": "unlimited",
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "winter-park-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "yunding-snow-park",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "yunding-snow-park",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zao-onsen-ski-resort",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zao-onsen-ski-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zermatt-matterhorn",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-04-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "This access applies to the Swiss side of the ski area.",
+      "days": 5,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zermatt-matterhorn",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-01",
+          "2027-04-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "This access applies to the Swiss side of the ski area.",
+      "days": 7,
+      "source": "https://www.ikonpass.com/en/compare-benefits",
+      "checkedOn": "2026-11-20"
+    }
+  ]
+}

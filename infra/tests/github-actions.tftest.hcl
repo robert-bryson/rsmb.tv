@@ -43,4 +43,13 @@ run "github_sync_permissions" {
     )
     error_message = "Each role must write only its project data. Only tornado sync needs deletion permission."
   }
+
+  assert {
+    condition = (
+      length(jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement) == 2 &&
+      jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement[1].Resource == ["${aws_s3_bucket.temperature_data.arn}/ski-status/*"] &&
+      jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement[1].Action == ["s3:GetObject", "s3:PutObject"]
+    )
+    error_message = "Ski status must read and write only its snapshot prefix."
+  }
 }

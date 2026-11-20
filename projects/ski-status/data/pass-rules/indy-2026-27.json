@@ -1,0 +1,103 @@
+{
+  "season": "2026/27",
+  "family": "indy",
+  "seasonDates": [
+    "2026-06-01",
+    "2027-05-31"
+  ],
+  "products": [
+    {
+      "id": "indy-base",
+      "name": "Indy Base Pass"
+    },
+    {
+      "id": "indy-plus",
+      "name": "Indy+ Pass"
+    },
+    {
+      "id": "indy-base-addon",
+      "name": "Indy Base Add-On",
+      "requiresHomeArea": true
+    },
+    {
+      "id": "indy-plus-addon",
+      "name": "Indy+ Add-On",
+      "requiresHomeArea": true
+    }
+  ],
+  "rules": [
+    {
+      "areaId": "49-north-mountain-resort",
+      "products": [
+        "indy-plus"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "A discounted third day is available.",
+      "source": "https://www.ski49n.com/promotions-perks/details/packs-of-tickets",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "berkshire-east-ski-resort",
+      "products": [
+        "indy-base",
+        "indy-plus"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "source": "https://berkshireeast.com/?id=8&view=category",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "berkshire-east-ski-resort",
+      "products": [
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Redeem at partner areas away from your home resort. An unrestricted home season pass is required.",
+      "source": "https://berkshireeast.com/?id=8&view=category",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "cannon-mountain",
+      "products": [
+        "indy-plus"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.cannonmt.com/indy-pass",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "catamount-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-plus"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "source": "https://berkshireeast.com/?id=8&view=category",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "catamount-mountain-resort",
+      "products": [
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Redeem at partner areas away from your home resort. An unrestricted home season pass is required.",
+      "source": "https://berkshireeast.com/?id=8&view=category",
+      "checkedOn": "2026-11-20"
+    }
+  ]
+}

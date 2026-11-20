@@ -12,6 +12,11 @@ locals {
       prefixes = ["tornadoes/*"]
       actions  = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
     }
+    ski-status = {
+      objects  = ["ski-status/*"]
+      prefixes = ["ski-status/*"]
+      actions  = ["s3:GetObject", "s3:PutObject"]
+    }
   }
 }
 
@@ -43,7 +48,7 @@ resource "aws_iam_role_policy" "github_data_sync" {
   role     = aws_iam_role.github_data_sync[each.key].id
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [
+    Statement = concat([
       {
         Sid      = "ListProjectData"
         Effect   = "Allow"
@@ -59,18 +64,17 @@ resource "aws_iam_role_policy" "github_data_sync" {
         Action   = each.value.actions
         Resource = [for key in each.value.objects : "${aws_s3_bucket.temperature_data.arn}/${key}"]
       },
-      {
+      ], each.key == "ski-status" ? [] : [{
         Sid      = "InvalidateProjectCDN"
         Effect   = "Allow"
         Action   = ["cloudfront:CreateInvalidation"]
         Resource = [aws_cloudfront_distribution.temperature_data.arn]
-      },
-    ]
+    }])
   })
 }
 
 output "github_data_sync_role_arns" {
-  description = "Set the matching AWS_TEMPERATURE_SYNC_ROLE_ARN and AWS_TORNADO_SYNC_ROLE_ARN repository variables after deployment."
+  description = "Set the matching AWS_TEMPERATURE_SYNC_ROLE_ARN, AWS_TORNADO_SYNC_ROLE_ARN, and AWS_SKI_STATUS_SYNC_ROLE_ARN repository variables after deployment."
   value       = { for job, role in aws_iam_role.github_data_sync : job => role.arn }
 }
 

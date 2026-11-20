@@ -1,9 +1,11 @@
 import { formatArea, formatElevation, matchesPassFilter, passFilterFamily, type PassFilter, type SkiUnits } from './browse';
 import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './catalog';
+import { reportStatus, statusLabels, type Conditions, type ResortStatus } from './conditions';
 
 export const markerModes = {
     default: 'Resort dots',
     pass: 'Pass access',
+    operatingStatus: 'Operating status',
     acres: 'Skiable area',
     verticalFt: 'Vertical drop',
     summitFt: 'Summit elevation',
@@ -21,6 +23,9 @@ type MarkerAppearance = { color: string; passBadge?: ReturnType<typeof passBadge
 
 const defaultColor = '#67e8f9';
 const unknown = { color: '#a1a1aa', label: 'Unknown' };
+const statusColors: Record<ResortStatus, string> = {
+    open: '#4ade80', limited: '#facc15', 'temporarily-closed': '#fb7185', 'season-closed': '#c084fc', unknown: unknown.color,
+};
 export const passBadgeSize = 26;
 export const passBadgeTextColor = '#141414';
 export const multiplePassColor = '#facc15';
@@ -40,6 +45,9 @@ const thresholds = {
 
 export function markerLegend(mode: MarkerMode, units: SkiUnits, indyDiscounts = false): LegendEntry[] {
     if (mode === 'default') return [];
+    if (mode === 'operatingStatus') return (Object.keys(statusLabels) as ResortStatus[]).map(status => ({
+        color: statusColors[status], label: status === 'unknown' ? 'Unknown or stale' : statusLabels[status],
+    }));
     if (mode === 'pass') {
         if (indyDiscounts) return [indyDiscount];
         return [...passFamilySchema.options.map(family => ({ color: passColors[family], label: passNames[family], family })),
@@ -69,8 +77,9 @@ export function passAccessAppearance(area: SkiArea, passFilter?: PassFilter): Le
     return { color: multiple ? multiplePassColor : passColors[family], label: passNames[family], family, multiple };
 }
 
-export function markerAppearance(area: SkiArea, mode: MarkerMode, passFilter?: PassFilter): MarkerAppearance {
+export function markerAppearance(area: SkiArea, mode: MarkerMode, passFilter?: PassFilter, conditions?: Conditions): MarkerAppearance {
     if (mode === 'default') return { color: defaultColor };
+    if (mode === 'operatingStatus') return { color: statusColors[reportStatus(conditions?.reports.get(area.id), conditions?.now ?? 0)] };
     if (mode === 'pass') {
         const { color, family, multiple } = passAccessAppearance(area, passFilter);
         return family ? { color, passBadge: passBadgeId(family, Boolean(multiple)) } : { color };

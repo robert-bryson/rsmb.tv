@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-20T15:55:45.851Z",
+  "forecasts": [
+    {
+      "areaId": "3-zinnen-dolomites",
+      "source": {
+        "name": "Open-Meteo",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=46.7313&longitude=12.3282&timezone=GMT&forecast_days=3&hourly=temperature_2m%2Csnowfall%2Cprecipitation_probability",
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "exportable": true
+      },
+      "retrievedAt": "2026-11-20T15:55:44.053Z",
+      "startsAt": "2026-11-20T16:00:00.000Z",
+      "endsAt": "2026-11-21T16:00:00.000Z",
+      "location": "Versciaco base",
+      "elevationM": 1134,
+      "temperatureC": 1.6,
+      "snowfallCm": 0,
+      "precipitationPct": 5
+    },
+    {
+      "areaId": "alta-badia",
+      "source": {
+        "name": "Open-Meteo",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=46.5547&longitude=11.8724&timezone=GMT&forecast_days=3&hourly=temperature_2m%2Csnowfall%2Cprecipitation_probability",
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "exportable": true
+      },
+      "retrievedAt": "2026-11-20T15:55:43.948Z",
+      "startsAt": "2026-11-20T16:00:00.000Z",
+      "endsAt": "2026-11-21T16:00:00.000Z",
+      "location": "Corvara base",
+      "elevationM": 1529,
+      "temperatureC": -1.2,
+      "snowfallCm": 0,
+      "precipitationPct": 0
+    },
+    {
+      "areaId": "val-gardena-alpe-di-siusi",
+      "source": {
+        "name": "Open-Meteo",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=46.5751&longitude=11.6718&timezone=GMT&forecast_days=3&hourly=temperature_2m%2Csnowfall%2Cprecipitation_probability",
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "exportable": true
+      },
+      "retrievedAt": "2026-11-20T15:55:44.045Z",
+      "startsAt": "2026-11-20T16:00:00.000Z",
+      "endsAt": "2026-11-21T16:00:00.000Z",
+      "location": "Ortisei base",
+      "elevationM": 1239,
+      "temperatureC": 2,
+      "snowfallCm": 0,
+      "precipitationPct": 3
+    }
+  ]
+}

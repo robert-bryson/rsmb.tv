@@ -1,0 +1,655 @@
+{
+  "season": "2026/27",
+  "family": "mountain-collective",
+  "seasonDates": [
+    "2026-06-01",
+    "2027-09-30"
+  ],
+  "products": [
+    {
+      "id": "mountain-collective-pass",
+      "name": "Mountain Collective Pass"
+    }
+  ],
+  "rules": [
+    {
+      "areaId": "alta",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "aspen-highlands",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "shared": "Aspen Snowmass",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "aspen-mountain",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "shared": "Aspen Snowmass",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "banff-sunshine",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://www.skibig3.com/stay/mountain-collective-perks/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "big-sky-resort",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "brevent-flegere",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "shared": "Chamonix Valley",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "bromont-montagne-dexperiences",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "buttermilk",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "shared": "Aspen Snowmass",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "coronet-peak",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "shared": "NZSki",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "grand-targhee-resort",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "grands-montets",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "shared": "Chamonix Valley",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "jackson-hole-mountain-resort",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "lake-louise",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://www.skibig3.com/stay/mountain-collective-perks/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "le-massif",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "les-houches",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "shared": "Chamonix Valley",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "marmot-basin",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "megeve",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-buller",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "niseko-united",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "panorama-mountain-resort",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "revelstoke",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "snowbasin-resort",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "snowbird",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "snowmass",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "shared": "Aspen Snowmass",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "sugar-bowl-resort",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "sugarloaf",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "sun-peaks-resort",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "sun-valley-bald-mountain",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "shared": "Sun Valley",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "sun-valley-dollar-mountain",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "shared": "Sun Valley",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "sunday-river",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "taos-ski-valley",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "the-remarkables",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "shared": "NZSki",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "valle-nevado",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "validDates": [
+        [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "whiteface",
+      "products": [
+        "mountain-collective-pass"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "After the included days, additional days are offered at half price.",
+      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    }
+  ]
+}

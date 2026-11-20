@@ -3,15 +3,19 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
 import {
-    filterSkiAreas, passFilterFamily, passFilterOptions, readPassFilter, readSkiingFilter, readSkiResultsView, readSkiSort,
-    skiingFilterOptions, skiRegionOptions, skiResultsViews, sortSkiAreas,
-    type SkiResultsView, type SkiSort, type SkiUnits,
+    defaultSkiColumns, filterSkiAreas, passFilterFamily, passFilterOptions, readPassFilter, readSkiingFilter, readSkiResultsView, readSkiSort,
+    matchesPassFilter, skiingFilterOptions, skiRegionOptions, skiResultsViews, sortSkiAreas, visibleSkiColumns,
+    type ColumnKey, type SkiResultsView, type SkiSort, type SkiUnits,
 } from '../features/ski-status/browse';
 import { locationAttribution, locationLicense, passSeason, skiAreas } from '../features/ski-status/catalog';
 import { markerLegend, markerModes, passBadgeTextColor, readMarkerMode } from '../features/ski-status/mapAppearance';
+import { passProducts, readSkiDate } from '../features/ski-status/passRules';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
+import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
 import { SkiPassIcon } from '../features/ski-status/SkiPassIcon';
+import { downloadSkiAreaCsv, skiAreaCsv } from '../features/ski-status/skiCsv';
+import { useSkiConditions } from '../features/ski-status/useSkiConditions';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { usePersistedState } from '../hooks/usePersistedState';
@@ -24,6 +28,8 @@ import terrainDownload from '../../projects/ski-status/data/resort-terrain.pmtil
 const SkiStatusMap = lazy(moduleLoader(() => import('../features/ski-status/SkiStatusMap'), MAPLIBRE_STYLESHEET));
 const { countries, regions } = skiRegionOptions(skiAreas);
 const regionValues = new Set([...regions, ...countries.map(({ value }) => value)]);
+const indyHomeAreas = sortSkiAreas(skiAreas.filter(area => area.skiing !== 'cross-country' && area.passes.some(pass => matchesPassFilter(pass, 'indy'))),
+    { key: 'name', direction: 'asc' });
 const inputClass = 'min-h-11 w-full min-w-0 rounded-md border border-zinc-700 bg-zinc-950 px-2.5 text-base text-zinc-100 focus-visible:border-cyan-300 focus-visible:outline-1 focus-visible:outline-cyan-300';
 const filterClass = 'grid min-w-0 gap-1 text-xs text-zinc-300';
 const layouts: Record<SkiResultsView, string> = {
@@ -64,6 +70,9 @@ export default function SkiStatus() {
     usePageMetadata(staticPageMetadata('/projects/ski-status/map'));
     const { query, updateQuery, commitQuery, searchParams, updateParams } = useSearchQuery();
     const [storedUnits, setUnits] = usePersistedState<SkiUnits>('ski-status-units', 'imperial');
+    const [storedColumns, setColumns] = usePersistedState<ColumnKey[]>('ski-status-columns', defaultSkiColumns);
+    const columnPreference = visibleSkiColumns(storedColumns).map(({ key }) => key);
+    const conditions = useSkiConditions();
     const units = storedUnits === 'metric' ? 'metric' : 'imperial';
     const wide = useMediaQuery('(min-width: 64rem)');
     const view = readSkiResultsView(searchParams, wide);
@@ -77,8 +86,12 @@ export default function SkiStatus() {
 
     const regionParam = searchParams.get('region') ?? '';
     const region = regionValues.has(regionParam) ? regionParam : '';
-    const pass = readPassFilter(searchParams);
+    const product = passProducts.get(searchParams.get('product') ?? '');
+    const skiDate = product && readSkiDate(searchParams.get('skiDate'));
+    const homeAreaId = product?.requiresHomeArea ? indyHomeAreas.find(area => area.id === searchParams.get('homeArea'))?.id : undefined;
+    const pass = product?.family ?? readPassFilter(searchParams);
     const passFamily = pass && passFilterFamily(pass);
+    const productOptions = [...passProducts.values()].filter(option => !passFamily || option.family === passFamily);
     const skiing = readSkiingFilter(searchParams);
     const night = searchParams.get('night') === '1';
     const inView = searchParams.get('inView') === '1';
@@ -88,13 +101,16 @@ export default function SkiStatus() {
     const terrain = searchParams.get('terrain') === '1';
     const resortTerrain = searchParams.get('skiTerrain') !== '0';
     const legend = markerLegend(colors, units, pass === 'indy-discounts');
-    const areas = useMemo(() => filterSkiAreas(skiAreas, { query, region, pass, night, skiing }), [query, region, pass, night, skiing]);
+    const passNow = product && !skiDate ? conditions.now : 0;
+    const areas = useMemo(() => filterSkiAreas(skiAreas, {
+        query, region, pass, night, skiing, product: product && { pass: product, date: skiDate, now: passNow, homeAreaId },
+    }), [query, region, pass, night, skiing, product, skiDate, passNow, homeAreaId]);
     const selected = areas.find(area => area.id === selectedId);
     const mapMinimum = selected ? 'min-h-min' : view === 'map' ? 'min-h-56' : 'min-h-68';
     // Save the latest view without updating the table until it uses the viewport filter.
     const viewportIds = useSyncExternalStore(viewport.subscribe, inView ? viewport.getSnapshot : emptyViewport, emptyViewport);
     const tableAreas = useMemo(() => viewportIds ? areas.filter(area => viewportIds.has(area.id)) : areas, [areas, viewportIds]);
-    const sorted = useMemo(() => sortSkiAreas(tableAreas, { key: sort.key, direction: sort.direction }), [tableAreas, sort.key, sort.direction]);
+    const sorted = useMemo(() => sortSkiAreas(tableAreas, { key: sort.key, direction: sort.direction }, conditions), [tableAreas, sort.key, sort.direction, conditions]);
     const selectedButton = useRef<HTMLButtonElement>(null);
     const mapButton = useRef<HTMLButtonElement>(null);
     const searchInput = useRef<HTMLInputElement>(null);
@@ -162,10 +178,51 @@ export default function SkiStatus() {
                         <label htmlFor="ski-pass" className="flex items-center gap-1.5">
                             {passFamily && <SkiPassIcon family={passFamily} />}Pass
                         </label>
-                        <select id="ski-pass" value={pass ?? ''} onChange={event => setParam('pass', event.target.value)} className={inputClass}>
+                        <select id="ski-pass" value={pass ?? ''} onChange={event => {
+                            const value = event.target.value;
+                            updateParams(params => {
+                                if (value) params.set('pass', value);
+                                else params.delete('pass');
+                                params.delete('product');
+                                params.delete('skiDate');
+                                params.delete('homeArea');
+                            });
+                        }} className={inputClass}>
                             <option value="">All ski areas</option>{Object.entries(passFilterOptions).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
                         </select>
                     </div>
+                    {pass !== 'indy-discounts' && productOptions.length > 0 && <div className={filterClass}>
+                        <label htmlFor="ski-product">Pass product</label>
+                        <select id="ski-product" value={product?.id ?? ''} onChange={event => {
+                            const next = passProducts.get(event.target.value);
+                            updateParams(params => {
+                                if (next) {
+                                    params.set('product', next.id);
+                                    params.set('pass', next.family);
+                                } else {
+                                    params.delete('product');
+                                    params.delete('skiDate');
+                                }
+                                if (!next?.requiresHomeArea) params.delete('homeArea');
+                            });
+                        }} className={inputClass}>
+                            <option value="">All products</option>
+                            {productOptions.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+                        </select>
+                    </div>}
+                    {product && <div className={filterClass}>
+                        <label htmlFor="ski-date">Ski date (local)</label>
+                        <input id="ski-date" aria-describedby={skiDate === undefined ? 'ski-date-help' : undefined}
+                            type="date" value={skiDate ?? ''} onChange={event => setParam('skiDate', readSkiDate(event.target.value))} className={inputClass} />
+                        {skiDate === undefined && <span id="ski-date-help">Today at each area</span>}
+                    </div>}
+                    {product?.requiresHomeArea && <div className={filterClass}>
+                        <label htmlFor="ski-home-area">Home ski area</label>
+                        <select id="ski-home-area" value={homeAreaId ?? ''} onChange={event => setParam('homeArea', event.target.value)} className={inputClass}>
+                            <option value="">Select your home ski area</option>
+                            {indyHomeAreas.map(area => <option key={area.id} value={area.id}>{area.name}</option>)}
+                        </select>
+                    </div>}
                     <div className={filterClass}>
                         <label htmlFor="ski-type">Skiing type</label>
                         <select id="ski-type" value={skiing ?? ''} onChange={event => setParam('skiing', event.target.value)} className={inputClass}>
@@ -192,7 +249,7 @@ export default function SkiStatus() {
                         aria-describedby={needsMapView ? 'ski-view-hint' : undefined} className="size-4 accent-cyan-400" /> In map view
                 </label>
                 {hasFilters && <button type="button" onClick={() => updateParams(params => {
-                    for (const key of ['q', 'region', 'pass', 'skiing', 'night', 'inView']) params.delete(key);
+                    for (const key of ['q', 'region', 'pass', 'product', 'skiDate', 'homeArea', 'skiing', 'night', 'inView']) params.delete(key);
                 })} className="min-h-8 text-cyan-300 underline underline-offset-4">Clear filters</button>}
                 {needsMapView && <span id="ski-view-hint" className="text-zinc-400">
                     {showMap ? 'Waiting for a map view.' : 'Open Map to set the area.'}
@@ -200,16 +257,24 @@ export default function SkiStatus() {
                 {selected && <a href="#ski-area-details" aria-label={`${selected.name} details`}
                     className="inline-flex min-h-8 items-center text-cyan-300 underline underline-offset-4">{selected.name}</a>}
                 {selected && viewportIds && !viewportIds.has(selected.id) && <span className="text-zinc-400">Selected area is outside the map view.</span>}
+                <button type="button" disabled={needsMapView || !sorted.length} className="ml-auto min-h-8 text-cyan-300 underline underline-offset-4 disabled:text-zinc-500"
+                    onClick={() => downloadSkiAreaCsv(skiAreaCsv(sorted, columnPreference, units, conditions))}>Export CSV</button>
             </div>
+            {view !== 'map' && <SkiColumnSettings columns={columnPreference} onChange={columns => {
+                setColumns(columns);
+                if (!columns.includes(sort.key)) setParam('sort', undefined);
+            }} />}
         </header>
         <div className={`grid min-h-0 flex-1 gap-px overflow-auto bg-zinc-800 lg:grid-rows-[minmax(0,1fr)] ${layouts[view]}`}>
             <section aria-label="Ski area statistics" className={`min-h-0 min-w-0 flex-col bg-zinc-950 ${showTable || selected ? 'flex' : 'hidden'} ${view === 'map' ? 'max-lg:order-last' : ''}`}>
                 <div className={showTable ? 'min-h-0 flex-1' : 'hidden'}>
                     <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} compact={view === 'map'} inView={Boolean(viewportIds)}
-                        colorBy={colors} passFilter={pass} selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
+                        colorBy={colors} passFilter={pass} conditions={conditions} columnPreference={columnPreference}
+                        selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
                 </div>
                 {selected && <div key={selected.id} className={`shrink-0 overflow-y-auto border-t border-zinc-700 ${showTable ? 'max-h-[min(42%,20rem)]' : 'max-h-[32dvh]'}`}>
-                    <SkiAreaDetails area={selected} units={units} onClose={closeDetails} />
+                    <SkiAreaDetails area={selected} units={units} onClose={closeDetails} conditions={conditions}
+                        product={product} skiDate={skiDate} homeAreaId={homeAreaId} />
                 </div>}
             </section>
             <section aria-label="Map of ski areas" className={`${showMap ? 'flex' : 'hidden'} ${mapMinimum} min-w-0 flex-col bg-zinc-950 lg:min-h-0`}>
@@ -239,7 +304,7 @@ export default function SkiStatus() {
                 </ul>}
                 <div className={`flex-1 ${selected ? 'min-h-96 lg:min-h-0' : 'min-h-0'}`}>
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={areas} selected={selected} colors={colors} passFilter={pass} terrain={terrain} visible={showMap} inView={inView} units={units}
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} passFilter={pass} conditions={conditions} terrain={terrain} visible={showMap} inView={inView} units={units}
                             resortTerrain={resortTerrain} onVisibleAreasChange={viewport.update} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>

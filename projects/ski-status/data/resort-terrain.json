@@ -2,31 +2,31 @@
   "source": "https://tiles.openskimap.org/openskidata.gpkg",
   "buildTime": "2026-11-16T01:43:51.452Z",
   "sourceSha256": "cf2de163bf7eaf6c0c6a902cc9ecf59655838bf2d98ea4748230f5525709fbbf",
-  "archiveSha256": "92baebdca3384635f79b2eb12f316a77835b9ae90147464607e2ccb2700857b1",
+  "archiveSha256": "36238c993973f3f38246283019aafa8bef9caae08c1019ecf390bff87dcbc26c",
   "license": "https://opendatacommons.org/licenses/odbl/1-0/",
   "minZoom": 11,
   "maxZoom": 14,
   "counts": {
-    "footprints": 406,
-    "lifts": 5535,
-    "runs": 40688,
-    "stations": 7148
+    "footprints": 421,
+    "lifts": 5665,
+    "runs": 41834,
+    "stations": 7266
   },
   "groupsByArea": {
     "3-zinnen-dolomites": [
-      296
+      309
     ],
     "49-north-mountain-resort": [
-      169
+      175
     ],
     "afton-alps": [
-      85
+      86
     ],
     "alpe-cimbra": [
-      168
+      174
     ],
     "alpe-lusia-san-pellegrino": [
-      110
+      112
     ],
     "alpental": [
       1
@@ -35,528 +35,543 @@
       55
     ],
     "alta": [
-      76
+      77
     ],
     "alta-badia": [
       12
     ],
     "alyeska-resort": [
-      256
+      267
     ],
     "amihari-onsen-ski-resort": [
       54
     ],
     "andermatt-gemsstock": [
-      228
+      238
     ],
     "andermatt-sedrun": [
-      187
+      194
     ],
     "andes-tower-hills": [
-      86
+      87
     ],
     "angel-fire-resort": [
-      78
+      79
     ],
     "antelope-butte": [
       32
     ],
     "aomori-spring-ski-resort": [
-      344
+      358
     ],
     "apex-mountain-resort": [
-      142
+      146
     ],
     "appi-resort": [
-      242
+      252
     ],
     "arabba-marmolada": [
-      259,
-      497
+      270,
+      513
     ],
     "arai-mountain-resort": [
-      237
+      247
     ],
     "arapahoe-basin": [
       52
     ],
     "arctic-valley": [
-      63
+      64
+    ],
+    "arizona-snowbowl": [
+      441
     ],
     "asessippi-ski-area-resort": [
-      456
+      472
     ],
     "aspen-highlands": [
       9
     ],
     "aspen-mountain": [
-      67
+      68
     ],
     "attitash-mountain-resort": [
-      121
+      123
     ],
     "bad-kleinkirchheim": [
-      270
+      281
     ],
     "baldy-mountain-resort": [
-      502
+      518
     ],
     "banff-sunshine": [
-      198
+      206
     ],
     "baqueira-beret": [
-      426
+      442
     ],
     "bear-basin-nordic-center": [
-      317
+      330
     ],
     "bear-creek": [
-      72
+      73
     ],
     "bear-mountain": [
-      460
+      476
     ],
     "bear-valley-adventure-company": [
-      515
+      532
     ],
     "bear-valley-mountain-resort": [
-      381
+      396
     ],
     "beaver-creek-resort": [
-      431
+      447
     ],
     "beaver-mountain": [
-      294
+      307
     ],
     "beidahu-ski-resort": [
       51
     ],
     "beito-resort": [
-      144
+      149
     ],
     "belleayre-mountain": [
-      375
+      390
     ],
     "bergbahnen-hohsaas": [
-      448
+      464
     ],
     "berkshire-east-ski-resort": [
-      152
+      157
     ],
     "bethel-village-trails": [
-      208
+      217
     ],
     "big-boulder": [
-      338
+      352
     ],
     "big-moose": [
       2
     ],
     "big-powderhorn": [
-      214
+      223
     ],
     "big-rock-mountain": [
-      364
+      379
     ],
     "big-sky-resort": [
-      332
+      346
     ],
     "big-snow-american-dream": [
-      129
+      131
     ],
     "big-white-ski-resort": [
-      382
+      397
     ],
     "bjorkliden": [
-      373
+      388
     ],
     "black-jack-cross-country-ski-club": [
-      519
+      536
     ],
     "black-mountain-of-maine": [
-      90
+      91
     ],
     "black-mountain-ski-area": [
-      186
+      193
     ],
     "blue-knob-all-season-resort": [
-      284
+      295
     ],
     "blue-mountain-resort": [
-      112
+      114
     ],
     "blue-mountain-resort-on": [
-      299
+      312
     ],
     "bluewood": [
-      438
+      454
     ],
     "bogus-basin": [
-      374
+      389
     ],
     "bolton-valley-resort": [
       43
     ],
+    "bosques-de-monterreal": [
+      527
+    ],
     "boston-mills": [
-      316
+      329
     ],
     "bottineau-winter-park": [
-      458
+      474
     ],
     "bousquet-mountain-0": [
       7
     ],
     "boyne-mountain": [
-      99
+      101
     ],
     "brandywine": [
-      260
+      271
     ],
     "breckenridge-ski-resort": [
-      408
+      423
     ],
     "bretton-woods": [
-      224
+      234
     ],
     "brevent-flegere": [
-      292
+      305
+    ],
+    "brian-head-resort": [
+      338
     ],
     "bridger-bowl": [
-      406
+      421
     ],
     "brighton-resort": [
-      257
+      268
     ],
     "bristol-mountain": [
-      156
+      162
     ],
     "bromont-montagne-dexperiences": [
-      253
+      263
     ],
     "bruce-mound-winter-sports-area": [
-      128
+      130
     ],
     "brundage-mountain-resort": [
-      222
+      231
     ],
     "bruson": [
-      394
+      409
     ],
     "bryce-resort": [
-      477
+      493
     ],
     "buck-hill": [
-      264
+      275
     ],
     "buffalo-ski-club": [
       47
     ],
     "burke-mountain-resort": [
-      184
+      191
     ],
     "buttermilk": [
-      267
+      278
     ],
     "caberfae-peaks": [
-      287
+      299
     ],
     "calabogie-peaks-resort": [
-      386
+      401
     ],
     "caledonia-nordic-ski-club": [
-      339
+      353
     ],
     "camden-snow-bowl": [
       56
     ],
     "camelback-mountain-resort": [
-      380
+      395
     ],
     "camp-10-ski-area": [
-      506
+      522
     ],
     "camp-fortune": [
-      230
+      240
     ],
     "canaan-valley": [
-      498
+      514
     ],
     "canmore-ski-village": [
-      139
+      142
     ],
     "cannon-mountain": [
-      399
+      414
     ],
     "carters-xc-ski-center": [
-      114
+      116
     ],
     "castle-mountain-resort": [
-      134
+      137
     ],
     "cataloochee-ski-area": [
-      439
+      455
     ],
     "catamount-mountain-resort": [
-      313
+      326
     ],
     "cazenovia-ski-club": [
-      503
+      519
     ],
     "centre-vorlage": [
-      405
+      420
     ],
     "cherry-peak": [
-      97
+      98
     ],
     "chestnut-mountain-resort": [
       17
     ],
     "china-peak": [
-      411
+      426
     ],
     "christie-mountain": [
-      483
+      499
     ],
     "civetta": [
-      427
+      443
     ],
     "coffee-mill-ski-area": [
-      453
+      469
     ],
     "cooper": [
-      312
+      325
     ],
     "cooper-spur-ski-area": [
-      450
+      466
     ],
     "copper-mountain": [
       22
     ],
     "coronet-peak": [
-      491
+      507
     ],
     "corralco-resort-de-montana": [
-      233
+      243
     ],
     "cortina-d-ampezzo": [
       3
     ],
     "corvatsch": [
-      435
+      451
     ],
     "corviglia": [
-      432
+      448
     ],
     "courchevel": [
-      407,
-      520
+      422,
+      537
     ],
     "courmayeur-mont-blanc": [
-      391
+      406
     ],
     "cranmore-mountain-resort": [
       24
     ],
     "crans-montana": [
-      415
+      430
     ],
     "crested-butte-mountain-resort": [
-      305
+      318
     ],
     "crotched-mountain": [
-      94
+      95
     ],
     "crystal-mountain": [
-      212
+      221
     ],
     "crystal-mountain-mi": [
-      258
+      269
     ],
     "crystal-ridge": [
-      447
-    ],
-    "cuchara": [
-      308
-    ],
-    "cupid-valley": [
-      104
-    ],
-    "cypress-mountain": [
-      178
-    ],
-    "dartmouth-skiway": [
-      207
-    ],
-    "deer-valley-resort": [
-      277
-    ],
-    "destination-owls-head": [
-      288
-    ],
-    "detroit-mountain": [
-      172
-    ],
-    "devil-s-head-resort": [
-      323
-    ],
-    "devils-thumb-ranch": [
-      524
-    ],
-    "diavolezza-lagalb": [
-      449
-    ],
-    "disentis": [
       463
     ],
+    "cuchara": [
+      321
+    ],
+    "cupid-valley": [
+      106
+    ],
+    "cypress-mountain": [
+      185
+    ],
+    "dartmouth-skiway": [
+      216
+    ],
+    "deer-valley-resort": [
+      288
+    ],
+    "destination-owls-head": [
+      300
+    ],
+    "detroit-mountain": [
+      178
+    ],
+    "devil-s-head-resort": [
+      336
+    ],
+    "devils-thumb-ranch": [
+      541
+    ],
+    "diavolezza-lagalb": [
+      465
+    ],
+    "discovery-ski-area": [
+      304
+    ],
+    "disentis": [
+      479
+    ],
     "dodge-ridge": [
-      469
+      485
     ],
     "dog-creek-lodge-nordic-center": [
-      512
+      529
     ],
     "domaine-skiable-des-contamines": [
-      459
+      475
     ],
     "donner-ski-ranch": [
-      486
+      502
     ],
     "dry-hill-ski-area": [
-      92
+      93
     ],
     "dynaland": [
-      83
+      84
     ],
     "eagle-point": [
-      499
+      515
     ],
     "eaglecrest-ski-area": [
-      62
+      63
     ],
     "eastman-cross-country": [
-      365
+      380
     ],
     "echo-mountain": [
-      213
+      222
     ],
     "eldora-mountain-resort": [
-      245
-    ],
-    "elk-mountain": [
-      159
-    ],
-    "engstligenalp": [
-      470
-    ],
-    "fairmont-hot-springs": [
-      472
-    ],
-    "falls-creek": [
-      244
-    ],
-    "fernie-alpine-resort": [
-      367
-    ],
-    "folgarida-marilleva": [
-      65
-    ],
-    "fort-kent-outdoor-center": [
-      521
-    ],
-    "franconia-village-xc-ski-area": [
       255
     ],
+    "elk-mountain": [
+      165
+    ],
+    "engstligenalp": [
+      486
+    ],
+    "fairmont-hot-springs": [
+      488
+    ],
+    "falls-creek": [
+      254
+    ],
+    "fernie-alpine-resort": [
+      382
+    ],
+    "folgarida-marilleva": [
+      66
+    ],
+    "fort-kent-outdoor-center": [
+      538
+    ],
+    "franconia-village-xc-ski-area": [
+      266
+    ],
     "frost-fire-park": [
-      371
+      386
     ],
     "furano-ski-resort": [
-      346
+      361
     ],
     "galtuer": [
       31
     ],
     "geto-kogen": [
-      376
+      391
     ],
     "giants-ridge": [
-      330
+      344
     ],
     "glencoe-mountain-resort": [
-      397
+      412
     ],
     "glenshee-ski-centre": [
-      223
+      233
     ],
     "gore-mountain": [
-      348,
-      444
+      363,
+      460
     ],
     "gore-mountain-nordic-center": [
-      348
+      363
     ],
     "granby-ranch": [
-      221
+      230
     ],
     "grand-targhee-resort": [
-      205
+      214
     ],
     "grands-montets": [
-      124
+      126
     ],
     "granite-peak": [
-      101
+      103
     ],
     "great-bear-ski-valley": [
-      200
+      209
     ],
     "great-divide-ski-area": [
-      75
+      76
     ],
     "great-glen-trails-outdoor-center": [
-      322
+      335
     ],
     "greek-peak-mountain-resort": [
-      176
+      183
     ],
     "grouse-mountain": [
       40
     ],
     "gunstock-mountain-resort": [
-      321
+      334
     ],
     "hafjell": [
-      135
+      138
     ],
     "hakuba-47": [
-      161
+      167
     ],
     "hakuba-cortina": [
-      275,
-      531
+      286,
+      548
     ],
     "hakuba-goryu": [
-      306
+      319
     ],
     "hakuba-happo-one": [
-      69
+      70
     ],
     "hakuba-iwatake": [
       45
     ],
     "hakuba-norikura-onsen": [
-      238,
-      531
+      248,
+      548
     ],
     "hakuba-sanosaka": [
-      366
+      381
     ],
     "hardwood-ski-and-bike": [
-      517
+      534
+    ],
+    "harper-mountain": [
+      159
     ],
     "hatley-pointe": [
-      241
+      251
     ],
     "heavenly": [
-      91
+      92
     ],
     "hidden-valley-resort": [
       10
@@ -565,82 +580,82 @@
       16
     ],
     "hilltop-ski-area": [
-      181
+      188
     ],
     "hintertux-glacier": [
-      401
-    ],
-    "hirugano-kogen-ski-resort": [
-      106
-    ],
-    "hochfuegen-hochzillertal": [
       416
     ],
+    "hirugano-kogen-ski-resort": [
+      108
+    ],
+    "hochfuegen-hochzillertal": [
+      431
+    ],
     "hochzeiger-bergbahnen-pitztal-ag": [
-      383
+      398
     ],
     "hockley-valley-resort": [
-      304
+      317
     ],
     "hodaigi-mountain-resort": [
-      355
+      370
     ],
     "homestake-lodge": [
       35
     ],
     "homewood-mountain-resort": [
-      243
+      253
     ],
     "hoodoo-ski-area": [
-      262
+      273
     ],
     "hotham": [
-      265
+      276
     ],
     "howelsen-hill": [
-      361
+      376
     ],
     "hudson-bay-mountain": [
-      87
+      88
     ],
     "huff-hills-ski-area": [
-      96
+      97
     ],
     "hunt-hollow-ski-club": [
-      190
+      197
     ],
     "hunter-mountain": [
       4
     ],
     "hurricane-ridge": [
-      452
+      468
     ],
     "hyland-hills": [
-      250
+      260
     ],
     "innsbruck-region": [
-      231
+      241
     ],
     "jack-frost-mountain": [
-      119
+      121
     ],
     "jackson-hole-mountain-resort": [
-      68
+      69
     ],
     "jackson-xc": [
-      514
+      531
     ],
     "jay-peak-resort": [
-      347
+      362
     ],
     "jigatake": [
-      249
+      259
     ],
     "jiminy-peak-mountain-resort": [
-      303
+      316
     ],
     "june-mountain": [
-      433
+      449
     ],
     "kamui-ski-links": [
       28
@@ -649,533 +664,557 @@
       11
     ],
     "kappl": [
-      138
+      141
     ],
     "kashimayari": [
-      79
+      80
     ],
     "kelly-canyon": [
-      93
+      94
     ],
     "kendall-mountain-ski-area": [
-      352
+      367
     ],
     "keystone-resort": [
-      196
+      204
     ],
     "kicking-horse": [
-      147
+      152
     ],
     "killington": [
-      261
+      272
     ],
     "kimberley-alpine-resort": [
       37
     ],
     "king-pine": [
-      153
+      158
     ],
     "kirkwood-mountain-resort": [
-      171
+      177
     ],
     "kitzbuehel": [
       53
     ],
     "kitzsteinhorn": [
-      424
+      439
     ],
     "kronplatz": [
       5
     ],
     "krvavec-ski-resort": [
-      441
+      457
     ],
     "kvitfjell": [
-      167
+      173
     ],
     "la-tzoumaz": [
-      394
+      409
     ],
     "lake-louise": [
-      246
+      256
     ],
     "lake-songhua-resort": [
-      251
+      261
     ],
     "laurel-mountain": [
-      298
+      311
     ],
     "le-massif": [
-      369
+      384
     ],
     "le-relais": [
-      116
+      118
     ],
     "leavenworth-winter-sports-club": [
-      102
+      104
     ],
     "lech-am-arlberg": [
-      125
+      127
     ],
     "les-7-laux": [
-      293
+      306
     ],
     "les-houches": [
-      462
+      478
     ],
     "les-menuires": [
-      409,
-      525,
-      529
+      424,
+      542,
+      546
     ],
     "leukerbad-torrent-ski-resort-gemmi-resort": [
-      320
+      333
     ],
     "levi-ski-resort": [
-      165
+      171
     ],
     "liberty-mountain-resort": [
-      495
+      511
     ],
     "liberty-mountain-snowflex-centre": [
-      206
+      215
     ],
     "little-ski-hill": [
-      109
+      111
     ],
     "little-switzerland": [
-      418
+      433
     ],
     "loch-lomond": [
-      504
+      520
+    ],
+    "lookout-pass": [
+      148
     ],
     "loon-mountain-resort": [
-      204
+      213
     ],
     "lost-trail": [
-      98
+      100
     ],
     "lost-valley": [
-      334
+      348
     ],
     "loup-loup-ski-bowl": [
-      164
+      170
     ],
     "loveland-ski-area": [
       50
     ],
     "lutsen-mountains": [
-      226
+      236
+    ],
+    "mad-river-glen": [
+      132
     ],
     "mad-river-mountain": [
-      71
+      72
     ],
     "madarao-mountain-resort": [
-      279
+      290
     ],
     "madonna-di-campiglio": [
-      402
+      417
     ],
     "magic-mountain-idaho": [
-      60
+      61
     ],
     "magic-mountain-ski-area": [
-      274
+      285
     ],
     "maiko-resort": [
       19
     ],
     "mala-upa": [
-      446
+      462
     ],
     "mammoth-mountain": [
-      281
+      292
     ],
     "manning-park": [
-      309,
-      508
+      322,
+      524
     ],
     "manning-park-xc": [
-      309
+      322
     ],
     "maple-ski-ridge": [
-      328
+      342
     ],
     "maplelag-resort": [
-      513
+      530
     ],
     "marble-mountain": [
-      88
+      89
     ],
     "marmot-basin": [
-      141
+      145
     ],
     "marquette-mountain": [
-      488
+      504
     ],
     "massanutten-resort": [
-      442
+      458
     ],
     "massif-du-sud": [
-      188
+      195
     ],
     "mayrhofen": [
       29
     ],
     "mcintyre-ski-area": [
-      356
+      371
     ],
     "megeve": [
-      414
+      429
     ],
     "meribel": [
-      440,
-      520,
-      525,
-      530
+      456,
+      537,
+      542,
+      547
     ],
     "middlebury-snowbowl": [
       15
     ],
     "minocqua-winter-park": [
-      522
+      539
+    ],
+    "mission-ridge": [
+      203
     ],
     "mohawk-mountain": [
-      143
+      147
     ],
     "mona-yongpyong": [
-      368
+      383
     ],
     "monarch-mountain": [
-      315
+      328
     ],
     "mont-edouard": [
-      82
+      83
     ],
     "mont-kanasuta": [
-      507
+      523
+    ],
+    "mont-orford": [
+      99
     ],
     "mont-rigaud": [
-      496
+      512
     ],
     "mont-ripley-ski-area": [
-      269
+      280
     ],
     "mont-sainte-anne": [
-      84
+      85
     ],
     "mont-sutton": [
-      489
+      505
     ],
     "montage-mountain": [
-      252
+      262
     ],
     "montana-snowbowl": [
       44
     ],
     "monte-bondone": [
-      266
+      277
     ],
     "monterosa-ski": [
-      421
+      436
     ],
     "moose-mountain-ski-resort": [
       30
     ],
     "mount-baldy-ski-area": [
-      510
+      526
     ],
     "mount-bohemia": [
-      247
+      257
     ],
     "mount-cain": [
-      133
+      136
     ],
     "mount-kato": [
-      325
+      339
     ],
     "mount-racey-ski-resort": [
-      351
+      366
     ],
     "mount-snow": [
-      175
+      182
     ],
     "mount-sunapee": [
-      201
+      210
     ],
     "mount-washington-alpine-resort": [
-      59
+      60
     ],
     "mountain-high": [
-      425
+      440
     ],
     "mt-abram": [
-      140
+      144
     ],
     "mt-bachelor": [
-      343
-    ],
-    "mt-baker-ski-area": [
-      327
-    ],
-    "mt-brighton": [
-      363
-    ],
-    "mt-buller": [
-      392
-    ],
-    "mt-eyak": [
-      61
-    ],
-    "mt-holiday": [
-      318
-    ],
-    "mt-hood-meadows": [
-      372
-    ],
-    "mt-hood-skibowl": [
-      117
-    ],
-    "mt-hutt": [
-      130
-    ],
-    "mt-la-crosse": [
-      126
-    ],
-    "mt-norquay": [
-      268
-    ],
-    "mt-pisgah": [
-      220
-    ],
-    "mt-shasta-ski-park": [
-      509
-    ],
-    "mt-spokane-ski-snowboard-park": [
-      217
-    ],
-    "mt-t": [
-      336
-    ],
-    "mt-van-hoevenberg": [
-      523
-    ],
-    "muica-snow-resort": [
-      398
-    ],
-    "murray-ridge-ski-area": [
-      474
-    ],
-    "myoko-suginohara-ski-resort": [
-      388
-    ],
-    "nakiska-ski-area": [
-      461
-    ],
-    "nayoro-piyashiri-ski-resort": [
-      248
-    ],
-    "nekoma-mountain": [
       357
     ],
-    "nelson-nordic-ski-club": [
-      511
+    "mt-baker-ski-area": [
+      341
     ],
-    "nendaz": [
-      394
+    "mt-brighton": [
+      378
     ],
-    "nickel-plate-cross-country-ski-club": [
-      389
+    "mt-buller": [
+      407
     ],
-    "ninox-snow-park": [
-      302
+    "mt-eyak": [
+      62
     ],
-    "niseko-united": [
-      173
+    "mt-holiday": [
+      331
     ],
-    "nordic-mountain": [
-      236
-    ],
-    "norefjell-ski-resort": [
-      160
-    ],
-    "northern-maine-community-trails": [
-      218
-    ],
-    "northstar-california-resort": [
-      170
-    ],
-    "norway-mountain": [
-      191
-    ],
-    "nub-s-nob": [
+    "mt-hood-meadows": [
       387
     ],
+    "mt-hood-skibowl": [
+      119
+    ],
+    "mt-hutt": [
+      133
+    ],
+    "mt-la-crosse": [
+      128
+    ],
+    "mt-norquay": [
+      279
+    ],
+    "mt-pisgah": [
+      229
+    ],
+    "mt-rose-ski-tahoe": [
+      207
+    ],
+    "mt-seymour": [
+      298
+    ],
+    "mt-shasta-ski-park": [
+      525
+    ],
+    "mt-spokane-ski-snowboard-park": [
+      226
+    ],
+    "mt-t": [
+      350
+    ],
+    "mt-van-hoevenberg": [
+      540
+    ],
+    "muica-snow-resort": [
+      413
+    ],
+    "murray-ridge-ski-area": [
+      490
+    ],
+    "myoko-suginohara-ski-resort": [
+      403
+    ],
+    "nakiska-ski-area": [
+      477
+    ],
+    "nayoro-piyashiri-ski-resort": [
+      258
+    ],
+    "nekoma-mountain": [
+      372
+    ],
+    "nelson-nordic-ski-club": [
+      528
+    ],
+    "nendaz": [
+      409
+    ],
+    "nickel-plate-cross-country-ski-club": [
+      404
+    ],
+    "ninox-snow-park": [
+      315
+    ],
+    "niseko-united": [
+      180
+    ],
+    "nordic-mountain": [
+      246
+    ],
+    "norefjell-ski-resort": [
+      166
+    ],
+    "northern-maine-community-trails": [
+      227
+    ],
+    "northstar-california-resort": [
+      176
+    ],
+    "norway-mountain": [
+      198
+    ],
+    "nub-s-nob": [
+      402
+    ],
     "nutt-hill": [
-      311
+      324
     ],
     "oak-hill-outdoor-center": [
-      229
+      239
     ],
     "ober-mountain": [
       23
     ],
     "obertauern": [
-      412
+      427
     ],
     "okemo-mountain-resort": [
-      385
+      400
     ],
     "okunakayama-kogen": [
-      337
+      351
     ],
     "onikoube-ski-resort": [
-      202
+      211
     ],
     "oppdal": [
-      331
+      345
     ],
     "orcieres-merlette-1850": [
-      64
+      65
     ],
     "ordino-arcalis": [
-      479
+      495
     ],
     "orelle": [
-      500,
-      528
+      516,
+      545
     ],
     "osceola-tug-hill-xc-ski-center": [
-      73
+      74
     ],
     "paganella-ski": [
-      145
+      150
     ],
     "pajarito-mountain": [
-      451
+      467
     ],
     "palcall-tsumagoi-resort": [
-      349
+      364
     ],
     "palisades-tahoe": [
-      393
+      408
     ],
     "panorama-mountain-resort": [
-      199
+      208
     ],
     "paoli-peaks": [
-      471
+      487
     ],
     "park-city-mountain": [
-      89
+      90
     ],
     "pass-powderkeg": [
-      480
+      496
     ],
     "pats-peak": [
-      350
+      365
     ],
     "paul-bunyan-ski-hill": [
-      428
+      444
     ],
     "paul-smiths-college-visitor-interpretive-center": [
-      518
+      535
     ],
     "pebble-creek-ski-area": [
-      445
+      461
     ],
     "peek-n-peak": [
-      111
+      113
     ],
     "pejo-3000": [
-      329
+      343
     ],
     "perisher": [
-      131
+      134
     ],
     "petzen": [
-      492
+      508
     ],
     "phoenix-mountain": [
-      423
+      438
     ],
     "pico-mountain": [
-      122
+      124
     ],
     "pila": [
-      455
+      471
     ],
     "pine-mountain": [
-      358
+      373
     ],
     "pinzolo": [
-      158
+      164
     ],
     "pippu-ski-resort": [
-      404
+      419
     ],
     "pitztal-glacier": [
-      430
+      446
     ],
     "pizol": [
-      419
+      434
     ],
     "pomerelle-mountain-resort": [
       38
     ],
     "pontedilegno-tonale": [
-      289
+      301
+    ],
+    "powder-king-mountain-resort": [
+      58
+    ],
+    "powder-mountain": [
+      360
     ],
     "powder-ridge": [
-      234
+      244
     ],
     "powder-ridge-connecticut": [
-      396
+      411
     ],
     "powderhorn-mountain-resort": [
-      466
+      482
     ],
     "purgatory-resort": [
-      149
+      154
     ],
     "pyha-ski-resort": [
-      319
+      332
     ],
     "quarry-road-trails": [
       21
     ],
     "ragged-mountain-resort": [
-      185
+      192
     ],
     "rangeley-lakes-trail-center": [
-      390
+      405
     ],
     "rauriser-hochalmbahnen": [
       39
     ],
     "red-lodge-mountain": [
-      301
+      314
     ],
     "red-mountain-resort": [
-      333
+      347
     ],
     "red-river-ski-summer-area": [
-      468
+      484
     ],
     "revelstoke": [
-      379
+      394
     ],
     "rikert-nordic-center": [
-      225
+      235
     ],
     "rio-pusteria-bressanone": [
-      166
+      172
     ],
     "roundtop-mountain-resort": [
-      150
+      155
     ],
     "ruka-ski-resort": [
-      239
+      249
     ],
     "rusutsu-resort": [
       57
@@ -1187,88 +1226,88 @@
       33
     ],
     "sandia-peak-ski-area": [
-      476
+      492
     ],
     "saskadena-six-ski-area": [
-      211
+      220
     ],
     "sasquatch-mountain-resort": [
-      271
+      282
     ],
     "schmittenhoehe": [
-      163
+      169
     ],
     "schuss-mountain-at-shanty-creek": [
-      180
+      187
     ],
     "schweitzer-mountain-resort": [
       36
     ],
     "see": [
-      434
+      450
     ],
     "seven-springs-mountain-resort": [
-      136
+      139
     ],
     "shames-mountain": [
-      360
+      375
     ],
     "shawnee-mountain-ski-area": [
-      81
+      82
     ],
     "shimokura": [
-      359
+      374
     ],
     "showdown-montana": [
-      501
+      517
     ],
     "sierra-at-tahoe-ski-resort": [
       14
     ],
     "silver-mountain-resort": [
-      326
+      340
     ],
     "silverstar-mountain-resort": [
-      310
+      323
     ],
     "silverton-mountain": [
-      291
+      303
     ],
     "silvretta-montafon": [
-      354
+      369
     ],
     "sipapu-ski-summer-resort": [
-      148
+      153
     ],
     "skaneateles-ski-club": [
-      487
+      503
     ],
     "skeetawk": [
-      216
+      225
     ],
     "ski-apache": [
-      454
+      470
     ],
     "ski-big-bear": [
-      189
+      196
     ],
     "ski-butternut": [
-      154
+      160
     ],
     "ski-land": [
-      505
+      521
     ],
     "ski-saint-bruno": [
-      417
+      432
     ],
     "ski-santa-fe": [
-      193
+      200
     ],
     "ski-sawmill": [
-      273
+      284
     ],
     "ski-vallee-bleue": [
-      183
+      190
     ],
     "skicircus-saalbach": [
       42
@@ -1277,308 +1316,317 @@
       27
     ],
     "skiwelt": [
-      413
+      428
     ],
     "sleepy-hollow": [
-      377
+      392
     ],
     "smokey-mountain-ski-club": [
-      482
+      498
     ],
     "smugglers-notch-resort": [
-      115
+      117
     ],
     "snow-creek": [
-      209
+      218
     ],
     "snow-king-mountain": [
-      297
+      310
     ],
     "snow-resort-the-cupid-of-romance": [
-      314
+      327
     ],
     "snow-ridge": [
-      493
+      509
     ],
     "snow-summit": [
-      490
+      506
     ],
     "snow-valley-mountain-resort": [
-      420
+      435
     ],
     "snowbasin-resort": [
-      95
+      96
     ],
     "snowbird": [
-      215
+      224
     ],
     "snowmass": [
       8
     ],
     "snowriver-mountain-resort-black-river-basin": [
-      100
+      102
     ],
     "snowriver-mountain-resort-jackson-creek-summit": [
-      378
+      393
     ],
     "snowshoe-mountain": [
-      467
+      483
     ],
     "snowy-range-ski-area": [
-      475
+      491
     ],
     "soelden": [
-      410
+      425
     ],
     "soldier-mountain-ski-area": [
-      157
+      163
     ],
     "solitude-mountain-resort": [
-      272
-    ],
-    "sovereign-lake-nordic-club": [
-      235
-    ],
-    "spieljoch": [
-      155
-    ],
-    "spirit-mountain": [
-      473
-    ],
-    "spring-mountain-adventures": [
-      105
-    ],
-    "st-anton-am-arlberg": [
-      125
-    ],
-    "st-christoph-am-arlberg": [
-      125
-    ],
-    "st-johann-in-tirol": [
-      464
-    ],
-    "station-touristique-stoneham": [
       283
     ],
-    "steamboat-ski-resort": [
-      123
+    "sovereign-lake-nordic-club": [
+      245
     ],
-    "stevens-pass": [
+    "spieljoch": [
+      161
+    ],
+    "spirit-mountain": [
+      489
+    ],
+    "spring-mountain-adventures": [
+      107
+    ],
+    "st-anton-am-arlberg": [
       127
     ],
+    "st-christoph-am-arlberg": [
+      127
+    ],
+    "st-johann-in-tirol": [
+      480
+    ],
+    "station-touristique-stoneham": [
+      294
+    ],
+    "steamboat-ski-resort": [
+      125
+    ],
+    "stevens-pass": [
+      129
+    ],
     "stoten-i-salen": [
-      192
+      199
     ],
     "stowe": [
       41
     ],
     "stranda-ski-resort": [
-      80
+      81
     ],
     "stratton-mountain-resort": [
-      66
+      67
     ],
     "stuben-am-arlberg": [
-      125
+      127
     ],
     "sugar-bowl-resort": [
-      395
+      410
     ],
     "sugar-mountain-resort": [
       34
     ],
     "sugarbush-resort": [
-      120
+      122
     ],
     "sugarloaf": [
-      282
+      293
     ],
     "sun-peaks-resort": [
-      240
+      250
     ],
     "sun-valley-bald-mountain": [
-      280
+      291
     ],
     "sun-valley-dollar-mountain": [
       49
     ],
     "sunburst-ski-area": [
-      203
+      212
+    ],
+    "sundance-mountain-resort": [
+      179
     ],
     "sunday-river": [
-      465
+      481
     ],
     "sundown-mountain": [
-      403
+      418
     ],
     "sunlight-mountain-resort": [
-      295
+      308
     ],
     "swain-resort": [
-      485
+      501
     ],
     "tahoe-donner-downhill-ski-resort": [
-      132
+      135
     ],
     "takasu-snow-park": [
-      118
+      120
     ],
     "tamarack-resort": [
       18
     ],
     "taos-ski-valley": [
-      219
+      228
     ],
     "tazawako": [
-      300
+      313
     ],
     "telemark-nordic-center": [
-      182
+      189
     ],
     "telluride-ski-resort": [
-      290
+      302
     ],
     "tenney-mountain": [
-      195
+      202
     ],
     "terry-peak": [
-      146
+      151
     ],
     "the-highlands-at-harbor-springs": [
-      335
+      349
     ],
     "the-loppet": [
-      516
+      533
     ],
     "the-remarkables": [
-      227
+      237
     ],
     "the-summit-at-snoqualmie": [
-      286
+      297
     ],
     "thredbo": [
-      324
+      337
     ],
     "thrill-hills": [
-      370
+      385
     ],
     "thyon": [
-      394
+      409
     ],
     "timberline-lodge-ski-area": [
-      107
+      109
     ],
     "titus-mountain": [
-      74
+      75
     ],
     "togakushi-ski-resort": [
-      342
+      356
     ],
     "togari-onsen-snow-resort": [
-      70
+      71
     ],
     "trapp-family-lodge": [
       20
     ],
     "treetops-resort": [
-      484
+      500
     ],
     "tremblant": [
-      278
+      289
     ],
     "trollhaugen-ski-area": [
-      478
+      494
     ],
     "tschiertschen-chur": [
-      422
+      437
     ],
     "tsugaike-mountain-resort": [
       25
     ],
     "tussey-mountain": [
-      481
-    ],
-    "tyrol-basin-ski-and-snowboard": [
-      113
-    ],
-    "vail-mountain": [
-      210
-    ],
-    "val-di-fassa-carezza": [
-      353,
       497
     ],
+    "tyrol-basin-ski-and-snowboard": [
+      115
+    ],
+    "vail-mountain": [
+      219
+    ],
+    "val-di-fassa-carezza": [
+      368,
+      513
+    ],
     "val-di-fiemme-obereggen": [
-      174
+      181
     ],
     "val-direne": [
-      494
+      510
     ],
     "val-gardena-alpe-di-siusi": [
-      400
+      415
     ],
     "val-thorens": [
-      437,
-      528,
-      529,
-      530
+      453,
+      545,
+      546,
+      547
     ],
     "valle-nevado": [
-      443
+      459
     ],
     "verbier": [
-      394
+      409
     ],
     "veterans-memorial-recreation-area": [
-      162
+      168
     ],
     "veysonnaz": [
-      394
+      409
     ],
     "washigatake-ski-resort": [
-      77
+      78
     ],
     "waterville-valley-resort": [
-      108
+      110
     ],
     "welch-village": [
-      345
+      359
     ],
     "west-mountain-ski-resort": [
-      232
+      242
     ],
     "whaleback": [
-      307
+      320
     ],
     "whistler-blackcomb": [
       46
     ],
     "white-grass-ski-touring": [
-      526
+      543
     ],
     "white-pass-ski-area": [
-      341
+      355
     ],
     "white-pine-resort": [
-      429
+      445
     ],
     "white-pine-touring-nordic-center": [
-      527
+      544
     ],
     "whitecap-mountains-resort": [
-      276
+      287
     ],
     "whiteface": [
-      340
+      354
+    ],
+    "whitefish-mountain-resort": [
+      265
     ],
     "whitehorse-nordic-centre": [
-      254
+      264
     ],
     "whitepia-takasu": [
-      263
+      274
     ],
     "whitetail-resort": [
-      436
+      452
+    ],
+    "whitewater-mountain-resort": [
+      143
     ],
     "wild-mountain": [
       48
@@ -1586,47 +1634,50 @@
     "wildcat-mountain": [
       26
     ],
+    "willamette-pass": [
+      232
+    ],
     "williams-lake-cross-country-ski-club": [
-      197
+      205
     ],
     "wilmot-mountain": [
-      137
+      140
     ],
     "winter-park-resort": [
-      362
+      377
     ],
     "winter4kids": [
-      177
+      184
     ],
     "wintergreen-resort": [
-      384
+      399
     ],
     "winterplace-ski-resort": [
-      457
+      473
     ],
     "wisp-resort": [
-      103
+      105
     ],
     "wolf-creek-ski-area": [
       13
     ],
     "woodstock-nordic-center": [
-      179
+      186
     ],
     "yunding-snow-park": [
-      58
+      59
     ],
     "yuzawa-nakazato-snow-resort": [
-      151
+      156
     ],
     "zao-onsen-ski-resort": [
-      194
+      201
     ],
     "zillertal-arena": [
-      285
+      296
     ],
     "zuers-am-arlberg": [
-      125
+      127
     ]
   }
 }

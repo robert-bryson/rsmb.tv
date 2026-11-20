@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page, type Response } from '@playwright/test';
 import type { GeoJSONSource, Map as MapLibreMap, StyleSpecification } from 'maplibre-gl';
@@ -45,6 +46,96 @@ async function captureMap(page: Page, { phone = false, state = 'ready' }: { phon
     await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
     return renderer;
 }
+
+test('filters by pass and local date, keeps column choices, and exports the comparison', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    await page.goto(`${path}?view=table&q=snowbird&product=ikon-base&skiDate=2026-12-26`);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
+    await page.getByLabel('Ski date (local)', { exact: true }).fill('2026-12-31');
+    await expect(table.getByRole('button', { name: 'Snowbird', exact: true })).toBeVisible();
+    await table.getByRole('button', { name: 'Snowbird', exact: true }).click();
+    await expect(page.getByRole('region', { name: 'Pass product terms' })).toContainText('5 days');
+    await page.getByText('Columns', { exact: true }).click();
+    await page.getByRole('checkbox', { name: 'Show Mapped lifts column', exact: true }).uncheck();
+    await expect(table.getByRole('columnheader', { name: 'Mapped lifts', exact: true })).toHaveCount(0);
+    await page.reload();
+    await expect(table.getByRole('columnheader', { name: 'Mapped lifts', exact: true })).toHaveCount(0);
+
+    const [download] = await Promise.all([
+        page.waitForEvent('download'),
+        page.getByRole('button', { name: 'Export CSV' }).click(),
+    ]);
+    const csv = await readFile(await download.path(), 'utf8');
+    expect(csv).toContain('Snowbird');
+    expect(csv).toContain('OpenSkiData');
+    expect(csv).not.toContain('Mapped lifts');
+    expect(csv).not.toContain('Alta Ski Area');
+});
+
+test('applies the Indy Add-On home area across reloads and clears it when the product changes', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    await page.goto(`${path}?view=table&product=indy-base-addon&skiDate=2026-12-18`);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    const berkshire = table.getByRole('button', { name: 'Berkshire East Ski Resort', exact: true });
+    const catamount = table.getByRole('button', { name: 'Catamount Mountain Resort', exact: true });
+    const terms = page.getByRole('region', { name: 'Pass product terms' });
+    await catamount.click();
+    await expect(terms).toContainText('Select your home ski area');
+    await page.getByLabel('Home ski area', { exact: true }).selectOption('berkshire-east-ski-resort');
+    await expect(berkshire).toHaveCount(0);
+    await expect(terms).toContainText('Included access');
+    await page.reload();
+    await expect(berkshire).toHaveCount(0);
+    await expect(terms).toContainText('Included access');
+    await page.getByLabel('Pass product', { exact: true }).selectOption('indy-plus');
+    await expect(page.getByLabel('Home ski area', { exact: true })).toHaveCount(0);
+    await expect(page).not.toHaveURL(/homeArea=/);
+});
+
+test('ages a verified report without resetting the camera when local-date results stay the same', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const generatedAt = '2026-12-24T08:00:00Z';
+    const body = JSON.stringify({ version: 1, generatedAt, reports: [{
+        areaId: 'snowbird', status: 'limited', retrievedAt: generatedAt, reportedAt: generatedAt,
+        source: { name: 'Test operator', url: 'https://example.test/conditions', license: 'https://example.test/license', exportable: true },
+    }] });
+    const file = `reports-${createHash('sha256').update(body).digest('hex')}.json`;
+    await page.route('https://data.rsmb.tv/ski-status/**', route => {
+        const name = new URL(route.request().url()).pathname.split('/').at(-1);
+        const headers = { 'access-control-allow-origin': '*' };
+        if (name === file) return route.fulfill({ body, headers, contentType: 'application/json' });
+        return route.fulfill({ json: { version: 1, updatedAt: generatedAt, catalogRevision: 'a'.repeat(64), reports: file }, headers });
+    });
+    await page.clock.install({ time: new Date('2026-12-25T07:59:15Z') });
+    const renderer = await captureMap(page);
+    const query = page.getByRole('searchbox', { name: 'Search areas' });
+    await query.fill('Snowbird');
+    await query.press('Enter');
+    await page.getByLabel('Pass product', { exact: true }).selectOption('ikon-base');
+    await page.getByLabel('Color by', { exact: true }).selectOption('operatingStatus');
+    const cell = page.getByRole('region', { name: 'Ski area comparison table' }).getByRole('cell', { name: 'Limited', exact: true });
+    await expect(cell).toBeVisible();
+    const color = () => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+        return data?.type === 'FeatureCollection' && data.features.find(feature => feature.id === 'snowbird')?.properties?.color;
+    });
+    await expect.poll(color).toBe('#facc15');
+    await expect.poll(() => renderer.evaluate(map => !map.isMoving())).toBe(true);
+    const camera = await renderer.evaluate(map => {
+        map.jumpTo({ center: [-110, 42], zoom: 6 });
+        return { center: map.getCenter().toArray(), zoom: map.getZoom() };
+    });
+
+    await page.clock.fastForward(60_001);
+    await expect(page.getByRole('cell', { name: 'Limited (stale)', exact: true })).toBeVisible();
+    await expect.poll(color).toBe('#a1a1aa');
+    expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
+    await renderer.dispose();
+});
 
 test('opens a globe on a phone and fits the Ikon resorts in a selected country', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 780 });

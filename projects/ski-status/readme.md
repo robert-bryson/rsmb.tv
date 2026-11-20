@@ -1,6 +1,6 @@
-# ski-status guide and plan
+# ski-status guide
 
-ski-status maps North American ski areas and worldwide Ikon, Epic, and Indy destinations.
+ski-status maps North American ski areas and worldwide pass destinations.
 Use the table to compare mountain statistics. Use the operator links to check current conditions. [Project tasks](TODO.md)
 
 ## Use ski-status
@@ -17,6 +17,8 @@ On a wide screen, the page starts in **Split**. On a narrow screen, it starts in
 - Search by area name, alternative name, town, country, or skiing type.
 - Select a country, state, or province under **Region**. A shared ski area appears under each country that it covers. Select **Filters** to show the controls on a narrow screen.
 - Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
+- Select a **Pass product** to see verified access on a **Ski date**. A blank date uses today at each ski area.
+- Select your **Home ski area** for an Indy Add-On. The results exclude this area.
 - Select **Conventional downhill** to include outdoor lift-served areas that also have Nordic trails. Select **Cross-country only** to find Nordic centers. Select **Specialty skiing** to include Nordic-only areas and other types such as indoor skiing.
 - Turn on **In map view** to limit the table to areas inside the map pane.
 - Select a column header to change the sort order.
@@ -25,9 +27,10 @@ On a wide screen, the page starts in **Split**. On a narrow screen, it starts in
 - Select empty map space to clear the selection. To use the keyboard, press Escape with focus in the map.
 - Select **Official conditions** to open the operator's report. Use **Resort website and conditions** when the main site has the report.
 - Open **Published statistic sources** to see which fields each source supports. The list includes the verification date and any note about what the figure covers.
+- Open **Columns** to choose comparison fields. Select **Export CSV** to download the current results and the selected fields with export permission.
 
 The URL stores the search text, filters, sort order, selected area, view, and map settings.
-The browser stores your unit preference.
+The browser stores your unit and column preferences.
 
 ### Map display
 
@@ -42,6 +45,8 @@ The map keeps its position when you change views. On a narrow screen, **Table** 
 Open **Map** to set the area for the first time. The selected area's details stay open when its marker moves out of view.
 
 The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
+
+Select **Operating status** to color markers from recent resort reports. Gray marks stale, missing, or unknown status. Open the resort details for the source and report time.
 
 In **Map** view, the second column follows **Color by**. Select its header to sort by the displayed number. With **Resort dots** selected, the column shows the active sort field or skiable area when you sort by name.
 
@@ -72,37 +77,38 @@ If the ski terrain fails, select **Retry ski terrain** at resort zoom. This retr
 
 ## Catalog
 
-On November 19, 2026, the catalog had 565 map points in 20 countries.
-The United States had 323 points. Canada had 66. Other countries had 176.
+On November 20, 2026, the catalog had 583 map points in 21 countries.
+The United States had 334 points. Canada had 72. Other countries had 177.
 The country filter also includes Germany through shared areas.
-The catalog had 126 areas with Ikon access, 98 with Epic access, and 298 with included Indy access.
+The catalog had 126 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
 
-All 565 areas have at least one published statistic. The six main downhill fields have values for 128 areas.
-Mapped terrain values cover 519 areas. [Research coverage](../../docs/reviews/2026-11-20-ski-status-data-and-recovery-review.md#catalog-coverage)
+All 583 areas have at least one published statistic. The six main downhill fields have values for 132 areas.
+Mapped terrain values cover 536 areas. [First-release data review](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#catalog-coverage)
 
 | Published field | Areas |
 | --- | ---: |
-| Skiable acreage | 240 |
-| Vertical drop | 437 |
-| Lift count | 445 |
-| Trail count | 482 |
-| Base elevation | 182 |
-| Summit elevation | 203 |
+| Skiable acreage | 256 |
+| Vertical drop | 452 |
+| Lift count | 455 |
+| Trail count | 496 |
+| Base elevation | 193 |
+| Summit elevation | 216 |
 | Downhill trail length | 55 |
-| Nordic trail length | 59 |
-| Highest lift terminal | 23 |
-| Lowest lift terminal | 6 |
-| Night skiable acreage | 7 |
+| Nordic trail length | 60 |
+| Highest lift terminal | 27 |
+| Lowest lift terminal | 7 |
+| Night skiable acreage | 9 |
 | Difficulty breakdown | 94 |
-| Season window | 61 |
-| Official conditions link | 348 |
+| Season window | 64 |
+| Official conditions link | 362 |
 
 | File | Use |
 | --- | --- |
 | [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
-| [Locations and mapped terrain](data/locations.json) | Points and mapped values from the November 16 OpenSkiData build. Some points use OpenStreetMap or operator directions. Each point has source links. |
-| [Resort terrain index](data/resort-terrain.json) and [PMTiles archive](data/resort-terrain.pmtiles) | Footprints, runs, lifts, and lift stations for 533 areas. The index records the source date, checksums, and groups of areas that share terrain. |
+| [Locations and mapped terrain](data/locations.json) | Points, local time zones, and mapped values from the November 16 OpenSkiData build. Each point has source links. |
+| [Resort terrain index](data/resort-terrain.json) and [PMTiles archive](data/resort-terrain.pmtiles) | Footprints, runs, lifts, and lift stations for 550 areas. The index records source and archive checksums and shared terrain groups. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
+| [Pass products](data/pass-rules/) | Verified product rules by family, season, resort, and local date. |
 
 Use the same area ID in the area, location, and pass records. Add one point per area. Add one membership per pass family.
 Put the map point's country in `country`. Put other verified countries that the same area covers in `otherCountries`. Add the state or province code where applicable. [Catalog validation](../../src/features/ski-status/catalog.ts)
@@ -110,20 +116,21 @@ Put the map point's country in `country`. Put other verified countries that the 
 Use operator fact sheets, trail maps, and lift inventories. Use regional ski associations or public tourism agencies when they describe the same area. Check which mountains, trails, and lifts each figure includes.
 
 Record the source URL, fields, and verification date in `statSources`. List each field once. Use the note to explain conversions, calculated totals, and terrain scope.
+Set `reportCheckedOn` when you verify an official conditions link. Use `exportLicense` on a field citation when its terms permit CSV export.
 Use `statsUrl` for published fields without a field-specific citation. Use absolute HTTPS links without credentials. Keep the pass access source in the pass record. [Catalog validation](../../src/features/ski-status/catalog.ts)
 
 Panorama's summit elevation covers Goldie Plateau. Its highest lift terminal covers the Summit Quad. Lutsen reports 825 feet of lift-served vertical. [Panorama mountain stats](https://www.panoramaresort.com/public/while-you-are-here/mountain-stats), [Lutsen mountain stats](https://www.lutsen.com/mountain-info/trail-map-mountain-stats)
 
 The **Mapped** columns use OpenSkiData. **Mapped elevation span** subtracts the mapped low point from the mapped high point.
-It covers 517 areas. The **Base**, **Summit**, and lift terminal columns show published elevations for those locations.
-The catalog has counts for named mapped downhill runs at 466 areas and for Nordic trails at 44.
+It covers 534 areas. The **Base**, **Summit**, and lift terminal columns show published elevations for those locations.
+The catalog has counts for named mapped downhill runs at 482 areas and for Nordic trails at 45.
 Each count uses operating routes of the given activity. Segments with the same name count once. Routes without names can contribute to the mapped distance. [OpenSkiData dataset and license](https://www.openskidata.org/#license)
 
 ### Runs and lifts at resort zoom
 
 OpenSkiMap uses OpenSkiData. OpenSkiData combines OpenStreetMap ski features with Skimap.org area records. It adds place names from Who’s On First and elevations from Mapterhorn. Ski-status builds its tiles from the downloadable data under ODbL. [OpenSkiData source and license](https://www.openskidata.org/#license)
 
-The November 16, 2026 snapshot covers 533 catalog areas. It contains 406 footprints, 40,688 run features, 5,535 lift features, and 7,148 lift stations. A run feature can be one trail segment. Catalog entries for a shared ski area can use the same geometry. Use the operator report to check current openings. [OpenSkiData datasets](https://www.openskidata.org/#whats-in-the-data)
+The November 16, 2026 snapshot covers 550 catalog areas. It contains 421 footprints, 41,834 run features, 5,665 lift features, and 7,266 lift stations. A run feature can be one trail segment. Catalog entries for a shared ski area can use the same geometry. Use the operator report to check current openings. [OpenSkiData datasets](https://www.openskidata.org/#whats-in-the-data)
 
 1. Download the GeoPackage and its `metadata.json` from the same build. [OpenSkiData downloads](https://www.openskidata.org/#downloads)
 2. Install the Python bindings for GDAL and the Tippecanoe command. [Tippecanoe](https://github.com/felt/tippecanoe)
@@ -136,7 +143,9 @@ The November 16, 2026 snapshot covers 533 catalog areas. It contains 406 footpri
 4. Review missing and shared area matches. Run the archive tests to check coverage and the checksum. [Local checks](#local-checks)
 5. Commit the archive, JSON index, and any changes to `locations.json` together.
 
-The importer checks the file size, layer names, feature counts, and build times. It matches each area by source ID or by a footprint that fits its location and activity. It updates named route counts when the location file uses the same build.
+The importer checks the file size, layer names, feature counts, and build times. It matches each area by source ID or by a footprint that fits its location and activity.
+The tiles assign only Nordic trails to cross-country areas. They assign only ski touring routes to ski touring areas.
+The importer updates named route counts when the location file uses the same build.
 
 The importer builds files in a temporary directory. It restores the previous output if a file replacement fails. The `data/resort-terrain.pid.lock` file prevents simultaneous builds. If a build stops and leaves this file, verify that its process has stopped before you remove it.
 
@@ -163,15 +172,23 @@ The catalog uses the published roster figures for vertical drop, lifts, trail co
 ## Local checks
 
 Install the repository dependencies. Run `npm run dev` to start Vite. Open `/projects/ski-status/map` on the local server.
-
-Run the catalog, table, and terrain tests. The archive test checks the index against the packaged file. The Python tests use small fixtures and require no GDAL or Tippecanoe installation.
+If the trip media path is unavailable, start Vite directly for ski-status.
 
 ```bash
-npx vitest run src/test/skiStatus.test.ts src/test/skiStatusComponents.test.tsx src/test/skiStatusPage.test.tsx src/test/skiResortTerrainMap.test.ts scripts/__tests__/skiResortTerrain.test.ts
+npx vite --host 127.0.0.1
+```
+
+Run the catalog, table, conditions, and terrain tests. The archive test checks the index against the packaged file.
+The Python tests check the importer and candidate review. They require no GDAL or Tippecanoe installation.
+
+```bash
+npx vitest run src/test/skiStatus*.test.* src/test/skiResortTerrainMap.test.ts \
+  scripts/__tests__/skiResortTerrain.test.ts scripts/__tests__/releaseSkiTerrain.test.ts \
+  scripts/__tests__/syncSkiStatus.test.ts
 npm run test:ski-terrain
 ```
 
-Run the browser tests for globe fit, filters, popups, and view changes. They also check byte range requests and map recovery.
+Run the browser tests for filters, resort reports, and map behavior. They check terrain byte ranges. They use a fixed clock to check report age.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
@@ -189,7 +206,8 @@ Pass product and ski date filters use the area's local date. Operating status co
 
 Keep measured snow and forecast snow in separate columns. Compare each field in common units. Put unknown values last in both sort directions.
 Group columns by mountain statistics, conditions, and season dates. Save column settings on the device.
-Include units, report times, and source links in CSV exports. Check the licenses before export. [Release tasks](TODO.md)
+CSV uses the current comparison filters, sort order, units, and column choices. The file includes report times, source links, and license credits.
+Export includes area identity, OpenSkiData values, and fields with verified export permission. A field can appear for some areas and be blank for others. [Release tasks](TODO.md)
 
 ### Comparable mountain statistics
 
@@ -205,7 +223,7 @@ Include units, report times, and source links in CSV exports. Check the licenses
 | Night skiing | Store yes, no, or unknown. Show night skiable acres when the operator publishes them. Keep a published lower bound, such as `200+` acres. Track scheduled night operations in the conditions report. |
 | Season window | Use the operator's published season window. Use **Year-round** for areas with lift access in all seasons. |
 
-Store acreage in acres and elevation in feet. Store trail length in kilometers. Give the original unit in the source note for converted values. The table uses the selected display units. [Big SNOW specifications](https://www.bigsnowamericandream.com/press-room/), [Palisades Tahoe mountain statistics and season windows](https://www.palisadestahoe.com/footer/mountain-statistics)
+Store area in acres. Store elevation in feet. Store trail length in kilometers. Give the original unit in the source note for converted values. The table uses the selected display units. [Big SNOW specifications](https://www.bigsnowamericandream.com/press-room/), [Palisades Tahoe mountain statistics and season windows](https://www.palisadestahoe.com/footer/mountain-statistics)
 
 ## Inventory and data quality
 
@@ -225,6 +243,8 @@ The audit counts candidates before the acreage and pass checks. A named row can 
 
 The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726a9df5`.
 
+The November 20 review records an initial decision for each candidate. Filter the review log by region and decision. Review Mexico and Greenland in their own groups. [Candidate review log](research/north-america-2026-11-16.csv), [Regional counts](research/north-america-2026-11-16-summary.csv)
+
 Use the same CSV for the mapped terrain values and the existing points. Match one operating row by its upstream source URL and coordinates. Check that the row covers the ski area. Leave the field empty when one row combines multiple areas that the catalog lists on their own. Use the downhill and Nordic lengths that apply to the venue. Keep the terrain source URL in `mappedTerrain`. [OpenSkiData statistics and source IDs](https://www.openskidata.org/#whats-in-the-data)
 
 ### Build the catalog
@@ -232,9 +252,9 @@ Use the same CSV for the mapped terrain values and the existing points. Match on
 1. Import names, points, source IDs, and candidate websites from a versioned OpenSkiData file. Use regional directories to find missing areas. Check directory terms before you collect source data. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [NSAA inventory by state](https://nsaa.org/NSAA/About/Media/Industry_Stats/NSAA/About/Media/Industry_Stats.aspx), [Canadian Ski Council directory](https://www.skicanada.org/ski-area-list/), [Québec ski area directory](https://maneige.ski/en/stations-et-conditions/)
 2. Match by source ID or a verified name and location. Assign a stable local ID for links, reports, and visits. OpenSkiData feature IDs can change between builds. [OpenSkiData feature IDs](https://www.openskidata.org/#whats-in-the-data)
 3. Review uncertain matches. Group bases when the operator publishes combined statistics. Palisades Tahoe publishes combined resort statistics. Keep independently operated areas separate if they share a pass allowance. [Palisades Tahoe statistics](https://www.palisadestahoe.com/footer/mountain-statistics), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
-4. Verify eligibility with operator acreage, an official pass listing, or a source for the specialty venue. Record the reason and source. List unresolved areas. Check for duplicate, closed, and private areas before release. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
-5. Add operator statistics for each eligible area. Record the source, date, and scope of the figures. Use map data to check large differences. Verify the figure with the operator before changing the record. [OpenSkiData data definitions](https://www.openskidata.org/#whats-in-the-data)
-6. Count resolved and unresolved candidates by region. Measure coverage for acres, elevations, grades, night acres, and dates. Skibowl reports total acres and the number of lit runs. Keep night skiable acres unknown until you find a source. [Skibowl statistics](https://skibowl.com/about-winter/stats/)
+4. Verify eligibility with operator acreage, an official pass listing, or a source for the specialty venue. Record the upstream reference, decision, reason, source, and date. Give each unresolved case a next check. Check for duplicate, closed, and private areas before release. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
+5. Add operator statistics for each eligible area. Record the source, date, and scope of each figure. Use map data to check large differences. Verify the figure with the operator before changing the record. [OpenSkiData data definitions](https://www.openskidata.org/#whats-in-the-data)
+6. Reconcile the decision counts with all candidates in each region. Compare field counts before and after each update. Check official conditions links for a current report or off-season status.
 
 ## Pass access by product and date
 
@@ -247,7 +267,14 @@ Create a reviewed file for each season and pass family. Record the product, area
 | Indy | Base, Indy+, and Add-On variants. Track excluded dates and reservations by area. Record Allied discounts separately from included ski days. [Indy products](https://www.indyskipass.com/shop), [Blackouts and reservations](https://www.indyskipass.com/blackout-dates-reservations) |
 | Mountain Collective | Included days, any published bonus days, and advance reservations where required. [Pass terms](https://mountaincollective.com/), [Destination reservation rules](https://mountaincollective.com/how-to-use-my-pass/) |
 
-The current family filter shows included partners for the season. For the planned product filter, apply the rules for the resort's local date. Show the access status, reservation rules, total allowance, and shared days. Use separate sources for individual usage and reservation availability.
+The family filter shows included partners for the season. The product filter uses verified rules and the resort's local ski date.
+Season dates select the rules that apply during a winter season. Apply exact resort access windows where the pass operator publishes them.
+Use the resort details to check the published allowance and reservation requirements. Check reservation availability on the operator's site.
+Time zones come from the catalog point. [Coordinate to time zone lookup](https://github.com/photostructure/tz-lookup)
+
+Indy Add-On access requires verification of an unrestricted home season pass. Select a home area to apply the exclusion. The app shows the requirement in the pass terms. [Indy Add-On rules](https://www.indyskipass.com/this-is-indy/how-it-works)
+
+Ski Arlberg requires a direct booking with a lodging partner. The app shows this requirement with the shared three-day allowance. [Ski Arlberg pass terms](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
 Review the pass lists at the start of each season. Check for changes each week. Confirm each change with the pass operator. Keep pending changes visible until the review completes.
 
@@ -264,14 +291,17 @@ Review the pass lists at the start of each season. Check for changes each week. 
 
 On November 19, the SnoCountry demo returned Bolton Valley, Bromley, and Burke. Each report had a time and an opening status. Base depth, recent snowfall, and open lift, trail, and acre counts were empty. Measure field coverage and report age during winter operation. [SnoCountry public example and field definitions](https://feeds.snocountry.net/)
 
+The pilot covers Alta Badia, Val Gardena / Alpe di Siusi, and 3 Zinnen Dolomites. Open Data Hub and LTS supply resort report fields. Open-Meteo supplies forecasts for one base location per area.
+The app uses separate timestamps for operations and snow measurements. It shows gray when the provider supplies only a measurement date. [Open Data Hub dataset](https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068), [Open-Meteo forecast API](https://open-meteo.com/en/docs), [Pilot measurements](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#conditions-pilot)
+
 ### Report and forecast rules
 
 - Store operating status with each report. Use open, limited, temporarily closed, season closed, or unknown. Store hours and planned opening dates when the operator publishes them.
-- Show open and total lifts, trails, and acres when the operator reports them. Show grooming status where available. Calculate closed counts and percentages from counts with the same scope and time. Use separate columns for **trails open %** and **acres open %**.
-- Keep the snow depth unit, range, and measurement location. Show the reporting period for new snow. Use one column for forecast snow. Show empty values as unknown. Show reported zeros as zero.
-- Keep the operator's report time and the time the app retrieved it. Mark pilot reports older than 24 hours as stale. Keep the last report and date visible. Identify missing fields on new reports.
-- Use a freshness limit for each source when its schedule changes. Show the date of an official seasonal closure. Calculate report age from the source time.
-- Publish a count of recent reports and a count for each main conditions field. Show the operator's link when the report is incomplete or stale.
+- Show open and total lifts, trails, and acres when the operator reports them. Calculate percentages from counts with the same scope and time.
+- Keep the snow depth unit, range, and measurement location. Show the reporting period for new snow. Show forecast snow in its own column. Show reported zeros as zero.
+- Store the source report time and the retrieval time. Calculate report age from the source report time. Mark pilot reports older than 24 hours as stale.
+- Keep the last report and date visible when a refresh fails. Show gray markers when the report age or status is unknown.
+- Show base forecasts for the next 24 hours of complete hourly data. Sum snowfall over the period. Show the highest hourly precipitation probability. Hide expired forecasts. [Open-Meteo hourly variables](https://open-meteo.com/en/docs)
 
 For future season history, record the first and last days of public lift access in the area's time zone.
 Use the median of up to five completed seasons for each typical date. Verify at least three actual dates for each median.
@@ -283,7 +313,7 @@ The project uses React, TypeScript, Vite, and MapLibre. The `/projects/ski-statu
 
 The map uses a GeoJSON source for resort markers. The map and table use the same search and filters. The table reads the latest viewport when **In map view** is on. The app serves the PMTiles archive with its site files. It requests byte ranges from the archive at resort zoom.
 
-Join static facts, pass rules, resort reports, and forecasts by the local area ID in later stages. The following diagram shows the planned data flow.
+Join static facts, pass rules, resort reports, and forecasts by the local area ID.
 
 ```mermaid
 flowchart LR
@@ -297,13 +327,37 @@ flowchart LR
     H --> I
 ```
 
-Use scheduled jobs for feeds. Update verified pass rules by hand. Publish checked JSON to `data.rsmb.tv` through S3 and CloudFront. Limit publisher access to the `ski-status` prefix. Keep partner keys in the scheduled job. [Repository geospatial delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md#reusing-s3-and-cloudfront), [GitHub OIDC setup](../../docs/github-actions-oidc.md)
+Update verified pass rules by hand. Publish catalog and pass files with the site revision.
+Use scheduled jobs for reports and forecasts. Keep provider keys in those jobs. [Repository geospatial delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md#reusing-s3-and-cloudfront)
 
-Publish catalog and pass files by revision. Refresh weather and reports on their own schedules. Upload each data file before you update the manifest. Include the schema version, catalog revision, coverage, and times. Keep the last valid file when a source fails or returns invalid data. Write one manifest update at a time. Save the previous manifest for rollback.
+Credit sources where their data appears. Publish modified OpenSkiData with its license and credits.
+Verify each feed's terms for storage, display, and export. Limit automatic OpenSkiData downloads to once per day. [OpenSkiData terms](https://www.openskidata.org/#license), [OpenStreetMap Foundation licensing guidance](https://osmfoundation.org/wiki/Licence/Community_Guidelines)
 
-Refresh pilot forecasts every six hours. With 400 areas and one point per area, this gives 1,600 location updates per day. Retries and selected variables can increase the call count. Open-Meteo lists 10,000 daily calls and 300,000 monthly calls for noncommercial use. Check the actual call count. Keep capacity for retries. Update operations reports each hour where the source supports it. [Open-Meteo plans and call accounting](https://open-meteo.com/en/pricing)
+### Conditions publication
 
-Credit sources where their data appears. OpenSkiData permits use under ODbL and requires source credits. Limit automatic downloads to once per day. Build tiles from the downloads. Publish modified ODbL data with its license and attribution. Verify each feed's terms for storage, display, and export before use. [OpenSkiData terms and attribution](https://www.openskidata.org/#license), [OpenStreetMap Foundation licensing guidance](https://osmfoundation.org/wiki/Licence/Community_Guidelines)
+Run the collector locally to check both feeds. It saves files under `.cache/ski-status/` and prints coverage counts. Use `--directory` to select another path.
+
+```bash
+node --import tsx/esm projects/ski-status/scripts/sync-conditions.ts --forecasts
+```
+
+The collector uses a local lock file to prevent two jobs from writing to the same directory. If a job leaves `conditions.pid.lock`, check that the process has stopped before you remove the file.
+
+The workflow uses `AWS_SKI_STATUS_SYNC_ROLE_ARN` on `main`. It publishes reports hourly and forecasts every six hours. The role can read and write the `ski-status/` prefix. [Sync workflow](../../.github/workflows/sync-ski-status.yml), [OIDC setup](../../docs/github-actions-oidc.md#deploy-and-switch)
+
+The collector uploads each new snapshot before it replaces `manifest.json`. The S3 ETag identifies the manifest content that the collector read. The collector uses this value to make the replacement conditional. A concurrent update causes the write to fail. Retry from the current manifest. [S3 conditional writes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html)
+
+The manifest lists snapshot files by SHA-256 checksum. The app checks the manifest every five minutes. It reads changed files and verifies their checksums. It keeps the last valid data when a fetch or check fails. The app uses the packaged pilot data when it has no live copy.
+
+The collector preserves rows with failed provider requests. The manifest gives report age and field coverage. Each successful publication writes an observation under `history/YYYY-MM-DD/`. Compare the received counts with the total counts to detect retained rows.
+
+#### Restore a previous manifest
+
+1. Read the active `manifest.json` from S3. Record its ETag.
+2. Get the file named by `previousManifest`. Check its SHA-256 checksum against its name.
+3. Set the recovered manifest's `updatedAt` to a UTC time later than the active value.
+4. Upload it to `ski-status/manifest.json` with the recorded ETag in `--if-match`. Set its cache lifetime to 60 seconds.
+5. Check the restored snapshot references on the data site. Open ski-status and verify the report dates. If the upload conflicts, start with the new active manifest.
 
 ## Release checks
 
@@ -312,7 +366,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 | Work | Acceptance check |
 | --- | --- |
 | Ski terrain | Run the release validator on the hosted preview for the candidate revision. It checks for `206`, the expected `Content-Range`, and the original bytes. It opens a lift and run tooltip at Heavenly. Check the revision and `previewJobId` in the report. Confirm that `skiTerrainRanges` is greater than zero. [Release validator](../../docs/release-validation.md), [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
-| Pass products | Test shared days, reservations, excluded products, blackout dates, and discount partners. Match each included partner or record why it is outside scope. |
+| Pass products | Test shared days, reservations, access requirements, excluded products, blackout dates, and discounts. Match each included partner. Record exceptions. |
 | Conditions pilot | Measure report age and field coverage for a week. Compare values with operator reports. Test failed updates, stale reports, unknown values, zero values, and partial openings. |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
 
@@ -320,7 +374,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 
 ### Resort conditions and 5-day forecast
 
-Give each ski area a conditions panel in its details. Match reports and forecasts to the catalog area ID. Powderhorn shows how a resort can present a forecast and snowfall measurements. [Powderhorn Mountain Report](https://www.powderhorn.com/conditions/)
+Add current weather and a five-day forecast to the conditions panel. Match reports and forecasts to the catalog area ID. Powderhorn shows how a resort can present a forecast and snowfall measurements. [Powderhorn Mountain Report](https://www.powderhorn.com/conditions/)
 
 | Section | Fields to show |
 | --- | --- |

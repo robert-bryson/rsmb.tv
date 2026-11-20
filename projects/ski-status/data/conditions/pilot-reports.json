@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-20T15:55:45.851Z",
+  "reports": [
+    {
+      "areaId": "3-zinnen-dolomites",
+      "source": {
+        "name": "Open Data Hub / LTS",
+        "url": "https://tourism.api.opendatahub.com/v1/Weather/SnowReport?lang=de&skiareaid=SKI04A713E6479A4BE4BD158019A6DA546C&pagesize=5",
+        "license": "https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068",
+        "exportable": true
+      },
+      "retrievedAt": "2026-11-20T15:55:45.278Z",
+      "status": "limited",
+      "lifts": {
+        "open": 1,
+        "total": 30
+      },
+      "trails": {
+        "open": 1,
+        "total": 78
+      },
+      "baseCm": 5,
+      "snowfallCm": 5,
+      "snowfallOn": "2026-11-19",
+      "snowReportedOn": "2026-11-20",
+      "snowLocation": "Lower station"
+    },
+    {
+      "areaId": "alta-badia",
+      "source": {
+        "name": "Open Data Hub / LTS",
+        "url": "https://tourism.api.opendatahub.com/v1/Weather/SnowReport?lang=de&skiareaid=SKI04EBE61F5AA0473F871AF0297887D6C2&pagesize=5",
+        "license": "https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068",
+        "exportable": true
+      },
+      "retrievedAt": "2026-11-20T15:55:45.127Z",
+      "status": "unknown",
+      "lifts": {
+        "open": 0,
+        "total": 48
+      },
+      "trails": {
+        "open": 0,
+        "total": 93
+      },
+      "baseCm": 0,
+      "snowReportedOn": "2026-04-07",
+      "snowLocation": "Lower station"
+    },
+    {
+      "areaId": "val-gardena-alpe-di-siusi",
+      "source": {
+        "name": "Open Data Hub / LTS",
+        "url": "https://tourism.api.opendatahub.com/v1/Weather/SnowReport?lang=de&skiareaid=SKI2C99CEA3DF2F458FB75E45CA39222E9D&pagesize=5",
+        "license": "https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068",
+        "exportable": true
+      },
+      "retrievedAt": "2026-11-20T15:55:45.851Z",
+      "status": "unknown",
+      "lifts": {
+        "open": 0,
+        "total": 76
+      },
+      "trails": {
+        "open": 0,
+        "total": 199
+      },
+      "baseCm": 0,
+      "snowfallCm": 15,
+      "snowfallOn": "2026-11-19",
+      "snowReportedOn": "2026-11-20",
+      "snowLocation": "Lower station"
+    }
+  ]
+}

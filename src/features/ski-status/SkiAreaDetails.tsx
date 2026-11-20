@@ -1,10 +1,12 @@
-import { columns, formatSkiLocation, formatSkiStat, type SkiUnits } from './browse';
+import { conditionColumns, mountainColumns, formatElevation, formatSkiLocation, formatSkiStat, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
+import { areaForecast, localReportTime, reportAgeHours, type Conditions } from './conditions';
+import { accessLabels, evaluatePass, type PassProduct } from './passRules';
 import { SkiPassIcon } from './SkiPassIcon';
 
 const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
 const passAccessNotes = { included: '', discount: ' (discount only)', listed: ' (lift access unconfirmed)' };
-const detailColumns = columns.slice(2);
+const detailColumns = mountainColumns.slice(2);
 const seasonLabel = 'Published season window';
 const difficultyLabel = 'Published difficulty';
 const statisticLabels = new Map<string, string>([
@@ -36,11 +38,26 @@ function detailSourceLinks(area: SkiArea) {
     return links;
 }
 
-export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units: SkiUnits; onClose: () => void }) {
+interface Props {
+    area: SkiArea;
+    units: SkiUnits;
+    onClose: () => void;
+    conditions?: Conditions;
+    product?: PassProduct;
+    skiDate?: string;
+    homeAreaId?: string;
+}
+
+export function SkiAreaDetails({ area, units, onClose, conditions, product, skiDate, homeAreaId }: Props) {
     const stats = detailColumns.flatMap(({ key, label }) => {
         const value = formatSkiStat(area, key, units);
         return value === undefined && key.startsWith('mapped') ? [] : [{ key, label, value }];
     });
+    const report = conditions?.reports.get(area.id);
+    const forecast = areaForecast(conditions, area.id);
+    const age = reportAgeHours(report, conditions?.now ?? 0);
+    const access = product && conditions && evaluatePass(product, area, conditions.now, skiDate, homeAreaId);
+    const rule = access?.rule;
     return <section id="ski-area-details" tabIndex={-1} aria-labelledby="ski-area-name" className="bg-zinc-950 px-3 py-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
@@ -49,6 +66,32 @@ export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units:
             </div>
             <button type="button" onClick={onClose} className="min-h-11 px-2 text-sm text-zinc-300 underline underline-offset-4 hover:text-white">Close details</button>
         </div>
+        {(report || forecast) && <section aria-label="Conditions summary" className="border-t border-zinc-800 py-2 text-sm">
+            {report && <p>
+                <a href={report.source.url} className={linkClass}>{report.source.name} report</a>{' · '}
+                {report.reportedAt ? <time dateTime={report.reportedAt}>{localReportTime(report.reportedAt, area)}</time>
+                    : report.reportedOn ? <time dateTime={report.reportedOn}>{report.reportedOn}</time> : 'Report time unknown'}
+                {age !== undefined && ` · ${age < 1 ? 'Less than an hour old' : `${Math.floor(age)} h old`}`}
+            </p>}
+            {report?.snowLocation && <p>Snow measurement at {report.snowLocation}{report.snowReportedOn &&
+                <> · <time dateTime={report.snowReportedOn}>{report.snowReportedOn}</time></>}</p>}
+            {report?.closedOn && <p>Season closed <time dateTime={report.closedOn}>{report.closedOn}</time></p>}
+            {report?.hours && <p>{report.hours}</p>}
+            {report?.nightOpen !== undefined && <p>Night operations {report.nightOpen ? 'open' : 'closed'}</p>}
+            {forecast && <p>
+                <a href={forecast.source.url} className={linkClass}>{forecast.source.name} forecast</a>{' · '}{forecast.location}
+                {forecast.elevationM !== undefined && ` (${formatElevation(forecast.elevationM / 0.3048, units)})`}{' · '}
+                <time dateTime={forecast.startsAt}>{localReportTime(forecast.startsAt, area)}</time>{' to '}
+                <time dateTime={forecast.endsAt}>{localReportTime(forecast.endsAt, area)}</time>
+                {forecast.issuedAt && <> · Issued <time dateTime={forecast.issuedAt}>{localReportTime(forecast.issuedAt, area)}</time></>}
+            </p>}
+            <dl className="flex flex-wrap gap-3">
+                {conditionColumns.map(({ key, label }) => {
+                    const value = formatSkiStat(area, key, units, conditions);
+                    return value !== undefined && <div key={key}><dt className="text-zinc-400">{label}</dt><dd>{value}</dd></div>;
+                })}
+            </dl>
+        </section>}
         <div className="flex flex-wrap gap-x-5 text-sm">
             {detailSourceLinks(area).map(({ url, label }) => <a key={url} className={linkClass} href={url}>{label}</a>)}
         </div>
@@ -86,5 +129,18 @@ export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units:
                 </a>
             </li>)}</ul>
         </div>}
+        {product && access && <section aria-label="Pass product terms" className="mt-4 border-t border-zinc-800 pt-3 text-sm">
+            <h3 className="font-medium">{product.name}</h3>
+            <p>{accessLabels[access.status]}{access.date && <> · <time dateTime={access.date}>{access.date}</time></>}</p>
+            {rule && <ul className="space-y-1 text-zinc-300">
+                {rule.days !== undefined && <li>{rule.days === 'unlimited' ? 'Unlimited days' : `${rule.days} days`}{rule.shared && ` shared across ${rule.shared}`}</li>}
+                {access.totalDays && <li>{access.totalDays} days total across this product</li>}
+                {rule.consecutiveDays && <li>Use days consecutively</li>}
+                {rule.reservation === 'required' && <li>Advance reservation required</li>}
+                {rule.reservation === 'check' && <li>Check partner reservation requirements</li>}
+                {rule.note && <li>{rule.note}</li>}
+                <li><a className={linkClass} href={rule.source}>Official pass terms</a> · Checked <time dateTime={rule.checkedOn}>{rule.checkedOn}</time></li>
+            </ul>}
+        </section>}
     </section>;
 }

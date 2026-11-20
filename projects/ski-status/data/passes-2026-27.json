@@ -423,6 +423,12 @@
       "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
     },
     {
+      "areaId": "brevent-flegere",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
+    },
+    {
       "areaId": "brides-les-bains",
       "family": "epic",
       "access": "included",
@@ -655,6 +661,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/destinations/coronet-peak-remarkables-mt-hutt"
+    },
+    {
+      "areaId": "coronet-peak",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
     },
     {
       "areaId": "corralco-resort-de-montana",
@@ -1003,6 +1015,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
+    },
+    {
+      "areaId": "grands-montets",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
     },
     {
       "areaId": "grandvalira",
@@ -1485,6 +1503,12 @@
       "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
     },
     {
+      "areaId": "les-houches",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
+    },
+    {
       "areaId": "les-menuires",
       "family": "epic",
       "access": "included",
@@ -1683,6 +1707,12 @@
       "source": "https://forfait.megeve.com/hiver/en/ikon-pass/"
     },
     {
+      "areaId": "megeve",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
+    },
+    {
       "areaId": "meribel",
       "family": "epic",
       "access": "included",
@@ -1851,6 +1881,12 @@
       "source": "https://www.ikonpass.com/en/destinations/mt-buller/"
     },
     {
+      "areaId": "mt-buller",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
+    },
+    {
       "areaId": "mt-eyak",
       "family": "indy",
       "access": "included",
@@ -1975,6 +2011,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "niseko-united",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
     },
     {
       "areaId": "nordic-mountain",
@@ -2991,6 +3033,12 @@
       "source": "https://www.ikonpass.com/destinations/coronet-peak-remarkables-mt-hutt"
     },
     {
+      "areaId": "the-remarkables",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
+    },
+    {
       "areaId": "the-summit-at-snoqualmie",
       "family": "ikon",
       "access": "included",
@@ -3127,6 +3175,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "valle-nevado",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/how-to-use-my-pass/"
     },
     {
       "areaId": "verbier",

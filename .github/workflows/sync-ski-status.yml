@@ -1,0 +1,44 @@
+name: Sync Ski Status
+
+on:
+  schedule:
+    - cron: '23 0,6,12,18 * * *'
+    - cron: '23 1-5,7-11,13-17,19-23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: sync-ski-status
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.ref == 'refs/heads/main' && vars.AWS_SKI_STATUS_SYNC_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      AWS_REGION: us-east-1
+      REFRESH_FORECASTS: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '23 0,6,12,18 * * *' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install configured npm version
+        run: npm install --global "$(node -p "require('./package.json').packageManager")"
+      - run: npm ci
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_SKI_STATUS_SYNC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Refresh pilot conditions
+        run: |
+          args=(--bucket rsmbtv-temperature-data --directory "${RUNNER_TEMP}/ski-status")
+          if [[ "$REFRESH_FORECASTS" == 'true' ]]; then args+=(--forecasts); fi
+          node --import tsx/esm projects/ski-status/scripts/sync-conditions.ts "${args[@]}"

@@ -22,8 +22,17 @@
         "source": "https://www.dreizinnen.com/en/skiing",
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/SkiArea/SKI04A713E6479A4BE4BD158019A6DA546C",
+        "checkedOn": "2026-11-20",
+        "fields": ["baseFt", "summitFt"],
+        "note": "Published ski area altitude bounds of 1154 to 2200 m.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
-    ]
+    ],
+    "baseFt": 3786,
+    "summitFt": 7218
   },
   {
     "id": "49-north-mountain-resort",
@@ -571,6 +580,31 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://arcticvalley.org/conditions/"
+  },
+  {
+    "id": "arizona-snowbowl",
+    "name": "Arizona Snowbowl",
+    "country": "US",
+    "locality": "Flagstaff",
+    "website": "https://www.snowbowl.ski",
+    "region": "AZ",
+    "reportUrl": "https://www.snowbowl.ski/the-mountain/mountain-information/",
+    "acres": 777,
+    "verticalFt": 2800,
+    "baseFt": 9200,
+    "summitFt": 12000,
+    "highestLiftTerminalFt": 11500,
+    "trailCount": 61,
+    "seasonWindow": "Mid-November to May",
+    "statSources": [
+      {
+        "source": "https://www.snowbowl.ski/the-mountain/mountain-information/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "verticalFt", "baseFt", "summitFt", "highestLiftTerminalFt", "trailCount", "seasonWindow"],
+        "note": "The summit includes hike-to terrain. The top lift-served elevation is a separate field."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
   },
   {
     "id": "asessippi-ski-area-resort",
@@ -1477,6 +1511,26 @@
     ]
   },
   {
+    "id": "bosques-de-monterreal",
+    "name": "Bosques de Monterreal",
+    "country": "MX",
+    "locality": "Arteaga",
+    "website": "https://www.monterreal.com/",
+    "skiing": "dry-slope",
+    "seasonWindow": "Year-round",
+    "statSources": [
+      {
+        "source": "https://www.gob.mx/sectur/articulos/arteaga-coahuila",
+        "checkedOn": "2026-11-20",
+        "fields": ["seasonWindow"],
+        "note": "Tourism ministry documents year-round artificial ski terrain. The Arteaga municipal gazette confirms the season window."
+      }
+    ],
+    "additionalSources": [
+      "https://arteaga.gob.mx/wp-content/uploads/2025/09/GACETA-MUNICIPAL-JULIO-2025.pdf"
+    ]
+  },
+  {
     "id": "boston-mills",
     "name": "Boston Mills",
     "aliases": [
@@ -1694,6 +1748,31 @@
         "note": "Brévent cable car upper terminal and named ski summit."
       }
     ]
+  },
+  {
+    "id": "brian-head-resort",
+    "name": "Brian Head Resort",
+    "country": "US",
+    "locality": "Brian Head",
+    "website": "https://www.brianhead.com",
+    "region": "UT",
+    "acres": 650,
+    "acresQualifier": "lower-bound",
+    "trailCount": 75,
+    "statSources": [
+      {
+        "source": "https://www.brianhead.com/about-us-brian-head-resort/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "acresQualifier", "trailCount"],
+        "note": "Combined Giant Steps and Navajo ski terrain. The operator reports acreage as a lower bound."
+      },
+      {
+        "source": "https://www.brianhead.com/wp-content/uploads/sites/7/2025/12/FY26-BHR-Winter-Press-Kit-V1-1.pdf",
+        "checkedOn": "2026-11-20",
+        "fields": ["baseFt"]
+      }
+    ],
+    "baseFt": 9600
   },
   {
     "id": "brides-les-bains",
@@ -2095,9 +2174,17 @@
         "source": "https://www.camelbackresort.com/trail-map",
         "checkedOn": "2026-11-19",
         "fields": ["trailCount"]
+      },
+      {
+        "source": "https://www.camelbackresort.com/poconos-ski-tube",
+        "checkedOn": "2026-11-20",
+        "fields": ["nightSkiing", "nightAcres"],
+        "note": "The operator reports night skiing on 100% of its 166-acre ski area."
       }
     ],
-    "trailCount": 46
+    "trailCount": 46,
+    "nightSkiing": true,
+    "nightAcres": 166
   },
   {
     "id": "camp-10-ski-area",
@@ -2902,6 +2989,16 @@
     "nightSkiing": true,
     "additionalSources": [
       "https://blog.crystalmountainresort.com/whats-new-at-crystal-mountain-for-the-26-27-season/"
+    ],
+    "highestLiftTerminalFt": 6992,
+    "lowestLiftTerminalFt": 4418,
+    "statSources": [
+      {
+        "source": "https://www.crystalmountainresort.com/media/mountain-stats-and-facts",
+        "checkedOn": "2026-11-20",
+        "fields": ["highestLiftTerminalFt", "lowestLiftTerminalFt"],
+        "note": "Extremes in the operator’s individual lift table. Highest shown is Chair 6; lowest shown is the Discovery start."
+      }
     ]
   },
   {
@@ -3175,6 +3272,28 @@
         "note": "Sum of 32 km of groomed pistes on Diavolezza and 13 km on Lagalb. The ungroomed glacier run is listed separately."
       }
     ]
+  },
+  {
+    "id": "discovery-ski-area",
+    "name": "Discovery Ski Area",
+    "country": "US",
+    "locality": "Anaconda",
+    "website": "https://www.skidiscovery.com",
+    "region": "MT",
+    "reportUrl": "https://www.skidiscovery.com/snow-report/",
+    "acres": 2200,
+    "trailCount": 67,
+    "verticalFt": 2388,
+    "summitFt": 8158,
+    "statSources": [
+      {
+        "source": "https://www.skidiscovery.com/the-mountain/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "trailCount", "verticalFt", "summitFt"],
+        "note": "In-bounds area. The operator reports 67 trails and 2,388 feet of vertical."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
   },
   {
     "id": "disentis",
@@ -4370,6 +4489,29 @@
     "reportUrl": "https://hardwoodskiandbike.ca/trail-conditions/"
   },
   {
+    "id": "harper-mountain",
+    "name": "Harper Mountain",
+    "country": "CA",
+    "locality": "Kamloops",
+    "website": "https://harpermountain.com",
+    "region": "BC",
+    "reportUrl": "https://harpermountain.com/",
+    "acres": 400,
+    "acresQualifier": "lower-bound",
+    "verticalFt": 1400,
+    "liftCount": 3,
+    "nightSkiing": true,
+    "statSources": [
+      {
+        "source": "https://harpermountain.com/skiing-snowboarding/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "acresQualifier", "verticalFt", "liftCount", "nightSkiing"],
+        "note": "Ski and snowboard terrain. The lift count includes the tow and T-bar. The acreage is a published lower bound."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
+  },
+  {
     "id": "hatley-pointe",
     "name": "Hatley Pointe",
     "country": "US",
@@ -4911,8 +5053,17 @@
         "source": "https://www.hurricaneridge.com/ski-area-info/",
         "checkedOn": "2026-11-19",
         "fields": ["baseFt", "summitFt"]
+      },
+      {
+        "source": "https://www.nps.gov/olym/planyourvisit/hurricane-ridge-in-winter.htm",
+        "checkedOn": "2026-11-20",
+        "fields": ["seasonWindow"],
+        "note": "National Park Service typical winter operations window. Ski lift operations depend on snow and road access."
       }
-    ]
+    ],
+    "seasonWindow": "Late November to the end of March",
+    "reportUrl": "https://www.hurricaneridge.com/",
+    "reportCheckedOn": "2026-11-20"
   },
   {
     "id": "hyland-hills",
@@ -4988,6 +5139,24 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "liftCount", "downhillKm", "baseFt", "summitFt", "verticalFt", "terrainParks"],
         "note": "The operator reports about 515 hectares of groomed slopes. Vertical is calculated from the 1,377–2,872 m area range."
+      }
+    ]
+  },
+  {
+    "id": "island-lake-cat-skiing",
+    "name": "Island Lake Catskiing",
+    "country": "CA",
+    "locality": "Fernie",
+    "website": "https://www.islandlakelodge.com",
+    "region": "BC",
+    "skiing": "cat-skiing",
+    "guidedTerrainAcres": 7000,
+    "statSources": [
+      {
+        "source": "https://www.islandlakelodge.com/catskiing/book",
+        "checkedOn": "2026-11-20",
+        "fields": ["guidedTerrainAcres"],
+        "note": "Guided access to over 7,000 acres."
       }
     ]
   },
@@ -6053,6 +6222,29 @@
     "terrainParks": true
   },
   {
+    "id": "lookout-pass",
+    "name": "Lookout Pass Ski & Recreation Area",
+    "country": "US",
+    "locality": "Mullan",
+    "website": "https://skilookout.com",
+    "region": "ID/MT",
+    "acres": 1023,
+    "baseFt": 4500,
+    "summitFt": 6150,
+    "verticalFt": 1650,
+    "liftCount": 5,
+    "trailCount": 51,
+    "terrainParks": true,
+    "statSources": [
+      {
+        "source": "https://skilookout.com/trail-map/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount", "terrainParks"],
+        "note": "Includes Eagle Peak. Trail count covers 51 named runs; separately listed glades and parks have their own scope."
+      }
+    ]
+  },
+  {
     "id": "loon-mountain-resort",
     "name": "Loon Mountain Resort",
     "aliases": [
@@ -6202,6 +6394,27 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "liftCount", "trailCount", "verticalFt", "grades"],
         "note": "The operator reports an 825 ft lift-served rise and a 1,088 ft terrain rise."
+      }
+    ]
+  },
+  {
+    "id": "mad-river-glen",
+    "name": "Mad River Glen",
+    "country": "US",
+    "locality": "Waitsfield",
+    "website": "https://www.madriverglen.com",
+    "region": "VT",
+    "acres": 115,
+    "verticalFt": 2037,
+    "summitFt": 3637,
+    "liftCount": 5,
+    "trailCount": 60,
+    "statSources": [
+      {
+        "source": "https://www.madriverglen.com/quick-facts/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "verticalFt", "summitFt", "liftCount", "trailCount"],
+        "note": "Acreage covers marked trails. The operator lists tree-skiing access separately."
       }
     ]
   },
@@ -6741,6 +6954,35 @@
     "reportUrl": "https://minocquawinterpark.org/park/ski/grooming-report-conditions/"
   },
   {
+    "id": "mission-ridge",
+    "name": "Mission Ridge Ski & Board Resort",
+    "country": "US",
+    "locality": "Wenatchee",
+    "website": "https://www.missionridge.com/",
+    "region": "WA",
+    "reportUrl": "https://www.missionridge.com/weather-updates/",
+    "acres": 2000,
+    "acresQualifier": "lower-bound",
+    "statSources": [
+      {
+        "source": "https://www.visitwenatchee.org/blog/winter-adventures-in-wenatchee-downhill-thrills-and-snowy-trails",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "acresQualifier"],
+        "note": "Tourism agency reports more than 2,000 skiable acres."
+      },
+      {
+        "source": "https://expansion.missionridge.com/expansion/",
+        "checkedOn": "2026-11-20",
+        "fields": ["verticalFt", "summitFt", "trailCount"],
+        "note": "Current resort figures in the expansion overview."
+      }
+    ],
+    "verticalFt": 2250,
+    "summitFt": 6820,
+    "trailCount": 36,
+    "reportCheckedOn": "2026-11-20"
+  },
+  {
     "id": "mohawk-mountain",
     "name": "Mohawk Mountain",
     "aliases": [
@@ -6842,6 +7084,27 @@
     "verticalFt": 482,
     "nightSkiing": true,
     "terrainParks": true
+  },
+  {
+    "id": "mont-orford",
+    "name": "Mont Orford",
+    "country": "CA",
+    "locality": "Orford",
+    "website": "https://montorford.com",
+    "region": "QC",
+    "acres": 245,
+    "liftCount": 7,
+    "trailCount": 62,
+    "verticalFt": 1933,
+    "terrainParks": true,
+    "statSources": [
+      {
+        "source": "https://montorford.com/en-ca/winter/technical-sheet/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "liftCount", "trailCount", "verticalFt", "terrainParks"],
+        "note": "Total of 44 runs and 18 glades. The lift total includes two conveyors."
+      }
+    ]
   },
   {
     "id": "mont-rigaud",
@@ -6961,9 +7224,16 @@
         "source": "https://www.montagemountainresorts.com/",
         "checkedOn": "2026-11-19",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.montagemountainresorts.com/experience/",
+        "checkedOn": "2026-11-20",
+        "fields": ["nightAcres"],
+        "note": "The operator offers full-mountain night skiing across its 140-acre terrain."
       }
     ],
-    "reportUrl": "https://www.montagemountainresorts.com/trails/"
+    "reportUrl": "https://www.montagemountainresorts.com/trails/",
+    "nightAcres": 140
   },
   {
     "id": "montana-snowbowl",
@@ -7338,7 +7608,23 @@
     "acres": 1000,
     "baseFt": 3500,
     "summitFt": 5089,
-    "verticalFt": 1500
+    "verticalFt": 1500,
+    "liftCount": 10,
+    "statSources": [
+      {
+        "source": "https://www.mtbaker.us/the-mountain/mountain-info-faq/",
+        "checkedOn": "2026-11-20",
+        "fields": ["liftCount"],
+        "note": "Eight quad chairs and two handle tows."
+      },
+      {
+        "source": "https://www.mtbaker.us/the-mountain/mountain-stats/",
+        "checkedOn": "2026-11-20",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Operator elevation for the top of Chair 8."
+      }
+    ],
+    "highestLiftTerminalFt": 5089
   },
   {
     "id": "mt-brighton",
@@ -7544,6 +7830,57 @@
     "verticalFt": 325,
     "nightSkiing": true,
     "terrainParks": true
+  },
+  {
+    "id": "mt-rose-ski-tahoe",
+    "name": "Mt. Rose Ski Tahoe",
+    "country": "US",
+    "locality": "Reno",
+    "website": "https://skirose.com",
+    "region": "NV",
+    "reportUrl": "https://skirose.com/mountain-information/",
+    "acres": 1200,
+    "acresQualifier": "lower-bound",
+    "verticalFt": 1800,
+    "baseFt": 8260,
+    "summitFt": 9700,
+    "trailCount": 70,
+    "trailCountQualifier": "lower-bound",
+    "statSources": [
+      {
+        "source": "https://skirose.com/mountain-information/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "acresQualifier", "verticalFt", "baseFt", "summitFt", "trailCount", "trailCountQualifier"],
+        "note": "Acreage and trail count are published lower bounds."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
+  },
+  {
+    "id": "mt-seymour",
+    "name": "Mt Seymour",
+    "country": "CA",
+    "locality": "North Vancouver",
+    "website": "https://mtseymour.ca",
+    "region": "BC",
+    "reportUrl": "https://mtseymour.ca/the-mountain/todays-conditions-hours",
+    "acres": 200,
+    "verticalFt": 1083,
+    "baseFt": 3346,
+    "summitFt": 4150,
+    "liftCount": 5,
+    "trailCount": 40,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "statSources": [
+      {
+        "source": "https://mtseymour.ca/the-mountain/trail-map",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "verticalFt", "baseFt", "summitFt", "liftCount", "trailCount", "nightSkiing", "terrainParks"],
+        "note": "Downhill terrain and lifts only. Base means the day lodge at 1,020 m. Top elevation is 1,265 m; skiable vertical is 330 m."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
   },
   {
     "id": "mt-shasta-ski-park",
@@ -8999,6 +9336,52 @@
     "terrainParks": true
   },
   {
+    "id": "powder-king-mountain-resort",
+    "name": "Powder King Mountain Resort",
+    "country": "CA",
+    "locality": "Pine Pass",
+    "website": "https://www.powderking.com",
+    "region": "BC",
+    "reportUrl": "https://www.powderking.com/mountain/ski-report",
+    "acres": 925,
+    "verticalFt": 2100,
+    "liftCount": 3,
+    "trailCount": 38,
+    "statSources": [
+      {
+        "source": "https://www.powderking.com/contact/about-us",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Uses the operator’s published acres and vertical in feet. The acreage and elevation conversions on the source page differ."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
+  },
+  {
+    "id": "powder-mountain",
+    "name": "Powder Mountain",
+    "country": "US",
+    "locality": "Eden",
+    "website": "https://powdermountain.com",
+    "region": "UT",
+    "reportUrl": "https://powdermountain.com/conditions",
+    "acres": 5000,
+    "liftCount": 8,
+    "trailCount": 152,
+    "verticalFt": 2615,
+    "summitFt": 9422,
+    "nightSkiing": true,
+    "statSources": [
+      {
+        "source": "https://powdermountain.com/mountain",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "liftCount", "trailCount", "verticalFt", "summitFt", "nightSkiing"],
+        "note": "Public skiable area includes lift-served, bus-served and hike-to terrain. Lifts are six chairs and two surface lifts. The vertical uses James Peak and the DMI base."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
+  },
+  {
     "id": "powder-ridge",
     "name": "Powder Ridge",
     "country": "US",
@@ -9231,7 +9614,9 @@
         "fields": ["acres", "liftCount", "baseFt", "summitFt", "verticalFt"],
         "note": "Vertical is converted from the published 890 m range. Acreage covers the resort's five skiable peaks."
       }
-    ]
+    ],
+    "reportUrl": "https://www.redresort.com/",
+    "reportCheckedOn": "2026-11-20"
   },
   {
     "id": "red-river-ski-summer-area",
@@ -9922,8 +10307,15 @@
         "source": "https://www.alterramtn.co/en/news/two-weeks-left-to-grab-an-ikon-pass-at-its-current-lowest-spring-prices",
         "checkedOn": "2026-11-19",
         "fields": ["trailCount", "verticalFt"]
+      },
+      {
+        "source": "https://www.skisilverstar.com/",
+        "checkedOn": "2026-11-20",
+        "fields": ["baseFt"],
+        "note": "Village base is 1,609 m."
       }
-    ]
+    ],
+    "baseFt": 5279
   },
   {
     "id": "silverton-mountain",
@@ -11354,7 +11746,9 @@
         "note": "Highest and lowest listed chairlift terminals are West Bowl Express and Burfield."
       }
     ],
-    "lowestLiftTerminalFt": 3930
+    "lowestLiftTerminalFt": 3930,
+    "reportUrl": "https://www.sunpeaksresort.com/ski-ride/weather-conditions-cams/lifts-trail-status",
+    "reportCheckedOn": "2026-11-20"
   },
   {
     "id": "sun-valley-bald-mountain",
@@ -11425,6 +11819,25 @@
     "verticalFt": 196,
     "nightSkiing": true,
     "terrainParks": true
+  },
+  {
+    "id": "sundance-mountain-resort",
+    "name": "Sundance Mountain Resort",
+    "country": "US",
+    "locality": "Sundance",
+    "website": "https://www.sundanceresort.com",
+    "region": "UT",
+    "acres": 608,
+    "trailCount": 85,
+    "verticalFt": 2150,
+    "statSources": [
+      {
+        "source": "https://www.sundanceresort.com/faqs/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "trailCount", "verticalFt"],
+        "note": "Approximate skiable area as published by the operator."
+      }
+    ]
   },
   {
     "id": "sunday-river",
@@ -12264,8 +12677,17 @@
         "source": "https://www.dolomitisuperski.com/dam/jcr%3Ab8977e3a-44c3-4a63-bd80-c17519e677cc/04_Val_Gardena_2025-2026_web.pdf",
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/SkiArea/SKI2C99CEA3DF2F458FB75E45CA39222E9D",
+        "checkedOn": "2026-11-20",
+        "fields": ["baseFt", "summitFt"],
+        "note": "Published ski area altitude bounds of 1220 to 2520 m.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
-    ]
+    ],
+    "baseFt": 4003,
+    "summitFt": 8268
   },
   {
     "id": "val-thorens",
@@ -12570,7 +12992,9 @@
     "terrainParks": true,
     "additionalSources": [
       "https://skiwhitepass.com/the-mountain/indypass"
-    ]
+    ],
+    "reportUrl": "https://skiwhitepass.com/the-mountain/hours-and-lifts",
+    "reportCheckedOn": "2026-11-20"
   },
   {
     "id": "white-pine-resort",
@@ -12667,6 +13091,31 @@
     }
   },
   {
+    "id": "whitefish-mountain-resort",
+    "name": "Whitefish Mountain Resort",
+    "country": "US",
+    "locality": "Whitefish",
+    "website": "https://skiwhitefish.com/",
+    "region": "MT",
+    "reportUrl": "https://skiwhitefish.com/snowreport/",
+    "acres": 3000,
+    "verticalFt": 2353,
+    "summitFt": 6817,
+    "baseFt": 4464,
+    "liftCount": 14,
+    "trailCount": 111,
+    "nightSkiing": true,
+    "statSources": [
+      {
+        "source": "https://skiwhitefish.com/WMREventGuide.pdf",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "verticalFt", "summitFt", "baseFt", "liftCount", "trailCount", "nightSkiing"],
+        "note": "Resort event guide includes both T-bars and both conveyors in the lift count."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
+  },
+  {
     "id": "whitehorse-nordic-centre",
     "name": "Whitehorse Nordic Centre",
     "country": "CA",
@@ -12735,6 +13184,29 @@
     "reportUrl": "https://www.skiwhitetail.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
+    "id": "whitewater-mountain-resort",
+    "name": "Whitewater Mountain Resort",
+    "country": "CA",
+    "locality": "Nelson",
+    "website": "https://whitewatermountainresort.com",
+    "region": "BC",
+    "reportUrl": "https://whitewatermountainresort.com/conditions/",
+    "acres": 3247,
+    "verticalFt": 2014,
+    "baseFt": 5348,
+    "summitFt": 6568,
+    "highestLiftTerminalFt": 6768,
+    "statSources": [
+      {
+        "source": "https://whitewatermountainresort.com/faq/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "verticalFt", "baseFt", "summitFt", "highestLiftTerminalFt"],
+        "note": "Total skiable terrain. The listed summit is the Summit Chair area; the Raven Chair terminal is higher."
+      }
+    ],
+    "reportCheckedOn": "2026-11-20"
+  },
+  {
     "id": "wild-mountain",
     "name": "Wild Mountain",
     "aliases": [
@@ -12782,6 +13254,30 @@
     },
     "statsUrl": "https://www.skiwildcat.com/the-mountain/about-the-mountain/mountain-info.aspx",
     "reportUrl": "https://www.skiwildcat.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+  },
+  {
+    "id": "willamette-pass",
+    "name": "Willamette Pass",
+    "country": "US",
+    "locality": "Crescent Lake",
+    "website": "https://www.willamettepass.ski",
+    "region": "OR",
+    "skiing": "both",
+    "acres": 555,
+    "verticalFt": 1563,
+    "baseFt": 5120,
+    "summitFt": 6683,
+    "liftCount": 6,
+    "trailCount": 29,
+    "nordicKm": 20,
+    "statSources": [
+      {
+        "source": "https://www.willamettepass.ski/about-the-mountain/",
+        "checkedOn": "2026-11-20",
+        "fields": ["acres", "verticalFt", "baseFt", "summitFt", "liftCount", "trailCount", "nordicKm"],
+        "note": "Skiable area is 555 acres. The permit covers a larger area. Lift total includes five chairs and a conveyor."
+      }
+    ]
   },
   {
     "id": "williams-lake-cross-country-ski-club",

@@ -1,0 +1,5632 @@
+{
+  "season": "2026/27",
+  "family": "epic",
+  "seasonDates": [
+    "2026-09-01",
+    "2027-09-30"
+  ],
+  "products": [
+    {
+      "id": "epic-pass",
+      "name": "Epic Pass"
+    },
+    {
+      "id": "epic-local",
+      "name": "Epic Local Pass"
+    },
+    {
+      "id": "epic-day-1-all-restricted",
+      "name": "Epic Day Pass · 1 day · All Resorts · Restricted",
+      "totalDays": 1
+    },
+    {
+      "id": "epic-day-1-all-unrestricted",
+      "name": "Epic Day Pass · 1 day · All Resorts · Any date",
+      "totalDays": 1
+    },
+    {
+      "id": "epic-day-2-all-restricted",
+      "name": "Epic Day Pass · 2 days · All Resorts · Restricted",
+      "totalDays": 2
+    },
+    {
+      "id": "epic-day-2-all-unrestricted",
+      "name": "Epic Day Pass · 2 days · All Resorts · Any date",
+      "totalDays": 2
+    },
+    {
+      "id": "epic-day-3-all-restricted",
+      "name": "Epic Day Pass · 3 days · All Resorts · Restricted",
+      "totalDays": 3
+    },
+    {
+      "id": "epic-day-3-all-unrestricted",
+      "name": "Epic Day Pass · 3 days · All Resorts · Any date",
+      "totalDays": 3
+    },
+    {
+      "id": "epic-day-4-all-restricted",
+      "name": "Epic Day Pass · 4 days · All Resorts · Restricted",
+      "totalDays": 4
+    },
+    {
+      "id": "epic-day-4-all-unrestricted",
+      "name": "Epic Day Pass · 4 days · All Resorts · Any date",
+      "totalDays": 4
+    },
+    {
+      "id": "epic-day-5-all-restricted",
+      "name": "Epic Day Pass · 5 days · All Resorts · Restricted",
+      "totalDays": 5
+    },
+    {
+      "id": "epic-day-5-all-unrestricted",
+      "name": "Epic Day Pass · 5 days · All Resorts · Any date",
+      "totalDays": 5
+    },
+    {
+      "id": "epic-day-6-all-restricted",
+      "name": "Epic Day Pass · 6 days · All Resorts · Restricted",
+      "totalDays": 6
+    },
+    {
+      "id": "epic-day-6-all-unrestricted",
+      "name": "Epic Day Pass · 6 days · All Resorts · Any date",
+      "totalDays": 6
+    },
+    {
+      "id": "epic-day-7-all-restricted",
+      "name": "Epic Day Pass · 7 days · All Resorts · Restricted",
+      "totalDays": 7
+    },
+    {
+      "id": "epic-day-7-all-unrestricted",
+      "name": "Epic Day Pass · 7 days · All Resorts · Any date",
+      "totalDays": 7
+    }
+  ],
+  "rules": [
+    {
+      "areaId": "afton-alps",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "afton-alps",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "afton-alps",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "afton-alps",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "alpe-cimbra",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alpine-valley",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "alpine-valley",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "alpine-valley",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "alpine-valley",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "andermatt-gemsstock",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "shared": "Andermatt-Sedrun-Disentis",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "andermatt-gemsstock",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "andermatt-sedrun",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "shared": "Andermatt-Sedrun-Disentis",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "andermatt-sedrun",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "attitash-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "attitash-mountain-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "attitash-mountain-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "attitash-mountain-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "beaver-creek-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "beaver-creek-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "beaver-creek-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": 10,
+      "shared": "Vail, Beaver Creek and Whistler Blackcomb",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "beaver-creek-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "big-boulder",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "big-boulder",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "big-boulder",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "big-boulder",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "boston-mills",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "boston-mills",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "boston-mills",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "boston-mills",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "brandywine",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "brandywine",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "brandywine",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "brandywine",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "breckenridge-ski-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "breckenridge-ski-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "breckenridge-ski-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "breckenridge-ski-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "brides-les-bains",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Les 3 Vallées",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "bruson",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-20"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "bruson",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "courchevel",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Les 3 Vallées",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "crans-montana",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "crans-montana",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "crested-butte-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crested-butte-mountain-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crested-butte-mountain-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crested-butte-mountain-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crotched-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crotched-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crotched-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crotched-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "disentis",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "shared": "Andermatt-Sedrun-Disentis",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "disentis",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "falls-creek",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/regions/australia.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "fernie-alpine-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "fernie-alpine-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "fernie-alpine-resort",
+      "products": [
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "fernie-alpine-resort",
+      "products": [
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "fernie-alpine-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": 7,
+      "shared": "Resorts of the Canadian Rockies",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "folgarida-marilleva",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-47",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-cortina",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-goryu",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-happo-one",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-iwatake",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-norikura-onsen",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-sanosaka",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "heavenly",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "heavenly",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "heavenly",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "heavenly",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-ski-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-ski-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-ski-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hidden-valley-ski-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hintertux-glacier",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Zillertal",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hochfuegen-hochzillertal",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Zillertal",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hotham",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/regions/australia.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hunter-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hunter-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hunter-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "hunter-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "jack-frost-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "jack-frost-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "jack-frost-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "jack-frost-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "jigatake",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "kashimayari",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "keystone-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "keystone-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "keystone-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "keystone-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kicking-horse",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kicking-horse",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kicking-horse",
+      "products": [
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kicking-horse",
+      "products": [
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kicking-horse",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": 7,
+      "shared": "Resorts of the Canadian Rockies",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kimberley-alpine-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kimberley-alpine-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kimberley-alpine-resort",
+      "products": [
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kimberley-alpine-resort",
+      "products": [
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kimberley-alpine-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": 7,
+      "shared": "Resorts of the Canadian Rockies",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kirkwood-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kirkwood-mountain-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kirkwood-mountain-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kirkwood-mountain-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "kitzsteinhorn",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "shared": "Saalbach and Zell am See-Kaprun",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "la-tzoumaz",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-20"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "la-tzoumaz",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "laurel-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "laurel-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "laurel-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "laurel-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "lech-am-arlberg",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 3,
+      "consecutiveDays": true,
+      "shared": "Ski Arlberg",
+      "lodgingRequired": true,
+      "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "les-menuires",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Les 3 Vallées",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "liberty-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "liberty-mountain-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "liberty-mountain-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "liberty-mountain-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mad-river-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mad-river-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mad-river-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mad-river-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "madonna-di-campiglio",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mayrhofen",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Zillertal",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "meribel",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Les 3 Vallées",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "products": [
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "products": [
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": 7,
+      "shared": "Resorts of the Canadian Rockies",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "monte-bondone",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mount-snow",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mount-snow",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mount-snow",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mount-snow",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mount-sunapee",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mount-sunapee",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mount-sunapee",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mount-sunapee",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mt-brighton",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mt-brighton",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mt-brighton",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mt-brighton",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "products": [
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "products": [
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": 7,
+      "shared": "Resorts of the Canadian Rockies",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "nendaz",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-20"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "nendaz",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "northstar-california-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "northstar-california-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "northstar-california-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "northstar-california-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "okemo-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "okemo-mountain-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "okemo-mountain-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "okemo-mountain-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "orelle",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Les 3 Vallées",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "paganella-ski",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "paoli-peaks",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "paoli-peaks",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "paoli-peaks",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "paoli-peaks",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "park-city-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "park-city-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "park-city-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "park-city-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "pejo-3000",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "perisher",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2027-06-01",
+          "2027-09-30"
+        ]
+      ],
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/regions/australia.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pinzolo",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pontedilegno-tonale",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Skirama Dolomiti",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "roundtop-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "roundtop-mountain-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "roundtop-mountain-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "roundtop-mountain-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "rusutsu-resort",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "source": "https://www.epicpass.com/regions/japan/rusutsu-resort.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "saint-martin-de-belleville",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Les 3 Vallées",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "schmittenhoehe",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "shared": "Saalbach and Zell am See-Kaprun",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "seven-springs-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "seven-springs-mountain-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "seven-springs-mountain-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "seven-springs-mountain-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "silvretta-montafon",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "skicircus-saalbach",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "shared": "Saalbach and Zell am See-Kaprun",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snow-creek",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "snow-creek",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "snow-creek",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "snow-creek",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "soelden",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "spieljoch",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Zillertal",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "st-anton-am-arlberg",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 3,
+      "consecutiveDays": true,
+      "shared": "Ski Arlberg",
+      "lodgingRequired": true,
+      "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "st-christoph-am-arlberg",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 3,
+      "consecutiveDays": true,
+      "shared": "Ski Arlberg",
+      "lodgingRequired": true,
+      "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "station-touristique-stoneham",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "station-touristique-stoneham",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "station-touristique-stoneham",
+      "products": [
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "station-touristique-stoneham",
+      "products": [
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "station-touristique-stoneham",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": 7,
+      "shared": "Resorts of the Canadian Rockies",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stevens-pass",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stevens-pass",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stevens-pass",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stevens-pass",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stowe",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stowe",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stowe",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stowe",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "stuben-am-arlberg",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 3,
+      "consecutiveDays": true,
+      "shared": "Ski Arlberg",
+      "lodgingRequired": true,
+      "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "products": [
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "reservation": "required",
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "products": [
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "reservation": "required",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": 7,
+      "reservation": "required",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "thyon",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-20"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "thyon",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "tsugaike-mountain-resort",
+      "products": [
+        "epic-pass",
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Hakuba Valley",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "vail-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "vail-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "vail-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": 10,
+      "shared": "Vail, Beaver Creek and Whistler Blackcomb",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "vail-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "val-thorens",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 7,
+      "consecutiveDays": true,
+      "shared": "Les 3 Vallées",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "verbier",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-20"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "verbier",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "veysonnaz",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-20"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "veysonnaz",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Verbier 4 Vallées",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "whistler-blackcomb",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "whistler-blackcomb",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "whistler-blackcomb",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": 10,
+      "shared": "Vail, Beaver Creek and Whistler Blackcomb",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "whistler-blackcomb",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "whitetail-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "whitetail-resort",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "whitetail-resort",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "whitetail-resort",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wildcat-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wildcat-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wildcat-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wildcat-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wilmot-mountain",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wilmot-mountain",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wilmot-mountain",
+      "products": [
+        "epic-local"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wilmot-mountain",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "days": "unlimited",
+      "source": "https://www.epicpass.com/pass-results/college.aspx",
+      "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "zillertal-arena",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 5,
+      "consecutiveDays": true,
+      "shared": "Zillertal",
+      "source": "https://www.epicpass.com/regions/europe.aspx",
+      "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zuers-am-arlberg",
+      "products": [
+        "epic-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "days": 3,
+      "consecutiveDays": true,
+      "shared": "Ski Arlberg",
+      "lodgingRequired": true,
+      "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
+      "checkedOn": "2026-11-20"
+    }
+  ]
+}

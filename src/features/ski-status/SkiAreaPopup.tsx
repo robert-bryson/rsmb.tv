@@ -5,17 +5,19 @@ import { Popup, type Map } from '../../maps/maplibre';
 import { containsPoint } from '../../maps/screenGeometry';
 import { columns, formatSkiLocation, formatSkiStat, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
+import { localReportTime, reportStatusText, type Conditions } from './conditions';
 
-type Props = { area: SkiArea; mapRef: RefObject<Map | null> } & (
+type Props = { area: SkiArea; mapRef: RefObject<Map | null>; conditions?: Conditions } & (
     { onClose?: undefined; units?: undefined } | { onClose: () => void; units: SkiUnits }
 );
 
 const summaryColumns = columns.filter(({ key }) => key === 'acres' || key === 'verticalFt' || key === 'liftCount');
 
-export function SkiAreaPopup({ area, mapRef, onClose, units }: Props) {
+export function SkiAreaPopup({ area, mapRef, onClose, units, conditions }: Props) {
     const [content] = useState(() => document.createElement('div'));
     const coordinates = area.location.coordinates;
     const selected = Boolean(onClose);
+    const report = conditions?.reports.get(area.id);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -52,6 +54,10 @@ export function SkiAreaPopup({ area, mapRef, onClose, units }: Props) {
             <div className={selected ? 'pr-8' : undefined}>
                 <p className="text-sm font-semibold">{area.name}</p>
                 <p className="mt-0.5 text-zinc-300">{formatSkiLocation(area)}</p>
+                {report && <p className="mt-0.5 text-zinc-300">
+                    {reportStatusText(report, conditions?.now ?? 0)}
+                    {report.reportedAt && <> · <time dateTime={report.reportedAt}>{localReportTime(report.reportedAt, area)}</time></>}
+                </p>}
             </div>
             {onClose && <button type="button" onClick={onClose} aria-label="Close resort popup"
                 className="absolute -top-2 -right-2 grid size-11 place-items-center rounded-md text-xl text-zinc-300 hover:text-white">

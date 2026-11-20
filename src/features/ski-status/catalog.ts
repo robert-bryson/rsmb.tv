@@ -2,19 +2,19 @@ import { z } from 'zod';
 import areaData from '../../../projects/ski-status/data/areas.json';
 import locationData from '../../../projects/ski-status/data/locations.json';
 import passData from '../../../projects/ski-status/data/passes-2026-27.json';
+import { httpsUrl, passSeasonId, skiId } from './schemas';
 
-const id = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const label = z.string().trim().min(1);
 const countryCode = z.string().regex(/^[A-Z]{2}$/);
-const httpsUrl = z.string().trim().refine(value => {
-    if (!/^https:\/\//i.test(value)) return false;
+export const skiTimeZone = label.refine(value => {
+    if (value.startsWith('+') || value.startsWith('-')) return false;
     try {
-        const { username, password } = new URL(value);
-        return !username && !password;
+        new Intl.DateTimeFormat('en', { timeZone: value });
+        return true;
     } catch {
         return false;
     }
-}, 'Use an HTTPS source URL without credentials');
+}, 'Use an IANA time zone');
 const amount = z.number().nonnegative();
 const count = z.int().nonnegative();
 const minimumSkiableAcres = 100;
@@ -59,9 +59,10 @@ const statisticSourceSchema = z.strictObject({
     checkedOn: z.iso.date(),
     fields: z.array(z.enum(statisticKeys)).min(1),
     note: label.optional(),
+    exportLicense: httpsUrl.optional(),
 });
 const areaSchema = z.strictObject({
-    id,
+    id: skiId,
     name: label,
     aliases: z.array(label).optional(),
     region: z.string().regex(/^[A-Z]{2}(?:\/[A-Z]{2})?$/).optional(),
@@ -72,10 +73,11 @@ const areaSchema = z.strictObject({
     website: httpsUrl,
     statsUrl: httpsUrl.optional(),
     reportUrl: httpsUrl.optional(),
+    reportCheckedOn: z.iso.date().optional(),
     ...mountainStats,
     statSources: z.array(statisticSourceSchema).optional(),
     additionalSources: z.array(httpsUrl).optional(),
-});
+}).refine(({ reportUrl, reportCheckedOn }) => !reportCheckedOn || Boolean(reportUrl), 'A report check date requires a report link');
 
 const mappedTerrainSchema = z.strictObject({
     source: httpsUrl,
@@ -94,10 +96,11 @@ const locationsSchema = z.strictObject({
     license: httpsUrl,
     attribution: z.record(label, httpsUrl).refine(links => Object.keys(links).length > 0, 'Add a location attribution link'),
     locations: z.array(z.strictObject({
-        id,
+        id: skiId,
         coordinates: z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]),
         upstream: z.array(httpsUrl).min(1),
         mappedTerrain: mappedTerrainSchema.optional(),
+        timeZone: skiTimeZone.optional(),
     })),
 });
 
@@ -108,11 +111,10 @@ export const passNames: Record<PassFamily, string> = {
 };
 
 const passesSchema = z.strictObject({
-    season: z.string().regex(/^\d{4}\/\d{2}$/).refine(value =>
-        Number(value.slice(5)) === (Number(value.slice(0, 4)) + 1) % 100, 'Pass season must end the next year'),
+    season: passSeasonId,
     checkedOn: z.iso.date(),
     memberships: z.array(z.strictObject({
-        areaId: id,
+        areaId: skiId,
         family: passFamilySchema,
         access: z.enum(['included', 'discount', 'listed']),
         source: httpsUrl,

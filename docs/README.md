@@ -48,7 +48,7 @@ An alt description states the visible content. A caption can supply other inform
 | [Temperature map](temperature-map.md) | Maintain record markers, units, selections, and map regression tests |
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Generate global and U.S. pins, validate location details, and check publication |
-| [ski-status guide and plan](../projects/ski-status/readme.md) | Use the map and table. Maintain the catalog and verify releases. |
+| [ski-status guide](../projects/ski-status/readme.md) | Use the map and table. Maintain the catalog and verify releases. |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
 ## Reviews
@@ -58,6 +58,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-20 | [ski-status implementation review](reviews/2026-11-20-ski-status-implementation-review.md) |
+| 2026-11-20 | [ski-status first-release work](reviews/2026-11-20-ski-status-first-release-work.md) |
 | 2026-11-20 | [ski-status release identity and map recovery review](reviews/2026-11-20-ski-status-release-and-map-review.md) |
 | 2026-11-20 | [ski-status data, map recovery, and terrain publication review](reviews/2026-11-20-ski-status-data-and-recovery-review.md) |
 | 2026-11-19 | [ski-status catalog, layout, and terrain review](reviews/2026-11-19-ski-status-expansion-review.md) |

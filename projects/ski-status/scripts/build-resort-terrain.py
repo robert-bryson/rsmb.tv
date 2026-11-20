@@ -22,7 +22,7 @@ DATA = Path(__file__).resolve().parents[1] / 'data'
 SOURCE = 'https://tiles.openskimap.org/openskidata.gpkg'
 MIN_ZOOM, MAX_ZOOM = 11, 14
 RUN_USES = ('downhill', 'nordic', 'skitour', 'snow_park', 'connection')
-LIFT_FREE_TYPES = {'cross-country', 'ski-touring'}
+LIFT_FREE_USES = {'cross-country': 'nordic', 'ski-touring': 'skitour'}
 AREA_POINTS = 'ski_areas_point'
 AREA_FOOTPRINTS = 'ski_areas_multipolygon'
 FEATURE_LAYERS = {
@@ -119,7 +119,7 @@ def find_areas(db, areas, locations):
         kind = area.get('skiing', 'downhill')
         if kind in ('heli-skiing', 'cat-skiing'):
             continue
-        activity = {'cross-country': 'nordic', 'ski-touring': 'skitour'}.get(kind, 'downhill')
+        activity = LIFT_FREE_USES.get(kind, 'downhill')
         countries = {area['country'], *area.get('otherCountries', ())}
         longitude, latitude = record['coordinates']
 
@@ -189,6 +189,16 @@ def add_mapped_trail_counts(path, locations, build_time):
     return changed
 
 
+def run_owners(owners, areas, uses):
+    primary = next((use for use in RUN_USES if use in uses), None)
+    by_use = defaultdict(set)
+    for owner in sorted(owners):
+        use = LIFT_FREE_USES.get(areas[owner].get('skiing'), primary)
+        if use in uses:
+            by_use[use].add(owner)
+    return by_use
+
+
 def write_tiles(db, matched, areas, work, attribution):
     groups = {}
     counts = {}
@@ -211,30 +221,30 @@ def write_tiles(db, matched, areas, work, attribution):
                         continue
 
                     props = {'name': feature['name']} if feature['name'] else {}
+                    owners_by_use = {None: owners}
                     if layer == 'runs':
-                        uses = values(feature['uses'])
-                        use = next((option for option in RUN_USES if option in uses), None)
-                        if not use:
-                            continue
-                        owners = {owner for owner in owners if areas[owner].get('skiing') != 'cross-country' or 'nordic' in uses}
-                        props.update(use=use, difficulty=feature['difficulty'], convention=feature['difficulty_convention'],
+                        owners_by_use = run_owners(owners, areas, values(feature['uses']))
+                        props.update(difficulty=feature['difficulty'], convention=feature['difficulty_convention'],
                                      ref=feature['ref'])
                     elif layer in ('lifts', 'stations'):
-                        owners = {owner for owner in owners if areas[owner].get('skiing') not in LIFT_FREE_TYPES}
+                        owners_by_use = {None: {owner for owner in owners if areas[owner].get('skiing') not in LIFT_FREE_USES}}
                         if layer == 'lifts':
                             props.update(liftType=feature['lift_type'])
-                    if not owners:
+                    if not any(owners_by_use.values()):
                         continue
 
                     geometry = feature.GetGeometryRef()
                     if geometry is None or geometry.IsEmpty():
                         continue
                     geometry.FlattenTo2D()
-                    props['group'] = groups.setdefault(tuple(sorted(owners)), len(groups) + 1)
-                    stream.write(json.dumps({'type': 'Feature', 'properties': {k: v for k, v in props.items() if v},
-                                             'geometry': json.loads(geometry.ExportToJson(['COORDINATE_PRECISION=6']))},
-                                            ensure_ascii=False, separators=(',', ':')) + '\n')
-                    counts[layer] += 1
+                    geometry_json = json.loads(geometry.ExportToJson(['COORDINATE_PRECISION=6']))
+                    for use, use_owners in owners_by_use.items():
+                        if use:
+                            props['use'] = use
+                        props['group'] = groups.setdefault(tuple(sorted(use_owners)), len(groups) + 1)
+                        stream.write(json.dumps({'type': 'Feature', 'properties': {k: v for k, v in props.items() if v},
+                                                 'geometry': geometry_json}, ensure_ascii=False, separators=(',', ':')) + '\n')
+                        counts[layer] += 1
         if counts[layer]:
             inputs.append(f'--named-layer={layer}:{path.name}')
 

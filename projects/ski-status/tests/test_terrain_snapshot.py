@@ -137,3 +137,17 @@ class TerrainPublicationTest(unittest.TestCase):
         self.assertEqual((self.directory / archive.name).read_text(encoding='utf-8'), f'Old {archive.name}')
         self.assertEqual((self.directory / index.name).read_text(encoding='utf-8'), f'Old {index.name}')
         self.assertFalse((self.directory / locations.name).exists())
+
+
+class TerrainRunOwnershipTest(unittest.TestCase):
+    areas = {'alpine': {}, 'nordic': {'skiing': 'cross-country'}, 'touring': {'skiing': 'ski-touring'}}
+
+    def test_draws_shared_geometry_for_each_supported_activity(self):
+        self.assertEqual(
+            terrain.run_owners(self.areas, self.areas, {'downhill', 'nordic', 'skitour'}),
+            {'downhill': {'alpine'}, 'nordic': {'nordic'}, 'skitour': {'touring'}},
+        )
+
+    def test_excludes_unsupported_activities_from_lift_free_areas(self):
+        self.assertEqual(terrain.run_owners(self.areas, self.areas, {'downhill'}), {'downhill': {'alpine'}})
+        self.assertEqual(terrain.run_owners(self.areas, self.areas, {'sled'}), {})

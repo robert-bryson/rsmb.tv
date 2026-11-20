@@ -29,7 +29,8 @@
           1135,
           2221
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "49-north-mountain-resort",
@@ -50,7 +51,8 @@
           1190,
           1756
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "afton-alps",
@@ -71,7 +73,8 @@
           213,
           310
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "alpe-cimbra",
@@ -92,7 +95,8 @@
           1182,
           1811
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "alpe-lusia-san-pellegrino",
@@ -103,7 +107,8 @@
       "upstream": [
         "https://www.openstreetmap.org/way/542227215",
         "https://www.skimap.org/SkiAreas/view/4226"
-      ]
+      ],
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "alpental",
@@ -123,7 +128,8 @@
           958,
           1659
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "alpine-valley",
@@ -144,7 +150,8 @@
           340,
           410
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "alta",
@@ -166,7 +173,8 @@
           2602,
           3217
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "alta-badia",
@@ -187,7 +195,8 @@
           1341,
           2526
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "alyeska-resort",
@@ -208,7 +217,8 @@
           80,
           837
         ]
-      }
+      },
+      "timeZone": "America/Anchorage"
     },
     {
       "id": "amihari-onsen-ski-resort",
@@ -229,7 +239,8 @@
           764,
           1324
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "andermatt-gemsstock",
@@ -249,7 +260,8 @@
           1437,
           2958
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "andermatt-sedrun",
@@ -270,7 +282,8 @@
           1437,
           2595
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "andes-tower-hills",
@@ -293,7 +306,8 @@
           428,
           493
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "angel-fire-resort",
@@ -314,7 +328,8 @@
           2618,
           3256
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "antelope-butte",
@@ -335,7 +350,8 @@
           2566,
           2855
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "aomori-spring-ski-resort",
@@ -356,7 +372,8 @@
           396,
           916
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "apex-mountain-resort",
@@ -377,7 +394,8 @@
           1606,
           2173
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "appi-resort",
@@ -398,7 +416,8 @@
           628,
           1269
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "arabba-marmolada",
@@ -409,7 +428,8 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/10732925",
         "https://www.skimap.org/SkiAreas/view/4218"
-      ]
+      ],
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "arai-mountain-resort",
@@ -430,7 +450,8 @@
           369,
           1278
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "arapahoe-basin",
@@ -451,7 +472,8 @@
           3289,
           3803
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "arctic-valley",
@@ -472,7 +494,30 @@
           772,
           1192
         ]
-      }
+      },
+      "timeZone": "America/Anchorage"
+    },
+    {
+      "id": "arizona-snowbowl",
+      "coordinates": [
+        -111.69799,
+        35.32924
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3187211",
+        "https://www.skimap.org/SkiAreas/view/548"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=baea9cfef6687ce48eab4290f136798ab2791ea9",
+        "lifts": 8,
+        "downhillKm": 22,
+        "elevationM": [
+          2791,
+          3510
+        ],
+        "namedDownhillRuns": 47
+      },
+      "timeZone": "America/Phoenix"
     },
     {
       "id": "asessippi-ski-area-resort",
@@ -492,7 +537,8 @@
           430,
           536
         ]
-      }
+      },
+      "timeZone": "America/Regina"
     },
     {
       "id": "aspen-highlands",
@@ -513,7 +559,8 @@
           2466,
           3527
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "aspen-mountain",
@@ -534,7 +581,8 @@
           2426,
           3431
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "attitash-mountain-resort",
@@ -555,7 +603,8 @@
           190,
           695
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "bad-kleinkirchheim",
@@ -575,7 +624,8 @@
           1012,
           2037
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "baldy-mountain-resort",
@@ -595,7 +645,8 @@
           1732,
           2119
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "balme-vallorcine",
@@ -616,7 +667,8 @@
           1262,
           2252
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "banff-sunshine",
@@ -637,7 +689,8 @@
           1661,
           2686
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "baqueira-beret",
@@ -658,7 +711,8 @@
           1504,
           2600
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "bear-basin-nordic-center",
@@ -677,7 +731,8 @@
           1628,
           1698
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "bear-creek",
@@ -698,7 +753,8 @@
           207,
           350
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "bear-mountain",
@@ -719,7 +775,8 @@
           2177,
           2680
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "bear-valley-adventure-company",
@@ -738,7 +795,8 @@
           2055,
           2301
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "bear-valley-mountain-resort",
@@ -759,7 +817,8 @@
           2024,
           2586
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "beaver-creek-resort",
@@ -779,7 +838,8 @@
           2259,
           3484
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "beaver-mountain",
@@ -800,7 +860,8 @@
           2181,
           2670
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "beidahu-ski-resort",
@@ -821,7 +882,8 @@
           506,
           1395
         ]
-      }
+      },
+      "timeZone": "Asia/Shanghai"
     },
     {
       "id": "beito-resort",
@@ -842,7 +904,8 @@
           901,
           1099
         ]
-      }
+      },
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "belleayre-mountain",
@@ -864,7 +927,8 @@
           626,
           1045
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "bergbahnen-hohsaas",
@@ -884,7 +948,8 @@
           1553,
           3142
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "berkshire-east-ski-resort",
@@ -905,7 +970,8 @@
           180,
           466
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "bethel-village-trails",
@@ -925,7 +991,8 @@
           193,
           370
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "big-boulder",
@@ -946,7 +1013,8 @@
           550,
           663
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "big-moose",
@@ -967,7 +1035,8 @@
           404,
           580
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "big-powderhorn",
@@ -988,7 +1057,8 @@
           370,
           498
         ]
-      }
+      },
+      "timeZone": "America/Menominee"
     },
     {
       "id": "big-rock-mountain",
@@ -1009,7 +1079,8 @@
           201,
           487
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "big-sky-resort",
@@ -1030,7 +1101,8 @@
           2078,
           3402
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "big-snow-american-dream",
@@ -1041,7 +1113,8 @@
       "upstream": [
         "https://www.openstreetmap.org/way/755762044",
         "https://www.skimap.org/SkiAreas/view/2658"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "big-white-ski-resort",
@@ -1062,7 +1135,8 @@
           1512,
           2271
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "bjorkliden",
@@ -1083,7 +1157,8 @@
           424,
           933
         ]
-      }
+      },
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "black-jack-cross-country-ski-club",
@@ -1102,7 +1177,8 @@
           1062,
           1513
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "black-mountain-of-maine",
@@ -1123,7 +1199,8 @@
           297,
           615
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "black-mountain-ski-area",
@@ -1144,7 +1221,8 @@
           375,
           685
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "blue-knob-all-season-resort",
@@ -1165,7 +1243,8 @@
           653,
           960
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "blue-mountain-resort",
@@ -1186,7 +1265,8 @@
           141,
           469
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "blue-mountain-resort-on",
@@ -1207,7 +1287,8 @@
           231,
           451
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "bluewood",
@@ -1228,7 +1309,8 @@
           1386,
           1728
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "bogus-basin",
@@ -1249,7 +1331,8 @@
           1758,
           2304
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "bolton-valley-resort",
@@ -1270,7 +1353,27 @@
           475,
           950
         ]
-      }
+      },
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "bosques-de-monterreal",
+      "coordinates": [
+        -100.435001,
+        25.232182
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/3253"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=fbc767d83e5f854f091f5a52ce462d5d5be83b0b",
+        "lifts": 1,
+        "elevationM": [
+          2657,
+          2705
+        ]
+      },
+      "timeZone": "America/Monterrey"
     },
     {
       "id": "boston-mills",
@@ -1291,7 +1394,8 @@
           202,
           264
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "bottineau-winter-park",
@@ -1311,7 +1415,8 @@
           692,
           747
         ]
-      }
+      },
+      "timeZone": "America/Winnipeg"
     },
     {
       "id": "bousquet-mountain-0",
@@ -1332,7 +1437,8 @@
           337,
           548
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "boyne-mountain",
@@ -1353,7 +1459,8 @@
           217,
           352
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "brandywine",
@@ -1374,7 +1481,8 @@
           200,
           254
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "breckenridge-ski-resort",
@@ -1394,7 +1502,8 @@
           2918,
           3913
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "bretton-woods",
@@ -1415,7 +1524,8 @@
           487,
           912
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "brevent-flegere",
@@ -1436,7 +1546,30 @@
           1047,
           2486
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
+    },
+    {
+      "id": "brian-head-resort",
+      "coordinates": [
+        -112.846101,
+        37.689158
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1230308747",
+        "https://www.skimap.org/SkiAreas/view/227"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=d17554e2aaa5a02bbc98023dd1f5cf4e17c6107e",
+        "lifts": 13,
+        "downhillKm": 38,
+        "elevationM": [
+          2929,
+          3325
+        ],
+        "namedDownhillRuns": 60
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "brides-les-bains",
@@ -1447,7 +1580,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/556895268",
         "https://www.openstreetmap.org/way/1231054490"
-      ]
+      ],
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "bridger-bowl",
@@ -1469,7 +1603,8 @@
           1865,
           2457
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "brighton-resort",
@@ -1490,7 +1625,8 @@
           2666,
           3185
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "bristol-mountain",
@@ -1511,7 +1647,8 @@
           307,
           656
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "bromont-montagne-dexperiences",
@@ -1532,7 +1669,8 @@
           183,
           547
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "bruce-mound-winter-sports-area",
@@ -1553,7 +1691,8 @@
           307,
           401
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "brundage-mountain-resort",
@@ -1574,7 +1713,8 @@
           1792,
           2318
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "bruson",
@@ -1585,7 +1725,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/13366241720",
         "https://www.openstreetmap.org/way/217973825"
-      ]
+      ],
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "bryce-resort",
@@ -1606,7 +1747,8 @@
           383,
           515
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "buck-hill",
@@ -1627,7 +1769,8 @@
           291,
           368
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "buffalo-ski-club",
@@ -1648,7 +1791,8 @@
           308,
           452
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "burke-mountain-resort",
@@ -1669,7 +1813,8 @@
           371,
           977
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "buttermilk",
@@ -1690,7 +1835,8 @@
           2402,
           3012
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "caberfae-peaks",
@@ -1711,7 +1857,8 @@
           357,
           465
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "calabogie-peaks-resort",
@@ -1732,7 +1879,8 @@
           158,
           372
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "caledonia-nordic-ski-club",
@@ -1752,7 +1900,8 @@
           604,
           742
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "camden-snow-bowl",
@@ -1773,7 +1922,8 @@
           73,
           326
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "camelback-mountain-resort",
@@ -1795,7 +1945,8 @@
           378,
           623
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "camp-10-ski-area",
@@ -1814,7 +1965,8 @@
           462,
           524
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "camp-fortune",
@@ -1836,7 +1988,8 @@
           171,
           352
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "canaan-valley",
@@ -1857,7 +2010,8 @@
           1046,
           1302
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "canmore-ski-village",
@@ -1878,7 +2032,8 @@
           216,
           450
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "cannon-mountain",
@@ -1899,7 +2054,8 @@
           574,
           1231
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "carters-xc-ski-center",
@@ -1918,7 +2074,8 @@
           192,
           361
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "castle-mountain-resort",
@@ -1939,7 +2096,8 @@
           1409,
           2259
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "cat-ski-mount-bailey",
@@ -1949,7 +2107,8 @@
       ],
       "upstream": [
         "https://diamondlake.net/getting-here/"
-      ]
+      ],
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "cataloochee-ski-area",
@@ -1970,7 +2129,8 @@
           1362,
           1583
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "catamount-mountain-resort",
@@ -1991,7 +2151,8 @@
           283,
           576
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "catamount-outdoor-family-center",
@@ -2001,7 +2162,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/node/408489913"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "cazenovia-ski-club",
@@ -2021,7 +2183,8 @@
           290,
           436
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "centre-vorlage",
@@ -2042,7 +2205,8 @@
           112,
           243
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "cervino-ski-paradise",
@@ -2053,7 +2217,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/240324438",
         "https://www.openstreetmap.org/way/114942017"
-      ]
+      ],
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "cherry-peak",
@@ -2074,7 +2239,8 @@
           1764,
           2132
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "chestnut-mountain-resort",
@@ -2095,7 +2261,8 @@
           184,
           309
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "china-peak",
@@ -2116,7 +2283,8 @@
           2143,
           2630
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "christie-mountain",
@@ -2136,7 +2304,8 @@
           397,
           502
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "civetta",
@@ -2157,7 +2326,8 @@
           984,
           2078
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "coffee-mill-ski-area",
@@ -2177,7 +2347,8 @@
           229,
           352
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "cooper",
@@ -2198,7 +2369,8 @@
           3226,
           3579
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "cooper-spur-ski-area",
@@ -2218,7 +2390,8 @@
           1204,
           1293
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "copper-mountain",
@@ -2239,7 +2412,8 @@
           2959,
           3756
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "coronet-peak",
@@ -2260,7 +2434,8 @@
           1167,
           1613
         ]
-      }
+      },
+      "timeZone": "Pacific/Auckland"
     },
     {
       "id": "corralco-resort-de-montana",
@@ -2281,7 +2456,8 @@
           1529,
           2392
         ]
-      }
+      },
+      "timeZone": "America/Santiago"
     },
     {
       "id": "cortina-d-ampezzo",
@@ -2305,7 +2481,8 @@
           859,
           2739
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "corvatsch",
@@ -2327,7 +2504,8 @@
           1799,
           3296
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "corviglia",
@@ -2348,7 +2526,8 @@
           1733,
           3021
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "courchevel",
@@ -2368,7 +2547,8 @@
           1258,
           2695
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "courmayeur-mont-blanc",
@@ -2389,7 +2569,8 @@
           1204,
           2749
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "cranmore-mountain-resort",
@@ -2410,7 +2591,8 @@
           166,
           510
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "crans-montana",
@@ -2431,7 +2613,8 @@
           1427,
           2872
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "crested-butte-mountain-resort",
@@ -2452,7 +2635,8 @@
           2783,
           3488
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "crosscut-mountain-sports-center",
@@ -2462,7 +2646,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/1264671748"
-      ]
+      ],
+      "timeZone": "America/Denver"
     },
     {
       "id": "crotched-mountain",
@@ -2483,7 +2668,8 @@
           316,
           584
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "crystal-mountain",
@@ -2504,7 +2690,8 @@
           1344,
           2072
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "crystal-mountain-mi",
@@ -2525,7 +2712,8 @@
           242,
           345
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "crystal-ridge",
@@ -2545,7 +2733,8 @@
           214,
           282
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "cuchara",
@@ -2566,7 +2755,8 @@
           2823,
           2903
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "cupid-valley",
@@ -2587,7 +2777,8 @@
           431,
           721
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "cypress-mountain",
@@ -2608,7 +2799,8 @@
           824,
           1426
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "dartmouth-skiway",
@@ -2629,7 +2821,8 @@
           280,
           580
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "deer-valley-resort",
@@ -2651,7 +2844,8 @@
           1964,
           2912
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "destination-owls-head",
@@ -2672,7 +2866,8 @@
           238,
           712
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "detroit-mountain",
@@ -2693,7 +2888,8 @@
           439,
           499
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "devil-s-head-resort",
@@ -2714,7 +2910,8 @@
           283,
           434
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "devils-thumb-ranch",
@@ -2733,7 +2930,8 @@
           2579,
           2866
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "diavolezza-lagalb",
@@ -2754,7 +2952,30 @@
           2084,
           3003
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
+    },
+    {
+      "id": "discovery-ski-area",
+      "coordinates": [
+        -113.251085,
+        46.265024
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1263735248",
+        "https://www.skimap.org/SkiAreas/view/366"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=c2aa4bc4a3f18ed27833da4df260df5a40ecfb03",
+        "lifts": 8,
+        "downhillKm": 41,
+        "elevationM": [
+          1743,
+          2486
+        ],
+        "namedDownhillRuns": 46
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "disentis",
@@ -2774,7 +2995,8 @@
           1223,
           2770
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "dodge-ridge",
@@ -2795,7 +3017,8 @@
           2002,
           2482
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "dog-creek-lodge-nordic-center",
@@ -2814,7 +3037,8 @@
           979,
           1122
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "domaine-skiable-des-contamines",
@@ -2835,7 +3059,8 @@
           1158,
           2444
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "donner-ski-ranch",
@@ -2856,7 +3081,8 @@
           2145,
           2364
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "dry-hill-ski-area",
@@ -2877,7 +3103,8 @@
           214,
           301
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "dutch-hill-recreation-area",
@@ -2887,7 +3114,8 @@
       ],
       "upstream": [
         "https://catamounttrail.org/bc-zones/bc-zones/dutch-hill-recreation-area-dhash/"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "dynaland",
@@ -2908,7 +3136,8 @@
           984,
           1425
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "eagle-point",
@@ -2929,7 +3158,8 @@
           2843,
           3222
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "eaglecrest-ski-area",
@@ -2950,7 +3180,8 @@
           350,
           788
         ]
-      }
+      },
+      "timeZone": "America/Juneau"
     },
     {
       "id": "eastman-cross-country",
@@ -2971,7 +3202,8 @@
           312,
           368
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "echo-mountain",
@@ -2992,7 +3224,8 @@
           3067,
           3249
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "eldora-mountain-resort",
@@ -3013,7 +3246,8 @@
           2821,
           3232
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "elk-mountain",
@@ -3034,7 +3268,8 @@
           535,
           812
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "elm-creek-park-reserve",
@@ -3045,7 +3280,8 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/18015832",
         "https://www.skimap.org/SkiAreas/view/5246"
-      ]
+      ],
+      "timeZone": "America/Chicago"
     },
     {
       "id": "enchanted-forest-xc",
@@ -3056,7 +3292,8 @@
       "upstream": [
         "https://www.openstreetmap.org/way/756454880",
         "https://www.skimap.org/SkiAreas/view/15246"
-      ]
+      ],
+      "timeZone": "America/Denver"
     },
     {
       "id": "engstligenalp",
@@ -3077,7 +3314,8 @@
           1946,
           2354
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "fairmont-hot-springs",
@@ -3098,7 +3336,8 @@
           1216,
           1477
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "falls-creek",
@@ -3119,7 +3358,8 @@
           1507,
           1774
         ]
-      }
+      },
+      "timeZone": "Australia/Melbourne"
     },
     {
       "id": "fernie-alpine-resort",
@@ -3140,7 +3380,8 @@
           1059,
           2097
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "folgarida-marilleva",
@@ -3160,7 +3401,8 @@
           1290,
           2167
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "fort-kent-outdoor-center",
@@ -3181,7 +3423,8 @@
           167,
           307
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "franconia-village-xc-ski-area",
@@ -3201,7 +3444,8 @@
           288,
           470
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "frost-fire-park",
@@ -3222,7 +3466,8 @@
           335,
           438
         ]
-      }
+      },
+      "timeZone": "America/Winnipeg"
     },
     {
       "id": "furano-ski-resort",
@@ -3243,7 +3488,8 @@
           235,
           1064
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "galtuer",
@@ -3265,7 +3511,8 @@
           1628,
           2295
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "garnet-hill-xc",
@@ -3275,7 +3522,8 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/17657"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "geto-kogen",
@@ -3296,7 +3544,8 @@
           636,
           1063
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "giants-ridge",
@@ -3317,7 +3566,8 @@
           431,
           562
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "glencoe-mountain-resort",
@@ -3338,7 +3588,8 @@
           374,
           1079
         ]
-      }
+      },
+      "timeZone": "Europe/London"
     },
     {
       "id": "glenshee-ski-centre",
@@ -3359,7 +3610,8 @@
           635,
           1028
         ]
-      }
+      },
+      "timeZone": "Europe/London"
     },
     {
       "id": "gore-mountain",
@@ -3381,7 +3633,8 @@
           321,
           1092
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "gore-mountain-nordic-center",
@@ -3391,7 +3644,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/815765733"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "granby-ranch",
@@ -3414,7 +3668,8 @@
           2540,
           2795
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "grand-targhee-resort",
@@ -3435,7 +3690,8 @@
           2318,
           2999
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "grands-montets",
@@ -3456,7 +3712,8 @@
           1234,
           2768
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "grandvalira",
@@ -3477,7 +3734,8 @@
           1674,
           2619
         ]
-      }
+      },
+      "timeZone": "Europe/Andorra"
     },
     {
       "id": "granite-peak",
@@ -3498,7 +3756,8 @@
           372,
           573
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "great-bear-ski-valley",
@@ -3518,7 +3777,8 @@
           412,
           462
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "great-divide-ski-area",
@@ -3539,7 +3799,8 @@
           1769,
           2194
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "great-glen-trails-outdoor-center",
@@ -3559,7 +3820,8 @@
           465,
           538
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "greek-peak-mountain-resort",
@@ -3580,7 +3842,8 @@
           384,
           636
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "grouse-mountain",
@@ -3601,7 +3864,8 @@
           872,
           1228
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "gunstock-mountain-resort",
@@ -3623,7 +3887,8 @@
           287,
           684
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "hafjell",
@@ -3644,7 +3909,8 @@
           192,
           1058
         ]
-      }
+      },
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "hakuba-47",
@@ -3664,7 +3930,8 @@
           820,
           1639
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hakuba-cortina",
@@ -3685,7 +3952,8 @@
           808,
           1391
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hakuba-goryu",
@@ -3704,7 +3972,8 @@
           753,
           1640
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hakuba-happo-one",
@@ -3725,7 +3994,8 @@
           751,
           1827
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hakuba-iwatake",
@@ -3746,7 +4016,8 @@
           746,
           1283
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hakuba-norikura-onsen",
@@ -3767,7 +4038,8 @@
           809,
           1278
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hakuba-sanosaka",
@@ -3788,7 +4060,8 @@
           791,
           1146
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hardwood-ski-and-bike",
@@ -3807,7 +4080,30 @@
           310,
           374
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
+    },
+    {
+      "id": "harper-mountain",
+      "coordinates": [
+        -120.133543,
+        50.72209
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/476841704",
+        "https://www.skimap.org/SkiAreas/view/53"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=68f4ae00702202f5b8aa14acb6f074e4878c9074",
+        "lifts": 4,
+        "downhillKm": 13,
+        "elevationM": [
+          1083,
+          1483
+        ],
+        "namedDownhillRuns": 14
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "hatley-pointe",
@@ -3828,7 +4124,8 @@
           1203,
           1398
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "haymaker-nordic-center",
@@ -3838,7 +4135,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/node/5892165397"
-      ]
+      ],
+      "timeZone": "America/Denver"
     },
     {
       "id": "heavenly",
@@ -3859,7 +4157,8 @@
           2025,
           3037
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "hidden-valley-resort",
@@ -3880,7 +4179,8 @@
           733,
           882
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "hidden-valley-ski-resort",
@@ -3901,7 +4201,8 @@
           171,
           260
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "high-point-xc-ski-center",
@@ -3911,7 +4212,8 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/17890"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "hilltop-ski-area",
@@ -3932,7 +4234,8 @@
           148,
           238
         ]
-      }
+      },
+      "timeZone": "America/Anchorage"
     },
     {
       "id": "hintertux-glacier",
@@ -3953,7 +4256,8 @@
           1500,
           3245
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "hirugano-kogen-ski-resort",
@@ -3974,7 +4278,8 @@
           868,
           1025
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "hochfuegen-hochzillertal",
@@ -3995,7 +4300,8 @@
           553,
           2374
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "hochzeiger-bergbahnen-pitztal-ag",
@@ -4016,7 +4322,8 @@
           1467,
           2483
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "hockley-valley-resort",
@@ -4037,7 +4344,8 @@
           332,
           398
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "hodaigi-mountain-resort",
@@ -4058,7 +4366,8 @@
           831,
           1384
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "homestake-lodge",
@@ -4078,7 +4387,8 @@
           1859,
           1985
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "homewood-mountain-resort",
@@ -4089,7 +4399,8 @@
       "upstream": [
         "https://www.openstreetmap.org/way/599019467",
         "https://www.skimap.org/SkiAreas/view/545"
-      ]
+      ],
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "hoodoo-ski-area",
@@ -4110,7 +4421,8 @@
           1427,
           1728
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "hotham",
@@ -4131,7 +4443,8 @@
           1449,
           1856
         ]
-      }
+      },
+      "timeZone": "Australia/Melbourne"
     },
     {
       "id": "howelsen-hill",
@@ -4154,7 +4467,8 @@
           2048,
           2186
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "hudson-bay-mountain",
@@ -4175,7 +4489,8 @@
           1143,
           1670
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "huff-hills-ski-area",
@@ -4196,7 +4511,8 @@
           565,
           669
         ]
-      }
+      },
+      "timeZone": "America/North_Dakota/New_Salem"
     },
     {
       "id": "hunt-hollow-ski-club",
@@ -4217,7 +4533,8 @@
           345,
           592
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "hunter-mountain",
@@ -4238,7 +4555,8 @@
           502,
           969
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "hurricane-ridge",
@@ -4258,7 +4576,8 @@
           1485,
           1660
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "hyland-hills",
@@ -4279,7 +4598,8 @@
           258,
           310
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "innsbruck-region",
@@ -4290,7 +4610,8 @@
       "upstream": [
         "https://www.openstreetmap.org/way/539209006",
         "https://www.skimap.org/SkiAreas/view/640"
-      ]
+      ],
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "ischgl-samnaun",
@@ -4311,7 +4632,20 @@
           1352,
           2868
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
+    },
+    {
+      "id": "island-lake-cat-skiing",
+      "coordinates": [
+        -115.186003,
+        49.506394
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1466131123",
+        "https://www.skimap.org/SkiAreas/view/2268"
+      ],
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "jack-frost-mountain",
@@ -4332,7 +4666,8 @@
           444,
           603
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "jackson-hole-mountain-resort",
@@ -4353,7 +4688,8 @@
           1929,
           3169
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "jackson-xc",
@@ -4373,7 +4709,8 @@
           228,
           1211
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "jay-peak-resort",
@@ -4396,7 +4733,8 @@
           560,
           1166
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "jigatake",
@@ -4417,7 +4755,8 @@
           919,
           1178
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "jiminy-peak-mountain-resort",
@@ -4438,7 +4777,8 @@
           383,
           724
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "june-mountain",
@@ -4459,7 +4799,8 @@
           2309,
           3089
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "kamui-ski-links",
@@ -4480,7 +4821,8 @@
           146,
           732
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "kandatsu-snow-resort",
@@ -4501,7 +4843,8 @@
           469,
           969
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "kappl",
@@ -4522,7 +4865,8 @@
           1173,
           2639
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "kashimayari",
@@ -4543,7 +4887,8 @@
           842,
           1333
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "kaunertal-glacier",
@@ -4563,7 +4908,8 @@
           2175,
           3107
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "kelly-canyon",
@@ -4584,7 +4930,8 @@
           1770,
           2037
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "kendall-mountain-ski-area",
@@ -4605,7 +4952,8 @@
           2835,
           2904
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "keystone-resort",
@@ -4626,7 +4974,8 @@
           2829,
           3742
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "kicking-horse",
@@ -4647,7 +4996,8 @@
           1262,
           2424
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "killington",
@@ -4668,7 +5018,8 @@
           354,
           1262
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "kimberley-alpine-resort",
@@ -4690,7 +5041,8 @@
           1235,
           1904
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "kimberley-nordic-club",
@@ -4700,7 +5052,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/475131780"
-      ]
+      ],
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "king-pine",
@@ -4721,7 +5074,8 @@
           143,
           241
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "kirkwood-mountain-resort",
@@ -4742,7 +5096,8 @@
           2382,
           2884
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "kitzbuehel",
@@ -4763,7 +5118,8 @@
           762,
           1993
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "kitzsteinhorn",
@@ -4784,7 +5140,8 @@
           765,
           3024
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "kronplatz",
@@ -4805,7 +5162,8 @@
           925,
           2273
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "krvavec-ski-resort",
@@ -4826,7 +5184,8 @@
           1474,
           1963
         ]
-      }
+      },
+      "timeZone": "Europe/Ljubljana"
     },
     {
       "id": "kvitfjell",
@@ -4847,7 +5206,8 @@
           184,
           1038
         ]
-      }
+      },
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "la-thuile-espace-san-bernardo",
@@ -4858,7 +5218,8 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/5752851",
         "https://www.skimap.org/SkiAreas/view/762"
-      ]
+      ],
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "la-tzoumaz",
@@ -4869,7 +5230,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/316315926",
         "https://www.openstreetmap.org/way/28770030"
-      ]
+      ],
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "lake-louise",
@@ -4890,7 +5252,8 @@
           1647,
           2643
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "lake-songhua-resort",
@@ -4911,7 +5274,8 @@
           320,
           910
         ]
-      }
+      },
+      "timeZone": "Asia/Shanghai"
     },
     {
       "id": "laurel-mountain",
@@ -4932,7 +5296,8 @@
           611,
           843
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "le-massif",
@@ -4953,7 +5318,8 @@
           37,
           792
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "le-relais",
@@ -4974,7 +5340,8 @@
           205,
           427
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "leavenworth-winter-sports-club",
@@ -4994,7 +5361,8 @@
           438,
           519
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "lech-am-arlberg",
@@ -5005,7 +5373,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/285898460",
         "https://www.openstreetmap.org/way/105896648"
-      ]
+      ],
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "les-7-laux",
@@ -5026,7 +5395,8 @@
           1333,
           2372
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "les-houches",
@@ -5047,7 +5417,8 @@
           978,
           1887
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "les-menuires",
@@ -5067,7 +5438,8 @@
           1386,
           2838
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "leukerbad-torrent-ski-resort-gemmi-resort",
@@ -5088,7 +5460,8 @@
           1387,
           2596
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "levi-ski-resort",
@@ -5108,7 +5481,8 @@
           197,
           530
         ]
-      }
+      },
+      "timeZone": "Europe/Helsinki"
     },
     {
       "id": "liberty-mountain-resort",
@@ -5129,7 +5503,8 @@
           178,
           354
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "liberty-mountain-snowflex-centre",
@@ -5139,7 +5514,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/896007563"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "little-ski-hill",
@@ -5160,7 +5536,8 @@
           1581,
           1702
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "little-switzerland",
@@ -5180,7 +5557,8 @@
           328,
           376
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "loch-lomond",
@@ -5201,7 +5579,30 @@
           251,
           431
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
+    },
+    {
+      "id": "lookout-pass",
+      "coordinates": [
+        -115.715948,
+        47.451816
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1225427361",
+        "https://www.skimap.org/SkiAreas/view/482"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=6203d7697ddd064b9db6405244468bf20fba9830",
+        "lifts": 5,
+        "downhillKm": 37,
+        "elevationM": [
+          1374,
+          1875
+        ],
+        "namedDownhillRuns": 49
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "loon-mountain-resort",
@@ -5222,7 +5623,8 @@
           262,
           929
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "lost-trail",
@@ -5243,7 +5645,8 @@
           1960,
           2495
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "lost-valley",
@@ -5264,7 +5667,8 @@
           77,
           148
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "loup-loup-ski-bowl",
@@ -5285,7 +5689,8 @@
           1237,
           1611
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "loveland-ski-area",
@@ -5297,7 +5702,8 @@
         "https://www.openstreetmap.org/way/184326663",
         "https://www.openstreetmap.org/way/184326673",
         "https://www.skimap.org/SkiAreas/view/515"
-      ]
+      ],
+      "timeZone": "America/Denver"
     },
     {
       "id": "lutsen-mountains",
@@ -5318,7 +5724,30 @@
           276,
           512
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
+    },
+    {
+      "id": "mad-river-glen",
+      "coordinates": [
+        -72.922758,
+        44.1985
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1094318196",
+        "https://www.skimap.org/SkiAreas/view/200"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=556e089aeadb5ea6194bd0456cb5548a0fa22bd6",
+        "lifts": 5,
+        "downhillKm": 27,
+        "elevationM": [
+          502,
+          1106
+        ],
+        "namedDownhillRuns": 59
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "mad-river-mountain",
@@ -5339,7 +5768,8 @@
           356,
           443
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "madarao-mountain-resort",
@@ -5360,7 +5790,8 @@
           918,
           1339
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "madonna-di-campiglio",
@@ -5381,7 +5812,8 @@
           1513,
           2511
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "magic-mountain-idaho",
@@ -5402,7 +5834,8 @@
           2055,
           2244
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "magic-mountain-ski-area",
@@ -5423,7 +5856,8 @@
           420,
           869
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "maiko-resort",
@@ -5444,7 +5878,8 @@
           258,
           911
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "mala-upa",
@@ -5465,7 +5900,8 @@
           982,
           1241
         ]
-      }
+      },
+      "timeZone": "Europe/Warsaw"
     },
     {
       "id": "mammoth-mountain",
@@ -5486,7 +5922,8 @@
           2457,
           3360
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "manning-park",
@@ -5507,7 +5944,8 @@
           1359,
           1789
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "manning-park-xc",
@@ -5517,7 +5955,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/node/3828083744"
-      ]
+      ],
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "maple-ski-ridge",
@@ -5538,7 +5977,8 @@
           163,
           247
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "maplelag-resort",
@@ -5558,7 +5998,8 @@
           446,
           481
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "marble-mountain",
@@ -5579,7 +6020,8 @@
           19,
           468
         ]
-      }
+      },
+      "timeZone": "America/St_Johns"
     },
     {
       "id": "marmot-basin",
@@ -5600,7 +6042,8 @@
           1724,
           2504
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "marquette-mountain",
@@ -5620,7 +6063,8 @@
           237,
           397
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "massanutten-resort",
@@ -5641,7 +6085,8 @@
           539,
           863
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "massif-du-sud",
@@ -5662,7 +6107,8 @@
           521,
           900
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "mayrhofen",
@@ -5683,7 +6129,8 @@
           616,
           2468
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "mcintyre-ski-area",
@@ -5704,7 +6151,8 @@
           107,
           156
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "megeve",
@@ -5725,7 +6173,8 @@
           820,
           2371
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "meribel",
@@ -5746,7 +6195,8 @@
           1132,
           2920
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "middlebury-snowbowl",
@@ -5767,7 +6217,8 @@
           521,
           811
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "minocqua-winter-park",
@@ -5786,7 +6237,30 @@
           472,
           528
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
+    },
+    {
+      "id": "mission-ridge",
+      "coordinates": [
+        -120.410937,
+        47.280643
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/15657511",
+        "https://www.skimap.org/SkiAreas/view/186"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=7d36a2d6c6dbcd0a0fb80e2bb65700cb3f6981da",
+        "lifts": 7,
+        "downhillKm": 33,
+        "elevationM": [
+          1401,
+          2064
+        ],
+        "namedDownhillRuns": 42
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "mohawk-mountain",
@@ -5807,7 +6281,8 @@
           279,
           456
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "mona-yongpyong",
@@ -5828,7 +6303,8 @@
           760,
           1424
         ]
-      }
+      },
+      "timeZone": "Asia/Seoul"
     },
     {
       "id": "monarch-mountain",
@@ -5849,7 +6325,8 @@
           3260,
           3598
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "mont-edouard",
@@ -5870,7 +6347,8 @@
           182,
           629
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "mont-kanasuta",
@@ -5891,7 +6369,30 @@
           327,
           471
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
+    },
+    {
+      "id": "mont-orford",
+      "coordinates": [
+        -72.229042,
+        45.313941
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/15656310",
+        "https://www.skimap.org/SkiAreas/view/91"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=443f083a450bb1a2f3beb7248d51c7c195c55a97",
+        "lifts": 8,
+        "downhillKm": 25,
+        "elevationM": [
+          316,
+          837
+        ],
+        "namedDownhillRuns": 35
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "mont-rigaud",
@@ -5912,7 +6413,8 @@
           58,
           167
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "mont-ripley-ski-area",
@@ -5933,7 +6435,8 @@
           198,
           329
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "mont-sainte-anne",
@@ -5954,7 +6457,8 @@
           178,
           803
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "mont-sutton",
@@ -5974,7 +6478,8 @@
           397,
           852
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "montage-mountain",
@@ -5995,7 +6500,8 @@
           287,
           591
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "montana-snowbowl",
@@ -6016,7 +6522,8 @@
           1522,
           2296
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "monte-bondone",
@@ -6037,7 +6544,8 @@
           1184,
           2087
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "monterosa-ski",
@@ -6058,7 +6566,8 @@
           1207,
           3030
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "moose-mountain-ski-resort",
@@ -6078,7 +6587,8 @@
           206,
           605
         ]
-      }
+      },
+      "timeZone": "America/Anchorage"
     },
     {
       "id": "mount-baldy-ski-area",
@@ -6098,7 +6608,8 @@
           348,
           489
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "mount-bohemia",
@@ -6119,7 +6630,8 @@
           198,
           443
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "mount-cain",
@@ -6140,7 +6652,8 @@
           1190,
           1616
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "mount-kato",
@@ -6161,7 +6674,8 @@
           240,
           308
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "mount-racey-ski-resort",
@@ -6182,7 +6696,8 @@
           298,
           699
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "mount-snow",
@@ -6203,7 +6718,8 @@
           591,
           1093
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "mount-sunapee",
@@ -6224,7 +6740,8 @@
           384,
           827
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "mount-washington-alpine-resort",
@@ -6245,7 +6762,8 @@
           1081,
           1569
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "mountain-high",
@@ -6267,7 +6785,8 @@
           2008,
           2494
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "mt-abram",
@@ -6288,7 +6807,8 @@
           290,
           606
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "mt-bachelor",
@@ -6309,7 +6829,8 @@
           1738,
           2724
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "mt-baker-ski-area",
@@ -6330,7 +6851,8 @@
           1106,
           1556
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "mt-brighton",
@@ -6351,7 +6873,8 @@
           286,
           340
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "mt-buller",
@@ -6372,7 +6895,8 @@
           1388,
           1777
         ]
-      }
+      },
+      "timeZone": "Australia/Melbourne"
     },
     {
       "id": "mt-eyak",
@@ -6393,7 +6917,8 @@
           124,
           375
         ]
-      }
+      },
+      "timeZone": "America/Anchorage"
     },
     {
       "id": "mt-holiday",
@@ -6408,7 +6933,8 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=ce630c84980209f2cbe80a74b168645ff385e7c2",
         "lifts": 4
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "mt-hood-meadows",
@@ -6431,7 +6957,8 @@
           1380,
           2226
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "mt-hood-skibowl",
@@ -6452,7 +6979,8 @@
           1113,
           1528
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "mt-hutt",
@@ -6473,7 +7001,8 @@
           1419,
           2065
         ]
-      }
+      },
+      "timeZone": "Pacific/Auckland"
     },
     {
       "id": "mt-la-crosse",
@@ -6494,7 +7023,8 @@
           224,
           357
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "mt-norquay",
@@ -6515,7 +7045,8 @@
           1632,
           2093
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "mt-pisgah",
@@ -6536,7 +7067,53 @@
           540,
           624
         ]
-      }
+      },
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "mt-rose-ski-tahoe",
+      "coordinates": [
+        -119.884359,
+        39.320736
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/534160668",
+        "https://www.skimap.org/SkiAreas/view/2260",
+        "https://www.skimap.org/SkiAreas/view/358"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=7e9c9c28d2694a3b49ad5d70e6a3c8d59dc75cbd",
+        "lifts": 12,
+        "downhillKm": 33,
+        "elevationM": [
+          2310,
+          2916
+        ],
+        "namedDownhillRuns": 78
+      },
+      "timeZone": "America/Los_Angeles"
+    },
+    {
+      "id": "mt-seymour",
+      "coordinates": [
+        -122.945082,
+        49.371085
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1052361696",
+        "https://www.skimap.org/SkiAreas/view/43"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=be8cd62a82ece0c8de28787217191d54c221bb97",
+        "lifts": 5,
+        "downhillKm": 17,
+        "elevationM": [
+          934,
+          1255
+        ],
+        "namedDownhillRuns": 44
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "mt-shasta-ski-park",
@@ -6557,7 +7134,8 @@
           1666,
           2298
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "mt-spokane-ski-snowboard-park",
@@ -6578,7 +7156,8 @@
           1181,
           1783
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "mt-t",
@@ -6598,7 +7177,8 @@
           743,
           1489
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "mt-van-hoevenberg",
@@ -6617,7 +7197,8 @@
           575,
           757
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "muica-snow-resort",
@@ -6637,7 +7218,8 @@
           339,
           675
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "murray-ridge-ski-area",
@@ -6658,7 +7240,8 @@
           897,
           1404
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "myoko-suginohara-ski-resort",
@@ -6679,7 +7262,8 @@
           739,
           1857
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "nakiska-ski-area",
@@ -6700,7 +7284,8 @@
           1500,
           2266
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "nayoro-piyashiri-ski-resort",
@@ -6720,7 +7305,8 @@
           217,
           515
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "nekoma-mountain",
@@ -6741,7 +7327,8 @@
           736,
           1335
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "nelson-nordic-ski-club",
@@ -6760,7 +7347,8 @@
           884,
           1224
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "nendaz",
@@ -6771,7 +7359,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/13352480891",
         "https://www.openstreetmap.org/way/29289978"
-      ]
+      ],
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "nickel-plate-cross-country-ski-club",
@@ -6791,7 +7380,8 @@
           1744,
           1947
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "ninox-snow-park",
@@ -6811,7 +7401,8 @@
           318,
           936
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "niseko-united",
@@ -6832,7 +7423,8 @@
           257,
           1176
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "nordic-mountain",
@@ -6853,7 +7445,8 @@
           277,
           345
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "norefjell-ski-resort",
@@ -6864,7 +7457,8 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1138053358",
         "https://www.skimap.org/SkiAreas/view/1849"
-      ]
+      ],
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "north-cascade-heli",
@@ -6874,7 +7468,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/362347635"
-      ]
+      ],
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "northern-maine-community-trails",
@@ -6894,7 +7489,8 @@
           204,
           321
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "northstar-california-resort",
@@ -6915,7 +7511,8 @@
           1921,
           2625
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "norway-mountain",
@@ -6936,7 +7533,8 @@
           308,
           402
         ]
-      }
+      },
+      "timeZone": "America/Menominee"
     },
     {
       "id": "nub-s-nob",
@@ -6957,7 +7555,8 @@
           280,
           403
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "nutt-hill",
@@ -6978,7 +7577,8 @@
           273,
           309
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "oak-hill-outdoor-center",
@@ -6998,7 +7598,8 @@
           123,
           278
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "ober-mountain",
@@ -7019,7 +7620,8 @@
           807,
           977
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "oberstdorf-kleinwalsertal-bergbahnen",
@@ -7040,7 +7642,8 @@
           823,
           2213
         ]
-      }
+      },
+      "timeZone": "Europe/Berlin"
     },
     {
       "id": "obertauern",
@@ -7061,7 +7664,8 @@
           1628,
           2297
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "okemo-mountain-resort",
@@ -7082,7 +7686,8 @@
           353,
           1012
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "okunakayama-kogen",
@@ -7102,7 +7707,8 @@
           646,
           1003
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "onikoube-ski-resort",
@@ -7123,7 +7729,8 @@
           361,
           1038
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "oppdal",
@@ -7144,7 +7751,8 @@
           585,
           1327
         ]
-      }
+      },
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "orcieres-merlette-1850",
@@ -7165,7 +7773,8 @@
           1826,
           2731
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "ordino-arcalis",
@@ -7185,7 +7794,8 @@
           1943,
           2626
         ]
-      }
+      },
+      "timeZone": "Europe/Andorra"
     },
     {
       "id": "orelle",
@@ -7205,7 +7815,8 @@
           2338,
           3221
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "osceola-tug-hill-xc-ski-center",
@@ -7226,7 +7837,8 @@
           324,
           397
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "paganella-ski",
@@ -7247,7 +7859,8 @@
           1025,
           2124
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "pajarito-mountain",
@@ -7268,7 +7881,8 @@
           2736,
           3179
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "pal-arinsal",
@@ -7289,7 +7903,8 @@
           1554,
           2494
         ]
-      }
+      },
+      "timeZone": "Europe/Andorra"
     },
     {
       "id": "palcall-tsumagoi-resort",
@@ -7309,7 +7924,8 @@
           1386,
           2089
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "palisades-tahoe",
@@ -7323,7 +7939,8 @@
         "https://www.openstreetmap.org/relation/6704136",
         "https://www.skimap.org/SkiAreas/view/16854",
         "https://www.skimap.org/SkiAreas/view/522"
-      ]
+      ],
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "panorama-mountain-resort",
@@ -7345,7 +7962,8 @@
           1152,
           2368
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "paoli-peaks",
@@ -7365,7 +7983,8 @@
           165,
           251
         ]
-      }
+      },
+      "timeZone": "America/Indiana/Indianapolis"
     },
     {
       "id": "park-city-mountain",
@@ -7386,7 +8005,8 @@
           2101,
           3041
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "pass-powderkeg",
@@ -7407,7 +8027,8 @@
           1292,
           1587
         ]
-      }
+      },
+      "timeZone": "America/Edmonton"
     },
     {
       "id": "pats-peak",
@@ -7428,7 +8049,8 @@
           180,
           409
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "paul-bunyan-ski-hill",
@@ -7448,7 +8070,8 @@
           379,
           417
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "paul-smiths-college-visitor-interpretive-center",
@@ -7467,7 +8090,8 @@
           495,
           574
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "pebble-creek-ski-area",
@@ -7488,7 +8112,8 @@
           1945,
           2594
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "peek-n-peak",
@@ -7509,7 +8134,8 @@
           431,
           535
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "pejo-3000",
@@ -7530,7 +8156,8 @@
           1406,
           2982
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "perisher",
@@ -7552,7 +8179,8 @@
           1604,
           2037
         ]
-      }
+      },
+      "timeZone": "Australia/Sydney"
     },
     {
       "id": "petzen",
@@ -7573,7 +8201,8 @@
           634,
           1904
         ]
-      }
+      },
+      "timeZone": "Europe/Ljubljana"
     },
     {
       "id": "phoenix-mountain",
@@ -7594,7 +8223,8 @@
           1265,
           1479
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "pico-mountain",
@@ -7615,7 +8245,8 @@
           610,
           1199
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "pila",
@@ -7636,7 +8267,8 @@
           1533,
           2723
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "pine-mountain",
@@ -7657,7 +8289,8 @@
           351,
           464
         ]
-      }
+      },
+      "timeZone": "America/Menominee"
     },
     {
       "id": "pinzolo",
@@ -7677,7 +8310,8 @@
           850,
           2097
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "pippu-ski-resort",
@@ -7698,7 +8332,8 @@
           245,
           559
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "pitztal-glacier",
@@ -7719,7 +8354,8 @@
           1728,
           3424
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "pizol",
@@ -7740,7 +8376,8 @@
           513,
           2250
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "plain-valley-ski-trails",
@@ -7750,7 +8387,8 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/16981"
-      ]
+      ],
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "pomerelle-mountain-resort",
@@ -7771,7 +8409,8 @@
           2352,
           2640
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "pontedilegno-tonale",
@@ -7792,7 +8431,8 @@
           1120,
           2993
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "portes-du-soleil",
@@ -7815,7 +8455,52 @@
           920,
           2250
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
+    },
+    {
+      "id": "powder-king-mountain-resort",
+      "coordinates": [
+        -122.628351,
+        55.368929
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1358286520",
+        "https://www.skimap.org/SkiAreas/view/45"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=2590cb9009e40060615034cbff5ba91f68d79b1c",
+        "lifts": 3,
+        "downhillKm": 35,
+        "elevationM": [
+          953,
+          1522
+        ],
+        "namedDownhillRuns": 39
+      },
+      "timeZone": "America/Vancouver"
+    },
+    {
+      "id": "powder-mountain",
+      "coordinates": [
+        -111.762111,
+        41.375487
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1124250244",
+        "https://www.skimap.org/SkiAreas/view/228"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=e15b214ba75941c2a0150d22cd5e75584bf9c068",
+        "lifts": 14,
+        "downhillKm": 130,
+        "elevationM": [
+          2023,
+          2745
+        ],
+        "namedDownhillRuns": 134
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "powder-ridge",
@@ -7836,7 +8521,8 @@
           355,
           430
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "powder-ridge-connecticut",
@@ -7857,7 +8543,8 @@
           117,
           243
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "powderhorn-mountain-resort",
@@ -7878,7 +8565,8 @@
           2494,
           2997
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "purgatory-resort",
@@ -7899,7 +8587,8 @@
           2696,
           3291
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "pyha-ski-resort",
@@ -7920,7 +8609,8 @@
           195,
           375
         ]
-      }
+      },
+      "timeZone": "Europe/Helsinki"
     },
     {
       "id": "quarry-road-trails",
@@ -7941,7 +8631,8 @@
           36,
           59
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "ragged-mountain-resort",
@@ -7962,7 +8653,8 @@
           337,
           673
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "rangeley-lakes-trail-center",
@@ -7982,7 +8674,8 @@
           533,
           684
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "rauriser-hochalmbahnen",
@@ -8003,7 +8696,8 @@
           927,
           2171
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "red-lodge-mountain",
@@ -8024,7 +8718,8 @@
           2161,
           2858
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "red-mountain-resort",
@@ -8045,7 +8740,8 @@
           1155,
           2037
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "red-river-ski-summer-area",
@@ -8065,7 +8761,8 @@
           2635,
           3132
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "revelstoke",
@@ -8086,7 +8783,8 @@
           514,
           2224
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "rikert-nordic-center",
@@ -8106,7 +8804,8 @@
           404,
           565
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "riksgransen",
@@ -8127,7 +8826,8 @@
           516,
           900
         ]
-      }
+      },
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "rio-pusteria-bressanone",
@@ -8148,7 +8848,8 @@
           1305,
           2497
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "roundtop-mountain-resort",
@@ -8169,7 +8870,8 @@
           235,
           411
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "ruka-ski-resort",
@@ -8190,7 +8892,8 @@
           286,
           494
         ]
-      }
+      },
+      "timeZone": "Europe/Helsinki"
     },
     {
       "id": "rusutsu-resort",
@@ -8211,7 +8914,8 @@
           422,
           988
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "saddleback",
@@ -8232,7 +8936,8 @@
           655,
           1218
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "saint-martin-de-belleville",
@@ -8243,7 +8948,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/270329832",
         "https://www.openstreetmap.org/way/24877621"
-      ]
+      ],
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "san-martino-rolle-pass",
@@ -8264,7 +8970,8 @@
           1402,
           2351
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "sandia-peak-ski-area",
@@ -8285,7 +8992,8 @@
           2646,
           3133
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "saskadena-six-ski-area",
@@ -8306,7 +9014,8 @@
           223,
           412
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "sasquatch-mountain-resort",
@@ -8327,7 +9036,8 @@
           975,
           1316
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "schmittenhoehe",
@@ -8348,7 +9058,8 @@
           758,
           1963
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "schuss-mountain-at-shanty-creek",
@@ -8368,7 +9079,8 @@
           253,
           356
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "schweitzer-mountain-resort",
@@ -8391,7 +9103,8 @@
           1221,
           1949
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "scotts-cobble-nordic-center",
@@ -8401,7 +9114,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/31766959"
-      ]
+      ],
+      "timeZone": "America/New_York"
     },
     {
       "id": "see",
@@ -8422,7 +9136,8 @@
           1037,
           2567
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "seven-springs-mountain-resort",
@@ -8443,7 +9158,8 @@
           688,
           914
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "shames-mountain",
@@ -8464,7 +9180,8 @@
           715,
           1161
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "shawnee-mountain-ski-area",
@@ -8485,7 +9202,8 @@
           145,
           349
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "shiga-kogen-mountain-resort",
@@ -8495,7 +9213,8 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/1645"
-      ]
+      ],
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "shimokura",
@@ -8515,7 +9234,8 @@
           604,
           1123
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "showdown-montana",
@@ -8536,7 +9256,8 @@
           2095,
           2496
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "sierra-at-tahoe-ski-resort",
@@ -8557,7 +9278,8 @@
           2030,
           2693
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "silver-mountain-resort",
@@ -8578,7 +9300,8 @@
           1272,
           1904
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "silverstar-mountain-resort",
@@ -8599,7 +9322,8 @@
           1146,
           1886
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "silverton-mountain",
@@ -8620,7 +9344,8 @@
           3143,
           3345
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "silvretta-montafon",
@@ -8641,7 +9366,8 @@
           689,
           2421
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "sipapu-ski-summer-resort",
@@ -8662,7 +9388,8 @@
           2498,
           2821
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "skaneateles-ski-club",
@@ -8682,7 +9409,8 @@
           245,
           338
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "skeetawk",
@@ -8703,7 +9431,8 @@
           443,
           529
         ]
-      }
+      },
+      "timeZone": "America/Anchorage"
     },
     {
       "id": "ski-apache",
@@ -8724,7 +9453,8 @@
           2943,
           3490
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "ski-big-bear",
@@ -8745,7 +9475,8 @@
           214,
           391
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "ski-butternut",
@@ -8766,7 +9497,8 @@
           253,
           538
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "ski-land",
@@ -8786,7 +9518,8 @@
           433,
           752
         ]
-      }
+      },
+      "timeZone": "America/Anchorage"
     },
     {
       "id": "ski-saint-bruno",
@@ -8807,7 +9540,8 @@
           46,
           181
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "ski-santa-fe",
@@ -8828,7 +9562,8 @@
           3151,
           3686
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "ski-sawmill",
@@ -8849,7 +9584,8 @@
           513,
           622
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "ski-vallee-bleue",
@@ -8870,7 +9606,8 @@
           317,
           415
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "skicircus-saalbach",
@@ -8891,7 +9628,8 @@
           795,
           2090
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "skigebiet-heiligenblut-grossglockner",
@@ -8912,7 +9650,8 @@
           1235,
           2905
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "skiwelt",
@@ -8933,7 +9672,8 @@
           609,
           1865
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "sleepy-hollow",
@@ -8953,7 +9693,8 @@
           230,
           448
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "smokey-mountain-ski-club",
@@ -8973,7 +9714,8 @@
           588,
           786
         ]
-      }
+      },
+      "timeZone": "America/Goose_Bay"
     },
     {
       "id": "smugglers-notch-resort",
@@ -8994,7 +9736,8 @@
           340,
           1112
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "snow-creek",
@@ -9015,7 +9758,8 @@
           251,
           331
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "snow-king-mountain",
@@ -9036,7 +9780,8 @@
           1902,
           2416
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "snow-resort-the-cupid-of-romance",
@@ -9058,7 +9803,8 @@
           476,
           861
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "snow-ridge",
@@ -9078,7 +9824,8 @@
           398,
           538
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "snow-summit",
@@ -9099,7 +9846,8 @@
           2122,
           2494
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "snow-valley-mountain-resort",
@@ -9120,7 +9868,8 @@
           2050,
           2388
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "snowbasin-resort",
@@ -9141,7 +9890,8 @@
           1939,
           2835
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "snowbird",
@@ -9162,7 +9912,8 @@
           2365,
           3340
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "snowmass",
@@ -9184,7 +9935,8 @@
           2474,
           3815
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "snowriver-mountain-resort-black-river-basin",
@@ -9205,7 +9957,8 @@
           366,
           493
         ]
-      }
+      },
+      "timeZone": "America/Menominee"
     },
     {
       "id": "snowriver-mountain-resort-jackson-creek-summit",
@@ -9226,7 +9979,8 @@
           368,
           531
         ]
-      }
+      },
+      "timeZone": "America/Menominee"
     },
     {
       "id": "snowshoe-mountain",
@@ -9248,7 +10002,8 @@
           994,
           1470
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "snowstar",
@@ -9258,7 +10013,8 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/473"
-      ]
+      ],
+      "timeZone": "America/Chicago"
     },
     {
       "id": "snowy-range-ski-area",
@@ -9279,7 +10035,8 @@
           2674,
           2939
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "soelden",
@@ -9300,7 +10057,8 @@
           1346,
           3247
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "soldier-mountain-ski-area",
@@ -9321,7 +10079,8 @@
           1763,
           2188
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "solitude-mountain-resort",
@@ -9342,7 +10101,8 @@
           2439,
           3051
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "sovereign-lake-nordic-club",
@@ -9362,7 +10122,8 @@
           1540,
           1861
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "spieljoch",
@@ -9382,7 +10143,8 @@
           640,
           2049
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "spirit-mountain",
@@ -9405,7 +10167,8 @@
           219,
           392
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "spring-mountain-adventures",
@@ -9426,7 +10189,8 @@
           51,
           155
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "st-anton-am-arlberg",
@@ -9437,7 +10201,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/327308648",
         "https://www.openstreetmap.org/way/29710303"
-      ]
+      ],
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "st-christoph-am-arlberg",
@@ -9448,7 +10213,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/327334448",
         "https://www.openstreetmap.org/way/29712600"
-      ]
+      ],
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "st-johann-in-tirol",
@@ -9469,7 +10235,8 @@
           666,
           1601
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "station-touristique-stoneham",
@@ -9490,7 +10257,8 @@
           250,
           594
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "steamboat-ski-resort",
@@ -9511,7 +10279,8 @@
           2102,
           3213
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "steamboat-ski-touring-center",
@@ -9521,7 +10290,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/236899238"
-      ]
+      ],
+      "timeZone": "America/Denver"
     },
     {
       "id": "steinplatte",
@@ -9544,7 +10314,8 @@
           768,
           1853
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "stevens-pass",
@@ -9565,7 +10336,8 @@
           1166,
           1727
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "stoke-mountain",
@@ -9575,7 +10347,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/293324333"
-      ]
+      ],
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "stoten-i-salen",
@@ -9596,7 +10369,8 @@
           439,
           835
         ]
-      }
+      },
+      "timeZone": "Europe/Stockholm"
     },
     {
       "id": "stowe",
@@ -9617,7 +10391,8 @@
           400,
           1112
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "stranda-ski-resort",
@@ -9637,7 +10412,8 @@
           447,
           1139
         ]
-      }
+      },
+      "timeZone": "Europe/Oslo"
     },
     {
       "id": "stratton-mountain-resort",
@@ -9659,7 +10435,8 @@
           607,
           1183
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "stuben-am-arlberg",
@@ -9670,7 +10447,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/249417956",
         "https://www.openstreetmap.org/way/23102910"
-      ]
+      ],
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "sugar-bowl-resort",
@@ -9691,7 +10469,8 @@
           2108,
           2550
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "sugar-mountain-resort",
@@ -9712,7 +10491,8 @@
           1238,
           1595
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "sugarbush-resort",
@@ -9733,7 +10513,8 @@
           461,
           1238
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "sugarloaf",
@@ -9754,7 +10535,8 @@
           425,
           1269
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "sun-peaks-resort",
@@ -9775,7 +10557,8 @@
           1200,
           2087
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "sun-valley-bald-mountain",
@@ -9796,7 +10579,8 @@
           1756,
           2780
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "sun-valley-dollar-mountain",
@@ -9817,7 +10601,8 @@
           1813,
           2002
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "sunburst-ski-area",
@@ -9838,7 +10623,30 @@
           296,
           356
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
+    },
+    {
+      "id": "sundance-mountain-resort",
+      "coordinates": [
+        -111.589267,
+        40.381251
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1117698962",
+        "https://www.skimap.org/SkiAreas/view/230"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=745a3b9611363f0f1ca4f55e5403f39dede94ebb",
+        "lifts": 10,
+        "downhillKm": 32,
+        "elevationM": [
+          1859,
+          2514
+        ],
+        "namedDownhillRuns": 61
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "sunday-river",
@@ -9859,7 +10667,8 @@
           249,
           955
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "sundown-mountain",
@@ -9880,7 +10689,8 @@
           220,
           351
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "sunlight-mountain-resort",
@@ -9901,7 +10711,8 @@
           2480,
           3002
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "swain-resort",
@@ -9921,7 +10732,8 @@
           403,
           568
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "tahoe-donner-downhill-ski-resort",
@@ -9942,7 +10754,8 @@
           2070,
           2219
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "takasu-snow-park",
@@ -9963,7 +10776,8 @@
           966,
           1520
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "tamarack-resort",
@@ -9984,7 +10798,8 @@
           1488,
           2328
         ]
-      }
+      },
+      "timeZone": "America/Boise"
     },
     {
       "id": "taos-ski-valley",
@@ -10005,7 +10820,8 @@
           2850,
           3603
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "tazawako",
@@ -10026,7 +10842,8 @@
           577,
           1173
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "telemark-nordic-center",
@@ -10047,7 +10864,8 @@
           963,
           1379
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "telluride-ski-resort",
@@ -10068,7 +10886,8 @@
           2662,
           3812
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "tenney-mountain",
@@ -10089,7 +10908,8 @@
           225,
           653
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "terry-peak",
@@ -10110,7 +10930,8 @@
           1804,
           2129
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "the-highlands-at-harbor-springs",
@@ -10131,7 +10952,8 @@
           240,
           401
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "the-loppet",
@@ -10151,7 +10973,8 @@
           249,
           295
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "the-remarkables",
@@ -10172,7 +10995,8 @@
           1607,
           1986
         ]
-      }
+      },
+      "timeZone": "Pacific/Auckland"
     },
     {
       "id": "the-summit-at-snoqualmie",
@@ -10197,7 +11021,8 @@
           800,
           1183
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "thredbo",
@@ -10218,7 +11043,8 @@
           1365,
           2036
         ]
-      }
+      },
+      "timeZone": "Australia/Sydney"
     },
     {
       "id": "thrill-hills",
@@ -10238,7 +11064,8 @@
           350,
           428
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "thyon",
@@ -10249,7 +11076,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/346675300",
         "https://www.openstreetmap.org/way/1239563613"
-      ]
+      ],
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "timberline-lodge-ski-area",
@@ -10270,7 +11098,8 @@
           1214,
           2586
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "titus-mountain",
@@ -10291,7 +11120,8 @@
           320,
           609
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "togakushi-ski-resort",
@@ -10312,7 +11142,8 @@
           1222,
           1741
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "togari-onsen-snow-resort",
@@ -10332,7 +11163,8 @@
           387,
           845
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "trapp-family-lodge",
@@ -10352,7 +11184,8 @@
           252,
           847
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "treetops-resort",
@@ -10372,7 +11205,8 @@
           340,
           408
         ]
-      }
+      },
+      "timeZone": "America/Detroit"
     },
     {
       "id": "tremblant",
@@ -10393,7 +11227,8 @@
           257,
           873
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "trollhaugen-ski-area",
@@ -10413,7 +11248,8 @@
           290,
           362
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "tschiertschen-chur",
@@ -10434,7 +11270,8 @@
           1355,
           2378
         ]
-      }
+      },
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "tsugaike-mountain-resort",
@@ -10455,7 +11292,8 @@
           803,
           1707
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "turpin-meadow-ranch",
@@ -10465,7 +11303,8 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/node/11210988224"
-      ]
+      ],
+      "timeZone": "America/Denver"
     },
     {
       "id": "tussey-mountain",
@@ -10485,7 +11324,8 @@
           403,
           552
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "tyrol-basin-ski-and-snowboard",
@@ -10506,7 +11346,8 @@
           266,
           346
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "vail-mountain",
@@ -10527,7 +11368,8 @@
           2452,
           3526
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "val-di-fassa-carezza",
@@ -10552,7 +11394,8 @@
           1331,
           2435
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "val-di-fiemme-obereggen",
@@ -10563,7 +11406,8 @@
       "upstream": [
         "https://www.openstreetmap.org/way/542223677",
         "https://www.skimap.org/SkiAreas/view/2094"
-      ]
+      ],
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "val-direne",
@@ -10584,7 +11428,8 @@
           444,
           689
         ]
-      }
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "val-gardena-alpe-di-siusi",
@@ -10606,7 +11451,8 @@
           1258,
           2507
         ]
-      }
+      },
+      "timeZone": "Europe/Rome"
     },
     {
       "id": "val-thorens",
@@ -10626,7 +11472,8 @@
           1822,
           3175
         ]
-      }
+      },
+      "timeZone": "Europe/Paris"
     },
     {
       "id": "valle-nevado",
@@ -10647,7 +11494,8 @@
           2858,
           3675
         ]
-      }
+      },
+      "timeZone": "America/Argentina/Mendoza"
     },
     {
       "id": "verbier",
@@ -10658,7 +11506,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/250155144",
         "https://www.openstreetmap.org/way/23154713"
-      ]
+      ],
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "veterans-memorial-recreation-area",
@@ -10679,7 +11528,8 @@
           236,
           306
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "veysonnaz",
@@ -10690,7 +11540,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/3415179933",
         "https://www.openstreetmap.org/way/6272955"
-      ]
+      ],
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "washigatake-ski-resort",
@@ -10711,7 +11562,8 @@
           902,
           1347
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "waterville-valley-resort",
@@ -10732,7 +11584,8 @@
           556,
           1163
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "welch-village",
@@ -10753,7 +11606,8 @@
           216,
           315
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "west-mountain-ski-resort",
@@ -10774,7 +11628,8 @@
           134,
           439
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "whaleback",
@@ -10795,7 +11650,8 @@
           348,
           545
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "whistler-blackcomb",
@@ -10816,7 +11672,8 @@
           653,
           2259
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "white-grass-ski-touring",
@@ -10836,7 +11693,8 @@
           988,
           1021
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "white-pass-ski-area",
@@ -10857,7 +11715,8 @@
           1367,
           1987
         ]
-      }
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "white-pine-resort",
@@ -10878,7 +11737,8 @@
           2571,
           2845
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "white-pine-touring-nordic-center",
@@ -10897,7 +11757,8 @@
           1969,
           2126
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "whitecap-mountains-resort",
@@ -10918,7 +11779,8 @@
           442,
           541
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "whiteface",
@@ -10939,7 +11801,32 @@
           372,
           1333
         ]
-      }
+      },
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "whitefish-mountain-resort",
+      "coordinates": [
+        -114.344921,
+        48.494633
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1388573249",
+        "https://www.skimap.org/SkiAreas/view/367"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=a9b9ab0ad6bb668e32b74a1745baa5974cdef3ec",
+        "lifts": 16,
+        "downhillKm": 84,
+        "nordicKm": 24,
+        "elevationM": [
+          1364,
+          2063
+        ],
+        "namedDownhillRuns": 108,
+        "namedNordicTrails": 19
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "whitehorse-nordic-centre",
@@ -10959,7 +11846,8 @@
           716,
           1221
         ]
-      }
+      },
+      "timeZone": "America/Whitehorse"
     },
     {
       "id": "whitepia-takasu",
@@ -10980,7 +11868,8 @@
           1066,
           1394
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "whitetail-resort",
@@ -11001,7 +11890,30 @@
           261,
           543
         ]
-      }
+      },
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "whitewater-mountain-resort",
+      "coordinates": [
+        -117.15679,
+        49.439539
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/475723205",
+        "https://www.skimap.org/SkiAreas/view/59"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=5e0f5c940cee44b22481b5599698c2ce040e5693",
+        "lifts": 5,
+        "downhillKm": 55,
+        "elevationM": [
+          1390,
+          2060
+        ],
+        "namedDownhillRuns": 85
+      },
+      "timeZone": "America/Creston"
     },
     {
       "id": "wild-mountain",
@@ -11022,7 +11934,8 @@
           237,
           319
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "wildcat-mountain",
@@ -11043,7 +11956,31 @@
           593,
           1211
         ]
-      }
+      },
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "willamette-pass",
+      "coordinates": [
+        -122.023636,
+        43.608405
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1278124828",
+        "https://www.skimap.org/SkiAreas/view/267"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=926bbb0835ac3d008a9b5a4c718c9dd6c7fcf3d3",
+        "lifts": 6,
+        "downhillKm": 22,
+        "nordicKm": 16,
+        "elevationM": [
+          1560,
+          2034
+        ],
+        "namedDownhillRuns": 30
+      },
+      "timeZone": "America/Los_Angeles"
     },
     {
       "id": "williams-lake-cross-country-ski-club",
@@ -11063,7 +12000,8 @@
           866,
           1052
         ]
-      }
+      },
+      "timeZone": "America/Vancouver"
     },
     {
       "id": "wilmot-mountain",
@@ -11085,7 +12023,8 @@
           232,
           291
         ]
-      }
+      },
+      "timeZone": "America/Chicago"
     },
     {
       "id": "winter-park-resort",
@@ -11106,7 +12045,8 @@
           2771,
           3654
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "winter4kids",
@@ -11121,7 +12061,8 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=75846c6f8d2a59a25744828c3d5fd577345a1830",
         "lifts": 3
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "wintergreen-resort",
@@ -11142,7 +12083,8 @@
           765,
           1067
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "winterplace-ski-resort",
@@ -11163,7 +12105,8 @@
           924,
           1082
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "wisp-resort",
@@ -11184,7 +12127,8 @@
           751,
           944
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "wolf-creek-ski-area",
@@ -11205,7 +12149,8 @@
           3128,
           3585
         ]
-      }
+      },
+      "timeZone": "America/Denver"
     },
     {
       "id": "woodstock-nordic-center",
@@ -11225,7 +12170,8 @@
           213,
           364
         ]
-      }
+      },
+      "timeZone": "America/New_York"
     },
     {
       "id": "yunding-snow-park",
@@ -11246,7 +12192,8 @@
           1655,
           2103
         ]
-      }
+      },
+      "timeZone": "Asia/Shanghai"
     },
     {
       "id": "yuzawa-nakazato-snow-resort",
@@ -11267,7 +12214,8 @@
           464,
           698
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "zao-onsen-ski-resort",
@@ -11288,7 +12236,8 @@
           792,
           1661
         ]
-      }
+      },
+      "timeZone": "Asia/Tokyo"
     },
     {
       "id": "zermatt-matterhorn",
@@ -11301,7 +12250,8 @@
         "https://www.openstreetmap.org/way/903540909",
         "https://www.openstreetmap.org/way/540681046",
         "https://www.skimap.org/SkiAreas/view/987"
-      ]
+      ],
+      "timeZone": "Europe/Zurich"
     },
     {
       "id": "zillertal-arena",
@@ -11322,7 +12272,8 @@
           572,
           2501
         ]
-      }
+      },
+      "timeZone": "Europe/Vienna"
     },
     {
       "id": "zuers-am-arlberg",
@@ -11333,7 +12284,8 @@
       "upstream": [
         "https://www.openstreetmap.org/node/325116003",
         "https://www.openstreetmap.org/way/458106193"
-      ]
+      ],
+      "timeZone": "Europe/Vienna"
     }
   ]
 }

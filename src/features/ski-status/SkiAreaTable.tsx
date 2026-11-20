@@ -1,6 +1,7 @@
 import type { Ref } from 'react';
-import { columns, formatSkiLocation, formatSkiStat, type PassFilter, type SkiSort, type SkiUnits } from './browse';
+import { columns, formatSkiLocation, formatSkiStat, visibleSkiColumns, type ColumnKey, type PassFilter, type SkiSort, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
+import type { Conditions } from './conditions';
 import { markerModes, passAccessAppearance, type MarkerMode } from './mapAppearance';
 import { SkiPassIcon } from './SkiPassIcon';
 
@@ -13,6 +14,8 @@ interface Props {
     inView: boolean;
     colorBy?: MarkerMode;
     passFilter?: PassFilter;
+    conditions?: Conditions;
+    columnPreference?: readonly ColumnKey[];
     selectedButtonRef: Ref<HTMLButtonElement>;
     onSort: (key: SkiSort['key']) => void;
     onSelect: (id: string) => void;
@@ -30,14 +33,14 @@ function PassAccess({ area, passFilter }: { area: SkiArea; passFilter?: PassFilt
     </span>;
 }
 
-export function SkiAreaTable({ areas, units, sort, selected, compact, inView, colorBy = 'default', passFilter,
+export function SkiAreaTable({ areas, units, sort, selected, compact, inView, colorBy = 'default', passFilter, conditions, columnPreference,
     selectedButtonRef, onSort, onSelect }: Props) {
     if (!areas.length) return <p className="p-4 text-zinc-300">{inView ? 'No matching ski areas in this map view.' : 'No ski areas match these filters.'}</p>;
 
     const secondary = sort.key === 'name' ? 'acres' : sort.key;
     const compactColumns = colorBy === 'default' ? columns.filter(({ key }) => key === 'name' || key === secondary)
         : [columns[0], { key: colorBy, label: markerModes[colorBy] }];
-    const visibleColumns = compact ? compactColumns : columns;
+    const visibleColumns = compact ? compactColumns : visibleSkiColumns(columnPreference);
     const nameColumn = `sticky left-0 z-10 bg-zinc-900 ${compact ? '' : 'min-w-36 sm:min-w-44'}`;
 
     return <div role="region" aria-label={compact ? 'Ski area list' : 'Ski area comparison table'} tabIndex={0}
@@ -70,7 +73,7 @@ export function SkiAreaTable({ areas, units, sort, selected, compact, inView, co
                     </th>
                     {visibleColumns.slice(1).map(({ key }) => <td key={key} className="border-b border-zinc-800 px-2.5 py-2 tabular-nums text-zinc-300">
                         {key === 'pass' ? <PassAccess area={area} passFilter={passFilter} />
-                            : formatSkiStat(area, key, units) ?? <><span aria-hidden="true">—</span><span className="sr-only">Unknown</span></>}
+                            : formatSkiStat(area, key, units, conditions) ?? <><span aria-hidden="true">—</span><span className="sr-only">Unknown</span></>}
                     </td>)}
                 </tr>;
             })}</tbody>

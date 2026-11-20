@@ -8,6 +8,7 @@ import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
 import { skiAreaBounds, skiAreaIdsInViewport, type PassFilter, type SkiUnits } from './browse';
 import { passFamilySchema, skiAreas, type SkiArea } from './catalog';
+import type { Conditions } from './conditions';
 import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passIconUrls } from './passIcons';
 import { resortFootprintLayer, resortTerrainGroups, resortTerrainLabel, resortTerrainMinZoom, resortTerrainSource, syncResortTerrain } from './resortTerrain';
@@ -37,6 +38,7 @@ interface Props {
     selected?: SkiArea;
     colors: MarkerMode;
     passFilter?: PassFilter;
+    conditions?: Conditions;
     terrain: boolean;
     resortTerrain: boolean;
     visible: boolean;
@@ -224,7 +226,7 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<
     return nearest;
 }
 
-export default function SkiStatusMap({ areas, selected, colors, passFilter, terrain, resortTerrain, visible, inView, units, onVisibleAreasChange, onSelect }: Props) {
+export default function SkiStatusMap({ areas, selected, colors, passFilter, conditions, terrain, resortTerrain, visible, inView, units, onVisibleAreasChange, onSelect }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
@@ -245,13 +247,14 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
     const areasById = useMemo(() => new Map(areas.map(area => [area.id, area])), [areas]);
     const terrainGroups = useMemo(() => resortTerrainGroups(areas), [areas]);
     const showResortTerrain = visible && resortTerrain && terrainGroups.length > 0;
+    const markerConditions = colors === 'operatingStatus' ? conditions : undefined;
     const points = useMemo<FeatureCollection<Point>>(() => ({
         type: 'FeatureCollection',
         features: areas.map(area => ({
-            type: 'Feature', id: area.id, properties: { areaId: area.id, ...markerAppearance(area, colors, passFilter) },
+            type: 'Feature', id: area.id, properties: { areaId: area.id, ...markerAppearance(area, colors, passFilter, markerConditions) },
             geometry: { type: 'Point', coordinates: area.location.coordinates },
         })),
-    }), [areas, colors, passFilter]);
+    }), [areas, colors, passFilter, markerConditions]);
     const current = useEffectEvent(() => ({ areasById, points, selected, colors, terrain }));
     const syncResortDetails = useEffectEvent((map: maplibre.Map) => {
         const reload = showResortTerrain && resortTerrainUnavailable && !map.getSource(resortTerrainSource)
@@ -278,6 +281,8 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
 
         // Keep changes pending while the map is hidden or a replacement style loads.
         const previous = appliedCamera.current;
+        const sameResults = previous && (areas === previous.areas ||
+            (areas.length === previous.areas.length && areas.every((area, index) => area.id === previous.areas[index].id)));
         appliedCamera.current = { areas, selectedId: selected?.id };
         if (inView && previous) return;
         if (selected && selected.id !== previous?.selectedId) {
@@ -287,7 +292,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 zoom: previous ? Math.max(pointZoom, map.getZoom()) : pointZoom,
                 duration: previous ? duration : 0,
             });
-        } else if (!selected && areas !== previous?.areas) {
+        } else if (!selected && !sameResults) {
             fitAreas(map, areas, previous ? duration : 0);
         }
     });
@@ -499,8 +504,8 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         <div ref={container} tabIndex={-1} className="h-full w-full" data-testid="ski-status-map"
             data-map-state={state} />
         {showPopups && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
-            && <SkiAreaPopup area={hovered} mapRef={mapRef} />}
-        {showPopups && selected && <SkiAreaPopup area={selected} mapRef={mapRef} units={units} onClose={closePopup} />}
+            && <SkiAreaPopup area={hovered} mapRef={mapRef} conditions={conditions} />}
+        {showPopups && selected && <SkiAreaPopup area={selected} mapRef={mapRef} units={units} onClose={closePopup} conditions={conditions} />}
         {ready && !failed && <button type="button" disabled={!areas.length} aria-label={fitLabel} onClick={() => {
             if (mapRef.current) fitAreas(mapRef.current, areas, duration);
         }}

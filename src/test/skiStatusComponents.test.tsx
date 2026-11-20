@@ -2,6 +2,8 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
+import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
+import { defaultSkiColumns } from '../features/ski-status/browse';
 import { skiAreas } from '../features/ski-status/catalog';
 
 describe('ski-status comparison table', () => {
@@ -68,6 +70,20 @@ describe('ski-status comparison table', () => {
         expect(screen.getByText('No matching ski areas in this map view.')).toBeVisible();
         rerender(<SkiAreaTable {...props} inView={false} />);
         expect(screen.getByText('No ski areas match these filters.')).toBeVisible();
+    });
+});
+
+describe('ski-status column settings', () => {
+    it('adds and removes the named column and restores the defaults', () => {
+        const onChange = vi.fn();
+        render(<SkiColumnSettings columns={['name', 'acres']} onChange={onChange} />);
+        fireEvent.click(screen.getByText('Columns', { exact: true }));
+        fireEvent.click(screen.getByRole('checkbox', { name: 'Show Skiable area column' }));
+        expect(onChange).toHaveBeenLastCalledWith(['name']);
+        fireEvent.click(screen.getByRole('checkbox', { name: 'Show Forecast snow column' }));
+        expect(onChange).toHaveBeenLastCalledWith(['name', 'acres', 'forecastSnow']);
+        fireEvent.click(screen.getByRole('button', { name: 'Reset columns' }));
+        expect(onChange).toHaveBeenLastCalledWith(defaultSkiColumns);
     });
 });
 

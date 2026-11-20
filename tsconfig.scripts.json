@@ -34,6 +34,7 @@
         "playwright.release.config.ts",
         "scripts/**/*.ts",
         "scripts/**/*.tsx",
+        "projects/ski-status/scripts/*.ts",
         "shared/**/*.ts",
         "tests/**/*.ts"
     ],
