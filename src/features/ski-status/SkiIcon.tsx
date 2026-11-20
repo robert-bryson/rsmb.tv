@@ -1,4 +1,5 @@
 const paths = {
+    back: 'm15 5-7 7 7 7',
     search: 'M10.5 18a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Zm5.5-2 5 5',
     filter: 'M3 4h18l-7 8v6l-4 2v-8L3 4Z',
     share: 'M12 16V3m-4 4 4-4 4 4M7 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-2',
@@ -13,6 +14,8 @@ const paths = {
     download: 'M12 3v12m-4-4 4 4 4-4M4 15v5h16v-5',
     sortAscending: 'M7 20V4m-4 4 4-4 4 4m3 2h7m-7 5h5m-5 5h3',
     sortDescending: 'M7 4v16m-4-4 4 4 4-4m3-12h3m-3 5h5m-5 5h7',
+    ascending: 'M12 19V5m-5 5 5-5 5 5',
+    descending: 'M12 5v14m-5-5 5 5 5-5',
 } as const;
 
 export function SkiIcon({ name }: { name: keyof typeof paths }) {

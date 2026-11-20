@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent, useMemo, useRef, useState, type RefObject } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
-import { applyGlobeStyle, globeOverviewZoom, projectVisibleGlobeLocation } from '../../maps/globe';
+import { globeOverviewZoom, projectVisibleGlobeLocation } from '../../maps/globe';
 import type { MapCamera } from '../../maps/mapCamera';
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
@@ -11,8 +11,8 @@ import { skiAreaMapPoint, skiAreas, type SkiArea } from './catalog';
 import type { Conditions, ResortStatus } from './conditions';
 import type { MarkerMode } from './mapAppearance';
 import { skiMapAttribution } from './mapAttribution';
-import { resortFootprintLayer, resortTerrainGroups, resortTerrainLabel, resortTerrainMinZoom, resortTerrainSource,
-    syncResortTerrain, visibleTerrainConventions, type TerrainConvention } from './resortTerrain';
+import { resortFootprintLayer, resortTerrainLabel, resortTerrainSource, syncResortTerrain, visibleTerrainConventions } from './resortTerrain';
+import { resortTerrainGroups, resortTerrainMinZoom, type TerrainConvention } from './resortTerrainData';
 import { captureSkiMapArea, encodeSkiMapArea, encodeSkiMapCamera, skiMapMaxZoom, skiMapMinZoom, type SkiMapArea } from './skiMapArea';
 import { addAreaLayers, addCountImage, addPassBadges, areaFeatures, clusterLayer, filterPassBadges, loadPassImages, markerLayers,
     pointLayer, selectionSource, sourceId, updateClusterStyle } from './skiMapLayers';
@@ -27,6 +27,21 @@ const reliefMinZoom = 8;
 const pointZoom = 9;
 const overviewCenter: [number, number] = [-100, 44];
 const providerStyle = () => cartoVectorStyleUrl('dark-matter');
+const detailStartZoom = 3;
+const detailLayers = new Set(['park_nature_reserve', 'landuse', 'waterway', 'water_shadow', 'waterway_label', 'watername_ocean', 'watername_lake_line']);
+
+const skiGlobeStyle: maplibre.TransformStyleFunction = (_, style) => {
+    if (!Array.isArray(style?.layers)) return style;
+    return {
+        ...style,
+        projection: { type: 'globe' },
+        sky: { 'sky-color': '#080e16', 'fog-ground-blend': 0, 'atmosphere-blend': 0 },
+        // Keep the coastline, boundaries, and place labels at the globe overview.
+        layers: style.layers.map(layer => layer && detailLayers.has(layer.id)
+            && (layer.maxzoom ?? 24) > detailStartZoom && (layer.minzoom ?? 0) < detailStartZoom
+            ? { ...layer, minzoom: detailStartZoom } : layer),
+    };
+};
 
 interface Props {
     areas: readonly SkiArea[];
@@ -40,6 +55,7 @@ interface Props {
     terrain: boolean;
     resortTerrain: boolean;
     visible: boolean;
+    layersModified: boolean;
     searchedArea?: SkiMapArea;
     searchedAreaKey: string | null;
     initializeArea: boolean;
@@ -84,7 +100,10 @@ function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number
                 center = location;
             }
         }
-        map.easeTo({ center, zoom: globeOverviewZoom(clientWidth, clientHeight), duration });
+        const zoom = globeOverviewZoom(clientWidth, clientHeight);
+        if (Math.abs(map.getZoom() - zoom) > 1e-5 || map.getCenter().distanceTo(maplibre.LngLat.convert(center)) > 0.1) {
+            map.easeTo({ center, zoom, duration });
+        }
         return;
     }
     map.fitBounds(bounds, { padding, maxZoom: pointZoom, duration });
@@ -151,7 +170,7 @@ function expandCluster(map: maplibre.Map, point: TooltipPoint, duration: number)
 }
 
 export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected, colors, passSelection, statuses, conditions, terrain, resortTerrain,
-    visible, searchedArea, searchedAreaKey, initializeArea, terrainRequest, camera, navigationKey, restoreHistoryCamera, cameraReader, onCameraChange,
+    visible, layersModified, searchedArea, searchedAreaKey, initializeArea, terrainRequest, camera, navigationKey, restoreHistoryCamera, cameraReader, onCameraChange,
     onSearchArea, onSelect, onTerrainKey, onOpenLayers }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
@@ -188,6 +207,12 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const points = useMemo(() => areaFeatures(areas, colors, statuses, passSelection), [areas, colors, statuses, passSelection]);
     const selection = useMemo(() => areaFeatures(selected ? [selected] : [], colors, statuses, passSelection), [selected, colors, statuses, passSelection]);
     const current = useEffectEvent(() => ({ areasById, points, selection, selected, colors, terrain, duration }));
+    const initialCamera = useEffectEvent((element: HTMLElement) => {
+        if (camera) return camera;
+        if (searchedArea) return { center: searchedArea.center, zoom: searchedArea.zoom };
+        if (selected) return { center: skiAreaMapPoint(selected), zoom: pointZoom };
+        return { center: overviewCenter, zoom: globeOverviewZoom(element.clientWidth, element.clientHeight) };
+    });
     const selectArea = useEffectEvent(onSelect);
     const syncResortDetails = useEffectEvent((map: maplibre.Map) => {
         const reload = showResortTerrain && resortTerrainUnavailable && !map.getSource(resortTerrainSource)
@@ -287,7 +312,9 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             let instance: maplibre.Map;
             try {
                 instance = new maplibre.Map({
-                    container: container.current, style: providerStyle(), center: overviewCenter, zoom: 1,
+                    container: container.current, style: providerStyle(), transformStyle: skiGlobeStyle,
+                    ...initialCamera(container.current),
+                    pixelRatio: Math.min(window.devicePixelRatio, 1.5), fadeDuration: 0,
                     minZoom: skiMapMinZoom, maxZoom: skiMapMaxZoom, dragRotate: false, pitchWithRotate: false,
                     attributionControl: false,
                 });
@@ -335,7 +362,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             instance.addControl(skiMapAttribution(), 'bottom-right');
             recoveryRef.current = recoverBasemap(instance, {
                 dataSources: new Set([sourceId, selectionSource, terrainSource, resortTerrainSource]),
-                providerStyle, neutralStyle: () => cartoRasterStyle('dark', ''),
+                providerStyle, neutralStyle: () => skiGlobeStyle(undefined, cartoRasterStyle('dark', '')),
             }, state => {
                 setBasemap(state);
                 if (state !== 'ready') setReady(false);
@@ -343,7 +370,6 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             instance.setMissingStyleImageResolver(id => addCountImage(instance, id));
             instance.on('style.load', () => {
                 clearHover();
-                applyGlobeStyle(instance);
                 const data = current();
                 passLayers.current = false;
                 if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points, data.selection, data.colors);
@@ -494,9 +520,9 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         }
     }}>
         <div className="ski-map-actions">
-            <button type="button" className="ski-control ski-primary" aria-disabled={!canSearch} onClick={() => {
-                if (canSearch && viewport) onSearchArea(viewport);
-            }} title={areaApplied ? 'This area is already searched' : undefined}>
+            <button type="button" className="ski-control ski-primary ski-area-search" aria-disabled={!canSearch}
+                data-applied={areaApplied || undefined} title={areaApplied ? 'This area is already searched' : undefined}
+                onClick={() => { if (canSearch && viewport) onSearchArea(viewport); }}>
                 <SkiIcon name={areaApplied ? 'check' : 'search'} />Search this area
             </button>
             <div className="ski-map-utilities">
@@ -505,7 +531,9 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                         if (mapRef.current) fitAreas(mapRef.current, fitResults, duration);
                     }}><SkiIcon name="fit" /><span>Fit results</span></button>
                 <button type="button" className="ski-control ski-icon-button" aria-label="Layers" title="Map layers"
-                    aria-haspopup="dialog" aria-controls="ski-map-layers" onClick={onOpenLayers}><SkiIcon name="layers" /></button>
+                    aria-haspopup="dialog" aria-controls="ski-map-layers" data-active={layersModified || undefined}
+                    aria-description={layersModified ? 'Custom map layers' : undefined}
+                    onClick={onOpenLayers}><SkiIcon name="layers" /></button>
             </div>
         </div>
         <p id="ski-map-instructions" className="sr-only">Use the arrow keys to move the map. Use the zoom buttons or plus and minus keys to zoom. Browse Results to select areas by name.</p>

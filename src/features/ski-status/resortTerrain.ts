@@ -3,26 +3,15 @@ import manifest from '../../../projects/ski-status/data/resort-terrain.json';
 import type { CircleLayerSpecification, ExpressionSpecification, FillLayerSpecification, FilterSpecification, LineLayerSpecification, Map as MapLibreMap } from '../../maps/maplibre';
 import { pmtilesSourceUrl } from '../../maps/pmtiles';
 import type { TooltipPoint } from '../../maps/screenGeometry';
-import type { SkiArea } from './catalog';
+import { resortTerrainMinZoom, terrainColors, type TerrainConvention } from './resortTerrainData';
 
 export const resortTerrainSource = 'ski-resort-terrain';
-export const resortTerrainMinZoom = manifest.minZoom;
 const resortDetailMinZoom = manifest.detailMinZoom;
 export const resortFootprintLayer = 'ski-resort-footprints';
 const liftLayer = 'ski-resort-lifts';
 const runLayer = 'ski-resort-runs';
 const runFillLayer = 'ski-resort-run-areas';
 const stationLayer = 'ski-resort-lift-stations';
-const groupsByArea = new Map(Object.entries(manifest.groupsByArea));
-export type TerrainConvention = 'default' | 'europe' | 'japan';
-const terrainColors = {
-    lift: '#fbbf24', nordic: '#22d3ee', touring: '#c084fc', park: '#fb923c', connector: '#a1a1aa',
-    novice: '#86efac', easy: '#4ade80', blue: '#60a5fa', red: '#fb7185', advanced: '#18181b', freeride: '#fde047', unknown: '#d4d4d8',
-};
-
-export function resortTerrainGroups(areas: readonly SkiArea[]) {
-    return [...new Set(areas.flatMap(area => groupsByArea.get(area.id) ?? []))];
-}
 
 const difficulty: ExpressionSpecification = ['get', 'difficulty'];
 const european: ExpressionSpecification = ['==', ['get', 'convention'], 'europe'];
@@ -77,22 +66,6 @@ export function visibleTerrainConventions(map: MapLibreMap): TerrainConvention[]
     }
     return [...conventions].sort();
 }
-
-export function skiRunLegend(convention: TerrainConvention) {
-    return [
-        { label: 'Novice', color: terrainColors.novice },
-        { label: 'Easy', color: convention === 'europe' ? terrainColors.blue : terrainColors.easy },
-        { label: 'Intermediate', color: convention === 'default' ? terrainColors.blue : terrainColors.red },
-        { label: 'Advanced and harder', color: terrainColors.advanced },
-    ];
-}
-
-export const skiTerrainLegend = [
-    { label: 'Lift', color: terrainColors.lift, dashed: true }, { label: 'Nordic', color: terrainColors.nordic },
-    { label: 'Ski touring', color: terrainColors.touring }, { label: 'Terrain park', color: terrainColors.park },
-    { label: 'Freeride', color: terrainColors.freeride }, { label: 'Connector', color: terrainColors.connector },
-    { label: 'Unrated run', color: terrainColors.unknown },
-];
 
 export function syncResortTerrain(map: MapLibreMap, before: string, groups: number[], reload = false) {
     if (!map.getLayer(before)) return;

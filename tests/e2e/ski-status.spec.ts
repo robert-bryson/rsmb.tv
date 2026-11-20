@@ -228,8 +228,12 @@ test('shows the union of selected passes in the map, results, and Compare', asyn
     await passes.getByRole('button', { name: 'Ikon', exact: true }).press('Space');
     await passes.getByRole('button', { name: 'Epic', exact: true }).press('Enter');
     await passes.getByRole('button', { name: 'Mountain Collective', exact: true }).click();
-    await expect(result(page, 'Alta Ski Area')).toBeVisible();
-    await expect(result(page, 'Park City Mountain')).toBeVisible();
+    const alta = result(page, 'Alta Ski Area');
+    const parkCity = result(page, 'Park City Mountain');
+    await expect(alta.getByText('Ikon', { exact: true })).toBeVisible();
+    await expect(alta.getByText('Mountain Collective', { exact: true })).toBeVisible();
+    await expect(parkCity.getByText('Epic', { exact: true })).toBeVisible();
+    await expect(parkCity.getByText('Ikon', { exact: true })).toHaveCount(0);
     await expect(result(page, 'Beaver Mountain')).toHaveCount(0);
     await expect.poll(() => renderer.evaluate(async map => {
         const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
@@ -258,7 +262,9 @@ test('keeps map controls within the phone viewport and gives the landscape map r
     await expect(map).toHaveAttribute('data-map-state', 'ready');
     await page.getByRole('searchbox', { name: 'Search areas' }).focus();
     await page.keyboard.press('Tab');
-    await expect(page.getByRole('button', { name: 'Filters', exact: true })).toBeFocused();
+    const filters = page.getByRole('button', { name: 'Filters', exact: true });
+    await expect(filters).toBeFocused();
+    await expect(filters).toHaveAccessibleDescription('1 additional filter active');
     await page.keyboard.press('Tab');
     await expect(page.getByRole('button', { name: 'Ikon', exact: true })).toBeFocused();
 
@@ -266,15 +272,50 @@ test('keeps map controls within the phone viewport and gives the landscape map r
         await page.setViewportSize(size);
         const status = (await page.getByRole('button', { name: 'All resorts', exact: true }).boundingBox())!;
         const view = (await page.getByRole('button', { name: 'Map', exact: true }).boundingBox())!;
-        expect(status.x + status.width <= view.x || status.y + status.height <= view.y).toBe(true);
-        expect((await map.boundingBox())!.height).toBeGreaterThan(160);
+        expect(Math.abs(status.y - view.y)).toBeLessThan(4);
+        expect(status.x + status.width).toBeLessThanOrEqual(view.x);
+        const canvas = (await map.boundingBox())!;
+        expect(canvas.height).toBeGreaterThan(size.height - 220);
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(size.width);
         for (const name of ['Filters', 'Share current view', 'Search this area', 'Fit results', 'Layers']) {
             const button = (await page.getByRole('button', { name, exact: true }).boundingBox())!;
             expect(button.height).toBeGreaterThanOrEqual(44);
             expect(button.x + button.width).toBeLessThanOrEqual(size.width);
         }
+        for (const name of ['Zoom in', 'Zoom out']) {
+            const zoom = (await page.getByRole('button', { name, exact: true }).boundingBox())!;
+            expect(zoom.y).toBeGreaterThanOrEqual(canvas.y);
+            expect(zoom.y + zoom.height).toBeLessThanOrEqual(canvas.y + canvas.height);
+        }
     }
+});
+
+test('pages through the catalog with the keyboard without loading the map renderer', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 780 });
+    await prepare(page);
+    const mapRequests: string[] = [];
+    page.on('request', request => {
+        if (new URL(request.url()).pathname.includes('maplibre')) mapRequests.push(request.url());
+    });
+    await page.goto(`${path}?view=table`);
+
+    const pages = page.getByRole('navigation', { name: 'Comparison pages' });
+    const rows = comparison(page).locator('tbody tr');
+    await expect(rows).toHaveCount(50);
+    await expect(pages.getByRole('status')).toHaveText(/^1–50 of \d+ areas$/);
+    await expect(pages.getByRole('button', { name: 'Previous' })).toBeDisabled();
+    const first = await rows.first().getByRole('button').innerText();
+
+    const next = pages.getByRole('button', { name: 'Next' });
+    await next.focus();
+    await page.keyboard.press('Enter');
+    await expect(next).toBeFocused();
+    await expect(pages.getByRole('status')).toHaveText(/^51–100 of \d+ areas$/);
+    await expect(rows.first().getByRole('button')).not.toHaveText(first);
+    await comparison(page).getByRole('button', { name: 'Vertical', exact: true }).click();
+    await expect(pages.getByRole('status')).toHaveText(/^1–50 of \d+ areas$/);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+    expect(mapRequests).toEqual([]);
 });
 
 test('filters by pass and local date, keeps column choices, and exports the comparison', async ({ page }) => {
@@ -287,10 +328,10 @@ test('filters by pass and local date, keeps column choices, and exports the comp
     await expect(table.getByRole('button', { name: 'Snowbird', exact: true })).toBeVisible();
     await table.getByRole('button', { name: 'Snowbird', exact: true }).click();
     await expect(page.getByRole('region', { name: 'Pass product terms' })).toContainText('5 days');
-    await inDialog(page, 'Columns', dialog => dialog.getByRole('checkbox', { name: 'Show Mapped lifts column', exact: true }).uncheck());
     await expect(table.getByRole('columnheader', { name: 'Mapped lifts', exact: true })).toHaveCount(0);
+    await inDialog(page, 'Columns', dialog => dialog.getByRole('checkbox', { name: 'Show Mapped lifts column', exact: true }).check());
     await page.reload();
-    await expect(table.getByRole('columnheader', { name: 'Mapped lifts', exact: true })).toHaveCount(0);
+    await expect(table.getByRole('columnheader', { name: 'Mapped lifts', exact: true })).toBeVisible();
 
     const [download] = await Promise.all([
         page.waitForEvent('download'),
@@ -299,7 +340,7 @@ test('filters by pass and local date, keeps column choices, and exports the comp
     const csv = await readFile(await download.path(), 'utf8');
     expect(csv).toContain('Snowbird');
     expect(csv).toContain('OpenSkiData');
-    expect(csv).not.toContain('Mapped lifts');
+    expect(csv).toContain('Mapped lifts');
     expect(csv).not.toContain('Alta Ski Area');
 });
 
@@ -371,6 +412,7 @@ test('shows historical season evidence and filters a typical season by month', a
     await page.goto(`${path}?view=table&q=killington&seasonMonth=11`);
     const table = page.getByRole('region', { name: 'Ski area comparison table' });
     const killington = table.getByRole('button', { name: 'Killington Resort', exact: true });
+    await inDialog(page, 'Columns', dialog => dialog.getByRole('checkbox', { name: 'Show Typical opening column', exact: true }).check());
     await expect(table.getByRole('cell', { name: 'Nov 12', exact: true })).toBeVisible();
     await killington.click();
     const seasons = page.getByRole('region', { name: 'Season dates' });
@@ -627,6 +669,7 @@ test('loads and removes a skiing-type chip in the phone comparison', async ({ pa
     await page.goto(`${path}?view=table&skiing=cross-country&region=BC`);
     const table = comparison(page);
     await expect(table.getByRole('button', { name: 'Manning Park Nordic Centre', exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
     await expect(table.getByRole('button', { name: 'Manning Park', exact: true })).toHaveCount(0);
     await page.getByRole('button', { name: 'Remove Cross-country only', exact: true }).click();
     await expect(table.getByRole('button', { name: 'Manning Park', exact: true })).toBeVisible();
@@ -704,6 +747,8 @@ test('changes results only when someone searches the new area and restores each 
     const renderer = await captureMap(page);
     await renderer.evaluate(map => { map.jumpTo({ center: [-111.64, 40.6], zoom: 10 }); });
     await searchArea(page).click();
+    await expect(searchArea(page)).toBeDisabled();
+    await expect(searchArea(page)).toHaveAttribute('title', 'This area is already searched');
     await expect(result(page, 'Alta Ski Area')).toBeVisible();
     await expect(result(page, 'Snowbird')).toBeVisible();
     await expect(result(page, 'Whaleback Mountain')).toHaveCount(0);
@@ -713,6 +758,7 @@ test('changes results only when someone searches the new area and restores each 
     const vail = resortPoint('vail-mountain');
     await renderer.evaluate((map, center) => { map.panTo(center, { duration: 0 }); }, vail);
     await expect.poll(() => mapCamera(page)?.center[0]).toBeCloseTo(vail[0], 3);
+    await expect(searchArea(page)).toBeEnabled();
     await expect(result(page, 'Alta Ski Area')).toBeVisible();
     await expect(result(page, 'Vail Mountain')).toHaveCount(0);
     await searchArea(page).click();
@@ -1103,6 +1149,7 @@ test('shows the map metric and status in results and carries sorting into Compar
     const list = results(page);
     await expect(list.getByRole('combobox', { name: 'Sort results' })).toHaveValue('acres');
     await setColor(page, 'summitFt');
+    await expect(page.getByRole('button', { name: 'Layers', exact: true })).toHaveAccessibleDescription('Custom map layers');
     await expect(list.locator('li').first()).toContainText('Park City Mountain');
     await expect(list.locator('li').first()).toContainText('Summit elevation · 10,026 ft');
     await expect(list.locator('li').first()).toContainText('No report');

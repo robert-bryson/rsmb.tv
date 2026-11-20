@@ -7,10 +7,13 @@ import { httpsUrl, passSeasonId, skiId } from './schemas';
 
 const label = z.string().trim().min(1);
 const countryCode = z.string().regex(/^[A-Z]{2}$/);
+const verifiedTimeZones = new Set<string>();
 export const skiTimeZone = label.refine(value => {
     if (value.startsWith('+') || value.startsWith('-')) return false;
+    if (verifiedTimeZones.has(value)) return true;
     try {
         new Intl.DateTimeFormat('en', { timeZone: value });
+        verifiedTimeZones.add(value);
         return true;
     } catch {
         return false;

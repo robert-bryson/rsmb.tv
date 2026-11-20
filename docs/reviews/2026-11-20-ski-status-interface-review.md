@@ -52,6 +52,40 @@ All 47 ski-status Chromium tests passed. They cover the map, Results, Compare, r
 
 An axe scan reported zero violations in the phone map, Filters dialog, and details panel. The 18 release-validator browser tests passed on local fixtures. The repository passed 3,849 Vitest tests and 32 Python tests. TypeScript checks and a fixture-mode Vite build passed.
 
-## Next usability question
+## Follow-up review
 
-Compare opens with several current-report columns. Many catalog rows show dashes when reports are sparse. Track the comparison test in the [ski-status task list](../../TODO.md#ski-status).
+The follow-up started at `ae78812`, with independent pass toggles and icon buttons already in place. The review walked through finding Utah resorts for an Ikon and Epic group, searching a new map area, comparing mountain statistics, and opening and closing resort details by keyboard and touch.
+
+### Passes and search
+
+The top shortcuts showed which passes were selected. The list only explained each resort’s access when the map was colored by pass. With several passes selected, Results now names the matching passes beside each resort’s location. Add Mountain Collective to Ikon and Epic in Utah and Alta shows both of its matching passes. Park City shows Epic. A product and date qualify the selected family’s access. The Filters icon displays the count of additional criteria, and each applied filter can be removed beside the result count. [Baymard research on combining filters](https://baymard.com/research-articles/allow-applying-of-multiple-filter-values) · [Baymard research on applied filters](https://baymard.com/research-articles/how-to-design-applied-filters)
+
+The narrow phone layout gave operating status and view selection two rows. They now fit side by side at 320 pixels. The solid segmented control shows the status scope. The underlined view shows which workspace is open. Short landscape layouts use the pass logos beside search. Report coverage appears when an operating-status filter is active, where it helps explain a short or empty result list. [Apple guidance on segmented controls](https://developer.apple.com/design/human-interface-guidelines/segmented-controls)
+
+### Map and details
+
+On a phone, Search this area, Fit results, Layers, and zoom crowded the top edge of the map. The geographic action now has its own prominent button. It shows a check once the visible area is applied. Fit results and Layers share a panel. The phone uses icons in that panel and places zoom near the bottom right to leave the map’s upper-right markers visible. The Layers icon also indicates when the map display has been customized. [Google Maps Layers](https://support.google.com/maps/answer/3092439?co=GENIE.Platform%3DDesktop) · [Esri map actions](https://developers.arcgis.com/calcite-design-system/components/action/)
+
+The Filters, Share, Layers, Fit results, and Close details icons have accessible names and 44-pixel targets. Close details is aligned with the sticky resort title. The browser checks exercise focus return, the share dialog fallback, and the distinction between moving the camera and applying a new area. [W3C button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/) · [W3C target size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html)
+
+### Compare
+
+The first screen of the All resorts table was dominated by missing daily reports. It now shows skiable area, vertical drop, lifts, trails, and summit elevation after resort and region. The numbers align to the right, and the resort name stays visible during horizontal scrolling. Operating-status views lead with report fields, consistent with a same-day lookup. Column preferences control which fields appear. [GOV.UK table guidance](https://design-system.service.gov.uk/components/table/) · [OnTheSnow’s Utah open resorts table](https://www.onthesnow.com/utah/open-resorts)
+
+### Map height
+
+Measured in local Chromium with a fixture basemap. All resorts was selected in each run. The landscape case included a United States filter, and the other cases included Ikon and Epic.
+
+| Viewport | Starting branch | Follow-up | Gain |
+| --- | ---: | ---: | ---: |
+| 1440 × 900 | 785 px | 790 px | 5 px |
+| 768 × 900 | 780 px | 789 px | 9 px |
+| 390 × 844 | 636 px | 648 px | 12 px |
+| 320 × 700 | 438 px | 504 px | 66 px |
+| 640 × 360 | 201 px | 250 px | 49 px |
+
+### Verification
+
+All 49 ski-status Chromium tests passed using local fixtures. They cover combined passes, map scope and camera history, touch and keyboard focus, share links, and comparison. Axe found zero violations across the phone map, landscape map, Filters, Layers, resort details, and phone Compare. [Browser checks](../../tests/e2e/ski-status.spec.ts)
+
+The open usability question is how quickly first-time visitors can find and compare mountains or discover the fit icon on a phone. [ski-status task list](../../TODO.md#ski-status)

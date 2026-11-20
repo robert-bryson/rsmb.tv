@@ -113,7 +113,7 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
                     <p className="text-sm text-zinc-300">{formatSkiLocation(area)}</p>
                 </div>
             </div>
-            <button type="button" onClick={onClose} className="ski-control ski-icon-button ski-quiet-button" aria-label="Close details" title="Close details">
+            <button type="button" onClick={onClose} className="ski-control ski-icon-button" aria-label="Close details" title="Close details">
                 <SkiIcon name="close" />
             </button>
         </div>

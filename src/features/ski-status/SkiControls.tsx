@@ -3,7 +3,7 @@ import { passFilterKeys, passFilterOptions, skiingFilterOptions, type SkiUnits }
 import { statusFilterLabels } from './conditions';
 import { markerLegend, markerModes, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passProducts, readSkiDate } from './passRules';
-import { skiRunLegend, skiTerrainLegend, type TerrainConvention } from './resortTerrain';
+import { skiRunLegend, skiTerrainLegend, type TerrainConvention } from './resortTerrainData';
 import { countries, indyHomeAreas, regions, toggleSkiPassFilter, writeSkiPassProduct, type SkiFilters } from './skiFilters';
 import { seasonMonths } from './seasons';
 import { SkiIcon } from './SkiIcon';

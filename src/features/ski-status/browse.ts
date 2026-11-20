@@ -119,8 +119,8 @@ export type ColumnKey = typeof columns[number]['key'];
 export type SkiSort = { key: ColumnKey; direction: 'asc' | 'desc' };
 
 export const defaultSkiColumns: ColumnKey[] = [
-    ...mountainColumns.map(({ key }) => key), 'operatingStatus', 'reportLifts', 'reportTrails', 'trailsOpenPct', 'acresOpenPct',
-    'measuredSnow', 'forecastSnow', 'typicalOpening', 'typicalClosing', 'opensOn', 'plannedClosing', 'seasonWindow',
+    'name', 'region', 'acres', 'verticalFt', 'liftCount', 'trailCount', 'baseFt', 'summitFt',
+    'operatingStatus', 'reportLifts', 'reportTrails', 'measuredSnow', 'forecastSnow', 'opensOn',
 ];
 
 export function visibleSkiColumns(preference: unknown) {

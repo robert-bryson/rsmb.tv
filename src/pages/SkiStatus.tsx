@@ -10,7 +10,7 @@ import {
 import { passFamilySchema, passNames, skiAreaMapPoint, skiAreas } from '../features/ski-status/catalog';
 import { matchesOperatingStatus, skiDayStatus, statusFilterLabels, type ResortStatus } from '../features/ski-status/conditions';
 import { readMarkerMode } from '../features/ski-status/mapAppearance';
-import { resortTerrainGroups, type TerrainConvention } from '../features/ski-status/resortTerrain';
+import { resortTerrainGroups, type TerrainConvention } from '../features/ski-status/resortTerrainData';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaList } from '../features/ski-status/SkiAreaList';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
@@ -76,7 +76,8 @@ export default function SkiStatus() {
     const sort = readSkiSort(searchParams);
     const selected = areaById.get(searchParams.get('area') ?? '');
     const colorParam = searchParams.get('color');
-    const colors = colorParam === null && status === 'today' ? 'operatingStatus' : readMarkerMode(colorParam);
+    const defaultColors = status === 'today' ? 'operatingStatus' : 'default';
+    const colors = colorParam === null ? defaultColors : readMarkerMode(colorParam);
     const terrain = searchParams.get('terrain') === '1';
     const resortTerrain = searchParams.get('skiTerrain') !== '0';
     const mapAreaParam = searchParams.get('mapArea');
@@ -267,6 +268,7 @@ export default function SkiStatus() {
         { label: status !== 'all' && status !== 'today' && statusFilterLabels[status], key: 'status' },
         { label: searchedArea && 'Searched map area', key: 'mapArea' },
     ].filter(chip => Boolean(chip.label));
+    const additionalFilters = chips.filter(({ key }) => key !== 'mapArea').length;
     const coverageText = `${currentReports} of ${scoped.length} areas have current reports`;
     const resultText = status === 'today' ? `${matching.length} reporting skiing today` : `${matching.length} ski ${matching.length === 1 ? 'area' : 'areas'}`;
     const emptyResults = <div className="ski-empty">
@@ -286,7 +288,9 @@ export default function SkiStatus() {
         <header className="ski-header">
             <div className="ski-topbar">
                 <div className="ski-brand">
-                    <IntentLink to="/projects">Projects</IntentLink>
+                    <IntentLink to="/projects" aria-label="Projects" title="Back to projects">
+                        <SkiIcon name="back" /><span>Projects</span>
+                    </IntentLink>
                     <h1>ski-status</h1>
                 </div>
                 <div className="ski-search">
@@ -294,15 +298,19 @@ export default function SkiStatus() {
                     <SkiIcon name="search" />
                     <input ref={searchInput} className="ski-input" type="search" id="ski-area-search" value={query}
                         onChange={event => updateQuery(event.target.value, params => params.set('status', status))}
-                        onBlur={commitQuery} onKeyDown={event => { if (event.key === 'Enter') commitQuery(); }} placeholder="Search resorts" />
+                        onBlur={commitQuery} onKeyDown={event => { if (event.key === 'Enter') commitQuery(); }} placeholder="Search areas" />
                     {query && <button type="button" className="ski-search-clear ski-icon-button ski-quiet-button" aria-label="Clear search" title="Clear search" onClick={() => {
                         searchInput.current?.focus({ preventScroll: true });
                         setParam('q');
                     }}><SkiIcon name="close" /></button>}
                 </div>
-                <button type="button" ref={filterButton} className="ski-control ski-icon-button ski-filter-button" aria-label="Filters" title="Filters"
-                    aria-haspopup="dialog" aria-controls="ski-filters" data-active={chips.some(({ key }) => key !== 'mapArea') || undefined}
-                    onClick={() => filterDialog.current?.showModal()}><SkiIcon name="filter" /></button>
+                <div className="ski-filter">
+                    <button type="button" ref={filterButton} className="ski-control ski-icon-button" aria-label="Filters" title="Filters"
+                        aria-haspopup="dialog" aria-controls="ski-filters" data-active={additionalFilters > 0 || undefined}
+                        aria-description={additionalFilters > 0 ? `${additionalFilters} additional ${additionalFilters === 1 ? 'filter' : 'filters'} active` : undefined}
+                        onClick={() => filterDialog.current?.showModal()}><SkiIcon name="filter" /></button>
+                    {additionalFilters > 0 && <span className="ski-filter-count" aria-hidden="true">{additionalFilters}</span>}
+                </div>
                 <div className="ski-pass-shortcuts" role="group" aria-label="Pass filters">
                     {passFamilySchema.options.map(family => <button key={family} type="button" className="ski-control ski-pass-button"
                         aria-label={passNames[family]} title={passNames[family]} aria-pressed={passes.includes(family)}
@@ -328,21 +336,24 @@ export default function SkiStatus() {
                     </button>
                     <button type="button" aria-pressed={compare} onClick={() => setView('table')}><SkiIcon name="compare" />Compare</button>
                 </nav>
-                <div className="ski-readout">
+                <div className="ski-context">
                     <div className="ski-counts" aria-live="polite" aria-atomic="true">
-                        <span>{resultText}</span><span>{coverageText}</span>
+                        <span>{resultText}</span>
+                        {status !== 'all' && <span className="ski-coverage">{coverageText}</span>}
                     </div>
-                    {!chips.length && passes.length > 0 && <button type="button" className="ski-clear-filters" onClick={clearFilters}>Clear filters</button>}
+                    {chips.length > 0 && <div aria-label="Applied filters" role="group" className="ski-chips">
+                        {chips.map(({ label, key }) => <button type="button" key={key} className="ski-chip"
+                            aria-label={`Remove ${label}`} title={`Remove ${label}`} onClick={() => removeFilter(key)}>
+                            <span>{label}</span><SkiIcon name="close" />
+                        </button>)}
+                    </div>}
+                    {(chips.length > 0 || passes.length > 0) &&
+                        <button type="button" className="ski-clear-filters" aria-label="Clear filters" onClick={clearFilters}>
+                            Clear<span> filters</span>
+                        </button>}
                 </div>
             </div>
             {legacyArea && !showMap && <p className="text-sm text-slate-300">Open Map to set the area for this link.</p>}
-            {chips.length > 0 && <div aria-label="Applied filters" role="group" className="ski-applied">
-                <div className="ski-chips">
-                    {chips.map(({ label, key }) => <button type="button" key={key} className="ski-chip"
-                        aria-label={`Remove ${label}`} onClick={() => removeFilter(key)}>{label}<SkiIcon name="close" /></button>)}
-                </div>
-                <button type="button" className="ski-clear-filters" onClick={clearFilters}>Clear filters</button>
-            </div>}
         </header>
         <div className="ski-workspace" data-sidebar={wide && (showList || detailsOpen) || undefined}
             data-docked={!wide && detailsOpen && showMap || undefined}>
@@ -360,6 +371,7 @@ export default function SkiStatus() {
                         <SkiStatusMap areas={status === 'today' ? scoped : matching} fitResults={matching} cameraAreas={catalogMatches}
                             selected={selected} colors={colors} passSelection={passSelection} statuses={statuses} conditions={conditions}
                             terrain={terrain} resortTerrain={resortTerrain} visible={showMap} searchedArea={searchedArea}
+                            layersModified={colors !== defaultColors || terrain || !resortTerrain}
                             searchedAreaKey={searchedArea ? mapAreaParam : null} initializeArea={legacyArea}
                             terrainRequest={detailsOpen ? undefined : terrainRequest}
                             camera={camera} navigationKey={location.key} restoreHistoryCamera={restoreHistoryCamera}
@@ -381,7 +393,7 @@ export default function SkiStatus() {
                 </div>
                 <div className="min-h-0 flex-1">
                     {sorted.length > 0 ? <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} conditions={conditions}
-                        columnPreference={columnPreference} onSort={setSort} onSelect={selectArea} /> : emptyResults}
+                        columnPreference={columnPreference} reportsFirst={status !== 'all'} onSort={setSort} onSelect={selectArea} /> : emptyResults}
                 </div>
             </section>}
             {!compare && <aside id="ski-results-pane" tabIndex={-1} aria-label="Resort results" hidden={!showList || detailsOpen} className="ski-sidebar flex min-h-0 min-w-0 flex-col">

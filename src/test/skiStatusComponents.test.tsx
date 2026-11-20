@@ -53,16 +53,20 @@ describe('ski-status results and comparison', () => {
         expect(list.getByText('Indy discount')).toBeVisible();
     });
 
-    it('marks the comparison sort and identifies areas with the same name', () => {
+    it('leads with mountain statistics or current reports and preserves resort identity and the active sort', () => {
         const areas = skiAreas.filter(area => area.name === 'Crystal Mountain');
         const onSort = vi.fn();
-        render(<SkiAreaTable areas={areas} units="imperial" sort={{ key: 'name', direction: 'asc' }}
-            onSort={onSort} onSelect={vi.fn()} />);
+        const props = { areas, units: 'imperial', sort: { key: 'name', direction: 'asc' }, onSort, onSelect: vi.fn() } as const;
+        const { rerender } = render(<SkiAreaTable {...props} />);
         const table = within(screen.getByRole('region', { name: 'Ski area comparison table' }));
+        const firstFields = () => table.getAllByRole('columnheader').slice(0, 5).map(header => header.textContent);
+        expect(firstFields()).toEqual(['Ski area', 'Region', 'Skiable area', 'Vertical', 'Lifts']);
         expect(table.getByRole('columnheader', { name: 'Ski area' })).toHaveAttribute('aria-sort', 'ascending');
         expect(table.getByRole('button', { name: 'Crystal Mountain', description: /, WA/ })).toBeVisible();
         fireEvent.click(table.getByRole('button', { name: 'Skiable area' }));
         expect(onSort).toHaveBeenCalledWith('acres');
+        rerender(<SkiAreaTable {...props} reportsFirst />);
+        expect(firstFields()).toEqual(['Ski area', 'Region', 'Operating status', 'Lifts open / total', 'Trails open / total']);
     });
 
     it('moves focus to the first result added by Show more', () => {

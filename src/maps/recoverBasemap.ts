@@ -28,7 +28,8 @@ export function recoverBasemap(map: Map, options: Options, onState: (state: Base
         clearTimeout(timer);
         providerSources = null;
         setState('unavailable');
-        map.setStyle(options.neutralStyle(), { diff: false });
+        // A transform waits for the old style to load. The neutral style is already complete.
+        map.setStyle(options.neutralStyle(), { diff: false, transformStyle: undefined });
     }
 
     function startDeadline() {

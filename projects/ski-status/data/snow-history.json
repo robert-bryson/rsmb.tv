@@ -34,6 +34,27 @@
       }
     }
   },
+  "angel-fire-resort": {
+    "snowfall": {
+      "label": "Angel Fire Resort",
+      "source": "https://www.angelfireresort.com/mountain-stats/",
+      "annualCm": 533.4
+    }
+  },
+  "apex-mountain-resort": {
+    "snowfall": {
+      "label": "Apex Mountain Resort",
+      "source": "https://apexresort.com/",
+      "annualCm": 500
+    }
+  },
+  "arapahoe-basin": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/arapahoe-basin/",
+      "annualCm": 889
+    }
+  },
   "banff-sunshine": {
     "snowfall": {
       "label": "Banff Sunshine Village",
@@ -73,6 +94,207 @@
       }
     }
   },
+  "beaver-mountain": {
+    "snowfall": {
+      "label": "Ski Utah",
+      "source": "https://www.skiutah.com/members/beaver-mountain",
+      "annualCm": 1016
+    }
+  },
+  "berkshire-east-ski-resort": {
+    "snowfall": {
+      "label": "Berkshire East Ski Resort",
+      "source": "https://www.berkshireeast.com/the-resort",
+      "annualCm": 279.4
+    }
+  },
+  "big-white-ski-resort": {
+    "snowfall": {
+      "label": "Big White Ski Resort",
+      "source": "https://www.bigwhite.com/explore/mountain-info/mountain-statistics",
+      "annualCm": 750
+    }
+  },
+  "bolton-valley-resort": {
+    "snowfall": {
+      "label": "Bolton Valley Resort",
+      "source": "https://www.boltonvalley.com/the-resort/about-us/",
+      "annualCm": 792.48
+    }
+  },
+  "boyne-mountain": {
+    "snowfall": {
+      "label": "Boyne Mountain",
+      "source": "https://www.boynemountain.com/mountain-stats",
+      "annualCm": 355.6
+    }
+  },
+  "brian-head-resort": {
+    "snowfall": {
+      "label": "Ski Utah",
+      "source": "https://www.skiutah.com/members/brian-head/",
+      "annualCm": 914.4
+    }
+  },
+  "bridger-bowl": {
+    "snowfall": {
+      "label": "Bridger Bowl",
+      "source": "https://bridgerbowl.com/mountain/stats",
+      "annualCm": 762
+    }
+  },
+  "brighton-resort": {
+    "snowfall": {
+      "label": "Brighton Resort",
+      "source": "https://www.brightonresort.com/",
+      "annualCm": 1270
+    }
+  },
+  "brundage-mountain-resort": {
+    "snowfall": {
+      "label": "Brundage Mountain Resort",
+      "source": "https://brundage.com/mountain-stats/",
+      "annualCm": 812.8,
+      "location": "Base area"
+    }
+  },
+  "burke-mountain-resort": {
+    "snowfall": {
+      "label": "Burke Mountain Resort",
+      "source": "https://skiburke.com/the-mountain/skiing-riding",
+      "annualCm": 551.18
+    }
+  },
+  "cannon-mountain": {
+    "snowfall": {
+      "label": "Cannon Mountain",
+      "source": "https://www.cannonmt.com/mountain-stats",
+      "annualCm": 406.4
+    }
+  },
+  "castle-mountain-resort": {
+    "snowfall": {
+      "label": "Castle Mountain Resort",
+      "source": "https://www.skicastle.ca/",
+      "annualCm": 850
+    }
+  },
+  "cat-ski-mount-bailey": {
+    "snowfall": {
+      "label": "Ski Oregon",
+      "source": "https://www.skioregon.org/ski-areas/cat-ski-mt-bailey/",
+      "annualCm": 1524
+    }
+  },
+  "cherry-peak": {
+    "snowfall": {
+      "label": "Cherry Peak",
+      "source": "https://www.skicpr.com/mountain-stats",
+      "annualCm": 812.8
+    }
+  },
+  "cooper": {
+    "snowfall": {
+      "label": "Cooper",
+      "source": "https://www.skicooper.com/mountain-stats-map/",
+      "annualCm": 635
+    }
+  },
+  "copper-mountain": {
+    "snowfall": {
+      "label": "Copper Mountain Resort",
+      "source": "https://www.coppercolorado.com/the-mountain/mountain-safety-stats/winter-mountain-stats/",
+      "annualCm": 777.24,
+      "annualSource": "https://www.coloradoski.com/resorts/copper-mountain/",
+      "period": "2005/06–2024/25",
+      "monthlyCm": {
+        "1": 131.32,
+        "2": 123.19,
+        "3": 124.33,
+        "4": 84.2,
+        "10": 58.93,
+        "11": 96.14,
+        "12": 123.95
+      }
+    }
+  },
+  "coronet-peak": {
+    "snowfall": {
+      "label": "Coronet Peak",
+      "source": "https://www.coronetpeak.co.nz/media/5861/coronet-peak-media-kit-2024.pdf",
+      "annualCm": 199
+    }
+  },
+  "cranmore-mountain-resort": {
+    "snowfall": {
+      "label": "Cranmore Mountain Resort",
+      "source": "https://cranmore.com/trail-map",
+      "annualCm": 203.2
+    }
+  },
+  "cuchara": {
+    "snowfall": {
+      "label": "Cuchara",
+      "source": "https://cucharamountainpark.org/pages/mountain-info",
+      "annualCm": 635
+    }
+  },
+  "cypress-mountain": {
+    "snowfall": {
+      "label": "Cypress Mountain",
+      "source": "https://www.cypressmountain.com/trail-maps-and-stats",
+      "annualCm": 622
+    }
+  },
+  "deer-valley-resort": {
+    "snowfall": {
+      "label": "Ski Utah",
+      "source": "https://www.skiutah.com/members/deer-valley/",
+      "annualCm": 762
+    }
+  },
+  "echo-mountain": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/echo-mountain/",
+      "annualCm": 698.5
+    }
+  },
+  "eldora-mountain-resort": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/eldora/",
+      "annualCm": 762
+    }
+  },
+  "fernie-alpine-resort": {
+    "snowfall": {
+      "label": "Fernie Alpine Resort",
+      "source": "https://skifernie.com/discover-fernie/mountain-stats/",
+      "annualCm": 900
+    }
+  },
+  "granby-ranch": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/granby-ranch/",
+      "annualCm": 304.8
+    }
+  },
+  "granite-peak": {
+    "snowfall": {
+      "label": "Granite Peak",
+      "source": "https://www.skigranitepeak.com/mountain-info/trail-map-mountain-stats",
+      "annualCm": 152.4
+    }
+  },
+  "great-divide-ski-area": {
+    "snowfall": {
+      "label": "Great Divide Ski Area",
+      "source": "https://www.skigd.com/mountain-stats",
+      "annualCm": 381
+    }
+  },
   "heavenly": {
     "snowfall": {
       "label": "Heavenly Mountain Resort",
@@ -95,11 +317,74 @@
       }
     }
   },
+  "homewood-mountain-resort": {
+    "snowfall": {
+      "label": "Homewood Mountain Resort",
+      "source": "https://skihomewood.com/trailmap/",
+      "annualCm": 1143
+    }
+  },
+  "hoodoo-ski-area": {
+    "snowfall": {
+      "label": "Hoodoo Ski Area",
+      "source": "https://skihoodoo.com/about/",
+      "annualCm": 1143
+    }
+  },
+  "hotham": {
+    "snowfall": {
+      "label": "Hotham Alpine Resort",
+      "source": "https://www.mthotham.com.au/resort/explore/mountain-info",
+      "annualCm": 300
+    }
+  },
+  "howelsen-hill": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/howelsen-hill/",
+      "annualCm": 431.8
+    }
+  },
+  "hurricane-ridge": {
+    "snowfall": {
+      "label": "Hurricane Ridge",
+      "source": "https://www.hurricaneridge.com/ski-area-info/",
+      "annualCm": 1016
+    }
+  },
   "jackson-hole-mountain-resort": {
     "snowfall": {
       "label": "Jackson Hole Mountain Resort",
       "source": "https://www.jacksonhole.com/the-big-one",
       "annualCm": 1163.32
+    }
+  },
+  "jay-peak-resort": {
+    "snowfall": {
+      "label": "Jay Peak Resort",
+      "source": "https://jaypeakresort.com/skiing-riding/mountain",
+      "annualCm": 952.5
+    }
+  },
+  "jiminy-peak-mountain-resort": {
+    "snowfall": {
+      "label": "Jiminy Peak Mountain Resort",
+      "source": "https://www.jiminypeak.com/the-mountain/mountain-information/know-before-you-go/",
+      "annualCm": 172.72
+    }
+  },
+  "june-mountain": {
+    "snowfall": {
+      "label": "June Mountain",
+      "source": "https://www.junemountain.com/mountain-information/trail-map",
+      "annualCm": 635
+    }
+  },
+  "kendall-mountain-ski-area": {
+    "snowfall": {
+      "label": "Kendall Mountain Ski Area",
+      "source": "https://www.skikendall.com/trail-map",
+      "annualCm": 508
     }
   },
   "killington": {
@@ -118,11 +403,39 @@
       }
     }
   },
+  "kimberley-alpine-resort": {
+    "snowfall": {
+      "label": "Kimberley Alpine Resort",
+      "source": "https://skikimberley.com/discover-kimberley/mountain-stats/",
+      "annualCm": 381
+    }
+  },
   "lake-louise": {
     "snowfall": {
       "label": "Lake Louise Ski Resort",
       "source": "https://www.skilouise.com/wp-content/uploads/2023/10/2023-Media-Kit-LLSR.pdf",
       "annualCm": 454
+    }
+  },
+  "le-massif": {
+    "snowfall": {
+      "label": "Le Massif de Charlevoix",
+      "source": "https://www.lemassif.com/en/activities-events/charlevoix-attractions/charlevoix-ski",
+      "annualCm": 545
+    }
+  },
+  "lutsen-mountains": {
+    "snowfall": {
+      "label": "Lutsen Mountains",
+      "source": "https://www.lutsen.com/mountain-info/trail-map-mountain-stats",
+      "annualCm": 304.8
+    }
+  },
+  "magic-mountain-ski-area": {
+    "snowfall": {
+      "label": "Magic Mountain Ski Area",
+      "source": "https://www.magicmtn.com/about-magic",
+      "annualCm": 330.2
     }
   },
   "mammoth-mountain": {
@@ -144,11 +457,82 @@
       }
     }
   },
+  "marble-mountain": {
+    "snowfall": {
+      "label": "Marble Mountain",
+      "source": "https://skimarble.com/mountain-stats/",
+      "annualCm": 500
+    }
+  },
+  "marquette-mountain": {
+    "snowfall": {
+      "label": "Marquette Mountain",
+      "source": "https://www.marquettemountain.com/the-mountain/trail-map/",
+      "annualCm": 533.4
+    }
+  },
+  "monarch-mountain": {
+    "snowfall": {
+      "label": "Monarch Mountain",
+      "source": "https://skimonarch.com/hours-stats/",
+      "annualCm": 889
+    }
+  },
+  "mount-washington-alpine-resort": {
+    "snowfall": {
+      "label": "Mount Washington Alpine Resort",
+      "source": "https://www.mountwashington.ca/the-mountain/about-us/",
+      "annualCm": 900
+    }
+  },
+  "mountain-high": {
+    "snowfall": {
+      "label": "Mountain High",
+      "source": "https://www.mthigh.com/site/trails-and-conditions/other/mountain-stats.html",
+      "annualCm": 297.18,
+      "period": "23-year average"
+    }
+  },
+  "mt-baker-ski-area": {
+    "snowfall": {
+      "label": "Mt. Baker Ski Area",
+      "source": "https://www.mtbaker.us/the-mountain/mountain-stats/",
+      "annualCm": 1747.52
+    }
+  },
   "mt-norquay": {
     "snowfall": {
       "label": "Mt. Norquay",
       "source": "https://banffnorquay.com/trail-map/",
       "annualCm": 300
+    }
+  },
+  "mt-shasta-ski-park": {
+    "snowfall": {
+      "label": "Mt. Shasta Ski Park",
+      "source": "https://www.skipark.com/winter/trail-map-stats",
+      "annualCm": 398.78
+    }
+  },
+  "mt-t": {
+    "snowfall": {
+      "label": "Mt.T by Hoshino Resorts",
+      "source": "https://tanigawadake-joch.com/en/mt-t/",
+      "annualCm": 1500
+    }
+  },
+  "nakiska-ski-area": {
+    "snowfall": {
+      "label": "Nakiska Ski Area",
+      "source": "https://skinakiska.com/discover-nakiska/mountain-stats/",
+      "annualCm": 250
+    }
+  },
+  "nub-s-nob": {
+    "snowfall": {
+      "label": "Nub's Nob",
+      "source": "https://www.nubsnob.com/snowmaking-grooming/",
+      "annualCm": 312.42
     }
   },
   "palisades-tahoe": {
@@ -168,11 +552,130 @@
       }
     }
   },
+  "panorama-mountain-resort": {
+    "snowfall": {
+      "label": "Panorama Mountain Resort",
+      "source": "https://www.panoramaresort.com/while-you-are-here/mountain-stats",
+      "annualCm": 520
+    }
+  },
   "park-city-mountain": {
     "snowfall": {
       "label": "Park City Mountain",
       "source": "https://www.parkcitymountain.com/the-mountain/about-the-mountain/mountain-info.aspx",
       "annualCm": 901.7
+    }
+  },
+  "pebble-creek-ski-area": {
+    "snowfall": {
+      "label": "Pebble Creek Ski Area",
+      "source": "https://pebblecreekskiarea.com/the-mountain",
+      "annualCm": 571.5
+    }
+  },
+  "pico-mountain": {
+    "snowfall": {
+      "label": "Pico Mountain",
+      "source": "https://picomountain.com/mountain-stats",
+      "annualCm": 635
+    }
+  },
+  "powder-mountain": {
+    "snowfall": {
+      "label": "Ski Utah",
+      "source": "https://www.skiutah.com/members/powder-mountain",
+      "annualCm": 914.4
+    }
+  },
+  "powderhorn-mountain-resort": {
+    "snowfall": {
+      "label": "Powderhorn Mountain Resort",
+      "source": "https://www.powderhorn.com/",
+      "annualCm": 635
+    }
+  },
+  "purgatory-resort": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/purgatory-resort/",
+      "annualCm": 660.4
+    }
+  },
+  "red-lodge-mountain": {
+    "snowfall": {
+      "label": "Red Lodge Mountain",
+      "source": "https://www.redlodgemountain.com/mountain/the-mountain/",
+      "annualCm": 635
+    }
+  },
+  "red-mountain-resort": {
+    "snowfall": {
+      "label": "RED Mountain Resort",
+      "source": "https://www.redresort.com/maps-stats/",
+      "annualCm": 760
+    }
+  },
+  "saddleback": {
+    "snowfall": {
+      "label": "Saddleback",
+      "source": "https://www.saddlebackmaine.com/the-stats/",
+      "annualCm": 571.5
+    }
+  },
+  "schweitzer-mountain-resort": {
+    "snowfall": {
+      "label": "Schweitzer Mountain Resort",
+      "source": "https://www.schweitzer.com/discover-schweitzer/stats-and-info",
+      "annualCm": 762
+    }
+  },
+  "shawnee-mountain-ski-area": {
+    "snowfall": {
+      "label": "Shawnee Mountain Ski Area",
+      "source": "https://shawneemt.com/hours-of-operation-trail-map/",
+      "annualCm": 88.9
+    }
+  },
+  "showdown-montana": {
+    "snowfall": {
+      "label": "Showdown Montana",
+      "source": "https://www.showdownmontana.com/lodge-mountain-info",
+      "annualCm": 609.6
+    }
+  },
+  "silver-mountain-resort": {
+    "snowfall": {
+      "label": "Silver Mountain Resort",
+      "source": "https://silvermt.com/trail-map/",
+      "annualCm": 863.6
+    }
+  },
+  "silverstar-mountain-resort": {
+    "snowfall": {
+      "label": "SilverStar Mountain Resort",
+      "source": "https://www.skisilverstar.com/",
+      "annualCm": 700
+    }
+  },
+  "ski-santa-fe": {
+    "snowfall": {
+      "label": "Ski Santa Fe",
+      "source": "https://www.skisantafe.com/our-story/about",
+      "annualCm": 571.5
+    }
+  },
+  "snow-ridge": {
+    "snowfall": {
+      "label": "Snow Ridge",
+      "source": "https://snowridge.com/trail-mapstats/",
+      "annualCm": 584.2
+    }
+  },
+  "snowbasin-resort": {
+    "snowfall": {
+      "label": "Ski Utah",
+      "source": "https://www.skiutah.com/members/snowbasin/",
+      "annualCm": 762
     }
   },
   "snowbird": {
@@ -198,11 +701,118 @@
       }
     }
   },
+  "snowy-range-ski-area": {
+    "snowfall": {
+      "label": "Snowy Range Ski Area",
+      "source": "https://snowyrangeski.com/",
+      "annualCm": 635
+    }
+  },
+  "solitude-mountain-resort": {
+    "snowfall": {
+      "label": "Ski Utah",
+      "source": "https://www.skiutah.com/members/solitude/",
+      "annualCm": 1270
+    }
+  },
+  "steamboat-ski-resort": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/steamboat/",
+      "annualCm": 853.44
+    }
+  },
+  "sugar-mountain-resort": {
+    "snowfall": {
+      "label": "Sugar Mountain Resort",
+      "source": "https://skisugar.com/sugar-mountain-stats/",
+      "annualCm": 187.96,
+      "period": "25-year average"
+    }
+  },
+  "sugarbush-resort": {
+    "snowfall": {
+      "label": "Sugarbush Resort",
+      "source": "https://www.sugarbush.com/mountain/terrain-and-maps",
+      "annualCm": 635
+    }
+  },
+  "sugarloaf": {
+    "snowfall": {
+      "label": "Sugarloaf",
+      "source": "https://www.sugarloaf.com/media-room",
+      "annualCm": 500.38,
+      "period": "20-year average"
+    }
+  },
+  "sun-peaks-resort": {
+    "snowfall": {
+      "label": "Sun Peaks Resort",
+      "source": "https://www.sunpeaksresort.com/ski-ride/the-mountain/trail-maps-stats",
+      "annualCm": 600
+    }
+  },
+  "sundance-mountain-resort": {
+    "snowfall": {
+      "label": "Ski Utah",
+      "source": "https://www.skiutah.com/members/sundance",
+      "annualCm": 762
+    }
+  },
+  "sunlight-mountain-resort": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/sunlight/",
+      "annualCm": 635
+    }
+  },
+  "swain-resort": {
+    "snowfall": {
+      "label": "Swain Resort",
+      "source": "https://swain.com/mountain/",
+      "annualCm": 330.2
+    }
+  },
+  "tamarack-resort": {
+    "snowfall": {
+      "label": "Tamarack Resort",
+      "source": "https://tamarackidaho.com/the-mountain",
+      "annualCm": 690.88
+    }
+  },
+  "telluride-ski-resort": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/telluride/",
+      "annualCm": 711.2
+    }
+  },
+  "terry-peak": {
+    "snowfall": {
+      "label": "Terry Peak",
+      "source": "https://terrypeak.com/snow-report",
+      "annualCm": 381
+    }
+  },
+  "the-highlands-at-harbor-springs": {
+    "snowfall": {
+      "label": "The Highlands at Harbor Springs",
+      "source": "https://www.highlandsharborsprings.com/media-room/resort-stats",
+      "annualCm": 355.6
+    }
+  },
   "vail-mountain": {
     "snowfall": {
       "label": "Vail Mountain",
       "source": "https://www.vail.com/the-mountain/mountain-conditions/snow-and-weather-report",
       "annualCm": 899.16
+    }
+  },
+  "welch-village": {
+    "snowfall": {
+      "label": "Welch Village",
+      "source": "https://www.welchvillage.com/trail-map/",
+      "annualCm": 114.3
     }
   },
   "whistler-blackcomb": {
@@ -219,6 +829,20 @@
         "11": 230,
         "12": 210
       }
+    }
+  },
+  "winter-park-resort": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/winter-park/",
+      "annualCm": 830.58
+    }
+  },
+  "wolf-creek-ski-area": {
+    "snowfall": {
+      "label": "Wolf Creek Ski Area",
+      "source": "https://wolfcreekski.com/the-mountain/",
+      "annualCm": 1092.2
     }
   }
 }

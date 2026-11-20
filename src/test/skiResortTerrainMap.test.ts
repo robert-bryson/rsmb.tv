@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { skiAreas } from '../features/ski-status/catalog';
-import { resortFootprintLayer, resortTerrainGroups, resortTerrainLabel, resortTerrainMinZoom, resortTerrainSource, syncResortTerrain } from '../features/ski-status/resortTerrain';
+import { resortFootprintLayer, resortTerrainLabel, resortTerrainSource, syncResortTerrain } from '../features/ski-status/resortTerrain';
+import { resortTerrainGroups, resortTerrainMinZoom } from '../features/ski-status/resortTerrainData';
 import type { LayerSpecification, Map as MapLibreMap, SourceSpecification } from '../maps/maplibre';
 
 vi.mock('../maps/maplibre', () => ({ addProtocol: vi.fn() }));

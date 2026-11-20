@@ -10,7 +10,7 @@ Use **Ski today** to find areas with a current report of open or limited skiing.
 
 - On a wide screen, the map and results sit side by side. On a phone, switch between **Map** and **Results**. Open **Compare** for the full-width table.
 - Search in the top bar by area name, alternative name, town, country, or skiing type. Use **Clear search** inside the field to remove the query.
-- Select one or more pass buttons for included access. An area matches if any selected pass gives access. Select a pass again to remove it. Open the **Filters** icon for regions and other criteria. Use **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer. Remove other applied filters from the header.
+- Select one or more pass buttons for included access. An area matches if any selected pass gives access. Results shows the matching passes when several are selected. Select a pass again to remove it. Open the **Filters** icon for regions and other criteria. Its count shows the additional filters in use. Use **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer. Remove other applied filters from the header.
 - Select a **Pass product** to check access on a **Ski date**. The product and date apply to that pass. A blank date uses today at each ski area. For an Indy Add-On, select your **Home ski area** to exclude it from the results for that product.
 - Select a month under **Typical season in** to find areas with a usual ski season in that month. Open a resort for the recorded dates and sources.
 - Select **Conventional downhill** for outdoor lift-served areas. This filter includes areas that also have Nordic trails. Select **Cross-country only** for Nordic centers. Use **Specialty skiing** for Nordic-only areas and other types such as indoor skiing.
@@ -18,7 +18,7 @@ Use **Ski today** to find areas with a current report of open or limited skiing.
 - The resort header shows its icon when available. Open Google Maps for the visitor entrance or resort listing. Open Wikipedia for the resort article or a name and location search.
 - In **Season and snowfall**, check the recorded, scheduled, or estimated opening and closing dates. The snow chart shows historical monthly snowfall and depth where available, with sources and measurement locations.
 - Use the close icon in the resort panel. Focus returns to the control that opened the panel if it is visible. Press Escape in the map or select empty map space to clear the selection. Use the keyboard skip links for search, the map, and results.
-- In **Compare**, select a column header to sort. Use **Columns** to choose fields. Select **Export CSV** to download the current matches and the selected fields with export permission.
+- In **Compare**, select a column header to sort. Use **Previous** and **Next** to browse pages of 50 areas. All resorts shows mountain statistics first. Operating-status views show report columns first. Use **Columns** for additional fields. **Export CSV** includes all matches across the pages and the selected fields with export permission.
 
 Select the **Share** icon in the top bar to share the current view. Use the system share menu when it opens. The app can also copy the URL or show it in a dialog. The link saves the search text, filters, sort order, selected resort, view, map position, and layer settings. The browser saves unit and column preferences.
 
@@ -31,7 +31,7 @@ At globe scale, markers group nearby resorts. In operating status mode, a group 
 The map uses a verified visitor entrance when one is available. It can use an inferred lift base when the mapped lifts support that location.
 **Show runs and lifts** centers the map on the terrain point.
 
-Select the **Layers** icon next to **Fit results**. The panel controls marker colors, the map key, and terrain overlays.
+Select the **Layers** icon next to **Fit results**. On a phone, **Fit results** uses a frame icon. The Layers panel controls marker colors, the map key, and terrain overlays.
 Color by pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The results show the selected metric and operating status. A gray marker in a metric layer means that the value is unknown.
 
 Select the information icon at the bottom right of the map. It shows the source credits and data license.
@@ -50,7 +50,7 @@ The app serves the pass images with its site files.
 
 An acreage value such as `200+` gives a minimum. The table sorts by that minimum. If the minimum leaves more than one possible color range, the map shows a gray dot.
 
-The globe uses the CARTO Dark Matter background. In **Layers**, turn on **Terrain relief** to see shaded slopes from zoom level 8. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre projections](https://maplibre.org/maplibre-style-spec/types/#projectiondefinition), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
+The globe uses the CARTO Dark Matter background. Land-use details, waterways, and water labels appear from zoom level 3. In **Layers**, turn on **Terrain relief** to see shaded slopes from zoom level 8. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre projections](https://maplibre.org/maplibre-style-spec/types/#projectiondefinition), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
 
 Resort footprints appear at zoom level 9. Runs and lifts appear at zoom level 11, and lift stations appear at zoom level 13. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Hover or tap a run or lift to see its mapped name and type. Open **Layers** for the difficulty key and the **Ski terrain** toggle.
 
@@ -67,25 +67,30 @@ The United States had 334 points. Canada had 72. Other countries had 177.
 The country filter also includes Germany through shared areas.
 The catalog had 126 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
 
-All 583 areas have at least one published statistic. The six main downhill fields have values for 132 areas.
+All 583 areas have at least one published statistic. Of the 525 downhill areas, 171 have values for all six main comparison fields, up from 132.
 Mapped terrain values cover 536 areas. [First-release data review](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#catalog-coverage)
 
 | Published field | Areas |
 | --- | ---: |
-| Skiable acreage | 256 |
-| Vertical drop | 452 |
-| Lift count | 455 |
-| Trail count | 496 |
-| Base elevation | 193 |
-| Summit elevation | 216 |
-| Downhill trail length | 55 |
-| Nordic trail length | 60 |
-| Highest lift terminal | 27 |
-| Lowest lift terminal | 7 |
-| Night skiable acreage | 9 |
-| Difficulty breakdown | 94 |
-| Season window | 64 |
-| Official conditions link | 362 |
+| Skiable acreage | 262 |
+| Vertical drop | 457 |
+| Lift count | 474 |
+| Trail count | 501 |
+| Base elevation | 220 |
+| Summit elevation | 252 |
+| Downhill trail length | 67 |
+| Nordic trail length | 61 |
+| Highest lift terminal | 36 |
+| Lowest lift terminal | 11 |
+| Night skiable acreage | 10 |
+| Difficulty breakdown | 111 |
+| Season window | 65 |
+| Official conditions link | 431 |
+| Planned season dates | 77 |
+| Average annual snowfall | 100 |
+| Average monthly snowfall | 7 |
+
+Copper Mountain’s monthly averages use the operator’s October through April measurements from the 2005/06 through 2024/25 seasons. [Copper Mountain snowfall history](https://www.coppercolorado.com/the-mountain/mountain-safety-stats/winter-mountain-stats/)
 
 | File | Use |
 | --- | --- |
@@ -201,6 +206,20 @@ They use a fixed clock to check report age.
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
 ```
+
+### Lighthouse
+
+The November 20, 2026 checks used Lighthouse 13.6.0 with production-optimized `vite build --mode test` previews and the live CARTO basemap. The checks use the default mobile settings and the desktop preset. The globe opens at `/projects/ski-status/map` and the all-resorts Compare view at `/projects/ski-status/map?view=table`.
+
+| View | Performance before | Performance after | Total blocking time before | Total blocking time after |
+| --- | ---: | ---: | ---: | ---: |
+| Compare on mobile | 66 | 73 | 8,457 ms | 1,731 ms |
+| Globe on mobile | 66 | 67 | 9,132 ms | 7,891 ms |
+| Globe on desktop | 65 | 67 | 2,853 ms | 1,823 ms |
+
+Compare rendered 2,009 elements on the first page, down from 50,356. Opening Compare directly now skips the MapLibre download. The globe applies its projection and initial camera before drawing and caps its canvas pixel ratio at 1.5. A separate Chromium run with Moto G4 emulation measured 3.83 seconds before and 2.52 seconds after for the basemap and resort markers to become usable.
+
+Accessibility and SEO scored 100 in all six audits. Best Practices scored 96 in each run while the hosted conditions manifest returned HTTP 403. Lighthouse’s largest paint on the globe page measures visible text in the interface. [Lighthouse performance scoring](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/)
 
 ## First release
 
