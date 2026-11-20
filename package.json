@@ -116,7 +116,7 @@
     "lint-staged": "^17.6.0",
     "magic-string": "^1.4.5",
     "remark-frontmatter": "^5.0.0",
-    "rollup": "^4.67.4",
+    "rollup": "^4.68.3",
     "sharp": "^0.35.5",
     "simplify-js": "^1.2.4",
     "tailwindcss": "^4.3.5",
