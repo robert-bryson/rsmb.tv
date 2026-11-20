@@ -225,6 +225,12 @@ describe('ski-status publication', () => {
         expect((await publish(inputs)).coverage).toMatchObject({ reports: 2, recentReports: 0, reportFields: { status: 0 } });
     });
 
+    it('keeps past ski-day reports in the snapshot and excludes them from current coverage', async () => {
+        const input = options();
+        input.now = () => Date.parse('2026-12-26T07:00:00Z');
+        expect((await publish(input)).coverage).toMatchObject({ reports: 2, recentReports: 0, reportFields: { status: 2 } });
+    });
+
     it('preserves the active manifest and history when every source fails', async () => {
         await publish();
         const previous = await readFile(join(directory, manifestName));

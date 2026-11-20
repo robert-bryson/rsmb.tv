@@ -1,8 +1,7 @@
-import { containsPoint, type TooltipPoint, type TooltipRect } from '../../maps/screenGeometry';
 import { normalizeSearch } from '../../utils/search';
 import { isSpecialtySkiing, passFamilySchema, passNames, skiingSchema, type PassFamily, type SkiArea, type Skiing } from './catalog';
 import {
-    areaForecast, isFreshReport, matchesOperatingStatus, openPercent, reportAgeLabel, reportStatus, reportStatusText, statusLabels,
+    areaForecast, isFreshReport, matchesOperatingStatus, openPercent, reportAgeLabel, reportStatusText, skiDayStatus, statusLabels,
     type Conditions, type ResortReport, type StatusFilter,
 } from './conditions';
 import { evaluatePass, matchesPassProduct, type PassProduct } from './passRules';
@@ -52,16 +51,11 @@ function matchesSkiingFilter(skiing: Skiing, filter: SkiingFilter) {
     return skiing === filter;
 }
 
-export const skiResultsViews = [
-    { id: 'map', label: 'Map' },
-    { id: 'split', label: 'Split' },
-    { id: 'table', label: 'Table' },
-] as const;
-export type SkiResultsView = typeof skiResultsViews[number]['id'];
+export type SkiResultsView = 'map' | 'results' | 'table';
 
-export function readSkiResultsView(params: URLSearchParams, wide: boolean): SkiResultsView {
+export function readSkiResultsView(params: URLSearchParams): SkiResultsView {
     const view = params.get('view');
-    return skiResultsViews.find(({ id }) => id === view)?.id ?? (wide ? 'split' : 'table');
+    return view === 'results' || view === 'table' ? view : 'map';
 }
 
 export const mountainColumns = [
@@ -194,7 +188,10 @@ export function filterSkiAreas(areas: readonly SkiArea[], {
         } else if (pass && !area.passes.some(membership => matchesPassFilter(membership, pass))) return false;
         if (night && area.nightSkiing !== true) return false;
         if (skiing && !matchesSkiingFilter(area.skiing, skiing)) return false;
-        if (operations && !matchesOperatingStatus(operations.reports.get(area.id), operations.now, operations.filter)) return false;
+        if (operations) {
+            const status = skiDayStatus(operations.reports.get(area.id), operations.now, area.location.timeZone);
+            if (!matchesOperatingStatus(status, operations.filter)) return false;
+        }
         if (seasonMonth && !includesSeasonMonth(seasonCalendar.byArea.get(area.id)?.typical, seasonMonth)) return false;
         if (!words.length) return true;
         const countries = areaCountries(area);
@@ -203,19 +200,6 @@ export function filterSkiAreas(areas: readonly SkiArea[], {
         ].join(' '));
         return words.every(word => searchable.includes(word));
     });
-}
-
-export function skiAreaIdsInViewport(
-    areas: readonly SkiArea[],
-    viewport: TooltipRect,
-    project: (coordinates: SkiArea['location']['coordinates']) => TooltipPoint | undefined,
-): ReadonlySet<string> {
-    const ids = new Set<string>();
-    for (const area of areas) {
-        const point = project(area.location.coordinates);
-        if (point && containsPoint(viewport, point)) ids.add(area.id);
-    }
-    return ids;
 }
 
 export function skiAreaBounds(areas: readonly SkiArea[]): [number, number, number, number] | undefined {
@@ -268,7 +252,7 @@ function skiStat(area: SkiArea, key: ColumnKey, conditions?: Conditions) {
     if (key === 'forecastPrecipitation') return areaForecast(conditions, area.id)?.precipitationPct;
     const report = conditions?.reports.get(area.id);
     if (key === 'operatingStatus') {
-        const status = reportStatus(report, conditions?.now ?? 0);
+        const status = skiDayStatus(report, conditions?.now ?? 0, area.location.timeZone);
         return status === 'unknown' ? undefined : statusLabels[status];
     }
     if (key === 'reportLifts') return report?.lifts?.open;
@@ -327,14 +311,14 @@ export function formatTemperature(celsius: number, units: SkiUnits) {
     return units === 'metric' ? `${integer.format(celsius)} °C` : `${integer.format(celsius * 1.8 + 32)} °F`;
 }
 
-function formatReportedTerrain(value: string, report: ResortReport | undefined, now: number) {
-    const age = report && reportAgeLabel(report, now);
+function formatReportedTerrain(value: string, report: ResortReport | undefined, now: number, timeZone?: string) {
+    const age = report && reportAgeLabel(report, now, timeZone);
     return age ? `${value} (${age})` : value;
 }
 
 export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, conditions?: Conditions): string | undefined {
     const report = conditions?.reports.get(area.id);
-    if (key === 'operatingStatus') return reportStatusText(report, conditions?.now ?? 0);
+    if (key === 'operatingStatus') return reportStatusText(report, conditions?.now ?? 0, area.location.timeZone);
     if (key === 'typicalOpening' || key === 'typicalClosing') {
         const typical = seasonCalendar.byArea.get(area.id)?.typical;
         return key === 'typicalOpening' ? typical?.opening : typical?.closing;
@@ -349,7 +333,7 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, co
         if (!counts) return;
         const format = (value: number | undefined) => value === undefined ? 'Unknown' :
             key === 'reportAcres' ? formatArea(value, units) : integer.format(value);
-        return formatReportedTerrain(`${format(counts.open)} / ${format(counts.total)}`, report, conditions?.now ?? 0);
+        return formatReportedTerrain(`${format(counts.open)} / ${format(counts.total)}`, report, conditions?.now ?? 0, area.location.timeZone);
     }
     const value = skiStat(area, key, conditions);
     if (value === undefined) return;
@@ -361,7 +345,7 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, co
     if (key === 'forecastSnow') return formatSnowDepth(value, units);
     if (key === 'forecastTemperature') return formatTemperature(value, units);
     if (key === 'trailsOpenPct' || key === 'acresOpenPct') {
-        return formatReportedTerrain(`${decimal.format(value)}%`, report, conditions?.now ?? 0);
+        return formatReportedTerrain(`${decimal.format(value)}%`, report, conditions?.now ?? 0, area.location.timeZone);
     }
     if (key === 'forecastPrecipitation') return `${decimal.format(value)}%`;
     if (key.endsWith('Ft')) return formatElevation(value, units);

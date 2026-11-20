@@ -129,4 +129,11 @@ describe('Lake Louise feed download', () => {
         vi.stubGlobal('fetch', async () => new Response(new Uint8Array(300 * 1024), { headers: { 'content-length': '8' } }));
         await expect(fetchLakeLouiseReport()).rejects.toThrow('exceeds the size limit');
     });
+
+    it('cancels the response stream on an HTTP error', async () => {
+        const cancel = vi.fn();
+        vi.stubGlobal('fetch', async () => new Response(new ReadableStream({ cancel }), { status: 503 }));
+        await expect(fetchLakeLouiseReport()).rejects.toThrow('Lake Louise returned HTTP 503');
+        expect(cancel).toHaveBeenCalledOnce();
+    });
 });

@@ -1,9 +1,11 @@
+import type { Ref } from 'react';
 import { conditionColumns, mountainColumns, formatElevation, formatSkiLocation, formatSkiStat, formatTemperature, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
-import { areaForecast, localReportTime, reportAgeHours, terrainStatusText, type Conditions, type ResortReport } from './conditions';
+import { areaForecast, localReportTime, reportAgeHours, reportAgeLabel, skiDayStatus, terrainStatusText, type Conditions, type ResortReport } from './conditions';
 import { accessLabels, evaluatePass, type PassProduct } from './passRules';
 import { SkiPassIcon } from './SkiPassIcon';
 import { SkiSeasonDetails } from './SkiSeasonDetails';
+import { SkiStatusLabel } from './SkiStatusLabel';
 
 const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
 const passAccessNotes = { included: '', discount: ' (discount only)', listed: ' (lift access unconfirmed)' };
@@ -42,7 +44,9 @@ function detailSourceLinks(area: SkiArea) {
 interface Props {
     area: SkiArea;
     units: SkiUnits;
+    sectionRef?: Ref<HTMLElement>;
     onClose: () => void;
+    onShowTerrain?: () => void;
     conditions?: Conditions;
     product?: PassProduct;
     skiDate?: string;
@@ -77,7 +81,7 @@ function ReportedTerrain({ report, area, now }: { report: ResortReport; area: Sk
     </details>;
 }
 
-export function SkiAreaDetails({ area, units, onClose, conditions, product, skiDate, homeAreaId }: Props) {
+export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain, conditions, product, skiDate, homeAreaId }: Props) {
     const stats = detailColumns.flatMap(({ key, label }) => {
         const value = formatSkiStat(area, key, units);
         return value === undefined && key.startsWith('mapped') ? [] : [{ key, label, value }];
@@ -85,16 +89,27 @@ export function SkiAreaDetails({ area, units, onClose, conditions, product, skiD
     const report = conditions?.reports.get(area.id);
     const temperature = report?.temperature;
     const forecast = areaForecast(conditions, area.id);
-    const age = reportAgeHours(report, conditions?.now ?? 0);
+    const now = conditions?.now ?? 0;
+    const age = reportAgeHours(report, now);
+    const ageLabel = report && reportAgeLabel(report, now, area.location.timeZone);
+    const operationsAge = ageLabel ? ` (${ageLabel})` : '';
+    const status = skiDayStatus(report, now, area.location.timeZone);
     const access = product && conditions && evaluatePass(product, area, conditions.now, skiDate, homeAreaId);
     const rule = access?.rule;
-    return <section id="ski-area-details" tabIndex={-1} aria-labelledby="ski-area-name" className="bg-zinc-950 px-3 py-2">
+    const links = detailSourceLinks(area);
+    const officialConditions = links.find(({ url }) => url === area.reportUrl);
+    return <section id="ski-area-details" ref={sectionRef} tabIndex={-1} aria-labelledby="ski-area-name" className="px-3 py-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
                 <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>
                 <p className="text-sm text-zinc-300">{formatSkiLocation(area)}</p>
             </div>
-            <button type="button" onClick={onClose} className="min-h-11 px-2 text-sm text-zinc-300 underline underline-offset-4 hover:text-white">Close details</button>
+            <button type="button" onClick={onClose} className="ski-control min-h-11 px-2 text-sm">Close details</button>
+        </div>
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+            <SkiStatusLabel status={status} report={report} now={now} />
+            {officialConditions && <a className={linkClass} href={officialConditions.url}>{officialConditions.label}</a>}
+            {onShowTerrain && <button type="button" className="ski-control" onClick={onShowTerrain}>Show runs and lifts</button>}
         </div>
         {(report || forecast) && <section aria-label="Conditions summary" className="border-t border-zinc-800 py-2 text-sm">
             {report && <p>
@@ -110,8 +125,8 @@ export function SkiAreaDetails({ area, units, onClose, conditions, product, skiD
                 <time dateTime={temperature.measuredAt}>{localReportTime(temperature.measuredAt, area)}</time>
             </p>}
             {report?.closedOn && <p>Season closed <time dateTime={report.closedOn}>{report.closedOn}</time></p>}
-            {report?.hours && <p>{report.hours}</p>}
-            {report?.nightOpen !== undefined && <p>Night operations {report.nightOpen ? 'open' : 'closed'}</p>}
+            {report?.hours && <p>{report.hours}{operationsAge}</p>}
+            {report?.nightOpen !== undefined && <p>Night operations {report.nightOpen ? 'open' : 'closed'}{operationsAge}</p>}
             {forecast && <p>
                 <a href={forecast.source.url} className={linkClass}>{forecast.source.name} forecast</a>{' · '}{forecast.location}
                 {forecast.elevationM !== undefined && ` (${formatElevation(forecast.elevationM / 0.3048, units)})`}{' · '}
@@ -120,7 +135,7 @@ export function SkiAreaDetails({ area, units, onClose, conditions, product, skiD
                 {forecast.issuedAt && <> · Issued <time dateTime={forecast.issuedAt}>{localReportTime(forecast.issuedAt, area)}</time></>}
             </p>}
             <dl className="flex flex-wrap gap-3">
-                {conditionColumns.map(({ key, label }) => {
+                {conditionColumns.filter(({ key }) => key !== 'operatingStatus').map(({ key, label }) => {
                     const value = formatSkiStat(area, key, units, conditions);
                     return value !== undefined && <div key={key}><dt className="text-zinc-400">{label}</dt><dd>{value}</dd></div>;
                 })}
@@ -129,7 +144,7 @@ export function SkiAreaDetails({ area, units, onClose, conditions, product, skiD
         </section>}
         <SkiSeasonDetails area={area} units={units} now={conditions?.now} />
         <div className="flex flex-wrap gap-x-5 text-sm">
-            {detailSourceLinks(area).map(({ url, label }) => <a key={url} className={linkClass} href={url}>{label}</a>)}
+            {links.filter(link => link !== officialConditions).map(({ url, label }) => <a key={url} className={linkClass} href={url}>{label}</a>)}
         </div>
         {area.statSources && area.statSources.length > 0 && <details className="border-t border-zinc-800 text-sm">
             <summary className="min-h-11 cursor-pointer py-3 text-zinc-200 hover:text-cyan-300 focus-visible:outline-2 focus-visible:outline-cyan-300">

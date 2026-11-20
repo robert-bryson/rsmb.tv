@@ -75,8 +75,9 @@ export function useSearchQuery() {
         setSearchParams(params, { replace, preventScrollReset: true, state });
     }
 
-    function updateQuery(value: string) {
+    function updateQuery(value: string, update?: (params: URLSearchParams) => void) {
         const params = withSearchQuery(searchParams, value);
+        update?.(params);
         cancelPendingQuery(pendingQuery);
         setDraft(current => ({ ...current, search: params.toString() }));
         pendingQuery.current = { params, timer: window.setTimeout(commitQuery, QUERY_COMMIT_DELAY_MS) };
@@ -89,12 +90,12 @@ export function useSearchQuery() {
         writeParams(pending.params, true);
     }
 
-    function updateParams(update: (params: URLSearchParams) => void) {
+    function updateParams(update: (params: URLSearchParams) => void, { replace = false } = {}) {
         const params = new URLSearchParams(searchParams);
         update(params);
         if (params.toString() === searchParams.toString()) return;
         cancelPendingQuery(pendingQuery);
-        writeParams(params, false);
+        writeParams(params, replace);
     }
 
     function clearFilters() {

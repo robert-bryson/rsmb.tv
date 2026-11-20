@@ -41,7 +41,10 @@ export async function verifyRenderedSkiTerrain(page: Page, timeoutMs: number) {
     // A single result fits at zoom 9. The route keeps terrain off until the final zoom.
     const zoomIn = page.getByRole('button', { name: 'Zoom in', exact: true });
     for (let clicks = 0; clicks < 4; clicks++) await zoomIn.click();
-    await page.getByRole('checkbox', { name: 'Ski terrain', exact: true }).check();
+    await page.getByRole('button', { name: 'Layers', exact: true }).click();
+    const layers = page.getByRole('dialog', { name: 'Map layers', exact: true });
+    await layers.getByRole('checkbox', { name: 'Ski terrain', exact: true }).check();
+    await layers.getByRole('button', { name: 'Done', exact: true }).click();
 
     const canvas = await ready.locator('.maplibregl-canvas').boundingBox();
     if (!canvas) throw new Error('Heavenly map canvas is unavailable.');

@@ -1,75 +1,135 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
+import { SkiAreaList } from '../features/ski-status/SkiAreaList';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
 import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
+import { SkiShareButton } from '../features/ski-status/SkiShareButton';
 import { defaultSkiColumns } from '../features/ski-status/browse';
 import { skiAreas } from '../features/ski-status/catalog';
+import type { ResortReport } from '../features/ski-status/conditions';
 
-describe('ski-status comparison table', () => {
-    it('identifies same-name areas by location and exposes the active sort', () => {
+const listDefaults = {
+    conditions: { reports: new Map(), forecasts: new Map(), now: 0 }, statuses: new Map(),
+    units: 'imperial', sort: { key: 'name', direction: 'asc' }, onSort: vi.fn(), onSelect: vi.fn(),
+} as const;
+
+describe('ski-status results and comparison', () => {
+    it('identifies same-name resorts and passes the selecting control for focus restoration', () => {
         const areas = skiAreas.filter(area => area.name === 'Crystal Mountain');
         const onSelect = vi.fn();
-        const onSort = vi.fn();
-        const [michigan] = areas.filter(area => area.region === 'MI');
-        render(<SkiAreaTable areas={areas} units="imperial" sort={{ key: 'name', direction: 'asc' }}
-            compact selected={michigan} inView={false} selectedButtonRef={null} onSelect={onSelect} onSort={onSort} />);
-
-        const table = screen.getByRole('region', { name: 'Ski area list' });
-        expect(within(table).getByRole('columnheader', { name: 'Ski area' })).toHaveAttribute('aria-sort', 'ascending');
-        expect(within(table).getByRole('button', { name: 'Crystal Mountain', description: 'Thompsonville, MI' }))
-            .toHaveAttribute('aria-pressed', 'true');
-        const washington = within(table).getByRole('button', { name: 'Crystal Mountain', description: /, WA$/ });
+        const michigan = areas.find(area => area.region === 'MI');
+        render(<SkiAreaList {...listDefaults} areas={areas} colors="operatingStatus" selectedId={michigan?.id} onSelect={onSelect} />);
+        const list = within(screen.getByRole('region', { name: 'Ski area list' }));
+        expect(list.getByRole('button', { name: 'Crystal Mountain', description: /Thompsonville, MI/ })).toHaveAttribute('aria-pressed', 'true');
+        const washington = list.getByRole('button', { name: 'Crystal Mountain', description: /, WA/ });
         fireEvent.click(washington);
-        expect(onSelect).toHaveBeenCalledWith(areas.find(area => area.region === 'WA')?.id);
-        fireEvent.click(within(table).getByRole('button', { name: 'Skiable area' }));
-        expect(onSort).toHaveBeenCalledWith('acres');
+        expect(onSelect).toHaveBeenCalledWith(areas.find(area => area.region === 'WA')?.id, washington);
+        expect(list.getAllByText('No report')).toHaveLength(2);
     });
 
     it.each([
         ['acres', 'Skiable area', '2,614 ac'], ['verticalFt', 'Vertical drop', '2,538 ft'],
         ['summitFt', 'Summit elevation', '11,068 ft'], ['highestLiftTerminalFt', 'Highest lift terminal', 'Unknown'],
-    ] as const)('shows the %s color value in the compact list and can sort by it', (colorBy, label, value) => {
+    ] as const)('shows the %s map value alongside the status and offers sorting', (colors, label, value) => {
         const alta = skiAreas.find(area => area.id === 'alta')!;
         const onSort = vi.fn();
-        render(<SkiAreaTable areas={[alta]} units="imperial" sort={{ key: 'region', direction: 'asc' }}
-            compact colorBy={colorBy} inView={false} selectedButtonRef={null} onSort={onSort} onSelect={vi.fn()} />);
-
+        render(<SkiAreaList {...listDefaults} colors={colors} areas={[alta]} onSort={onSort} />);
         const list = within(screen.getByRole('region', { name: 'Ski area list' }));
-        expect(list.getAllByRole('columnheader')).toHaveLength(2);
-        expect(list.getByRole('cell', { name: value })).toBeVisible();
-        fireEvent.click(list.getByRole('button', { name: label }));
-        expect(onSort).toHaveBeenCalledWith(colorBy);
+        expect(list.getByText(`${label} · ${value}`)).toBeVisible();
+        fireEvent.change(list.getByRole('combobox', { name: 'Sort results' }), { target: { value: colors } });
+        expect(onSort).toHaveBeenCalledWith(colors);
     });
 
-    it('uses the map badge and access labels in the compact pass column', () => {
+    it('shows map access labels and logos alongside the resort results', () => {
         const areas = skiAreas.filter(area => ['alta', 'north-cascade-heli', 'big-snow-american-dream'].includes(area.id));
-        const props = {
-            areas, units: 'imperial', sort: { key: 'name', direction: 'asc' }, compact: true, colorBy: 'pass', inView: false,
-            selectedButtonRef: null, onSort: vi.fn(), onSelect: vi.fn(),
-        } as const;
-        const { rerender } = render(<SkiAreaTable {...props} passFilter="mountain-collective" />);
-
+        const { rerender } = render(<SkiAreaList {...listDefaults} areas={areas} colors="pass" passFilter="mountain-collective" />);
         const list = within(screen.getByRole('region', { name: 'Ski area list' }));
-        expect(list.getByRole('columnheader', { name: 'Pass access' })).toBeVisible();
-        const multiPass = list.getByRole('cell', { name: 'Mountain Collective and other passes' });
+        const multiPass = list.getByText('Mountain Collective + other passes');
         expect(multiPass.querySelector('img')).toHaveAttribute('src', expect.stringContaining('mountain-collective.png'));
-        expect(list.getByRole('cell', { name: 'No confirmed access' })).toBeVisible();
-        expect(list.getByRole('cell', { name: 'Discount only' })).toBeVisible();
-
-        rerender(<SkiAreaTable {...props} passFilter="indy-discounts" />);
-        expect(list.getByRole('cell', { name: 'Indy discount' })).toBeVisible();
+        expect(list.getByText('No confirmed access')).toBeVisible();
+        expect(list.getByText('Discount only')).toBeVisible();
+        rerender(<SkiAreaList {...listDefaults} areas={areas} colors="pass" passFilter="indy-discounts" />);
+        expect(list.getByText('Indy discount')).toBeVisible();
     });
 
-    it('identifies the reason for an empty table', () => {
-        const props = {
-            areas: [], units: 'imperial', sort: { key: 'name', direction: 'asc' }, compact: false,
-            selectedButtonRef: null, onSelect: vi.fn(), onSort: vi.fn(),
-        } as const;
-        const { rerender } = render(<SkiAreaTable {...props} inView />);
-        expect(screen.getByText('No matching ski areas in this map view.')).toBeVisible();
-        rerender(<SkiAreaTable {...props} inView={false} />);
-        expect(screen.getByText('No ski areas match these filters.')).toBeVisible();
+    it('marks the comparison sort and identifies areas with the same name', () => {
+        const areas = skiAreas.filter(area => area.name === 'Crystal Mountain');
+        const onSort = vi.fn();
+        render(<SkiAreaTable areas={areas} units="imperial" sort={{ key: 'name', direction: 'asc' }}
+            onSort={onSort} onSelect={vi.fn()} />);
+        const table = within(screen.getByRole('region', { name: 'Ski area comparison table' }));
+        expect(table.getByRole('columnheader', { name: 'Ski area' })).toHaveAttribute('aria-sort', 'ascending');
+        expect(table.getByRole('button', { name: 'Crystal Mountain', description: /, WA/ })).toBeVisible();
+        fireEvent.click(table.getByRole('button', { name: 'Skiable area' }));
+        expect(onSort).toHaveBeenCalledWith('acres');
+    });
+
+    it('moves focus to the first result added by Show more', () => {
+        const areas = skiAreas.slice(0, 43);
+        render(<SkiAreaList {...listDefaults} areas={areas} colors="default" />);
+        const results = within(screen.getByRole('region', { name: 'Ski area list' }));
+        expect(results.getAllByRole('listitem')).toHaveLength(40);
+        fireEvent.click(results.getByRole('button', { name: 'Show 3 more' }));
+        expect(results.getAllByRole('listitem')).toHaveLength(43);
+        expect(results.getByRole('button', { name: areas[40].name })).toHaveFocus();
+    });
+});
+
+describe('ski-status share control', () => {
+    const url = 'https://rsmb.tv/projects/ski-status/map?view=results&q=whaleback';
+    const shareButton = () => screen.getByRole('button', { name: 'Share current view' });
+    function navigatorApis(share?: ReturnType<typeof vi.fn>, writeText?: ReturnType<typeof vi.fn>) {
+        vi.stubGlobal('navigator', Object.defineProperties(Object.create(navigator), {
+            share: { value: share }, clipboard: { value: writeText && { writeText } },
+        }));
+    }
+
+    afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
+
+    it('announces the copied link while keeping the Share label visible', async () => {
+        vi.useFakeTimers();
+        const copy = vi.fn().mockResolvedValue(undefined);
+        navigatorApis(undefined, copy);
+        render(<SkiShareButton getUrl={() => url} />);
+        await act(async () => fireEvent.click(shareButton()));
+        expect(copy).toHaveBeenCalledExactlyOnceWith(url);
+        expect(shareButton()).toHaveTextContent(/^Share$/);
+        expect(screen.getByRole('status')).toHaveTextContent('Link copied');
+        act(() => { vi.advanceTimersByTime(2500); });
+        expect(screen.getByRole('status')).toBeEmptyDOMElement();
+    });
+
+    it('keeps one native share pending and respects cancellation', async () => {
+        let cancel!: (reason: Error) => void;
+        const native = vi.fn(() => new Promise<void>((_resolve, reject) => { cancel = reject; }));
+        const copy = vi.fn();
+        navigatorApis(native, copy);
+        render(<SkiShareButton getUrl={() => url} />);
+        await act(async () => { fireEvent.click(shareButton()); fireEvent.click(shareButton()); });
+        expect(native).toHaveBeenCalledExactlyOnceWith({ title: 'ski-status', url });
+        await act(async () => { cancel(new DOMException('Cancelled', 'AbortError')); });
+        expect(copy).not.toHaveBeenCalled();
+        expect(screen.queryByRole('dialog')).toBeNull();
+    });
+
+    it('selects the URL in a dialog if the clipboard refuses it', async () => {
+        navigatorApis(undefined, vi.fn().mockRejectedValue(new Error('Denied')));
+        const prototype = HTMLDialogElement.prototype;
+        const original = Object.getOwnPropertyDescriptor(prototype, 'showModal');
+        Object.defineProperty(prototype, 'showModal', { configurable: true, value(this: HTMLDialogElement) { this.open = true; } });
+        try {
+            render(<SkiShareButton getUrl={() => url} />);
+            await act(async () => fireEvent.click(shareButton()));
+            const link = screen.getByRole<HTMLInputElement>('textbox', { name: 'Copy this link' });
+            expect(link).toHaveValue(url);
+            expect(link).toHaveFocus();
+            expect(link.selectionStart).toBe(0);
+            expect(link.selectionEnd).toBe(url.length);
+        } finally {
+            if (original) Object.defineProperty(prototype, 'showModal', original);
+            else Reflect.deleteProperty(prototype, 'showModal');
+        }
     });
 });
 
@@ -77,7 +137,6 @@ describe('ski-status column settings', () => {
     it('adds and removes the named column and restores the defaults', () => {
         const onChange = vi.fn();
         render(<SkiColumnSettings columns={['name', 'acres']} onChange={onChange} />);
-        fireEvent.click(screen.getByText('Columns', { exact: true }));
         fireEvent.click(screen.getByRole('checkbox', { name: 'Show Skiable area column' }));
         expect(onChange).toHaveBeenLastCalledWith(['name']);
         fireEvent.click(screen.getByRole('checkbox', { name: 'Show Forecast snow column' }));
@@ -88,6 +147,30 @@ describe('ski-status column settings', () => {
 });
 
 describe('ski-status area details', () => {
+    it('marks counts, named terrain and night operations from the previous local day as stale', () => {
+        const area = skiAreas.find(area => area.id === 'alta')!;
+        const report: ResortReport = {
+            areaId: area.id, status: 'limited', reportedAt: '2026-11-21T06:30:00Z', retrievedAt: '2026-11-21T06:35:00Z',
+            source: { name: 'Test operator', url: 'https://example.test/conditions', exportable: false },
+            lifts: { open: 2, total: 5 }, nightOpen: true, hours: '9 AM to 4 PM',
+            terrain: { items: [
+                { id: 'lift:untimed', name: 'First chair', kind: 'lift', status: 'open' },
+                { id: 'trail:timed', name: 'First trail', kind: 'trail', status: 'open', updatedAt: '2026-11-21T06:20:00Z' },
+            ] },
+        };
+        render(<SkiAreaDetails area={area} units="imperial" onClose={vi.fn()} conditions={{
+            reports: new Map([[area.id, report]]), forecasts: new Map(), now: Date.parse('2026-11-21T07:00:00Z'),
+        }} />);
+        expect(screen.getByText('Stale report')).toBeVisible();
+        expect(screen.getByText('2 / 5 (stale)')).toBeVisible();
+        expect(screen.getByText('Night operations open (stale)')).toBeVisible();
+        expect(screen.getByText('9 AM to 4 PM (stale)')).toBeVisible();
+        fireEvent.click(screen.getByText('Reported lifts and trails (2)'));
+        const table = within(screen.getByRole('table', { name: 'Reported lift and trail status' }));
+        expect(table.getByRole('row', { name: 'First chair Lift Open (stale)' })).toBeVisible();
+        expect(table.getByRole('row', { name: 'First trail Trail Open (record stale)' })).toBeVisible();
+    });
+
     it('shows each source once and retains its pass label', () => {
         const area = skiAreas.find(area => area.id === 'whaleback')!;
         const source = area.passes[0].source;

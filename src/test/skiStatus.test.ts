@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, passFilterFamily, readPassFilter, readSkiingFilter, readSkiResultsView, readSkiSort, skiAreaBounds, skiAreaIdsInViewport, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, passFilterFamily, readPassFilter, readSkiingFilter, readSkiResultsView, readSkiSort, skiAreaBounds, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
 import { markerAppearance, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
@@ -127,13 +127,12 @@ describe('ski-status catalog validation', () => {
 });
 
 describe('ski-status catalog and browse', () => {
-    it('uses a responsive default view and honors links to each explicit view', () => {
-        expect(readSkiResultsView(new URLSearchParams(), true)).toBe('split');
-        expect(readSkiResultsView(new URLSearchParams('view=unknown'), false)).toBe('table');
-        for (const view of ['map', 'split', 'table']) {
-            const params = new URLSearchParams({ view });
-            expect(readSkiResultsView(params, true)).toBe(view);
-            expect(readSkiResultsView(params, false)).toBe(view);
+    it('opens the map by default and honors shared results and comparison links', () => {
+        expect(readSkiResultsView(new URLSearchParams())).toBe('map');
+        expect(readSkiResultsView(new URLSearchParams('view=unknown'))).toBe('map');
+        expect(readSkiResultsView(new URLSearchParams('view=split'))).toBe('map');
+        for (const view of ['map', 'results', 'table']) {
+            expect(readSkiResultsView(new URLSearchParams({ view }))).toBe(view);
         }
     });
 
@@ -169,19 +168,6 @@ describe('ski-status catalog and browse', () => {
         expect(found.map(area => area.id)).toEqual(['mt-hutt']);
         expect(formatSkiStat(found[0], 'region', 'metric')).toBe('New Zealand');
         expect(formatSkiLocation(found[0])).toBe('Methven, New Zealand');
-    });
-
-    it('keeps dots whose projected centers are inside or on the edges of the map', () => {
-        const viewport = { left: 0, top: 0, right: 320, bottom: 180 };
-        const centers: [number, number][] = [[0, 0], [320, 180], [160, 90], [-1, 1], [321, 1], [1, -1], [1, 181]];
-        const areas = centers.map((coordinates, index) => {
-            const area = skiAreas[index];
-            return { ...area, location: { ...area.location, coordinates } };
-        });
-        const visible = skiAreaIdsInViewport(areas, viewport, ([x, y]) => ({ x, y }));
-        expect([...visible]).toEqual(areas.slice(0, 3).map(area => area.id));
-        const frontSideOnly = skiAreaIdsInViewport(areas, viewport, ([x, y]) => x === 160 ? undefined : { x, y });
-        expect([...frontSideOnly]).toEqual(areas.slice(0, 2).map(area => area.id));
     });
 
     it('fits nearby ski areas across the date line within the shorter longitude span', () => {

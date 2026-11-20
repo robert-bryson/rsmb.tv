@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import {
-    conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, mergeResortReports, reportAgeHours, reportSnapshotSchema, reportStatus,
+    conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, mergeResortReports, reportAgeHours, reportSnapshotSchema, skiDayStatus,
     type BaseForecast, type ResortReport,
 } from '../../../src/features/ski-status/conditions.ts';
 import { manifestName, type ConditionsStore } from './conditions-store.ts';
@@ -100,7 +100,7 @@ export async function publishConditions<T extends PilotArea>(store: ConditionsSt
     });
     const coverage = {
         areas: areas.length, reports: reportRows.length,
-        recentReports: reportRows.filter(report => reportStatus(report, observedAt) !== 'unknown').length,
+        recentReports: reportRows.filter(report => skiDayStatus(report, observedAt) !== 'unknown').length,
         reportAgesHours: Object.fromEntries(reportAges.map(({ id, age }) => [id, Math.round(age * 10) / 10])),
         reportFields: Object.fromEntries(reportFields.map(field => [field, reportRows.filter(report =>
             field === 'status' ? report.status !== 'unknown' : report[field] !== undefined).length])),

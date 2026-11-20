@@ -3,7 +3,7 @@ import operatorReports from '../../projects/ski-status/data/conditions/operator-
 import { dolomitiTerrainReport } from '../../projects/ski-status/scripts/conditions-sources';
 import { filterSkiAreas, formatSkiStat, sortSkiAreas } from '../features/ski-status/browse';
 import { skiAreas } from '../features/ski-status/catalog';
-import { mergeResortReports, reportSnapshotSchema, reportStatus, reportStatusText, terrainStatusText, type ResortReport } from '../features/ski-status/conditions';
+import { mergeResortReports, reportSnapshotSchema, reportStatus, reportStatusText, skiDayStatus, terrainStatusText, type ResortReport } from '../features/ski-status/conditions';
 import { includesSeasonMonth, readSeasonCalendar, readSeasonMonth, seasonCalendar, upcomingSeasonPlan } from '../features/ski-status/seasons';
 import { skiAreaCsv } from '../features/ski-status/skiCsv';
 
@@ -114,6 +114,30 @@ describe('ski operations and terrain', () => {
         expect(reportSnapshotSchema.safeParse({
             ...operatorReports, reports: [{ ...report, reportedOn: '2026-11-19' }],
         }).success).toBe(false);
+    });
+
+    it('rejects a report date that disagrees with the timestamp in the resort time zone', () => {
+        const report: ResortReport = {
+            areaId: 'alta', source: louise.source, status: 'open',
+            reportedAt: '2026-11-21T06:30:00Z', retrievedAt: '2026-11-21T06:35:00Z', reportedOn: '2026-11-21',
+        };
+        const snapshot = { version: 1, generatedAt: report.retrievedAt, reports: [report] };
+        expect(reportSnapshotSchema.safeParse(snapshot).success).toBe(false);
+        expect(reportSnapshotSchema.safeParse({ ...snapshot, reports: [{ ...report, reportedOn: '2026-11-20' }] }).success).toBe(true);
+    });
+
+    it('uses the resort ski day in the catalog filter and excludes reports collected in the future', () => {
+        const alta = area('alta');
+        const report: ResortReport = {
+            areaId: alta.id, source: louise.source, status: 'limited',
+            reportedAt: '2026-11-21T06:30:00Z', retrievedAt: '2026-11-21T06:35:00Z',
+        };
+        const midnight = Date.parse('2026-11-21T07:00:00Z');
+        const openAt = (now: number) => filterSkiAreas([alta], { operations: { filter: 'open', reports: new Map([[alta.id, report]]), now } });
+        expect(openAt(midnight - 1)).toEqual([alta]);
+        expect(openAt(midnight)).toEqual([]);
+        expect(skiDayStatus(report, Date.parse('2026-11-21T06:34:59Z'), alta.location.timeZone)).toBe('unknown');
+        expect(reportStatusText(report, Date.parse('2026-11-21T06:34:59Z'), alta.location.timeZone)).toBe('Limited (age unknown)');
     });
 
     it('requires a date-only report to be collected during its local ski day', () => {

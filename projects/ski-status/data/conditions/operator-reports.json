@@ -16,7 +16,12 @@
       "baseCm": 38,
       "snowLocation": "Upper mountain",
       "lifts": {
-        "open": 3
+        "open": 3,
+        "total": 12
+      },
+      "trails": {
+        "open": 4,
+        "total": 139
       },
       "terrain": {
         "items": [

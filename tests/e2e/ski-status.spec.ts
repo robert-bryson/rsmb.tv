@@ -1,9 +1,10 @@
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { expect, test, type Page, type Response } from '@playwright/test';
+import { expect, test, type Locator, type Page, type Response } from '@playwright/test';
 import type { GeoJSONSource, Map as MapLibreMap, StyleSpecification } from 'maplibre-gl';
 import locations from '../../projects/ski-status/data/locations.json' with { type: 'json' };
 import { SKI_TERRAIN_ROUTE, skiTerrainArchivePath, verifyRenderedSkiTerrain, verifySkiTerrainResponse } from '../../scripts/release-ski-terrain.ts';
+import { readSkiMapCamera } from '../../src/features/ski-status/skiMapArea.ts';
 
 const path = '/projects/ski-status/map';
 const styleUrl = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json*';
@@ -24,8 +25,7 @@ async function prepare(page: Page, style: StyleSpecification | null = baseStyle)
     await page.emulateMedia({ reducedMotion: 'reduce' });
 }
 
-async function captureMap(page: Page, { phone = false, state = 'ready' }: { phone?: boolean; state?: 'ready' | 'degraded' } = {}) {
-    await page.goto('/projects');
+async function captureNextMap(page: Page) {
     // Capture the renderer by its public method. Restore the method after one call.
     await page.evaluate(async () => {
         const mapModule = '/src/maps/maplibre.ts';
@@ -39,13 +39,112 @@ async function captureMap(page: Page, { phone = false, state = 'ready' }: { phon
             return original.call(this, id, source);
         };
     });
+}
+
+async function captureMap(page: Page, { today = false, state = 'ready' }: { today?: boolean; state?: 'ready' | 'degraded' } = {}) {
+    await page.goto('/projects');
+    await captureNextMap(page);
     await page.getByRole('link', { name: 'Open map: ski-status', exact: true }).click();
-    if (phone) await page.getByRole('button', { name: 'Map', exact: true }).click();
+    if (!today) await page.getByRole('button', { name: 'All resorts', exact: true }).click();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', state, { timeout: 10_000 });
     const renderer = await page.evaluateHandle(() => (window as ReviewWindow).skiStatusMap!);
     await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
     return renderer;
 }
+
+async function inDialog(page: Page, name: 'Filters' | 'Layers' | 'Columns', act: (dialog: Locator) => Promise<unknown>) {
+    await page.getByRole('button', { name, exact: true }).click();
+    const dialog = page.getByRole('dialog', { name: name === 'Layers' ? 'Map layers' : name, exact: true });
+    await act(dialog);
+    await dialog.getByRole('button', { name: 'Done', exact: true }).click();
+}
+
+function setFilter(page: Page, name: string, value: string | { label: string }) {
+    return inDialog(page, 'Filters', dialog => dialog.getByLabel(name, { exact: true }).selectOption(value));
+}
+
+function setColor(page: Page, value: string) {
+    return inDialog(page, 'Layers', dialog => dialog.getByLabel('Color by', { exact: true }).selectOption(value));
+}
+
+function setLayer(page: Page, name: string, checked: boolean) {
+    return inDialog(page, 'Layers', dialog => dialog.getByRole('checkbox', { name, exact: true }).setChecked(checked));
+}
+
+const results = (page: Page) => page.getByRole('region', { name: 'Ski area list', exact: true });
+const comparison = (page: Page) => page.getByRole('region', { name: 'Ski area comparison table', exact: true });
+const resort = (page: Page, name: string) => page.getByRole('region', { name, exact: true });
+const result = (page: Page, name: string) => results(page).getByRole('button', { name, exact: true });
+const searchArea = (page: Page) => page.getByRole('button', { name: 'Search this area', exact: true });
+const selectView = (page: Page, name: 'Map' | 'Results' | 'Compare') => page.getByRole('button', { name, exact: true }).click();
+const mapCamera = (page: Page) => readSkiMapCamera(new URL(page.url()).searchParams.get('camera'));
+
+test('filters by pass from the top bar and clears only the search', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    await page.goto(`${path}?view=table&q=snowbird&product=ikon-base&skiDate=2026-12-31&status=all`);
+    const search = page.getByRole('searchbox', { name: 'Search areas' });
+    const heading = page.getByRole('heading', { name: 'ski-status', exact: true });
+    const passes = page.getByRole('group', { name: 'Pass filters' });
+    const ikon = passes.getByRole('button', { name: 'Ikon', exact: true });
+    const epic = passes.getByRole('button', { name: 'Epic', exact: true });
+    const clear = page.getByRole('button', { name: 'Clear search', exact: true });
+    await expect(ikon).toHaveAttribute('aria-pressed', 'true');
+    await expect(comparison(page).getByRole('button', { name: 'Snowbird', exact: true })).toBeVisible();
+    for (const label of ['Ikon', 'Epic', 'Indy', 'Mountain Collective']) {
+        await expect(passes.getByRole('button', { name: label, exact: true }).locator('img')).toBeVisible();
+    }
+    const headingRectangle = (await heading.boundingBox())!;
+    const searchRectangle = (await search.boundingBox())!;
+    expect(headingRectangle.y + headingRectangle.height / 2).toBeCloseTo(searchRectangle.y + searchRectangle.height / 2);
+    expect((await ikon.boundingBox())!.x).toBeGreaterThan(searchRectangle.x + searchRectangle.width);
+
+    await epic.click();
+    await expect(page).toHaveURL(/pass=epic/);
+    await expect(page).not.toHaveURL(/product=|skiDate=/);
+    await expect(ikon).toHaveAttribute('aria-pressed', 'false');
+    await expect(epic).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByText('No ski areas match these filters.', { exact: true })).toBeVisible();
+    await search.fill('vail mountain');
+    await search.press('Enter');
+    await expect(page).toHaveURL(/q=vail\+mountain/);
+    await expect(comparison(page).getByRole('button', { name: 'Vail Mountain', exact: true })).toBeVisible();
+    await clear.click();
+    await expect(search).toBeFocused();
+    await expect(search).toHaveValue('');
+    await expect(clear).toHaveCount(0);
+    await expect(page).not.toHaveURL(/q=/);
+    await expect(page).toHaveURL(/pass=epic/);
+    await epic.click();
+    await expect(page).not.toHaveURL(/pass=/);
+
+    await page.setViewportSize({ width: 320, height: 780 });
+    const narrowHeading = (await heading.boundingBox())!;
+    const narrowSearch = (await search.boundingBox())!;
+    expect(narrowHeading.y + narrowHeading.height / 2).toBeCloseTo(narrowSearch.y + narrowSearch.height / 2);
+    await expect(page.getByRole('button', { name: 'Share current view' })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+});
+
+test('shows a selectable share link when the browser cannot copy it', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await prepare(page);
+    await page.addInitScript(() => {
+        Object.defineProperty(navigator, 'share', { value: undefined });
+        Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.reject(new Error('Clipboard denied')) } });
+    });
+    await page.goto(`${path}?status=all&view=results&pass=indy`);
+    await page.getByRole('searchbox', { name: 'Search areas' }).fill('whaleback');
+    const share = page.getByRole('button', { name: 'Share current view', exact: true });
+    await share.click();
+    const dialog = page.getByRole('dialog', { name: 'Share current view', exact: true });
+    const link = dialog.getByRole('textbox', { name: 'Copy this link' });
+    await expect(link).toBeFocused();
+    expect(Object.fromEntries(new URL(await link.inputValue()).searchParams)).toMatchObject({ view: 'results', pass: 'indy', q: 'whaleback' });
+    await link.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(share).toBeFocused();
+});
 
 test('filters by pass and local date, keeps column choices, and exports the comparison', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
@@ -53,12 +152,11 @@ test('filters by pass and local date, keeps column choices, and exports the comp
     await page.goto(`${path}?view=table&q=snowbird&product=ikon-base&skiDate=2026-12-26`);
     const table = page.getByRole('region', { name: 'Ski area comparison table' });
     await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
-    await page.getByLabel('Ski date (local)', { exact: true }).fill('2026-12-31');
+    await inDialog(page, 'Filters', dialog => dialog.getByLabel('Ski date (local)', { exact: true }).fill('2026-12-31'));
     await expect(table.getByRole('button', { name: 'Snowbird', exact: true })).toBeVisible();
     await table.getByRole('button', { name: 'Snowbird', exact: true }).click();
     await expect(page.getByRole('region', { name: 'Pass product terms' })).toContainText('5 days');
-    await page.getByText('Columns', { exact: true }).click();
-    await page.getByRole('checkbox', { name: 'Show Mapped lifts column', exact: true }).uncheck();
+    await inDialog(page, 'Columns', dialog => dialog.getByRole('checkbox', { name: 'Show Mapped lifts column', exact: true }).uncheck());
     await expect(table.getByRole('columnheader', { name: 'Mapped lifts', exact: true })).toHaveCount(0);
     await page.reload();
     await expect(table.getByRole('columnheader', { name: 'Mapped lifts', exact: true })).toHaveCount(0);
@@ -90,14 +188,14 @@ test('finds current ski operations, shows reported terrain by name, and expires 
     await expect(terrain.getByRole('row', { name: 'Grizzly Gondola Lift Open' })).toBeVisible();
     await expect(terrain.getByRole('row', { name: 'Deer Run Trail Open' })).toBeVisible();
 
-    await page.getByRole('combobox', { name: 'Operating status' }).selectOption('closed');
+    await setFilter(page, 'Operating status', 'closed');
     await expect(table.locator('tbody tr')).toHaveCount(1);
     await expect(table.getByRole('button', { name: 'Telluride Ski Resort', exact: true })).toBeVisible();
 
     await page.clock.setFixedTime(new Date('2026-11-21T08:00:00Z'));
     await page.reload();
     await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
-    await expect(page.getByText('0 areas with current status')).toBeVisible();
+    await expect(page.getByText(`0 of ${locations.locations.length} areas have current reports`)).toBeVisible();
 });
 
 test('uses a fresh daily feed for named terrain and shows when the resort measured temperature', async ({ page }) => {
@@ -149,7 +247,7 @@ test('shows historical season evidence and filters a typical season by month', a
     await seasons.getByText('Opening and closing history', { exact: true }).click();
     await expect(seasons.getByRole('row', { name: /2025\/26/ })).toContainText('2026-05-25');
 
-    await page.getByRole('combobox', { name: 'Typical season in' }).selectOption('8');
+    await setFilter(page, 'Typical season in', '8');
     await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
     await expect(page).toHaveURL(/seasonMonth=8/);
 });
@@ -178,21 +276,23 @@ test('applies the Indy Add-On home area across reloads and clears it when the pr
     const terms = page.getByRole('region', { name: 'Pass product terms' });
     await catamount.click();
     await expect(terms).toContainText('Select your home ski area');
-    await page.getByLabel('Home ski area', { exact: true }).selectOption('berkshire-east-ski-resort');
+    await setFilter(page, 'Home ski area', 'berkshire-east-ski-resort');
     await expect(berkshire).toHaveCount(0);
     await expect(terms).toContainText('Included access');
     await page.reload();
     await expect(berkshire).toHaveCount(0);
     await expect(terms).toContainText('Included access');
-    await page.getByLabel('Pass product', { exact: true }).selectOption('indy-plus');
-    await expect(page.getByLabel('Home ski area', { exact: true })).toHaveCount(0);
+    await inDialog(page, 'Filters', async dialog => {
+        await dialog.getByLabel('Pass product', { exact: true }).selectOption('indy-plus');
+        await expect(dialog.getByLabel('Home ski area', { exact: true })).toHaveCount(0);
+    });
     await expect(page).not.toHaveURL(/homeArea=/);
 });
 
 test('ages a verified report without resetting the camera when local-date results stay the same', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
-    const generatedAt = '2026-12-24T08:00:00Z';
+    const generatedAt = '2026-12-25T06:55:00Z';
     const body = JSON.stringify({ version: 1, generatedAt, reports: [{
         areaId: 'snowbird', status: 'limited', retrievedAt: generatedAt, reportedAt: generatedAt,
         source: { name: 'Test operator', url: 'https://example.test/conditions', license: 'https://example.test/license', exportable: true },
@@ -204,20 +304,19 @@ test('ages a verified report without resetting the camera when local-date result
         if (name === file) return route.fulfill({ body, headers, contentType: 'application/json' });
         return route.fulfill({ json: { version: 1, updatedAt: generatedAt, catalogRevision: 'a'.repeat(64), reports: file }, headers });
     });
-    await page.clock.install({ time: new Date('2026-12-25T07:59:15Z') });
+    await page.clock.install({ time: new Date('2026-12-25T06:59:15Z') });
     const renderer = await captureMap(page);
     const query = page.getByRole('searchbox', { name: 'Search areas' });
     await query.fill('Snowbird');
     await query.press('Enter');
-    await page.getByLabel('Pass product', { exact: true }).selectOption('ikon-base');
-    await page.getByLabel('Color by', { exact: true }).selectOption('operatingStatus');
-    const cell = page.getByRole('region', { name: 'Ski area comparison table' }).getByRole('cell', { name: 'Limited', exact: true });
-    await expect(cell).toBeVisible();
+    await setFilter(page, 'Pass product', 'ikon-base');
+    await setColor(page, 'operatingStatus');
+    await expect(result(page, 'Snowbird')).toContainText('Limited today');
     const color = () => renderer.evaluate(async map => {
         const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
         return data?.type === 'FeatureCollection' && data.features.find(feature => feature.id === 'snowbird')?.properties?.color;
     });
-    await expect.poll(color).toBe('#facc15');
+    await expect.poll(color).toBe('#f0c478');
     await expect.poll(() => renderer.evaluate(map => !map.isMoving())).toBe(true);
     const camera = await renderer.evaluate(map => {
         map.jumpTo({ center: [-110, 42], zoom: 6 });
@@ -225,78 +324,104 @@ test('ages a verified report without resetting the camera when local-date result
     });
 
     await page.clock.fastForward(60_001);
-    await expect(page.getByRole('cell', { name: 'Limited (stale)', exact: true })).toBeVisible();
-    await expect.poll(color).toBe('#a1a1aa');
+    await expect(result(page, 'Snowbird')).toContainText('Stale report');
+    await expect.poll(color).toBe('#abb9c6');
     expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
     await renderer.dispose();
 });
 
-test('opens a globe on a phone and fits the Ikon resorts in a selected country', async ({ page }) => {
-    await page.setViewportSize({ width: 320, height: 780 });
+test('opens on the phone globe with current reports, clusters, and a usable resort panel', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await prepare(page);
-    const renderer = await captureMap(page, { phone: true });
+    await page.clock.setFixedTime(new Date('2026-11-20T18:00:00Z'));
+    const renderer = await captureMap(page, { today: true });
     expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
-    await expect(page.getByText(`${locations.locations.length} of ${locations.locations.length} ski areas`)).toBeVisible();
-    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-points'] })
-        .some(feature => feature.properties.areaId === 'alta'))).toBe(true);
-
-    const filters = page.getByRole('button', { name: 'Filters', exact: true });
-    await filters.click();
-    await page.getByLabel('Region', { exact: true }).selectOption({ label: 'New Zealand' });
-    await page.getByLabel('Pass', { exact: true }).selectOption('ikon');
-    await filters.click();
-    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
-    await expect.poll(() => renderer.evaluate(map => {
-        if (!map.getLayer('ski-status-pass-badges')) return [];
-        const points = map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] });
-        return [...new Set(points.map(feature => feature.properties.areaId))].sort();
-    })).toEqual(['coronet-peak', 'mt-hutt', 'the-remarkables']);
-
-    await page.getByRole('button', { name: 'Table', exact: true }).click();
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    await expect(table.locator('tbody tr')).toHaveCount(3);
-    await table.getByRole('button', { name: 'Mt Hutt', exact: true }).click();
-    await expect(page.getByText('Methven, New Zealand', { exact: true })).toBeVisible();
+    await expect(page.getByText('5 reporting skiing today', { exact: true })).toBeVisible();
+    await expect(page.getByText(`6 of ${locations.locations.length} areas have current reports`)).toBeVisible();
+    await expect(results(page)).toBeHidden();
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-cluster-counts'] })
+        .map(feature => feature.properties.skiingCount).some(count => count > 1))).toBe(true);
+    const skipMap = page.getByRole('link', { name: 'Skip to map', exact: true });
+    await skipMap.focus();
+    await skipMap.press('Enter');
+    await expect(page.getByRole('region', { name: 'Map of ski areas', exact: true })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(searchArea(page)).toBeFocused();
+    await selectView(page, 'Results');
+    const lakeLouise = result(page, 'Lake Louise Ski Resort');
+    await expect(lakeLouise).toContainText('Limited today');
+    await expect(lakeLouise).toContainText('4 lifts open');
+    await lakeLouise.press('Enter');
+    const details = resort(page, 'Lake Louise Ski Resort');
+    await expect(details).toBeFocused();
+    await expect(details.getByRole('link', { name: 'Official conditions', exact: true })).toBeVisible();
+    await details.getByRole('button', { name: 'Close details' }).press('Enter');
+    await expect(lakeLouise).toBeFocused();
     await renderer.dispose();
 });
 
-test('keeps rear-side resorts and their popups out of the globe view', async ({ page }) => {
+test('opens resort terrain and its local difficulty key from phone details', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await prepare(page);
+    await page.goto(`${path}?view=results&status=all&q=lake%20louise&skiTerrain=0`);
+    await result(page, 'Lake Louise Ski Resort').click();
+    const range = page.waitForResponse(response => skiTerrainArchivePath.test(new URL(response.url()).pathname) && response.status() === 206);
+    await resort(page, 'Lake Louise Ski Resort').getByRole('button', { name: 'Show runs and lifts' }).click();
+    expect((await range).headers()['content-range']).toMatch(/^bytes \d+-\d+\/\d+$/);
+    await expect(resort(page, 'Lake Louise Ski Resort')).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Resort details', exact: true })).toBeVisible();
+    await expect(page).toHaveURL(/details=0/);
+    await expect.poll(() => mapCamera(page)?.zoom).toBeGreaterThanOrEqual(13);
+    await inDialog(page, 'Layers', async dialog => {
+        await expect(dialog.getByRole('region', { name: 'Mapped runs and lifts' })).toBeVisible();
+        await expect(dialog.getByText('Green and blue convention', { exact: true })).toBeVisible();
+    });
+    await page.reload();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    await expect(page.getByRole('button', { name: 'Resort details', exact: true })).toBeVisible();
+    await expect.poll(() => mapCamera(page)?.zoom).toBeGreaterThanOrEqual(13);
+});
+
+test('fits filtered Ikon resorts in New Zealand from the phone globe', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 780 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await inDialog(page, 'Filters', async dialog => {
+        await dialog.getByLabel('Region', { exact: true }).selectOption({ label: 'New Zealand' });
+        await dialog.getByLabel('Pass', { exact: true }).selectOption('ikon');
+    });
+    await setColor(page, 'pass');
+    const membership = () => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+        return data?.type === 'FeatureCollection' ? data.features.map(point => point.id).sort() : [];
+    });
+    await expect.poll(membership).toEqual(['coronet-peak', 'mt-hutt', 'the-remarkables']);
+    await expect.poll(() => renderer.evaluate(map => map.getCenter().lng)).toBeGreaterThan(150);
+    await selectView(page, 'Compare');
+    await expect(comparison(page).locator('tbody tr')).toHaveCount(3);
+    await comparison(page).getByRole('button', { name: 'Mt Hutt', exact: true }).click();
+    await expect(resort(page, 'Mt Hutt').getByText('Methven, New Zealand', { exact: true })).toBeVisible();
+    await renderer.dispose();
+});
+
+test('searches only the facing side of the globe across the antimeridian', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
     const renderer = await captureMap(page);
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    const alta = table.getByRole('button', { name: 'Alta Ski Area', exact: true });
-    const mtHutt = table.getByRole('button', { name: 'Mt Hutt', exact: true });
-    const popup = page.getByRole('region', { name: 'Alta Ski Area map popup', exact: true });
-
-    await page.getByRole('checkbox', { name: 'In map view' }).check();
-    await expect(alta).toBeVisible();
-    await expect(mtHutt).toHaveCount(0);
-    await alta.click();
-    await expect(popup).toBeVisible();
-
-    const canvas = (await page.getByTestId('ski-status-map').boundingBox())!;
-    const beforeDrag = await renderer.evaluate(map => map.getCenter().lng);
-    const dragStart = { x: canvas.x + canvas.width / 2, y: canvas.y + canvas.height * 0.65 };
-    await page.mouse.move(dragStart.x, dragStart.y);
-    await page.mouse.down();
-    await page.mouse.move(dragStart.x + 70, dragStart.y, { steps: 8 });
-    await page.mouse.up();
-    await expect.poll(() => renderer.evaluate(map => map.getCenter().lng)).not.toBe(beforeDrag);
-    await expect(page).toHaveURL(/area=alta/);
-
-    await renderer.evaluate(map => { map.jumpTo({ center: [171.53, -43.49], zoom: 0.75 }); });
-    await expect(mtHutt).toBeVisible();
-    await expect(alta).toHaveCount(0);
-    await expect(popup).toBeHidden();
-    await expect(page.getByRole('region', { name: 'Alta Ski Area', exact: true })).toBeVisible();
-    await expect(page.getByText('Selected area is outside the map view.')).toBeVisible();
-    const altaCoordinates = locations.locations.find(location => location.id === 'alta')!.coordinates as [number, number];
+    const sourceIds = () => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+        return data?.type === 'FeatureCollection' ? data.features.map(feature => feature.id) : [];
+    });
+    await renderer.evaluate(map => { map.jumpTo({ center: [179, -43.49], zoom: 0.75 }); });
+    await searchArea(page).click();
+    await expect.poll(sourceIds).toContain('mt-hutt');
+    expect(await sourceIds()).not.toContain('alta');
+    const alta = locations.locations.find(location => location.id === 'alta')!.coordinates as [number, number];
     expect(await renderer.evaluate((map, coordinates) => {
-        const point = map.project(coordinates);
+        const { x, y } = map.project(coordinates);
         const { clientWidth, clientHeight } = map.getContainer();
-        return point.x >= 0 && point.x <= clientWidth && point.y >= 0 && point.y <= clientHeight;
-    }, altaCoordinates)).toBe(true);
+        return x >= 0 && x <= clientWidth && y >= 0 && y <= clientHeight;
+    }, alta)).toBe(true);
     await renderer.dispose();
 });
 
@@ -308,130 +433,103 @@ test('keeps listed Ikon destinations visible until the included-access filter is
     const table = page.getByRole('region', { name: 'Ski area comparison table' });
     await expect(table.getByRole('button', { name: 'See', exact: true })).toBeVisible();
 
-    await page.getByLabel('Pass', { exact: true }).selectOption('ikon');
-    await expect(details).toHaveCount(0);
+    await setFilter(page, 'Pass', 'ikon');
+    await expect(details).toBeVisible();
     await expect(table.getByRole('button', { name: 'See', exact: true })).toHaveCount(0);
     await expect(table.getByRole('button', { name: 'Ischgl / Samnaun', exact: true })).toBeVisible();
 });
 
-test('filters skiing types in the table and the map source', async ({ page }) => {
+test('filters skiing types in the results and the map source', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
     const renderer = await captureMap(page);
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    const skiing = page.getByLabel('Skiing type', { exact: true });
     const mapIds = () => renderer.evaluate(async map => {
         const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
         return data?.type === 'FeatureCollection' ? data.features.map(feature => feature.id).sort() : [];
     });
-
-    await skiing.selectOption('indoor');
+    await setFilter(page, 'Skiing type', 'indoor');
     await expect(page).toHaveURL(/skiing=indoor/);
-    await expect(table.locator('tbody tr')).toHaveCount(2);
-    await expect(table.getByRole('button', { name: 'Big SNOW American Dream', exact: true })).toBeVisible();
+    await expect(results(page).locator('li')).toHaveCount(2);
+    await expect(result(page, 'Big SNOW American Dream')).toBeVisible();
     await expect.poll(mapIds).toEqual(['big-snow-american-dream', 'stoke-mountain']);
-
-    await skiing.selectOption('specialty');
-    await page.getByLabel('Pass', { exact: true }).selectOption('indy-discounts');
-    await expect(table.locator('tbody tr')).toHaveCount(1);
-    await expect(table.getByRole('button', { name: 'North Cascade Heli', exact: true })).toBeVisible();
+    await inDialog(page, 'Filters', async dialog => {
+        await dialog.getByLabel('Skiing type', { exact: true }).selectOption('specialty');
+        await dialog.getByLabel('Pass', { exact: true }).selectOption('indy-discounts');
+    });
+    await expect(result(page, 'North Cascade Heli')).toBeVisible();
     await expect.poll(mapIds).toEqual(['north-cascade-heli']);
-
     await page.getByRole('button', { name: 'Clear filters', exact: true }).click();
-    await expect(skiing).toHaveValue('');
     await expect(page).not.toHaveURL(/skiing=/);
     await expect.poll(async () => (await mapIds()).length).toBe(locations.locations.length);
     await renderer.dispose();
 });
 
-test('loads and clears a skiing-type filter in the phone table', async ({ page }) => {
+test('loads and removes a skiing-type chip in the phone comparison', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 780 });
     await prepare(page);
     await page.goto(`${path}?view=table&skiing=cross-country&region=BC`);
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    const table = comparison(page);
     await expect(table.getByRole('button', { name: 'Manning Park Nordic Centre', exact: true })).toBeVisible();
     await expect(table.getByRole('button', { name: 'Manning Park', exact: true })).toHaveCount(0);
-    await page.getByRole('button', { name: 'Filters', exact: true }).click();
-    await expect(page.getByLabel('Skiing type', { exact: true })).toHaveValue('cross-country');
-    await page.getByRole('button', { name: 'Clear filters', exact: true }).click();
-    await expect(page.getByLabel('Skiing type', { exact: true })).toHaveValue('');
+    await page.getByRole('button', { name: 'Remove Cross-country only', exact: true }).click();
+    await expect(table.getByRole('button', { name: 'Manning Park', exact: true })).toBeVisible();
+    await expect(page).not.toHaveURL(/skiing=/);
 });
 
-test('shows separate Epic badges and table rows for the Hakuba Valley resorts', async ({ page }) => {
+test('keeps separate Epic points and resort cards for Hakuba Valley resorts', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    await page.getByLabel('Region', { exact: true }).selectOption({ label: 'Japan' });
-    await page.getByLabel('Pass', { exact: true }).selectOption('epic');
+    await setFilter(page, 'Region', { label: 'Japan' });
+    await setFilter(page, 'Pass', 'epic');
     await page.getByRole('searchbox', { name: 'Search areas' }).fill('Hakuba Valley');
-    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
-
-    await expect.poll(() => renderer.evaluate(map => {
-        if (!map.getLayer('ski-status-pass-badges')) return 0;
-        const features = map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] });
-        return new Set(features.filter(feature => feature.properties.passBadge === 'epic')
-            .map(feature => feature.properties.areaId)).size;
+    await setColor(page, 'pass');
+    await expect.poll(() => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')!.getData();
+        return data.type === 'FeatureCollection' ? data.features.filter(point => point.properties?.passBadge === 'epic').length : 0;
     })).toBe(10);
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    await expect(table.locator('tbody tr')).toHaveCount(10);
-    await table.getByRole('button', { name: 'Hakuba Happo-One', exact: true }).click();
-    const details = page.getByRole('region', { name: 'Hakuba Happo-One', exact: true });
-    await expect(details.getByRole('link', { name: 'Epic', exact: true })).toHaveAttribute('href',
+    await expect(results(page).locator('li')).toHaveCount(10);
+    await result(page, 'Hakuba Happo-One').click();
+    await expect(resort(page, 'Hakuba Happo-One').getByRole('link', { name: 'Epic', exact: true })).toHaveAttribute('href',
         'https://www.epicpass.com/regions/japan/hakuba-valley.aspx');
     await renderer.dispose();
 });
 
-test('filters worldwide Indy memberships and discounts on the map and table', async ({ page }) => {
+test('filters worldwide Indy memberships and discounts on the map and in results', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    const region = page.getByLabel('Region', { exact: true });
-    const pass = page.getByLabel('Pass', { exact: true });
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-
-    await region.selectOption({ label: 'Finland' });
-    await pass.selectOption('indy');
-    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
-    await expect(table.locator('tbody tr')).toHaveCount(3);
-    await expect.poll(() => renderer.evaluate(map => {
-        const layer = 'ski-status-pass-badges';
-        if (!map.getLayer(layer)) return [];
-        return [...new Set(map.queryRenderedFeatures({ layers: [layer] })
-            .filter(feature => feature.properties.passBadge === 'indy')
-            .map(feature => feature.properties.areaId))].sort();
-    })).toEqual(['levi-ski-resort', 'pyha-ski-resort', 'ruka-ski-resort']);
-
-    await region.selectOption('');
-    await pass.selectOption({ label: 'Indy discounts' });
-    await expect(table.locator('tbody tr')).toHaveCount(5);
-    await expect(page.getByRole('list', { name: 'Resort dot legend' })).toHaveText('Indy discount');
+    await setFilter(page, 'Region', { label: 'Finland' });
+    await setFilter(page, 'Pass', 'indy');
+    await setColor(page, 'pass');
+    await expect(results(page).locator('li')).toHaveCount(3);
     await expect.poll(() => renderer.evaluate(async map => {
-        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
-        return data?.type === 'FeatureCollection'
-            ? data.features.find(feature => feature.properties?.areaId === 'whiteface')?.properties
-            : undefined;
-    })).toEqual({ areaId: 'whiteface', color: '#fb923c' });
-    await table.getByRole('button', { name: 'North Cascade Heli', exact: true }).click();
-    const details = page.getByRole('region', { name: 'North Cascade Heli', exact: true });
+        const data = await map.getSource<GeoJSONSource>('ski-areas')!.getData();
+        return data.type === 'FeatureCollection' ? data.features.filter(point => point.properties?.passBadge === 'indy').map(point => point.id).sort() : [];
+    })).toEqual(['levi-ski-resort', 'pyha-ski-resort', 'ruka-ski-resort']);
+    await setFilter(page, 'Region', '');
+    await setFilter(page, 'Pass', { label: 'Indy discounts' });
+    await expect(results(page).locator('li')).toHaveCount(5);
+    await inDialog(page, 'Layers', dialog => expect(dialog.getByRole('list', { name: 'Resort map key' })).toHaveText('Indy discount'));
+    await expect.poll(() => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')!.getData();
+        return data.type === 'FeatureCollection' ? data.features.find(feature => feature.id === 'whiteface')?.properties?.color : undefined;
+    })).toBe('#fb923c');
+    await result(page, 'North Cascade Heli').click();
+    const details = resort(page, 'North Cascade Heli');
     await expect(details.getByText('Heli-skiing', { exact: true })).toBeVisible();
     await expect(details.getByRole('link', { name: 'Indy (discount only)', exact: true }))
         .toHaveAttribute('href', 'https://www.indyskipass.com/our-resorts/north-cascade-heli');
-    await expect.poll(() => renderer.evaluate(map => {
-        const source = map.getSource<GeoJSONSource>('ski-areas');
-        return source?.getData().then(data => data.type === 'FeatureCollection' ? data.features.length : 0);
-    })).toBe(5);
     await renderer.dispose();
 });
 
-test('shows a single shared destination on the map and table for either country', async ({ page }) => {
+test('shows a single shared destination for either country', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    const region = page.getByLabel('Region', { exact: true });
     await page.getByRole('searchbox', { name: 'Search areas' }).fill('Portes du Soleil');
-    await page.getByLabel('Pass', { exact: true }).selectOption('indy');
+    await setFilter(page, 'Pass', 'indy');
     for (const country of ['France', 'Switzerland']) {
-        await region.selectOption({ label: country });
-        await expect(table.locator('tbody tr')).toHaveCount(1);
-        await expect(table.getByRole('cell', { name: 'France / Switzerland', exact: true })).toBeVisible();
+        await setFilter(page, 'Region', { label: country });
+        await expect(results(page).locator('li')).toHaveCount(1);
+        await expect(result(page, 'Portes du Soleil')).toContainText('France / Switzerland');
         await expect.poll(() => renderer.evaluate(async map => {
             const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
             return data?.type === 'FeatureCollection' ? data.features.map(feature => feature.id) : [];
@@ -440,118 +538,125 @@ test('shows a single shared destination on the map and table for either country'
     await renderer.dispose();
 });
 
-test('in-view results follow pan and zoom and support filters and sorting', async ({ page }) => {
+test('changes results only when someone searches the new area and restores each view from history', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
     const renderer = await captureMap(page);
-    const inView = page.getByRole('checkbox', { name: 'In map view', exact: true });
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    const row = (name: string) => table.getByRole('button', { name, exact: true });
-    const camera = await renderer.evaluate(map => {
-        map.jumpTo({ center: [-111.64, 40.6], zoom: 10 });
-        return { center: map.getCenter().toArray(), zoom: map.getZoom() };
-    });
-    await expect(row('Whaleback Mountain')).toHaveCount(1);
-    await inView.check();
-    await expect(page).toHaveURL(/inView=1/);
-    await expect(row('Alta Ski Area')).toBeVisible();
-    await expect(row('Snowbird')).toBeVisible();
-    await expect(row('Whaleback Mountain')).toHaveCount(0);
-
-    await table.getByRole('button', { name: 'Vertical', exact: true }).click();
-    await expect(table.getByRole('columnheader', { name: 'Vertical', exact: true })).toHaveAttribute('aria-sort', 'descending');
-    const names = (await table.locator('tbody th button').allTextContents()).map(name => name.trim());
-    expect(names.indexOf('Snowbird')).toBeLessThan(names.indexOf('Alta Ski Area'));
-
-    const search = page.getByRole('searchbox', { name: 'Search areas' });
-    await search.fill('snowbird');
-    await expect(table.locator('tbody tr')).toHaveCount(1);
-    await expect(row('Snowbird')).toBeVisible();
-    await search.fill('');
-    await page.getByLabel('Pass', { exact: true }).selectOption('epic');
-    await expect(row('Alta Ski Area')).toHaveCount(0);
-    await row('Park City Mountain').click();
-    await expect(page.getByRole('heading', { name: 'Park City Mountain', exact: true })).toBeVisible();
-    expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-111.64, 40.6], zoom: 10 }); });
+    await searchArea(page).click();
+    await expect(result(page, 'Alta Ski Area')).toBeVisible();
+    await expect(result(page, 'Snowbird')).toBeVisible();
+    await expect(result(page, 'Whaleback Mountain')).toHaveCount(0);
+    const utah = new URL(page.url()).searchParams.get('mapArea');
+    expect(utah).toBeTruthy();
 
     const vail = locations.locations.find(location => location.id === 'vail-mountain')!.coordinates as [number, number];
     await renderer.evaluate((map, center) => { map.panTo(center, { duration: 0 }); }, vail);
-    await expect(row('Vail Mountain')).toBeVisible();
-    await expect(row('Beaver Creek Resort')).toBeVisible();
-    await expect(row('Park City Mountain')).toHaveCount(0);
-    await expect(page.getByText('Selected area is outside the map view.')).toBeVisible();
-    const views = page.getByRole('group', { name: 'Results view' });
-    await views.getByRole('button', { name: 'Table', exact: true }).click();
-    await expect(row('Beaver Creek Resort')).toHaveCount(0);
-    await views.getByRole('button', { name: 'Split', exact: true }).click();
-    await expect(row('Beaver Creek Resort')).toBeVisible();
-    await renderer.evaluate(map => { map.setZoom(13); });
-    await expect(row('Beaver Creek Resort')).toHaveCount(0);
-    await expect(row('Vail Mountain')).toBeVisible();
-
-    await renderer.evaluate(map => { map.panTo([-150, 28], { duration: 0 }); });
-    await expect(page.getByText('No matching ski areas in this map view.')).toBeVisible();
-    await page.getByRole('button', { name: 'Fit all results', exact: true }).click();
-    await expect(row('Vail Mountain')).toBeVisible();
-    await page.getByRole('button', { name: 'Clear filters', exact: true }).click();
-    await expect(inView).not.toBeChecked();
-    await expect(row('Whaleback Mountain')).toHaveCount(1);
-    await expect(table.getByRole('columnheader', { name: 'Vertical', exact: true })).toHaveAttribute('aria-sort', 'descending');
+    await expect.poll(() => mapCamera(page)?.center[0]).toBeCloseTo(vail[0], 3);
+    await expect(result(page, 'Alta Ski Area')).toBeVisible();
+    await expect(result(page, 'Vail Mountain')).toHaveCount(0);
+    await searchArea(page).click();
+    await expect(result(page, 'Vail Mountain')).toBeVisible();
+    await expect(result(page, 'Alta Ski Area')).toHaveCount(0);
+    const colorado = new URL(page.url()).searchParams.get('mapArea');
+    expect(colorado).not.toBe(utah);
+    await page.getByRole('button', { name: 'Fit results', exact: true }).click();
+    expect(new URL(page.url()).searchParams.get('mapArea')).toBe(colorado);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-105, 39], zoom: 8 }); });
+    await expect.poll(() => mapCamera(page)?.center).toEqual([-105, 39]);
+    await page.goBack();
+    await expect(result(page, 'Snowbird')).toBeVisible();
+    await expect.poll(() => renderer.evaluate(map => map.getCenter().lng)).toBeCloseTo(vail[0], 3);
+    await page.goForward();
+    await expect(result(page, 'Vail Mountain')).toBeVisible();
+    await expect.poll(() => renderer.evaluate(map => map.getCenter().lng)).toBeCloseTo(-105, 3);
     await renderer.dispose();
 });
 
-test('uses the last visible map area when filters change in the phone table', async ({ page }) => {
-    await page.setViewportSize({ width: 320, height: 780 });
+test('shares the visible map without changing the searched area', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
-    const renderer = await captureMap(page, { phone: true });
-    const inView = page.getByRole('checkbox', { name: 'In map view', exact: true });
-    await inView.check();
-    const filters = page.getByRole('button', { name: 'Filters', exact: true });
-    await filters.click();
-    await page.getByLabel('Pass', { exact: true }).selectOption('mountain-collective');
-    await filters.click();
-    await renderer.evaluate(map => { map.jumpTo({ center: [-111.63, 40.6], zoom: 10 }); });
-    await expect(page.getByText(`2 of ${locations.locations.length} ski areas`)).toBeVisible();
+    await page.addInitScript(() => { Object.defineProperty(navigator, 'share', { value: undefined }); });
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    const renderer = await captureMap(page);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-111.64, 40.6], zoom: 10 }); });
+    await searchArea(page).click();
+    await expect(result(page, 'Alta Ski Area')).toBeVisible();
+    const area = new URL(page.url()).searchParams.get('mapArea');
+    const vail = locations.locations.find(location => location.id === 'vail-mountain')!.coordinates as [number, number];
+    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 10, bearing: -12, pitch: 20 }); }, vail);
+    await expect.poll(() => mapCamera(page)).toMatchObject({ zoom: 10, bearing: -12, pitch: 20 });
+    await expect(result(page, 'Alta Ski Area')).toBeVisible();
+    await page.getByRole('button', { name: 'Share current view', exact: true }).click();
+    await expect(page.getByText('Link copied', { exact: true })).toBeAttached();
+    const sharedUrl = new URL(await page.evaluate(() => navigator.clipboard.readText()));
+    expect(sharedUrl.searchParams.get('view')).toBe('map');
+    expect(sharedUrl.searchParams.get('mapArea')).toBe(area);
+    expect(readSkiMapCamera(sharedUrl.searchParams.get('camera'))).toEqual(mapCamera(page));
 
-    await page.getByRole('button', { name: 'Table', exact: true }).click();
+    const phone = await page.context().newPage();
+    try {
+        await phone.setViewportSize({ width: 390, height: 844 });
+        await prepare(phone);
+        await phone.goto(sharedUrl.href);
+        await expect(phone.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+        await selectView(phone, 'Results');
+        await expect(result(phone, 'Alta Ski Area')).toBeVisible();
+        await selectView(phone, 'Map');
+        await searchArea(phone).click();
+        await selectView(phone, 'Results');
+        await expect(result(phone, 'Vail Mountain')).toBeVisible();
+        await expect(result(phone, 'Alta Ski Area')).toHaveCount(0);
+    } finally {
+        await phone.close();
+        await renderer.dispose();
+    }
+});
+
+test('shares the committed geography across devices and keeps it when filtering in Compare', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await setFilter(page, 'Pass', 'mountain-collective');
+    await renderer.evaluate(map => { map.jumpTo({ center: [-111.63, 40.6], zoom: 10 }); });
+    await searchArea(page).click();
+    await expect(result(page, 'Alta Ski Area')).toBeVisible();
+    await selectView(page, 'Compare');
     await expect(page.getByTestId('ski-status-map')).toBeHidden();
-    await expect(inView).toBeChecked();
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    await expect(table.getByRole('button', { name: 'Alta Ski Area', exact: true })).toBeVisible();
-    const brighton = table.getByRole('button', { name: 'Brighton Resort', exact: true });
-    await expect(brighton).toHaveCount(0);
-    await filters.click();
-    await page.getByLabel('Pass', { exact: true }).selectOption('');
-    await expect(brighton).toBeVisible();
-    await expect(table.getByRole('button', { name: 'Whaleback Mountain', exact: true })).toHaveCount(0);
+    const names = await comparison(page).locator('tbody th button').allTextContents();
+    await page.setViewportSize({ width: 320, height: 780 });
+    await page.reload();
+    await expect(comparison(page).locator('tbody th button')).toHaveText(names);
+    await expect(page.getByTestId('ski-status-map')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Remove Mountain Collective', exact: true }).click();
+    await expect(comparison(page).getByRole('button', { name: 'Brighton Resort', exact: true })).toBeVisible();
+    await expect(comparison(page).getByRole('button', { name: 'Whaleback Mountain', exact: true })).toHaveCount(0);
     await renderer.dispose();
 });
 
-test('keeps the phone table usable when an in-view link opens before the map', async ({ page }) => {
+test('keeps legacy in-view links usable and commits their first map area', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 780 });
     await prepare(page);
     await page.goto(`${path}?view=table&inView=1&q=whaleback`);
-    await expect(page.getByRole('checkbox', { name: 'In map view', exact: true })).toBeChecked();
-    await expect(page.getByText('Open Map to set the area.')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Whaleback Mountain', exact: true })).toBeVisible();
+    await expect(page.getByText('Open Map to set the area for this link.')).toBeVisible();
+    await expect(comparison(page).getByRole('button', { name: 'Whaleback Mountain', exact: true })).toBeVisible();
     await expect(page.getByTestId('ski-status-map')).toHaveCount(0);
-    await page.getByRole('button', { name: 'Map', exact: true }).click();
+    await selectView(page, 'Map');
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
-    await expect(page.getByText('Waiting for a map view.')).toHaveCount(0);
-    await expect(page.getByText(`1 of ${locations.locations.length} ski areas`)).toBeVisible();
+    await expect(page).toHaveURL(/mapArea=/);
+    await expect(page).not.toHaveURL(/inView=/);
+    await expect(page.getByRole('button', { name: 'Remove Searched map area' })).toBeVisible();
+    await expect(page.getByText('1 ski area', { exact: true })).toBeVisible();
 });
 
 test('fits changes made in the phone table after the real map viewport returns', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 780 });
     await prepare(page);
-    const renderer = await captureMap(page, { phone: true });
-    await page.getByRole('button', { name: 'Table', exact: true }).click();
+    const renderer = await captureMap(page);
+    await selectView(page, 'Compare');
     await expect(page.getByTestId('ski-status-map')).toBeHidden();
     await renderer.evaluate(map => { map.resize(); });
-    const filters = page.getByRole('button', { name: 'Filters', exact: true });
-    await filters.click();
-    await page.getByLabel('Region', { exact: true }).selectOption('BC');
-    await filters.click();
+    await setFilter(page, 'Region', 'BC');
     await page.getByRole('button', { name: 'Map', exact: true }).click();
     const edges = ['mount-washington-alpine-resort', 'fernie-alpine-resort'].map(id =>
         locations.locations.find(location => location.id === id)!.coordinates as [number, number]);
@@ -569,7 +674,7 @@ test('centers the resort selected while the background style is being retried', 
     await prepare(page, null);
     const renderer = await captureMap(page, { state: 'degraded' });
     expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
-    await page.getByLabel('Region', { exact: true }).selectOption('WA');
+    await setFilter(page, 'Region', 'WA');
     let release = () => {};
     const waiting = new Promise<void>(resolve => { release = resolve; });
     let requested = false;
@@ -581,7 +686,7 @@ test('centers the resort selected while the background style is being retried', 
     try {
         await page.getByRole('button', { name: 'Retry background' }).click();
         await expect.poll(() => requested).toBe(true);
-        await page.getByLabel('Region', { exact: true }).selectOption('UT');
+        await setFilter(page, 'Region', 'UT');
         await page.getByRole('button', { name: 'Alta Ski Area', exact: true }).click();
         await expect(page.getByRole('heading', { name: 'Alta Ski Area', exact: true })).toBeVisible();
     } finally {
@@ -610,91 +715,79 @@ async function findWhaleback(page: Page, renderer: Awaited<ReturnType<typeof cap
     }, coordinates);
 }
 
-test('previews a resort on hover and clears the selection on a blank map click', async ({ page }) => {
+test('recenters a result after tapping its selected marker and panning away', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
     const renderer = await captureMap(page);
-    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+    const position = await findWhaleback(page, renderer);
+    const canvas = page.getByTestId('ski-status-map').locator('canvas');
+    const details = resort(page, 'Whaleback Mountain');
+    await canvas.click({ position });
+    await expect(details).toBeVisible();
+    await canvas.click({ position });
+    await renderer.evaluate(map => { map.jumpTo({ center: [-71.5, 43.9], zoom: 9 }); });
+    await expect.poll(() => mapCamera(page)?.center).toEqual([-71.5, 43.9]);
+    await details.getByRole('button', { name: 'Close details' }).click();
+    await result(page, 'Whaleback Mountain').click();
+    const [longitude] = locations.locations.find(location => location.id === 'whaleback')!.coordinates;
+    await expect.poll(() => renderer.evaluate(map => map.getCenter().lng)).toBeCloseTo(longitude, 4);
+    await renderer.dispose();
+});
+
+test('previews a resort on hover and opens one docked details panel', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await setColor(page, 'pass');
     const position = await findWhaleback(page, renderer);
     await expect.poll(() => renderer.evaluate(map => map.getLayer('ski-status-pass-badges')
         && map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] }).some(feature => feature.properties.areaId === 'whaleback'))).toBe(true);
     const canvas = page.getByTestId('ski-status-map').locator('canvas');
     const background = { x: 24, y: (await canvas.boundingBox())!.height / 2 };
-    const details = page.getByRole('region', { name: 'Whaleback Mountain', exact: true });
-    const popup = page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true });
-    const tooltip = page.getByRole('tooltip');
-
+    const details = resort(page, 'Whaleback Mountain');
     await canvas.hover({ position });
-    await expect(tooltip).toContainText('Whaleback Mountain');
-    await expect(tooltip).toContainText('Enfield, NH');
+    await expect(page.getByRole('tooltip')).toContainText('Enfield, NH');
     await expect(details).toHaveCount(0);
-    await expect(popup).toHaveCount(0);
     await canvas.hover({ position: background });
-    await expect(tooltip).toHaveCount(0);
-
-    const iconEdge = { x: position.x + 9, y: position.y };
-    await canvas.hover({ position: iconEdge });
-    await expect(tooltip).toContainText('Whaleback Mountain');
-    await canvas.click({ position: iconEdge });
-    await expect(popup).toBeVisible();
-    await expect(popup).toContainText('86 ac');
-    await expect(details).toBeVisible();
-    await expect(tooltip).toHaveCount(0);
-    await popup.getByRole('link', { name: 'View resort details' }).click();
-    await expect(page).toHaveURL(/#ski-area-details$/);
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await canvas.click({ position });
+    await expect(details).toBeFocused();
+    await expect(details.getByText('86 ac', { exact: true })).toBeVisible();
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
     await renderer.evaluate(map => { map.panBy([40, 20], { duration: 0 }); });
-    await expect(popup).toBeVisible();
-    await expect.poll(() => renderer.evaluate(map => !map.isMoving())).toBe(true);
+    await expect(details).toBeVisible();
     const camera = await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }));
-
     await canvas.click({ position: background });
-    await expect(popup).toHaveCount(0);
     await expect(details).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Whaleback Mountain', exact: true })).toHaveAttribute('aria-pressed', 'false');
-    expect(Object.fromEntries(new URL(page.url()).searchParams)).toEqual({ q: 'whaleback', color: 'pass' });
+    expect(new URL(page.url()).searchParams.has('area')).toBe(false);
     expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
-
     await page.goBack();
-    await expect(popup).toBeVisible();
-    await popup.getByRole('button', { name: 'Close resort popup' }).press('Escape');
-    await expect(popup).toHaveCount(0);
+    await expect(details).toBeVisible();
+    await canvas.press('Escape');
+    await expect(details).toHaveCount(0);
     await expect(canvas).toBeFocused();
     await renderer.dispose();
 });
 
 test.describe('ski-status on touch screens', () => {
-    test.use({ hasTouch: true, viewport: { width: 320, height: 680 } });
+    test.use({ hasTouch: true, viewport: { width: 360, height: 740 } });
 
-    test('opens a selected popup on tap and dismisses it with a tap away or its close button', async ({ page }) => {
+    test('keeps a tapped resort details control outside the map attribution', async ({ page }) => {
         await prepare(page);
-        const renderer = await captureMap(page, { phone: true });
-        await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+        const renderer = await captureMap(page);
         const position = await findWhaleback(page, renderer);
         const canvas = page.getByTestId('ski-status-map').locator('canvas');
-        const popup = page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true });
+        const details = resort(page, 'Whaleback Mountain');
         await canvas.tap({ position });
-        await expect(popup).toBeVisible();
-        const title = popup.getByText('Whaleback Mountain', { exact: true });
-        await expect.poll(() => title.evaluate(node => {
-            const panel = node.closest('.maplibregl-popup-content')!.getBoundingClientRect();
-            const map = node.closest('[data-testid="ski-status-map"]')!.getBoundingClientRect();
-            const bounds = node.getBoundingClientRect();
-            const target = document.elementFromPoint(bounds.left + 2, bounds.top + bounds.height / 2);
-            return panel.top >= map.top && panel.bottom <= map.bottom && node.contains(target);
-        })).toBe(true);
-        await expect(page.getByRole('tooltip')).toHaveCount(0);
+        await expect(details).toBeVisible();
         await expect(page).toHaveURL(/area=whaleback/);
-        await title.tap();
-        await expect(popup).toBeVisible();
-
-        await canvas.tap({ position: { x: 20, y: (await canvas.boundingBox())!.height / 2 } });
-        await expect(popup).toHaveCount(0);
+        const mapBounds = (await canvas.boundingBox())!;
+        const headingBounds = (await details.getByRole('heading', { name: 'Whaleback Mountain' }).boundingBox())!;
+        expect(headingBounds.y).toBeGreaterThanOrEqual(mapBounds.y + mapBounds.height);
+        await details.getByRole('button', { name: 'Close details' }).tap();
+        await expect(details).toHaveCount(0);
         await expect(page).not.toHaveURL(/area=whaleback/);
-
-        await canvas.tap({ position });
-        await popup.getByRole('button', { name: 'Close resort popup' }).tap();
-        await expect(popup).toHaveCount(0);
-        await expect(page).not.toHaveURL(/area=whaleback/);
+        await expect(canvas).toBeFocused();
         await renderer.dispose();
     });
 });
@@ -702,7 +795,7 @@ test.describe('ski-status on touch screens', () => {
 test('selects the closest ski area where two markers overlap', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    await page.getByLabel('Region', { exact: true }).selectOption('UT');
+    await setFilter(page, 'Region', 'UT');
     await page.getByRole('button', { name: 'Alta Ski Area', exact: true }).click();
     const altaDetails = page.getByRole('region', { name: 'Alta Ski Area', exact: true });
     await expect(altaDetails).toBeVisible();
@@ -718,7 +811,7 @@ test('selects the closest ski area where two markers overlap', async ({ page }) 
     const snowbirdDetails = page.getByRole('region', { name: 'Snowbird', exact: true });
     await expect(snowbirdDetails).toBeVisible({ timeout: 3_000 });
     expect(await snowbirdDetails.evaluate(details => details.parentElement!.scrollTop)).toBe(0);
-    await expect(page.getByRole('button', { name: 'Snowbird', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(/area=snowbird/);
     await renderer.dispose();
 });
 
@@ -731,9 +824,9 @@ test('draws one point per resort and changes its color without moving the camera
         return { count: source.data.features.length, clustered: Boolean(source.cluster), center: map.getCenter().toArray(), zoom: map.getZoom() };
     });
     expect(start.count).toBe(locations.locations.length);
-    expect(start.clustered).toBe(false);
-    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
-    await expect(page.getByRole('list', { name: 'Resort dot legend' })).toContainText('Multiple passes');
+    expect(start.clustered).toBe(true);
+    await setColor(page, 'pass');
+    await inDialog(page, 'Layers', dialog => expect(dialog.getByRole('list', { name: 'Resort map key' })).toContainText('Multiple passes'));
     await expect.poll(() => renderer.evaluate(map => {
         const data = map.getSource<GeoJSONSource>('ski-areas')!.serialize().data;
         return typeof data === 'object' && data.type === 'FeatureCollection'
@@ -744,45 +837,36 @@ test('draws one point per resort and changes its color without moving the camera
     await renderer.dispose();
 });
 
-test('shows larger pass icons at overview zoom and one badge per multi-pass resort', async ({ page }) => {
+test('groups resorts on the globe and shows individual pass badges from continent zoom', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    const colors = page.getByLabel('Color by', { exact: true });
-    await colors.selectOption('pass');
-    const legend = page.getByRole('list', { name: 'Resort dot legend' });
-    const icons = legend.locator('img');
-    await expect(icons).toHaveCount(4);
-    await expect.poll(() => icons.evaluateAll(images => images.every(image =>
-        image instanceof HTMLImageElement && image.naturalWidth >= 32 && new URL(image.src).origin === location.origin))).toBe(true);
-    await expect(legend.getByText('+', { exact: true })).toBeVisible();
-
-    const passLayers = ['ski-status-pass-badges', 'ski-status-selected-pass-badge'];
+    await setColor(page, 'pass');
+    await inDialog(page, 'Layers', async dialog => {
+        const legend = dialog.getByRole('list', { name: 'Resort map key' });
+        await expect(legend.locator('img')).toHaveCount(4);
+        await expect.poll(() => legend.locator('img').evaluateAll(images => images.every(image =>
+            image instanceof HTMLImageElement && image.naturalWidth >= 32 && new URL(image.src).origin === location.origin))).toBe(true);
+    });
     await expect.poll(() => renderer.evaluate(map => map.hasImage('ski-status-pass-badge-ikon-plus'))).toBe(true);
-    expect(await renderer.evaluate(map => {
-        const image = map.getImage('ski-status-pass-badge-ikon-plus');
-        return image.data.width / image.pixelRatio;
-    })).toBe(26);
-    const alta = locations.locations.find(location => location.id === 'alta')!.coordinates as [number, number];
-    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 3 }); }, alta);
-    const cottonwood = ['alta', 'snowbird'];
-    const renderedBadges = () => renderer.evaluate((map, { layers, ids }) =>
-        map.queryRenderedFeatures({ layers }).filter(feature => ids.includes(feature.properties.areaId))
-            .map(feature => ({ layer: feature.layer.id, area: feature.properties.areaId, badge: feature.properties.passBadge }))
-            .sort((first, second) => first.area.localeCompare(second.area)), { layers: passLayers, ids: cottonwood });
-    await expect.poll(renderedBadges).toEqual(cottonwood.map(area => ({ layer: 'ski-status-pass-badges', area, badge: 'ikon-plus' })));
-
-    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 8 }); }, alta);
-    await page.getByRole('button', { name: 'Alta Ski Area', exact: true }).click();
-    const details = page.getByRole('region', { name: 'Alta Ski Area', exact: true });
-    await expect(details.getByRole('link', { name: 'Ikon', exact: true }).locator('img')).toBeVisible();
-    await expect(details.getByRole('link', { name: 'Mountain Collective', exact: true }).locator('img')).toBeVisible();
-    await page.getByLabel('Pass', { exact: true }).selectOption('mountain-collective');
-    await expect.poll(renderedBadges).toEqual([
-        { layer: 'ski-status-selected-pass-badge', area: 'alta', badge: 'mountain-collective-plus' },
-        { layer: 'ski-status-pass-badges', area: 'snowbird', badge: 'mountain-collective-plus' },
-    ]);
-    await colors.selectOption('default');
-    await expect.poll(renderedBadges).toEqual([]);
+    const counts = () => renderer.evaluate(map => ({
+        clusters: map.queryRenderedFeatures({ layers: ['ski-area-clusters', 'ski-area-cluster-counts'] }).length,
+        badges: new Set(map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] }).map(feature => feature.properties.areaId)).size,
+    }));
+    await renderer.evaluate(map => { map.jumpTo({ center: [-100, 44], zoom: 1.5 }); });
+    await expect.poll(async () => (await counts()).clusters).toBeGreaterThan(0);
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 3 }); });
+    await expect.poll(async () => {
+        const { clusters, badges } = await counts();
+        return clusters === 0 && badges > 10;
+    }).toBe(true);
+    await page.getByRole('searchbox', { name: 'Search areas' }).fill('Alta Ski Area');
+    await result(page, 'Alta Ski Area').click();
+    await expect(resort(page, 'Alta Ski Area').getByRole('link', { name: 'Ikon', exact: true }).locator('img')).toBeVisible();
+    await setFilter(page, 'Pass', 'mountain-collective');
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-status-selected-pass-badge'] })
+        .some(feature => feature.properties.areaId === 'alta' && feature.properties.passBadge === 'mountain-collective-plus'))).toBe(true);
+    await setColor(page, 'default');
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-status-selected-pass-badge'] }).length)).toBe(0);
     await renderer.dispose();
 });
 
@@ -790,11 +874,12 @@ test('keeps a fallback dot if a pass image fails and restores other badges after
     await prepare(page, null);
     await page.route(/\/pass-icons\/indy\.png\?no-inline$/, route => route.abort());
     const renderer = await captureMap(page, { state: 'degraded' });
-    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+    await setColor(page, 'pass');
     const anotherPassBadge = () => renderer.evaluate(map => map.hasImage('ski-status-pass-badge-ikon-plus'));
     await expect.poll(anotherPassBadge).toBe(true);
     expect(await renderer.evaluate(map => map.hasImage('ski-status-pass-badge-indy'))).toBe(false);
-    await page.getByRole('button', { name: 'Whaleback Mountain', exact: true }).click();
+    await page.getByRole('searchbox', { name: 'Search areas' }).fill('whaleback');
+    await result(page, 'Whaleback Mountain').click();
     await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-points'] })
         .some(feature => feature.properties.areaId === 'whaleback'))).toBe(true);
 
@@ -806,89 +891,57 @@ test('keeps a fallback dot if a pass image fails and restores other badges after
     await renderer.dispose();
 });
 
-test('switches between all desktop layouts and keeps the camera, filters, sort, and selection', async ({ page }) => {
+test('opens a full-width comparison and preserves the map, sort, filters, and selection across views', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
     const renderer = await captureMap(page);
-    const views = page.getByRole('group', { name: 'Results view' });
-    const mapView = views.getByRole('button', { name: 'Map', exact: true });
-    const splitView = views.getByRole('button', { name: 'Split', exact: true });
-    const tableView = views.getByRole('button', { name: 'Table', exact: true });
     const map = page.getByRole('region', { name: 'Map of ski areas' });
-    const table = page.getByRole('region', { name: 'Ski area statistics' });
-    const selection = page.getByRole('button', { name: 'Alta Ski Area', exact: true });
-    await expect(splitView).toHaveAttribute('aria-pressed', 'true');
-    await page.getByLabel('Region', { exact: true }).selectOption('UT');
-    await page.getByRole('button', { name: 'Vertical', exact: true }).click();
-    await selection.click();
-    const popup = page.getByRole('region', { name: 'Alta Ski Area map popup', exact: true });
-    await expect(popup).toBeVisible();
-    await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
-    const splitMapWidth = (await map.boundingBox())!.width;
-    const splitTableWidth = (await table.boundingBox())!.width;
+    await setFilter(page, 'Region', 'UT');
+    await results(page).getByRole('combobox', { name: 'Sort results' }).selectOption('verticalFt');
+    await result(page, 'Alta Ski Area').click();
+    await expect(resort(page, 'Alta Ski Area')).toBeVisible();
     const camera = await renderer.evaluate(map => {
         map.jumpTo({ center: [-111.72, 40.7], zoom: 9.5 });
         return { center: map.getCenter().toArray(), zoom: map.getZoom() };
     });
-
-    await mapView.click();
-    await expect(mapView).toHaveAttribute('aria-pressed', 'true');
-    await expect.poll(async () => (await map.boundingBox())?.width ?? 0).toBeGreaterThan(splitMapWidth + 150);
-    const compactList = page.getByRole('region', { name: 'Ski area list' });
-    await expect(compactList.getByRole('columnheader')).toHaveCount(2);
-    await expect(compactList.getByRole('columnheader', { name: 'Vertical' })).toHaveAttribute('aria-sort', 'descending');
-    await expect(selection).toHaveAttribute('aria-pressed', 'true');
-
-    await tableView.click();
-    await expect(tableView).toHaveAttribute('aria-pressed', 'true');
-    await expect.poll(async () => (await table.boundingBox())?.width ?? 0).toBeGreaterThan(splitTableWidth + 150);
+    await selectView(page, 'Compare');
+    await expect(map).toBeHidden();
+    await expect(comparison(page).getByRole('columnheader', { name: 'Vertical', exact: true })).toHaveAttribute('aria-sort', 'descending');
+    await expect(resort(page, 'Alta Ski Area')).toBeVisible();
+    await selectView(page, 'Map');
     await expect(map).toBeVisible();
-    const comparison = page.getByRole('region', { name: 'Ski area comparison table' });
-    await expect(comparison.getByRole('columnheader', { name: 'Vertical' })).toHaveAttribute('aria-sort', 'descending');
-
-    await splitView.press('Enter');
-    await expect(splitView).toHaveAttribute('aria-pressed', 'true');
-    expect((await map.boundingBox())!.width).toBeCloseTo(splitMapWidth, 0);
-    await expect(page.getByLabel('Region', { exact: true })).toHaveValue('UT');
     expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
     expect(await renderer.evaluate(map => map.getContainer() === document.querySelector('[data-testid="ski-status-map"]'))).toBe(true);
-    expect(await page.evaluate(() => document.fullscreenElement)).toBeNull();
-    expect(Object.fromEntries(new URL(page.url()).searchParams)).toMatchObject({ area: 'alta', region: 'UT', sort: 'verticalFt:desc', view: 'split' });
+    expect(Object.fromEntries(new URL(page.url()).searchParams)).toMatchObject({ area: 'alta', region: 'UT', sort: 'verticalFt:desc', view: 'map' });
+    await renderer.evaluate(map => { map.jumpTo({ center: [-106, 40], zoom: 8 }); });
+    await expect.poll(() => mapCamera(page)?.zoom).toBe(8);
     await page.goBack();
-    await expect(tableView).toHaveAttribute('aria-pressed', 'true');
-    await page.getByRole('link', { name: 'Alta Ski Area details' }).click();
-    await page.getByRole('button', { name: 'Close details' }).click();
-    await expect(selection).toBeFocused();
-    await expect(popup).toHaveCount(0);
+    await expect(map).toBeHidden();
+    await selectView(page, 'Map');
+    await expect.poll(() => renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
+    await selectView(page, 'Compare');
+    await resort(page, 'Alta Ski Area').getByRole('button', { name: 'Close details' }).click();
+    await expect.poll(async () => (await comparison(page).boundingBox())?.width ?? 0).toBe(1440);
     await renderer.dispose();
 });
 
-test('shows the color-by metric in the Map view list and sorts it when its header is selected', async ({ page }) => {
+test('shows the map metric and status in results and carries sorting into Compare', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
     await page.goto(`${path}?view=map&region=UT&sort=acres%3Adesc`);
-    const list = page.getByRole('region', { name: 'Ski area list' });
-    const summit = list.getByRole('columnheader', { name: 'Summit elevation', exact: true });
-    await expect(list.getByRole('columnheader', { name: 'Skiable area' })).toHaveAttribute('aria-sort', 'descending');
-
-    await page.getByLabel('Color by', { exact: true }).selectOption('summitFt');
-    await expect(summit).toBeVisible();
-    await expect(list.getByRole('columnheader', { name: 'Skiable area' })).toHaveCount(0);
-    await expect(list.getByRole('row').nth(1)).toContainText('Park City Mountain');
-    await expect(list.getByRole('row').nth(1).getByRole('cell')).toHaveText('10,026 ft');
+    const list = results(page);
+    await expect(list.getByRole('combobox', { name: 'Sort results' })).toHaveValue('acres');
+    await setColor(page, 'summitFt');
+    await expect(list.locator('li').first()).toContainText('Park City Mountain');
+    await expect(list.locator('li').first()).toContainText('Summit elevation · 10,026 ft');
+    await expect(list.locator('li').first()).toContainText('No report');
     await expect(page).toHaveURL(/sort=acres%3Adesc/);
-
     await page.reload();
-    await expect(summit).toBeVisible();
-    await summit.getByRole('button').click();
-    await expect(summit).toHaveAttribute('aria-sort', 'descending');
-    await expect(list.getByRole('row').nth(1)).toContainText('Alta Ski Area');
+    await list.getByRole('combobox', { name: 'Sort results' }).selectOption('summitFt');
+    await expect(list.locator('li').first()).toContainText('Alta Ski Area');
     await expect(page).toHaveURL(/sort=summitFt%3Adesc/);
-
-    await page.getByRole('group', { name: 'Results view' }).getByRole('button', { name: 'Table' }).click();
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    await expect(table.getByRole('columnheader', { name: 'Skiable area' })).toBeVisible();
-    await expect(table.getByRole('columnheader', { name: 'Summit', exact: true })).toHaveAttribute('aria-sort', 'descending');
+    await selectView(page, 'Compare');
+    await expect(comparison(page).getByRole('columnheader', { name: 'Summit', exact: true })).toHaveAttribute('aria-sort', 'descending');
 });
 
 const tile = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==', 'base64');
@@ -901,13 +954,13 @@ test('loads terrain only when enabled and zoomed in, with CARTO underneath', asy
         return route.fulfill({ headers: { 'access-control-allow-origin': '*' }, contentType: 'image/png', body: tile });
     });
     const renderer = await captureMap(page);
-    await page.getByRole('checkbox', { name: 'Terrain relief' }).check();
+    await setLayer(page, 'Terrain relief', true);
     await expect.poll(() => renderer.evaluate(map => map.getLayer('ski-terrain-relief')?.type)).toBe('hillshade');
     expect(terrainRequests).toBe(0);
     await renderer.evaluate(map => { map.jumpTo({ center: [-111.635515, 40.573361], zoom: 10 }); });
     await expect.poll(() => terrainRequests).toBeGreaterThan(0);
     expect(await renderer.evaluate(map => Boolean(map.getLayer('background')))).toBe(true);
-    await page.getByRole('checkbox', { name: 'Terrain relief' }).uncheck();
+    await setLayer(page, 'Terrain relief', false);
     await expect.poll(() => renderer.evaluate(map => Boolean(map.getSource('ski-terrain-dem')))).toBe(false);
     await renderer.dispose();
 });
@@ -924,15 +977,14 @@ test('clears an old terrain relief error when a fresh source loads', async ({ pa
     });
     const renderer = await captureMap(page);
     await renderer.evaluate(map => { map.jumpTo({ center: [-111.635515, 40.573361], zoom: 10 }); });
-    const relief = page.getByRole('checkbox', { name: 'Terrain relief' });
     const error = page.getByText('Terrain relief unavailable.', { exact: true });
-    await relief.check();
+    await setLayer(page, 'Terrain relief', true);
     await expect(error).toBeVisible();
-    await relief.uncheck();
+    await setLayer(page, 'Terrain relief', false);
     await expect.poll(() => renderer.evaluate(map => Boolean(map.getSource('ski-terrain-dem')))).toBe(false);
 
     unavailable = false;
-    await relief.check();
+    await setLayer(page, 'Terrain relief', true);
     await expect.poll(() => recoveredTiles).toBeGreaterThan(0);
     await expect.poll(() => renderer.evaluate(map => map.isSourceLoaded('ski-terrain-dem'))).toBe(true);
     await expect(error).toBeHidden();
@@ -949,8 +1001,7 @@ test('loads and filters resort terrain by zoom and pass using byte ranges', asyn
         if (url.pathname.endsWith('/resort-terrain.pmtiles') && !url.searchParams.has('import')) requests.push(request.headers().range ?? '');
     });
     const renderer = await captureMap(page);
-    const skiTerrain = page.getByRole('checkbox', { name: 'Ski terrain', exact: true });
-    await expect(skiTerrain).toBeChecked();
+    await inDialog(page, 'Layers', dialog => expect(dialog.getByRole('checkbox', { name: 'Ski terrain', exact: true })).toBeChecked());
     expect(requests).toEqual([]);
 
     const layers = ['ski-resort-footprints', 'ski-resort-lifts', 'ski-resort-runs', 'ski-resort-lift-stations'];
@@ -986,17 +1037,16 @@ test('loads and filters resort terrain by zoom and pass using byte ranges', asyn
     await page.locator('.maplibregl-canvas').hover({ position: liftPosition });
     await expect(page.getByText('Heavenly Gondola · gondola', { exact: true })).toBeVisible();
 
-    await page.getByRole('checkbox', { name: 'In map view' }).check();
-    const pass = page.getByLabel('Pass', { exact: true });
-    await pass.selectOption('ikon');
+    await searchArea(page).click();
+    await setFilter(page, 'Pass', 'ikon');
     await expect.poll(counts).toEqual([0, 0, 0, 0]);
-    await pass.selectOption('epic');
+    await setFilter(page, 'Pass', 'epic');
     await expect.poll(async () => (await counts()).every(count => count > 0)).toBe(true);
 
-    await skiTerrain.uncheck();
+    await setLayer(page, 'Ski terrain', false);
     await expect.poll(counts).toEqual([0, 0, 0, 0]);
     await expect(page).toHaveURL(/skiTerrain=0/);
-    await skiTerrain.check();
+    await setLayer(page, 'Ski terrain', true);
     await expect.poll(async () => (await counts()).every(count => count > 0)).toBe(true);
     await renderer.evaluate(map => { map.jumpTo({ zoom: 10 }); });
     await expect.poll(counts).toEqual([0, 0, 0, 0]);
@@ -1041,11 +1091,10 @@ test('reopens ski terrain after an archive outage when the overlay is toggled', 
     const error = page.getByText('Ski terrain unavailable.', { exact: true });
     await expect(error).toBeVisible();
 
-    const toggle = page.getByRole('checkbox', { name: 'Ski terrain', exact: true });
-    await toggle.uncheck();
+    await setLayer(page, 'Ski terrain', false);
     await expect(error).toBeHidden();
     failArchive = false;
-    await toggle.check();
+    await setLayer(page, 'Ski terrain', true);
     await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-resort-runs'] }).length)).toBeGreaterThan(0);
     await expect(error).toBeHidden();
     await renderer.dispose();
@@ -1123,54 +1172,53 @@ test('offers a map retry when marker data fails and keeps the selected area', as
     await page.getByRole('button', { name: 'Retry map' }).press('Enter');
     await expect(map).toHaveAttribute('data-map-state', 'ready');
     await expect(map.locator('.maplibregl-canvas')).toBeFocused();
-    await expect(page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true })).toBeVisible();
+    await expect(resort(page, 'Whaleback Mountain')).toBeVisible();
     await expect(page.getByRole('searchbox', { name: 'Search areas' })).toHaveValue('whaleback');
     await renderer.dispose();
 });
 
-test('opens each phone layout with the same results when the basemap fails', async ({ page }) => {
+test('retries at the current map position after the terrain shortcut has run', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await findWhaleback(page, renderer);
+    await result(page, 'Whaleback Mountain').click();
+    await resort(page, 'Whaleback Mountain').getByRole('button', { name: 'Show runs and lifts' }).click();
+    await expect.poll(() => mapCamera(page)?.zoom).toBe(13);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-71.5, 43.9], zoom: 10 }); });
+    await expect.poll(() => mapCamera(page)?.zoom).toBe(10);
+    await captureNextMap(page);
+    await renderer.evaluate(map => { map.fire('error', { sourceId: 'ski-areas', error: new Error('Resort data unavailable') }); });
+    await page.getByRole('button', { name: 'Retry map' }).click();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    const retried = await page.evaluateHandle(() => (window as ReviewWindow).skiStatusMap!);
+    await expect.poll(() => retried.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() })))
+        .toEqual({ center: [-71.5, 43.9], zoom: 10 });
+    await retried.dispose();
+    await renderer.dispose();
+});
+
+test('keeps phone results and comparisons usable when the basemap fails', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 680 });
     await prepare(page, null);
     await page.goto('/projects/ski-status?pass=indy&q=whaleback');
-    await expect(page).toHaveURL(`${path}?pass=indy&q=whaleback`);
-    await expect(page.getByText(`1 of ${locations.locations.length} ski areas`)).toBeVisible();
-    const views = page.getByRole('group', { name: 'Results view' });
-    const mapView = views.getByRole('button', { name: 'Map', exact: true });
-    const tableView = views.getByRole('button', { name: 'Table', exact: true });
-    const splitView = views.getByRole('button', { name: 'Split', exact: true });
-    await expect(tableView).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.getByTestId('ski-status-map')).toHaveCount(0);
-    const filterToggle = page.getByRole('button', { name: 'Filters', exact: true });
-    await filterToggle.click();
-    await expect(page.getByLabel('Pass', { exact: true })).toHaveValue('indy');
-    await filterToggle.click();
-    const row = page.getByRole('button', { name: 'Whaleback Mountain', exact: true });
-    await row.press('Enter');
-    await expect(row).toHaveAttribute('aria-pressed', 'true');
-    await mapView.click();
-    await expect(row).toBeHidden();
-    await expect(page.getByRole('heading', { name: 'Whaleback Mountain', exact: true })).toBeVisible();
+    await expect(page).toHaveURL(url => url.pathname === path && url.searchParams.get('pass') === 'indy' && url.searchParams.get('q') === 'whaleback');
+    await expect(page.getByText('1 ski area', { exact: true })).toBeVisible();
     const map = page.getByTestId('ski-status-map');
     await expect(map).toHaveAttribute('data-map-state', 'degraded', { timeout: 20_000 });
-    await expect(page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true })).toBeVisible();
     const renderer = await map.elementHandle();
-    const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    await splitView.click();
-    await expect(map).toBeVisible();
-    await expect(table).toBeVisible();
-    expect((await map.boundingBox())!.y).toBeGreaterThan((await table.boundingBox())!.y);
-    await tableView.click();
-    await expect(map).toBeHidden();
-    expect(await renderer!.evaluate(element => element.isConnected)).toBe(true);
-    await expect(row).toHaveAttribute('aria-pressed', 'true');
-    await page.getByRole('button', { name: 'Close details' }).press('Enter');
-    await expect(row).toBeFocused({ timeout: 2_000 });
-    await expect(row).toHaveAttribute('aria-pressed', 'false');
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
-    expect(await table.evaluate(region => region.scrollWidth)).toBeGreaterThan(320);
+    await inDialog(page, 'Filters', dialog => expect(dialog.getByLabel('Pass', { exact: true })).toHaveValue('indy'));
+    await selectView(page, 'Results');
+    const row = result(page, 'Whaleback Mountain');
     await row.press('Enter');
-    await mapView.click();
+    await expect(resort(page, 'Whaleback Mountain')).toBeFocused();
     await page.getByRole('button', { name: 'Close details' }).press('Enter');
-    await expect(mapView).toBeFocused();
+    await expect(row).toBeFocused();
+    await selectView(page, 'Compare');
+    await expect(map).toBeHidden();
+    await expect(comparison(page).getByRole('button', { name: 'Whaleback Mountain', exact: true })).toBeVisible();
+    expect(await renderer!.evaluate(element => element.isConnected)).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+    expect(await comparison(page).evaluate(region => region.scrollWidth)).toBeGreaterThan(320);
     await renderer!.dispose();
 });

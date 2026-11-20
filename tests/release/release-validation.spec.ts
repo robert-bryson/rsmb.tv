@@ -86,11 +86,15 @@ if (location.pathname === '/projects/flights/map') {
 } else if (location.pathname === '/projects/ski-status/map') {
     ready();
     const map = document.querySelector('[data-map-state]');
-    map.innerHTML = '<button type="button">Zoom in</button><label><input type="checkbox">Ski terrain</label>'
+    map.innerHTML = '<button type="button">Zoom in</button><button type="button">Layers</button>'
+        + '<dialog aria-label="Map layers"><label><input type="checkbox">Ski terrain</label><button type="button">Done</button></dialog>'
         + '<canvas class="maplibregl-canvas" width="680" height="400"></canvas><output></output>';
     let zoomClicks = 0;
     let terrainLoaded = false;
     map.querySelector('button').onclick = () => zoomClicks++;
+    const dialog = map.querySelector('dialog');
+    map.querySelectorAll('button')[1].onclick = () => dialog.showModal();
+    dialog.querySelector('button').onclick = () => dialog.close();
     map.querySelector('input').onchange = async () => {
         if (main.dataset.failure !== 'terrain-no-requests') {
             await Promise.all(['bytes=0-127', 'bytes=5200000-5200127'].map(range =>

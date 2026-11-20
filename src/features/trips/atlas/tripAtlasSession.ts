@@ -1,11 +1,7 @@
+import type { MapCamera } from '../../../maps/mapCamera';
 import type { AtlasPanelState, AtlasResultsView } from './tripAtlasBrowser';
 
-export interface AtlasCamera {
-    center: [number, number];
-    zoom: number;
-    bearing: number;
-    pitch: number;
-}
+export type AtlasCamera = MapCamera;
 
 export interface AtlasSession {
     camera?: AtlasCamera;

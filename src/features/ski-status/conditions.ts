@@ -43,6 +43,12 @@ const operationSchema = z.strictObject({
     opensOn: z.iso.date().optional(), closedOn: z.iso.date().optional(), hours: z.string().min(1).optional(),
     terrain: terrainReport.optional(),
 }).refine(({ reportedAt, retrievedAt }) => !reportedAt || Date.parse(reportedAt) <= Date.parse(retrievedAt))
+    .refine(({ areaId, reportedAt, reportedOn }) => {
+        const timeZone = areaTimeZones.get(areaId);
+        if (!reportedAt || !reportedOn || !timeZone) return true;
+        const instant = Date.parse(reportedAt);
+        return Number.isFinite(instant) && localSkiDate(instant, timeZone) === reportedOn;
+    }, 'Use a report date that matches its timestamp in the resort time zone')
     .refine(({ areaId, validThrough, reportedAt, reportedOn, retrievedAt }) => {
         if (!validThrough) return true;
         const deadline = Date.parse(validThrough);
@@ -119,13 +125,35 @@ export function readStatusFilter(value: string | null): StatusFilter | undefined
 }
 
 export function reportAgeHours(report: ResortReport | undefined, now: number) {
-    if (!report?.reportedAt) return undefined;
+    if (!report?.reportedAt || Date.parse(report.retrievedAt) > now) return undefined;
     const age = (now - Date.parse(report.reportedAt)) / hour;
     return age >= 0 ? age : undefined;
 }
 
 export function reportStatus(report: ResortReport | undefined, now: number): ResortStatus {
     return report && isFreshReport(report, now) ? report.status : 'unknown';
+}
+
+function reportSkiDay(report: ResortReport, timeZone: string) {
+    return report.reportedAt ? localSkiDate(Date.parse(report.reportedAt), timeZone) : report.reportedOn;
+}
+
+export function skiDayStatus(report: ResortReport | undefined, now: number, timeZone?: string): ResortStatus {
+    if (!report || report.status === 'unknown' || reportAgeLabel(report, now, timeZone)) return 'unknown';
+    return report.status;
+}
+
+export function isSkiingStatus(status: ResortStatus) {
+    return status === 'open' || status === 'limited';
+}
+
+export function skiDayStatusText(status: ResortStatus, report: ResortReport | undefined, now: number) {
+    if (status === 'open') return 'Open today';
+    if (status === 'limited') return 'Limited today';
+    if (status !== 'unknown') return statusLabels[status];
+    if (!report) return 'No report';
+    if (report.status === 'unknown' || reportAgeLabel(report, now) === 'age unknown') return 'Status unverified';
+    return 'Stale report';
 }
 
 export function isFreshReport(report: ResortReport, now: number) {
@@ -141,8 +169,8 @@ function operationsTime(report: ResortReport) {
 }
 
 function selectOperations(previous: ResortReport, next: ResortReport, now: number) {
-    const wasCurrent = reportStatus(previous, now) !== 'unknown';
-    const isCurrent = reportStatus(next, now) !== 'unknown';
+    const wasCurrent = skiDayStatus(previous, now) !== 'unknown';
+    const isCurrent = skiDayStatus(next, now) !== 'unknown';
     if (wasCurrent !== isCurrent) return isCurrent ? next : previous;
     const previousTime = operationsTime(previous);
     const nextTime = operationsTime(next);
@@ -163,24 +191,28 @@ export function mergeResortReports(previous: ResortReport, next: ResortReport, n
     return { ...report, terrain: { ...terrain, retrievedAt } };
 }
 
-export function reportAgeLabel(report: ResortReport, now: number) {
-    if (isFreshReport(report, now)) return;
+export function reportAgeLabel(report: ResortReport, now: number, timeZone = areaTimeZones.get(report.areaId)) {
+    const retrievedAt = Date.parse(report.retrievedAt);
+    if (retrievedAt > now) return 'age unknown';
+    if (isFreshReport(report, now)) {
+        if (!timeZone) return 'age unknown';
+        return reportSkiDay(report, timeZone) === localSkiDate(now, timeZone) ? undefined : 'stale';
+    }
     const hasReportTime = report.reportedAt ? Date.parse(report.reportedAt) <= now
-        : report.reportedOn && report.validThrough && Date.parse(report.retrievedAt) <= now;
+        : report.reportedOn && report.validThrough;
     return hasReportTime ? 'stale' : 'age unknown';
 }
 
-export function matchesOperatingStatus(report: ResortReport | undefined, now: number, filter: StatusFilter) {
-    const status = reportStatus(report, now);
-    if (filter === 'open') return status === 'open' || status === 'limited';
+export function matchesOperatingStatus(status: ResortStatus, filter: StatusFilter) {
+    if (filter === 'open') return isSkiingStatus(status);
     if (filter === 'closed') return status === 'temporarily-closed' || status === 'season-closed';
     return status === 'unknown';
 }
 
-export function reportStatusText(report: ResortReport | undefined, now: number) {
+export function reportStatusText(report: ResortReport | undefined, now: number, timeZone?: string) {
     if (!report) return undefined;
     if (report.status === 'unknown') return statusLabels.unknown;
-    const age = reportAgeLabel(report, now);
+    const age = reportAgeLabel(report, now, timeZone);
     const label = statusLabels[report.status];
     return age ? `${label} (${age})` : label;
 }
@@ -190,8 +222,14 @@ export function terrainStatusText(item: z.infer<typeof terrainItem>, report: Res
     const labels = { open: 'Open', closed: 'Closed', 'on-hold': 'On hold', scheduled: 'Scheduled' } as const;
     const label = labels[item.status];
     if (item.updatedAt) {
-        const age = now - Date.parse(item.updatedAt);
-        return age < 0 || age > freshHours * hour ? `${label} (record stale)` : label;
+        const updatedAt = Date.parse(item.updatedAt);
+        const age = now - updatedAt;
+        const timeZone = areaTimeZones.get(report.areaId);
+        if (age < 0 || age > freshHours * hour || Date.parse(report.terrain?.retrievedAt ?? report.retrievedAt) > now) {
+            return `${label} (record stale)`;
+        }
+        if (!timeZone) return `${label} (age unknown)`;
+        return localSkiDate(updatedAt, timeZone) === localSkiDate(now, timeZone) ? label : `${label} (record stale)`;
     }
     const age = reportAgeLabel(report, now);
     return age ? `${label} (${age})` : label;

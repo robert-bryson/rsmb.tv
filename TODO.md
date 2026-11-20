@@ -223,9 +223,11 @@ Use the [ski-status guide](projects/ski-status/readme.md) for catalog rules, loc
 
 ### Release checks
 
-- [ ] Verify ski terrain on the first hosted preview. Match the validation report to the Amplify job and candidate revision. Check the byte ranges and Heavenly tooltips. [Release checks](projects/ski-status/readme.md#release-checks)
-- [ ] Enable the hosted conditions pilot. Collect observations for one week. Compare lift and trail counts with operator reports. Check the local ski-day cutoffs. [Publication guide](projects/ski-status/readme.md#conditions-publication)
-- [ ] Complete pass product coverage. Verify the Epic Day Pass 22- and 32-resort tiers and the remaining Ikon and Indy rules. [Product coverage](docs/reviews/2026-11-20-ski-status-first-release-work.md#pass-product-coverage)
+- [ ] Run the terrain validator on the hosted preview. Match the report to the Amplify job and candidate revision. Check the byte ranges and Heavenly tooltips. [Release checks](projects/ski-status/readme.md#release-checks)
+- [ ] Confirm hosted display and storage terms for the Banff Sunshine and Mt. Norquay feeds. [Pilot sources](projects/ski-status/readme.md#sources-and-pilot)
+- [ ] Resolve the Mt. Norquay XML error. Compare the working feed with the official conditions page. [Pilot sources](projects/ski-status/readme.md#sources-and-pilot)
+- [ ] Check **Ski today** against all three Rockies operators for seven ski days. Record report dates and differences in terrain counts. Check the release threshold. [Pilot checks](projects/ski-status/readme.md#conditions-publication)
+- [ ] Verify the Epic Day Pass 22- and 32-resort tiers. Complete the remaining Ikon and Indy product rules. [Product coverage](docs/reviews/2026-11-20-ski-status-first-release-work.md#pass-product-coverage)
 
 ### Catalog maintenance
 
@@ -239,11 +241,11 @@ Use the [ski-status guide](projects/ski-status/readme.md) for catalog rules, loc
 
 - [ ] Add missing official report links. Check that each link opens a report for the correct area. [Catalog files](projects/ski-status/readme.md#catalog)
 - [ ] Fill actual dates for areas with plans only. Use closing-day reports to confirm the last ski day. Record opening-day terrain when available. Record breaks in daily operation. [Season date rules](projects/ski-status/readme.md#opening-and-closing-dates)
-- [ ] Add scheduled North American report sources beyond Lake Louise. Verify the ski day, the scope of the counts, and the reuse terms. Compare counts and terrain status with operator reports. [Operating status and terrain](projects/ski-status/readme.md#operating-status-and-terrain)
+- [ ] Add scheduled feeds for more North American areas after the Rockies pilot. Verify the ski day, the scope of the counts, and the reuse terms. Compare each feed with the operator's report. [Operating status and terrain](projects/ski-status/readme.md#operating-status-and-terrain)
 
 ### Version 2
 
-- [ ] Build a season conditions calendar from daily observations. Remove repeat observations. Check the coverage before you show a summary. Show terrain availability, snow, and temperature by local ski date. [Season calendar design](projects/ski-status/readme.md#season-conditions-calendar)
+- [ ] Build a season conditions calendar from daily observations. Remove duplicate records. Check coverage before you show a summary. Show open terrain, snow, and temperature by local ski date. [Season calendar design](projects/ski-status/readme.md#season-conditions-calendar)
 - [ ] Add current weather and a five-day forecast to the conditions panel. Test local dates, units, and missing values. [Resort conditions](projects/ski-status/readme.md#resort-conditions-and-5-day-forecast)
 - [ ] Link to official resort trail maps. Mark trail areas with a verified access type. Show run length, maximum slope, and grooming status where sources supply them. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
 - [ ] Use operator directions to match resorts to access roads. Show agency road restrictions. Link to official agency and resort webcams. [Access routes and webcams](projects/ski-status/readme.md#access-routes-and-webcams)

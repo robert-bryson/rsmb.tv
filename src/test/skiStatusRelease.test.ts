@@ -119,12 +119,16 @@ describe('ski-status conditions and CSV', () => {
         expect(reportStatusText(partial, stale.now)).toBe('Limited (stale)');
         expect(reportAgeHours({ ...partial, reportedAt: undefined }, now)).toBeUndefined();
         expect(reportStatus({ ...partial, reportedAt: undefined }, now)).toBe('unknown');
-        expect(markerAppearance(resort, 'operatingStatus', undefined, conditions).color)
+        const today = { ...conditions, reports: new Map([[resort.id, {
+            ...partial, reportedAt: '2026-12-25T18:00:00Z', retrievedAt: '2026-12-25T18:05:00Z',
+        }]]) };
+        expect(markerAppearance(resort, 'operatingStatus', undefined, today).color)
             .toBe(markerLegend('operatingStatus', 'metric').find(entry => entry.label === 'Limited')?.color);
-        expect(markerAppearance(resort, 'operatingStatus', undefined, stale).color)
+        expect(markerAppearance(resort, 'operatingStatus', undefined, conditions).color)
             .toBe(markerAppearance(area('snowbird'), 'operatingStatus', undefined, stale).color);
-        expect(formatSkiStat(resort, 'reportLifts', 'metric', conditions)).toBe('0 / 2');
-        expect(formatSkiStat(resort, 'trailsOpenPct', 'metric', conditions)).toBe('50%');
+        expect(formatSkiStat(resort, 'reportLifts', 'metric', today)).toBe('0 / 2');
+        expect(formatSkiStat(resort, 'trailsOpenPct', 'metric', today)).toBe('50%');
+        expect(formatSkiStat(resort, 'reportLifts', 'metric', conditions)).toBe('0 / 2 (stale)');
         expect(formatSkiStat(resort, 'baseSnow', 'metric', conditions)).toBe('12–17 cm');
         expect(sortSkiAreas([area('snowbird'), resort], { key: 'reportLifts', direction: 'desc' }, conditions)[0]).toBe(resort);
     });
@@ -192,6 +196,8 @@ describe('ski-status pilot sources', () => {
             return openDataHubReport({ Items: [{ ...item, ...fields }] }, target, source.url, reportedAt);
         }
         expect(read()).toMatchObject({ status: 'open', reportedAt: item.LastUpdate });
+        expect(read({ LastUpdate: '2026-12-24T23:30:00Z' }))
+            .toMatchObject({ status: 'open', reportedOn: '2026-12-25', reportedAt: '2026-12-24T23:30:00Z' });
         expect(read({ totalskislopes: '10' }).status).toBe('limited');
         expect(read({ openskilift: '0x1', LastUpdate: '2026-12-25 invalid' })).toMatchObject({
             status: 'unknown', reportedOn: undefined, lifts: { total: 2, open: undefined },

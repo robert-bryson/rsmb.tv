@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { reportSnapshotSchema, forecastSnapshotSchema, type ResortReport } from '../../../src/features/ski-status/conditions.ts';
+import { localSkiDate } from '../../../src/features/ski-status/localSkiDate.ts';
 import { isoTime } from '../../../src/features/ski-status/schemas.ts';
 
 export const pilotAreas = [
@@ -61,7 +62,10 @@ function numberOrUnknown(value?: string | null) {
 function sourceDate(value?: string | null) {
     if (!value || value.startsWith('0001-')) return;
     if (isoDate.safeParse(value).success) return value;
-    if (sourceTime.safeParse(value).success) return value.slice(0, 10);
+    if (!sourceTime.safeParse(value).success) return;
+    if (!isoTime.safeParse(value).success) return value.slice(0, 10);
+    const instant = Date.parse(value);
+    if (Number.isFinite(instant)) return localSkiDate(instant, 'Europe/Rome');
 }
 
 function openCounts(open: string | null, total: string | null) {

@@ -8,7 +8,6 @@
 }
 
 .ski-area-popup-hover .maplibregl-popup-content { pointer-events: none; }
-.ski-area-popup-selected { z-index: 1; }
 .ski-area-popup[class*="maplibregl-popup-anchor-top"] .maplibregl-popup-tip { border-bottom-color: var(--color-zinc-900); }
 .ski-area-popup[class*="maplibregl-popup-anchor-bottom"] .maplibregl-popup-tip { border-top-color: var(--color-zinc-900); }
 .ski-area-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--color-zinc-900); }

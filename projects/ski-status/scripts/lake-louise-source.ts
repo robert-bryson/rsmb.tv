@@ -1,10 +1,9 @@
-import { DOMParser } from '@xmldom/xmldom';
 import { reportSnapshotSchema, type ResortReport } from '../../../src/features/ski-status/conditions.ts';
 import { isoTime } from '../../../src/features/ski-status/schemas.ts';
+import { conditionsXmlRoot, fetchConditionsXml } from './conditions-xml.ts';
 
 const feedUrl = 'https://lamp10.skilouise.com/app/mtnxml.php';
 const reportUrl = 'https://www.skilouise.com/snow-conditions/';
-const maxXmlBytes = 256 * 1024;
 export const lakeLouiseBase = { areaId: 'lake-louise', location: 'Lake Louise base', latitude: 51.44172, longitude: -116.16257 } as const;
 
 type TerrainItem = NonNullable<ResortReport['terrain']>['items'][number];
@@ -20,10 +19,7 @@ function numberField(value: string | null | undefined, minimum = 0) {
 }
 
 export function lakeLouiseReport(xml: string, retrievedAt: string) {
-    if (/<!DOCTYPE/i.test(xml)) throw Error('Lake Louise XML contains a document type');
-    const document = new DOMParser({ onError: (level, message) => { throw Error(`${level}: ${message}`); } })
-        .parseFromString(xml, 'text/xml');
-    const root = document.documentElement;
+    const root = conditionsXmlRoot(xml, 'Lake Louise');
     if (root?.tagName !== 'report' || root.getAttribute('name') !== 'The Lake Louise Ski Resort' || root.getAttribute('units') !== 'metric') {
         throw Error('Expected a metric Lake Louise resort report');
     }
@@ -96,16 +92,6 @@ export function lakeLouiseReport(xml: string, retrievedAt: string) {
 }
 
 export async function fetchLakeLouiseReport() {
-    const response = await fetch(feedUrl, { signal: AbortSignal.timeout(30_000), headers: { accept: 'application/xml' }, redirect: 'error' });
-    if (!response.ok) throw Error(`Lake Louise returned HTTP ${response.status}`);
-    if (!response.body) throw Error('Lake Louise XML response is empty');
-    const decoder = new TextDecoder('utf-8', { fatal: true });
-    let bytes = 0;
-    let xml = '';
-    for await (const chunk of response.body) {
-        bytes += chunk.byteLength;
-        if (bytes > maxXmlBytes) throw Error('Lake Louise XML response exceeds the size limit');
-        xml += decoder.decode(chunk, { stream: true });
-    }
-    return lakeLouiseReport(xml + decoder.decode(), new Date().toISOString());
+    const { xml, retrievedAt } = await fetchConditionsXml(feedUrl, 'Lake Louise');
+    return lakeLouiseReport(xml, retrievedAt);
 }

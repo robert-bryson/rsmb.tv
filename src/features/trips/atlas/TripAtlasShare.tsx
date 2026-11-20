@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { trackAnalyticsEvent } from '../../../utils/analytics';
+import { shareLink } from '../../../utils/shareLink';
+
+const shareOutcomes = {
+    shared: ['native', 'handed-off'], cancelled: ['native', 'cancelled'], copied: ['clipboard', 'copied'], manual: ['manual', 'manual'],
+} as const;
 
 export function TripAtlasShare({ getUrl }: { getUrl: () => string }) {
     const [status, setStatus] = useState<'idle' | 'sharing' | 'copied' | 'manual'>('idle');
@@ -19,24 +24,13 @@ export function TripAtlasShare({ getUrl }: { getUrl: () => string }) {
         pending.current = true;
         const link = getUrl();
         const pathname = window.location.pathname;
-        const record = (method: 'native' | 'clipboard' | 'manual', outcome: 'handed-off' | 'copied' | 'cancelled' | 'manual') =>
-            trackAnalyticsEvent('share-action', { feature: 'adv-atlas', method, outcome }, pathname);
         setUrl(link);
         setStatus('sharing');
         try {
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: 'ADV Atlas', url: link });
-                    record('native', 'handed-off');
-                    setStatus('idle');
-                    return;
-                } catch (error) {
-                    if (error instanceof DOMException && error.name === 'AbortError') { record('native', 'cancelled'); setStatus('idle'); return; }
-                }
-            }
-            if (!navigator.clipboard?.writeText) { record('manual', 'manual'); setStatus('manual'); return; }
-            try { await navigator.clipboard.writeText(link); record('clipboard', 'copied'); setStatus('copied'); }
-            catch { record('manual', 'manual'); setStatus('manual'); }
+            const result = await shareLink('ADV Atlas', link);
+            const [method, outcome] = shareOutcomes[result];
+            trackAnalyticsEvent('share-action', { feature: 'adv-atlas', method, outcome }, pathname);
+            setStatus(result === 'manual' || result === 'copied' ? result : 'idle');
         } finally { pending.current = false; }
     };
     return <>
