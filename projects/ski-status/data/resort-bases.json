@@ -1,0 +1,2688 @@
+{
+  "buildTime": "2026-11-16T01:43:51.452Z",
+  "license": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "bases": {
+    "3-zinnen-dolomites": {
+      "coordinates": [
+        12.35396,
+        46.696292
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c443cc1044843c9e8087e6c40fe118eb8d8fa18b"
+    },
+    "afton-alps": {
+      "coordinates": [
+        -92.787798,
+        44.85724
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=37f4ea452662caed6a34272742ddce97f1a4734a"
+    },
+    "alpe-cimbra": {
+      "coordinates": [
+        11.200203,
+        45.881001
+      ],
+      "name": "Fondo Piccolo",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=712f8e147bed9e60894d62fb3dad2619ac81966a"
+    },
+    "alpe-lusia-san-pellegrino": {
+      "coordinates": [
+        11.68515,
+        46.35609
+      ],
+      "name": "Piavac",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=4984dcad2a0d405ed69fa07204fa4e4398f3bdaa"
+    },
+    "alpental": {
+      "coordinates": [
+        -121.42805,
+        47.445682
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=012af6135e558d614d71a2af51f3b2a0f8fcf158"
+    },
+    "alta": {
+      "coordinates": [
+        -111.637994,
+        40.587955
+      ],
+      "name": "Wildcat base",
+      "source": "https://www.alta.com/getting-here",
+      "kind": "entrance"
+    },
+    "alta-badia": {
+      "coordinates": [
+        11.899041,
+        46.556183
+      ],
+      "name": "Pre dai Corf",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=04d84a3789b94eba19ce3c951fece8117d931c03"
+    },
+    "aomori-spring-ski-resort": {
+      "coordinates": [
+        140.282214,
+        40.695136
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e0494e78dbf7a68f9f2df5e72370b0797b4f282c"
+    },
+    "arabba-marmolada": {
+      "coordinates": [
+        11.873486,
+        46.495386
+      ],
+      "name": "Portados",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ab7961704073ef3c88692eee6638c6622112defc"
+    },
+    "arapahoe-basin": {
+      "coordinates": [
+        -105.873538,
+        39.64136
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1e281ff389476a82150ad7ef7be5f1ea48edd5e5"
+    },
+    "arizona-snowbowl": {
+      "coordinates": [
+        -111.709506,
+        35.330344
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=baea9cfef6687ce48eab4290f136798ab2791ea9"
+    },
+    "attitash-mountain-resort": {
+      "coordinates": [
+        -71.232703,
+        44.082
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=513237f93d127ca8e5cdbcd527ac3c99cef7c6ed"
+    },
+    "bad-kleinkirchheim": {
+      "coordinates": [
+        13.783822,
+        46.812432
+      ],
+      "name": "Bachlift Talstation",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b0a93ffd62df6dae4750a71875f77e24250d4169"
+    },
+    "banff-sunshine": {
+      "coordinates": [
+        -115.763609,
+        51.114965
+      ],
+      "name": "Sunshine Gondola base",
+      "source": "https://www.skibanff.com/plan/getting-here/parking",
+      "kind": "entrance"
+    },
+    "baqueira-beret": {
+      "coordinates": [
+        0.94672,
+        42.699681
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=125d02338620dc079d5d635595a099370161bf83"
+    },
+    "bear-creek": {
+      "coordinates": [
+        -75.626504,
+        40.475446
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=3078e997deb12b6686a9f0db8a3865acd3c0b733"
+    },
+    "bear-mountain": {
+      "coordinates": [
+        -116.860062,
+        34.227305
+      ],
+      "name": "Midway Chair 5 Bottom Portal",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=78bac1237b378a398d712ba2cc962ddf9d1c6479"
+    },
+    "bear-valley-mountain-resort": {
+      "coordinates": [
+        -120.04526,
+        38.49187
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f357cc18ead38a393c55cf27921fe05913dc33e1"
+    },
+    "beaver-creek-resort": {
+      "coordinates": [
+        -106.516967,
+        39.602728
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1185f0916cf0cbf03f6b75c9d1449b86afb1516d"
+    },
+    "beaver-mountain": {
+      "coordinates": [
+        -111.541093,
+        41.967619
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c3bb5fd130638c068edb6cd5198a50f113be4425"
+    },
+    "beidahu-ski-resort": {
+      "coordinates": [
+        126.614873,
+        43.416862
+      ],
+      "name": "E索",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1de6206a0bf70c0499d14cff30a1db68d3b89a1f"
+    },
+    "beito-resort": {
+      "coordinates": [
+        8.904747,
+        61.249504
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=63a16704ef88cc64ec56bf3c96af61911ababfff"
+    },
+    "belleayre-mountain": {
+      "coordinates": [
+        -74.501216,
+        42.140511
+      ],
+      "name": "Catskill Thunder Gondola bottom terminal",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f16be64558f5124a26f4797260671c96ad2fde8b"
+    },
+    "bergbahnen-hohsaas": {
+      "coordinates": [
+        7.964599,
+        46.138703
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=8556f7c962b73f8cca10ac4ef41b9e40a5d5ae23"
+    },
+    "big-powderhorn": {
+      "coordinates": [
+        -90.094532,
+        46.509004
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=8c33304ed70a4ebdf6fe537e495e8d48c83cb58b"
+    },
+    "big-sky-resort": {
+      "coordinates": [
+        -111.433633,
+        45.278821
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d4086b2e9d44022ca27bde811816b5a4fc859c87"
+    },
+    "black-mountain-of-maine": {
+      "coordinates": [
+        -70.614453,
+        44.577777
+      ],
+      "name": "Novice Lift",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=3e195ef86e8d0357faac23bea3775f9af661d8d5"
+    },
+    "blue-knob-all-season-resort": {
+      "coordinates": [
+        -78.553964,
+        40.298791
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=bb999437b96b0531dd23d01aff6bf9462cf94e3c"
+    },
+    "blue-mountain-resort": {
+      "coordinates": [
+        -75.513362,
+        40.82099
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=4bca16dce4783e4eab06c9a39ee02168c67ca488"
+    },
+    "blue-mountain-resort-on": {
+      "coordinates": [
+        -80.31319,
+        44.502185
+      ],
+      "name": "Silver Bullet Express",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c5f70b639b76f6496d08a74e0691d5d71836cb4d"
+    },
+    "bluewood": {
+      "coordinates": [
+        -117.851716,
+        46.081291
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9de44d36058588b0bb8da99912b97a5c3f388191"
+    },
+    "bogus-basin": {
+      "coordinates": [
+        -116.101591,
+        43.763947
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f0fca4018306a921928ebc2f04cfd1ac82ba1ef2"
+    },
+    "bolton-valley-resort": {
+      "coordinates": [
+        -72.848938,
+        44.4204
+      ],
+      "name": "Vista Quad",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=185277c7c66ee582fb01243753ecfe25aa3ea215"
+    },
+    "boston-mills": {
+      "coordinates": [
+        -81.56514,
+        41.264521
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=cd7f28de9a4b85aff0761e9af449c5e6c9626168"
+    },
+    "bousquet-mountain-0": {
+      "coordinates": [
+        -73.277089,
+        42.418656
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=031a23bc9ebb837beed75b7c4237a2d966bb1684"
+    },
+    "boyne-mountain": {
+      "coordinates": [
+        -84.932401,
+        45.164326
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=449aa402eafd646e49025b6afbcd4962c77096e3"
+    },
+    "brandywine": {
+      "coordinates": [
+        -81.556183,
+        41.285635
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=abc97db78f6238663faf95a23b1bce2f4f6bf1c6"
+    },
+    "breckenridge-ski-resort": {
+      "coordinates": [
+        -106.066151,
+        39.479676
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=27206747b07d41c64659c2ffd8753c554127752d"
+    },
+    "bretton-woods": {
+      "coordinates": [
+        -71.460786,
+        44.259412
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=92fcb6dd76ddb1d1b1374e2d308a6f4939d46817"
+    },
+    "brevent-flegere": {
+      "coordinates": [
+        6.861469,
+        45.944111
+      ],
+      "name": "Parsa",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c2fba992cc1711880d5f8d8ffa661f71eab950cf"
+    },
+    "brian-head-resort": {
+      "coordinates": [
+        -112.849047,
+        37.702035
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d17554e2aaa5a02bbc98023dd1f5cf4e17c6107e"
+    },
+    "bridger-bowl": {
+      "coordinates": [
+        -110.897155,
+        45.817315
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fef67ddf6ff39f1d90e8b4152933479fe7258284"
+    },
+    "brighton-resort": {
+      "coordinates": [
+        -111.583054,
+        40.598739
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ab2b5807422f8a412c013e32e73b521f76a65d98"
+    },
+    "bristol-mountain": {
+      "coordinates": [
+        -77.405119,
+        42.74435
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=69a316b32d68d678d82b8614d9c6b9e51e06cae9"
+    },
+    "bromont-montagne-dexperiences": {
+      "coordinates": [
+        -72.637355,
+        45.301954
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=a87ccf8c2949bc2ea5db0cf94c7c95fa6da0c874"
+    },
+    "brundage-mountain-resort": {
+      "coordinates": [
+        -116.155399,
+        45.004385
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9173efad0a9aad95e9b478bb91a640ea237d284f"
+    },
+    "bryce-resort": {
+      "coordinates": [
+        -78.766456,
+        38.81698
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=03e8538093aa18eebbfc0cc34aea9e72737a5567"
+    },
+    "burke-mountain-resort": {
+      "coordinates": [
+        -71.91561,
+        44.587455
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=78dff31bfb6ad8ca4aff38c381f44a301e7e765b"
+    },
+    "calabogie-peaks-resort": {
+      "coordinates": [
+        -76.784252,
+        45.273939
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f6950418728474f314474e4a9f083b8928636181"
+    },
+    "camelback-mountain-resort": {
+      "coordinates": [
+        -75.35577,
+        41.050725
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f34b05b63db9dcbcc7e3ba106a82072ec6a197f9"
+    },
+    "camp-fortune": {
+      "coordinates": [
+        -75.850647,
+        45.508662
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=99d183d639efdd0bbec46e0d9acf125ad46d6bdb"
+    },
+    "canmore-ski-village": {
+      "coordinates": [
+        142.534802,
+        43.72916
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5c741ffb667ae43a6d26d369c3d276872fdeaf69"
+    },
+    "cannon-mountain": {
+      "coordinates": [
+        -71.701716,
+        44.176916
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fc60aa0866f0d633caaf1891d089663d53d43ab4"
+    },
+    "castle-mountain-resort": {
+      "coordinates": [
+        -114.415591,
+        49.318188
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=578c669494c02e675c7ad8d418a14acc5d7d6f68"
+    },
+    "cataloochee-ski-area": {
+      "coordinates": [
+        -83.089665,
+        35.562188
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=652698804287694a17b8250681e7a5080e4f4f4d"
+    },
+    "centre-vorlage": {
+      "coordinates": [
+        -75.936466,
+        45.645785
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fe2866748ad2d4d5363fc65ebf6d1a0f5395cd53"
+    },
+    "cherry-peak": {
+      "coordinates": [
+        -111.757138,
+        41.926061
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=42f02a37e6d5cf0a434b48baefa3745574a5067f"
+    },
+    "china-peak": {
+      "coordinates": [
+        -119.154901,
+        37.23528
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9e118f4eb36fb34e987c7a3ddd7f2d976b6a7443"
+    },
+    "cooper": {
+      "coordinates": [
+        -106.300104,
+        39.360239
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=caf0bd6c118f5974144ef382d4a267f5aefb2366"
+    },
+    "copper-mountain": {
+      "coordinates": [
+        -106.162741,
+        39.499426
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0bab3102857cf4c7243d3db844c283a24413fa28"
+    },
+    "cortina-d-ampezzo": {
+      "coordinates": [
+        12.120962,
+        46.535193
+      ],
+      "name": "Lacedel",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=02196b1e0dd473176e265318bc9c06e22df53ace"
+    },
+    "corvatsch": {
+      "coordinates": [
+        9.800715,
+        46.426089
+      ],
+      "name": "Rabgiusa",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=13756027a3c85c2f3e1b8742865baa4f2469a277"
+    },
+    "corviglia": {
+      "coordinates": [
+        9.82577,
+        46.51577
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f9beaf4e37ef88b422b9ee4aa2ae9224f10afd02"
+    },
+    "courchevel": {
+      "coordinates": [
+        6.633615,
+        45.414792
+      ],
+      "name": "Jardin Alpin",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=23365b5cea5dad5b58d9ffc5506ff573f96cb70b"
+    },
+    "courmayeur-mont-blanc": {
+      "coordinates": [
+        6.943455,
+        45.790427
+      ],
+      "name": "Checrouit",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f93e740601821a663803ec50529854339b744b27"
+    },
+    "crans-montana": {
+      "coordinates": [
+        7.4953,
+        46.325786
+      ],
+      "name": "Les Marolires",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7764d597cda909bb1bc7fd66a07bbfa6bb8ab695"
+    },
+    "crested-butte-mountain-resort": {
+      "coordinates": [
+        -106.965235,
+        38.899234
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c7ba44969ddc615ea94968125fc96d9b584c388f"
+    },
+    "crystal-mountain": {
+      "coordinates": [
+        -121.47528,
+        46.934612
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=89f555b5b8a62c0c002adaa796997b635f38e6da"
+    },
+    "cypress-mountain": {
+      "coordinates": [
+        -123.203579,
+        49.39729
+      ],
+      "name": "Lions Express Quad",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7599cb6e98e206b310f1be3d95fe1e27fa08f307"
+    },
+    "dartmouth-skiway": {
+      "coordinates": [
+        -72.099604,
+        43.788767
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=85d62e305294135550ef07bdfbb7094ec1d9862c"
+    },
+    "deer-valley-resort": {
+      "coordinates": [
+        -111.491102,
+        40.619478
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b7a200210f3dac1b9a5ca7b71429e6205c8c413e"
+    },
+    "destination-owls-head": {
+      "coordinates": [
+        -72.297939,
+        45.073255
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=bf2acdeaa2a1f3d3bd04ac406819c73b6165a33c"
+    },
+    "diavolezza-lagalb": {
+      "coordinates": [
+        9.983451,
+        46.440987
+      ],
+      "name": "Bernina Diavolezza (Talstat.)",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b46b8286189d83f14e1d35e75381a2f4ac231f9b"
+    },
+    "dodge-ridge": {
+      "coordinates": [
+        -119.949554,
+        38.189126
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=162525ff9a2a65810a602b74f338303d1bb9ea38"
+    },
+    "dynaland": {
+      "coordinates": [
+        136.867107,
+        35.990606
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=37743c0eb90f720f91c5b52ca96a60ad4e6fa4f0"
+    },
+    "eagle-point": {
+      "coordinates": [
+        -112.386239,
+        38.317109
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=72510c18b4eb758d0daab8290bda044c27c5405f"
+    },
+    "eaglecrest-ski-area": {
+      "coordinates": [
+        -134.512331,
+        58.274245
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=2820cb0c70bf04efad30d45b4e2f15538927bdd9"
+    },
+    "engstligenalp": {
+      "coordinates": [
+        7.568854,
+        46.437745
+      ],
+      "name": "Skilift Dossen",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=74b11097056348d4cf78c158c5ecec65a67ed4c6"
+    },
+    "fairmont-hot-springs": {
+      "coordinates": [
+        -115.825055,
+        50.339204
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=2d18333956794a17b18acdc7c2bbafe63e79ab1b"
+    },
+    "falls-creek": {
+      "coordinates": [
+        147.27313,
+        -36.865539
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=a280690db943a1192a5e92c81707f6ab19b037ec"
+    },
+    "fernie-alpine-resort": {
+      "coordinates": [
+        -115.087878,
+        49.463145
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ecea3ea316650e534c05c56dca021977818dc214"
+    },
+    "folgarida-marilleva": {
+      "coordinates": [
+        10.847103,
+        46.289147
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=29b30f99e12f6399919a7bbd34ab3ad948bf6ede"
+    },
+    "furano-ski-resort": {
+      "coordinates": [
+        142.353444,
+        43.325468
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e197429644be3ecdfd0d5ef7fb5703a1b2754a22"
+    },
+    "geto-kogen": {
+      "coordinates": [
+        140.905658,
+        39.237406
+      ],
+      "name": "ゴンドラ乗降場",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f1abda339137027416ba37a0de3d2801246ef9a6"
+    },
+    "glencoe-mountain-resort": {
+      "coordinates": [
+        -4.835215,
+        56.623505
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fafa43aac37c73502229a75ea9bd44ad2c66dcba"
+    },
+    "glenshee-ski-centre": {
+      "coordinates": [
+        -3.415734,
+        56.887309
+      ],
+      "name": "Baddoch Lower",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=92ec4cdfb514f61000d0f4c9344fc1484d452901"
+    },
+    "grand-targhee-resort": {
+      "coordinates": [
+        -110.956945,
+        43.788815
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=84ddf46f67c0fca577dc969188dc189f1c7a040f"
+    },
+    "grands-montets": {
+      "coordinates": [
+        6.942052,
+        45.967433
+      ],
+      "name": "Grand Marmotton",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=529fcab6ce37f59505fcbd53b7904688bc4b635f"
+    },
+    "great-bear-ski-valley": {
+      "coordinates": [
+        -96.665295,
+        43.577768
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=809a4c2de36f03cff92fbad4c790974fae0b9e78"
+    },
+    "great-divide-ski-area": {
+      "coordinates": [
+        -112.313887,
+        46.753156
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=30c18ba69d27fcd201067270535c9e43075a79e3"
+    },
+    "grouse-mountain": {
+      "coordinates": [
+        -123.080425,
+        49.381595
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=167ec497e42bcb658ecaa281e3569050cc073b65"
+    },
+    "gunstock-mountain-resort": {
+      "coordinates": [
+        -71.366081,
+        43.540584
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=cefd1da1b8fdb384a00984e693f0726d403ddbf1"
+    },
+    "hakuba-47": {
+      "coordinates": [
+        137.822828,
+        36.679485
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=6d8c8a9a4114428e603d1c434b147d1217879f85"
+    },
+    "hakuba-cortina": {
+      "coordinates": [
+        137.888317,
+        36.777212
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b602362c1e045f1cdc1c5aa731c1ee2224205518"
+    },
+    "hakuba-goryu": {
+      "coordinates": [
+        137.834977,
+        36.663669
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c841118d2b5eed99ac5e30f569bb0f2e6ba7892a"
+    },
+    "hakuba-happo-one": {
+      "coordinates": [
+        137.821405,
+        36.702223
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=2badaaea50fcf2640ddea5311798bbd7e2c17b7c"
+    },
+    "hakuba-iwatake": {
+      "coordinates": [
+        137.857142,
+        36.716882
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=18cba9125586b2701f80908d351556655f8f6c80"
+    },
+    "hakuba-norikura-onsen": {
+      "coordinates": [
+        137.875597,
+        36.764425
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9e9a84ef97c366ed523b405845fa42051c9d578d"
+    },
+    "hakuba-sanosaka": {
+      "coordinates": [
+        137.841805,
+        36.628197
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ece5006c66d60ddde5df1f6ccf9d2f6a3e8bcb52"
+    },
+    "heavenly": {
+      "coordinates": [
+        -119.939702,
+        38.934956
+      ],
+      "name": "California Main Lodge",
+      "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+      "kind": "entrance"
+    },
+    "hidden-valley-ski-resort": {
+      "coordinates": [
+        -90.652728,
+        38.536569
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=05913b1b97919918fed5906bd52fa995e42a2acf"
+    },
+    "hintertux-glacier": {
+      "coordinates": [
+        11.663459,
+        47.096945
+      ],
+      "name": "Gletscherbus 2",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fd2502303c53c45c2a6c5dd332f5105bb3c95179"
+    },
+    "hirugano-kogen-ski-resort": {
+      "coordinates": [
+        136.908645,
+        36.005152
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=480cfebb3173d2206cd0a52595d0e76eec07ef50"
+    },
+    "hochfuegen-hochzillertal": {
+      "coordinates": [
+        11.817036,
+        47.265072
+      ],
+      "name": "4er Wedelexpress",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=99cef648d8c6f7231b60448092fb29de26069d0f"
+    },
+    "hochzeiger-bergbahnen-pitztal-ag": {
+      "coordinates": [
+        10.758742,
+        47.152284
+      ],
+      "name": "Hochzeigerbahn",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f3b4e79c767462bfb7b253fd94d2840cc52d7e1a"
+    },
+    "hodaigi-mountain-resort": {
+      "coordinates": [
+        139.079318,
+        36.836847
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e68137ff7e6ad28d28c8260d2a455171182224b1"
+    },
+    "hoodoo-ski-area": {
+      "coordinates": [
+        -121.872577,
+        44.408895
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=acd006bbb7f5cc2bb54086eb2f4ff8475af88e28"
+    },
+    "hotham": {
+      "coordinates": [
+        147.141389,
+        -36.980782
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=aea2abf24d2ee29ac2721b3053ab816c21bb39ae"
+    },
+    "huff-hills-ski-area": {
+      "coordinates": [
+        -100.723629,
+        46.626268
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=42d033204c78068e53d11d5473da35e2f068c3fb"
+    },
+    "hunt-hollow-ski-club": {
+      "coordinates": [
+        -77.478207,
+        42.645455
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7aea477834febc46e7505d1bc249d8824b9b2b13"
+    },
+    "hunter-mountain": {
+      "coordinates": [
+        -74.208297,
+        42.204526
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0220b9172bf819d9b5fbd07c2f2218a8cfabb864"
+    },
+    "innsbruck-region": {
+      "coordinates": [
+        11.118829,
+        46.994958
+      ],
+      "name": "Gamsgarten",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=99f28adeace732787655c845a53fcce7ab4b8129"
+    },
+    "jackson-hole-mountain-resort": {
+      "coordinates": [
+        -110.82789,
+        43.587543
+      ],
+      "name": "Teton Village tram base",
+      "source": "https://www.jacksonhole.com/dining/tram-dock",
+      "kind": "entrance"
+    },
+    "jay-peak-resort": {
+      "coordinates": [
+        -72.505585,
+        44.929136
+      ],
+      "name": "Bonaventure",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e1a32fce69402dd1c018c22b0216990d077531fa"
+    },
+    "june-mountain": {
+      "coordinates": [
+        -119.082496,
+        37.761682
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1f94daed2b308fa325be064eebc82535fcc3861b"
+    },
+    "kamui-ski-links": {
+      "coordinates": [
+        142.187606,
+        43.703922
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0e314e146549ce5cb2ba2514fa6b0630757aa0f6"
+    },
+    "kandatsu-snow-resort": {
+      "coordinates": [
+        138.808346,
+        36.907198
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=04c79ac88a7f8a3980dcffa7e5d1933dc2862e2f"
+    },
+    "kappl": {
+      "coordinates": [
+        10.35977,
+        47.067605
+      ],
+      "name": "Alblittbahn",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5b89c3ba88e8c1263685a34ee3ddeea390a37874"
+    },
+    "kashimayari": {
+      "coordinates": [
+        137.825616,
+        36.597346
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=351e73f443295e581a711c45d697a82006f24352"
+    },
+    "kelly-canyon": {
+      "coordinates": [
+        -111.626751,
+        43.645947
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=404f9961432a5c4db64c85b97591e6bbe7c7f8fc"
+    },
+    "killington": {
+      "coordinates": [
+        -72.803471,
+        43.617793
+      ],
+      "name": "K-1 base lodge",
+      "source": "https://www.killington.com/the-mountain/mountain-info/trail-maps",
+      "kind": "entrance"
+    },
+    "kirkwood-mountain-resort": {
+      "coordinates": [
+        -120.066252,
+        38.68271
+      ],
+      "name": "The Wall Base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=718db266e6e9ec76a5003a404aec69a657b3ab33"
+    },
+    "kitzbuehel": {
+      "coordinates": [
+        12.360143,
+        47.408808
+      ],
+      "name": "Sonnenrast",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1eeb56a80185ff1dff644357f9f747842d0f620c"
+    },
+    "kitzsteinhorn": {
+      "coordinates": [
+        12.698757,
+        47.219862
+      ],
+      "name": "Langwiedbahn",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=bc0361849d0e6e33ef5d9cd035522200a3125df1"
+    },
+    "kronplatz": {
+      "coordinates": [
+        11.963306,
+        46.722993
+      ],
+      "name": "Costa",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0295b1657f53d93d0eb1fd692993c0d2909d6d73"
+    },
+    "krvavec-ski-resort": {
+      "coordinates": [
+        14.520962,
+        46.297368
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1c25cf660c84f21364c1905e7eb788e3789ccfbd"
+    },
+    "lake-louise": {
+      "coordinates": [
+        -116.160997,
+        51.442199
+      ],
+      "name": "Grizzly Express gondola base",
+      "source": "https://www.skilouise.com/accessibility/",
+      "kind": "entrance"
+    },
+    "lake-songhua-resort": {
+      "coordinates": [
+        126.619497,
+        43.682885
+      ],
+      "name": "C索底站",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=a61289e1a39b5908befa9e06cadb0c036a7e38b9"
+    },
+    "le-massif": {
+      "coordinates": [
+        -70.573886,
+        47.281215
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ef6c8dc160b9330d799cf95bf76ae29b58d33c5c"
+    },
+    "les-7-laux": {
+      "coordinates": [
+        6.016722,
+        45.264704
+      ],
+      "name": "Blanchons",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c349bb235a74def4c527ddf3fdb200ce99c18fe2"
+    },
+    "les-houches": {
+      "coordinates": [
+        6.762623,
+        45.878018
+      ],
+      "name": "Col de Voza",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ea9dfe26da36c33e8cf007b22b628c153ac69ab4"
+    },
+    "les-menuires": {
+      "coordinates": [
+        6.538988,
+        45.322502
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=075db540453d13b0e660135085f40523940b95ba"
+    },
+    "leukerbad-torrent-ski-resort-gemmi-resort": {
+      "coordinates": [
+        7.649671,
+        46.370771
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=cecc6336ead1c4d3fd9e805c04004885f10e32f2"
+    },
+    "levi-ski-resort": {
+      "coordinates": [
+        24.824502,
+        67.791831
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=6ff3d800655f463f2ea8d24980630b01000c8c49"
+    },
+    "loch-lomond": {
+      "coordinates": [
+        -89.346618,
+        48.293542
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5795ddd47e05fd5a3d36ff4d9f8ae27b95c3efe1"
+    },
+    "loveland-ski-area": {
+      "coordinates": [
+        -105.905883,
+        39.676324
+      ],
+      "name": "Ptarmigan Load",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1dd2321e1ddaeaba8ad3d040cd145bd2ad08c028"
+    },
+    "lutsen-mountains": {
+      "coordinates": [
+        -90.7174,
+        47.661099
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=952dd7481a7a4aa784a4c61a385afa70238836a3"
+    },
+    "mad-river-glen": {
+      "coordinates": [
+        -72.919519,
+        44.202312
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=556e089aeadb5ea6194bd0456cb5548a0fa22bd6"
+    },
+    "madarao-mountain-resort": {
+      "coordinates": [
+        138.284779,
+        36.850408
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b7e060a1861cfe2b1eadc171cebdc5d145178d5b"
+    },
+    "madonna-di-campiglio": {
+      "coordinates": [
+        10.836308,
+        46.235789
+      ],
+      "name": "Fortini express",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fd830ae87b04dcc7ab252d9b7f21cb21029dd61f"
+    },
+    "magic-mountain-idaho": {
+      "coordinates": [
+        -114.28607,
+        42.187118
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=26eda109442576aa257d97624b341a941867f96e"
+    },
+    "magic-mountain-ski-area": {
+      "coordinates": [
+        -72.772435,
+        43.200998
+      ],
+      "name": "Black Line Quad",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b46091ab4d973392d23af15f0bd86f684c91bae2"
+    },
+    "maiko-resort": {
+      "coordinates": [
+        138.825105,
+        36.98192
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0758851e7566cebfd9801159688e5c39562cb46e"
+    },
+    "mala-upa": {
+      "coordinates": [
+        15.817614,
+        50.728373
+      ],
+      "name": "U Kostela",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=08d4ac312d1e23ecbec6df4238207d4fe15f4ce3"
+    },
+    "mammoth-mountain": {
+      "coordinates": [
+        -119.037773,
+        37.651061
+      ],
+      "name": "Main Lodge",
+      "source": "https://www.mammothmountain.com/on-the-mountain/base-lodges",
+      "kind": "entrance"
+    },
+    "marble-mountain": {
+      "coordinates": [
+        -57.832438,
+        48.94748
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=3cd3dae98351a0c8d84257d5263926e5d557b028"
+    },
+    "marmot-basin": {
+      "coordinates": [
+        -118.083641,
+        52.801556
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5e819ebcf0e2f7b4cee8123304ed019d6eff2e59"
+    },
+    "massanutten-resort": {
+      "coordinates": [
+        -78.754672,
+        38.403107
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=08bcd7a173c04efe03440e2dde2cb71e48c06bf8"
+    },
+    "mayrhofen": {
+      "coordinates": [
+        11.808271,
+        47.183447
+      ],
+      "name": "Talstation 8er Tappenalmbahn",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0e7ba1fd10a2afbc6e188d1f9936f843cc665583"
+    },
+    "mcintyre-ski-area": {
+      "coordinates": [
+        -71.441302,
+        43.005765
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e7bdf3f0770b5330ef22f507b3c5b445550bd296"
+    },
+    "mona-yongpyong": {
+      "coordinates": [
+        128.68063,
+        37.644386
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=eeba070400ae4c5176b1736be9d42afb9457068e"
+    },
+    "monarch-mountain": {
+      "coordinates": [
+        -106.332988,
+        38.512191
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=cbf5bcc5f265cec9368d353e2ab6ecb6c9e41a4c"
+    },
+    "mont-kanasuta": {
+      "coordinates": [
+        -79.403273,
+        48.175935
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=381c03a5b99ba84aec5abd3c81d01ee1d3b49e10"
+    },
+    "mont-orford": {
+      "coordinates": [
+        -72.221775,
+        45.316908
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=443f083a450bb1a2f3beb7248d51c7c195c55a97"
+    },
+    "mont-ripley-ski-area": {
+      "coordinates": [
+        -88.55952,
+        47.1278
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=af975d2da6cc5807757e938661e9894ae228718d"
+    },
+    "montage-mountain": {
+      "coordinates": [
+        -75.661941,
+        41.350025
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=a81d1a654cb6d27a2c57ab333b861e73cab51385"
+    },
+    "montana-snowbowl": {
+      "coordinates": [
+        -114.000077,
+        47.014856
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1899d3be7b756dfaa8181c0c6970de5c6e3062b7"
+    },
+    "monterosa-ski": {
+      "coordinates": [
+        7.802605,
+        45.855152
+      ],
+      "name": "Sant'Anna",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5ffd86e2374dc98261a846de36bfc510ab758dfc"
+    },
+    "mount-racey-ski-resort": {
+      "coordinates": [
+        141.96973,
+        43.05053
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e5e2e92ad96673a731e4718706b0173baae63eca"
+    },
+    "mount-snow": {
+      "coordinates": [
+        -72.895485,
+        42.967373
+      ],
+      "name": "Bluebird Express #17 Return Terminal",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=74dd4473e21693f4e2d2fdfb66ed5eee9493d4cc"
+    },
+    "mountain-high": {
+      "coordinates": [
+        -117.691154,
+        34.376435
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d7cc8768ea056dd9a46d954ce7d03d433288ba8a"
+    },
+    "mt-abram": {
+      "coordinates": [
+        -70.70663,
+        44.379325
+      ],
+      "name": "Way Back Machine",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5e39ee03c92ff9381445a5956d47332e8182cddc"
+    },
+    "mt-bachelor": {
+      "coordinates": [
+        -121.676514,
+        44.002445
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=df0ebcea3daf2a4ad2c46e99f043d37d57cf1b9b"
+    },
+    "mt-baker-ski-area": {
+      "coordinates": [
+        -121.661575,
+        48.857428
+      ],
+      "name": "Chair 6",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d272da6efb174a96c70b157b6c4cf370f8d5da87"
+    },
+    "mt-brighton": {
+      "coordinates": [
+        -83.811861,
+        42.539545
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=eb22337964133d173cab93b1b85b22a41b27b611"
+    },
+    "mt-buller": {
+      "coordinates": [
+        146.448513,
+        -37.147702
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fa08874099e7e3e2ae78ebd0e5a4c842d080d7e9"
+    },
+    "mt-eyak": {
+      "coordinates": [
+        -145.749689,
+        60.549949
+      ],
+      "name": "Bottom Station",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=28098c43579d6e0b939ab6daad2f6c62c7206faf"
+    },
+    "mt-hood-meadows": {
+      "coordinates": [
+        -121.665028,
+        45.330837
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=effda1f2db54d33bc3770670cd4335bd56a41eec"
+    },
+    "mt-hood-skibowl": {
+      "coordinates": [
+        -121.773488,
+        45.300726
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=4edeb68c1b51b4fce1d7289cf145de7e1b7b70cc"
+    },
+    "mt-norquay": {
+      "coordinates": [
+        -115.599199,
+        51.204826
+      ],
+      "name": "Cascade base area",
+      "source": "https://banffnorquay.com/trail-map/",
+      "kind": "entrance"
+    },
+    "mt-rose-ski-tahoe": {
+      "coordinates": [
+        -119.885077,
+        39.326676
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7e9c9c28d2694a3b49ad5d70e6a3c8d59dc75cbd"
+    },
+    "mt-shasta-ski-park": {
+      "coordinates": [
+        -122.202722,
+        41.321033
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d02d16e39611d48a0421991064355899bce16402"
+    },
+    "mt-t": {
+      "coordinates": [
+        138.951368,
+        36.817846
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d764592885db846086b2e701a8519bb27ca70e55"
+    },
+    "muica-snow-resort": {
+      "coordinates": [
+        138.845447,
+        37.070564
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fb7f7f629b5cd983c02e33537523f4623809a6a8"
+    },
+    "murray-ridge-ski-area": {
+      "coordinates": [
+        -124.210038,
+        54.517667
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0bc4ad9d89288c5016a8912a92c174ec7a079800"
+    },
+    "nakiska-ski-area": {
+      "coordinates": [
+        -115.153286,
+        50.942579
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=629f41736fe9e223bb92ecae332e0d736721da14"
+    },
+    "nekoma-mountain": {
+      "coordinates": [
+        140.037114,
+        37.60326
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e8cdffc42141b9eb5c6721dc02e895c9aad3df7f"
+    },
+    "ninox-snow-park": {
+      "coordinates": [
+        139.4757,
+        37.922323
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c682e7f389b8055c73dec35f4603f38253f56964"
+    },
+    "niseko-united": {
+      "coordinates": [
+        140.677324,
+        42.847257
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7467b4b92b34f135e5a3258eee64b992f39c95f0"
+    },
+    "northstar-california-resort": {
+      "coordinates": [
+        -120.126934,
+        39.264814
+      ],
+      "name": "Big Easy Base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=717fe0e81e226ce0361fb10dc24e9f863eeda6ba"
+    },
+    "ober-mountain": {
+      "coordinates": [
+        -83.558636,
+        35.702791
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0c5660d4eef0f04e94747339f8514016002ef02f"
+    },
+    "obertauern": {
+      "coordinates": [
+        13.546545,
+        47.251183
+      ],
+      "name": "Sonnenlift Talstation",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b28af962323890eb2dc4f2705ed7b6893d894add"
+    },
+    "onikoube-ski-resort": {
+      "coordinates": [
+        140.638023,
+        38.787015
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=83a6164e59bd3fea70cb9f943c010e02cf239e85"
+    },
+    "oppdal": {
+      "coordinates": [
+        9.650525,
+        62.611612
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d3f67900a5233a1437babd4f804a78820fb839ba"
+    },
+    "orcieres-merlette-1850": {
+      "coordinates": [
+        6.334032,
+        44.718251
+      ],
+      "name": "Fontainon",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=293ceddf2ced898a483558519740f4f0dee9225f"
+    },
+    "ordino-arcalis": {
+      "coordinates": [
+        1.497621,
+        42.62744
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=066c4b2d821452980329ab1a2fd4aee2d6251231"
+    },
+    "orelle": {
+      "coordinates": [
+        6.570231,
+        45.24677
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=13ba869607d22e177654c6366ae9dc746b8db0f2"
+    },
+    "paganella-ski": {
+      "coordinates": [
+        11.050414,
+        46.163361
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=64aee63c9ac051c8e37df33f4bc3e5549876880d"
+    },
+    "pajarito-mountain": {
+      "coordinates": [
+        -106.389833,
+        35.894115
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=6113e90989ba3b057fdba6366e2e48ada9428ecc"
+    },
+    "palcall-tsumagoi-resort": {
+      "coordinates": [
+        138.463795,
+        36.557157
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e42b445d142573e50e0a6d90d696cfe7d9fa7f33"
+    },
+    "palisades-tahoe": {
+      "coordinates": [
+        -120.235956,
+        39.19681
+      ],
+      "name": "Olympic Valley tram base",
+      "source": "https://www.palisadestahoe.com/plan-your-visit/pre-arrival-guide",
+      "kind": "entrance"
+    },
+    "panorama-mountain-resort": {
+      "coordinates": [
+        -116.237056,
+        50.456418
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7f0f9748509826cf58fa1961ee12560933bbf7ab"
+    },
+    "park-city-mountain": {
+      "coordinates": [
+        -111.50796,
+        40.650824
+      ],
+      "name": "Mountain Village base",
+      "source": "https://www.parkcitymountain.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+      "kind": "entrance"
+    },
+    "paul-bunyan-ski-hill": {
+      "coordinates": [
+        -88.524354,
+        45.324933
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=03cb8154c75418bb8fa6d8302927baf5f7797fbd"
+    },
+    "pebble-creek-ski-area": {
+      "coordinates": [
+        -112.158992,
+        42.777974
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d6ccc4b24a3ff6253ea1439cf75e74bdf5f80579"
+    },
+    "pejo-3000": {
+      "coordinates": [
+        10.66302,
+        46.370399
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d2e1e84c6527c29dc0f4fbd22c9f7fd34bd61480"
+    },
+    "pico-mountain": {
+      "coordinates": [
+        -72.843669,
+        43.660739
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5263141e47dd13bf5e7529ecdeb1d1f61aecb0ae"
+    },
+    "pila": {
+      "coordinates": [
+        7.311008,
+        45.682139
+      ],
+      "name": "Gorraz",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=80f1b9fb69d6d58d8c0211a019de956673e86a18"
+    },
+    "pine-mountain": {
+      "coordinates": [
+        -88.08729,
+        45.839901
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e9e53434c85990c4832361e9d821f667cffa64f0"
+    },
+    "pinzolo": {
+      "coordinates": [
+        10.785375,
+        46.167432
+      ],
+      "name": "Pra Rodont",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=6bce0c5b4378d80172a8f1e44252244e65530be2"
+    },
+    "pitztal-glacier": {
+      "coordinates": [
+        10.879077,
+        46.925814
+      ],
+      "name": "Talstation Wildspitzbahn",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f1ae030e9b17ac258bb0eb30a0f769106518dfcd"
+    },
+    "pomerelle-mountain-resort": {
+      "coordinates": [
+        -113.608288,
+        42.317685
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=14ec9ceb98c4ce0cdc13b6fc73ab12fe20c95a1f"
+    },
+    "powder-king-mountain-resort": {
+      "coordinates": [
+        -122.612686,
+        55.364291
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=2590cb9009e40060615034cbff5ba91f68d79b1c"
+    },
+    "powder-mountain": {
+      "coordinates": [
+        -111.776847,
+        41.383358
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e15b214ba75941c2a0150d22cd5e75584bf9c068"
+    },
+    "powder-ridge": {
+      "coordinates": [
+        -94.305879,
+        45.342984
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9bc8daa5cc36d1e4282e4c2a5d037456d2cef475"
+    },
+    "powderhorn-mountain-resort": {
+      "coordinates": [
+        -108.151588,
+        39.069241
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ad4b81c2172308bc79a3d488e3908f5663a3059e"
+    },
+    "purgatory-resort": {
+      "coordinates": [
+        -107.814974,
+        37.629455
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=66ebd7d72089d0697f49126b4fe6bfadbb08f9e0"
+    },
+    "pyha-ski-resort": {
+      "coordinates": [
+        27.239716,
+        67.018152
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=cebc149497e19ddc3d8c80e732466fe3bfd43cc6"
+    },
+    "ragged-mountain-resort": {
+      "coordinates": [
+        -71.843198,
+        43.484186
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=79a1940e13ccae5bf38fb38169f1a70236b06eec"
+    },
+    "rauriser-hochalmbahnen": {
+      "coordinates": [
+        12.991169,
+        47.223864
+      ],
+      "name": "Hochalmbahn Talstation",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1586f10a5ae9a8f4707455ef38cb72a1bee343e6"
+    },
+    "red-lodge-mountain": {
+      "coordinates": [
+        -109.336934,
+        45.190488
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c67f75462733dca449d070942e082a1c1a7d0689"
+    },
+    "red-river-ski-summer-area": {
+      "coordinates": [
+        -105.413517,
+        36.70587
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=bf6afe86945513e83720c59303658436be745f18"
+    },
+    "rio-pusteria-bressanone": {
+      "coordinates": [
+        11.669231,
+        46.834927
+      ],
+      "name": "Gaisjoch",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=6ff57b9fc9073c238cb59e44b5b24b6b0aba269d"
+    },
+    "roundtop-mountain-resort": {
+      "coordinates": [
+        -76.928124,
+        40.108863
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=67139981d789d29cdb4da8f3c4818ab3b10e579e"
+    },
+    "ruka-ski-resort": {
+      "coordinates": [
+        29.169255,
+        66.170455
+      ],
+      "name": "Ruka Valley",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9ebf3503311da1c2e8d04a89c04e678a0d347367"
+    },
+    "rusutsu-resort": {
+      "coordinates": [
+        140.911232,
+        42.736833
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=24ee51415a84a991406320a88bd1bd2e7aa81030"
+    },
+    "san-martino-rolle-pass": {
+      "coordinates": [
+        11.77864,
+        46.268215
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=11b4273361f22eb084db41a3270d66fe1db2e7c1"
+    },
+    "sandia-peak-ski-area": {
+      "coordinates": [
+        -106.415229,
+        35.207589
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c3bdf2365be8731aa6cb20ce76de31e246dfab57"
+    },
+    "sasquatch-mountain-resort": {
+      "coordinates": [
+        -121.937511,
+        49.380531
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b38f30d1d386190b96087ad975d4ffc0e912d43b"
+    },
+    "schmittenhoehe": {
+      "coordinates": [
+        12.770202,
+        47.327492
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=6ecf3eac97891cee8e38aa2e836e878db6ebe5a3"
+    },
+    "seven-springs-mountain-resort": {
+      "coordinates": [
+        -79.297664,
+        40.021938
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=58ebc9836ec25e4498e8608b3a078c918ed1ce69"
+    },
+    "shames-mountain": {
+      "coordinates": [
+        -128.953086,
+        54.485124
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ea6d832bbf3fd251ce0f1666eb52dd44d673f014"
+    },
+    "shawnee-mountain-ski-area": {
+      "coordinates": [
+        -75.082507,
+        41.038293
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=355c556419de6098b79e1a9f6b714c000068a8fe"
+    },
+    "showdown-montana": {
+      "coordinates": [
+        -110.701515,
+        46.838736
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fbff3ec1a04b26ff94e1f1356e35767dfdf1594e"
+    },
+    "sierra-at-tahoe-ski-resort": {
+      "coordinates": [
+        -120.080814,
+        38.799554
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0558a46359e12971010ba1ba17046a6bf304e6af"
+    },
+    "sipapu-ski-summer-resort": {
+      "coordinates": [
+        -105.549585,
+        36.153915
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=66934016f836f00b8955a87aedd5b2713603fdf2"
+    },
+    "ski-apache": {
+      "coordinates": [
+        -105.790365,
+        33.3976
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b22870e1f4c5dbd701d3dd68d25d90c67de968d6"
+    },
+    "ski-saint-bruno": {
+      "coordinates": [
+        -73.335268,
+        45.558525
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b6a4ea696c3ce7ff680fcb2878b769de28c9e155"
+    },
+    "ski-santa-fe": {
+      "coordinates": [
+        -105.800171,
+        35.795254
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7ba787e59e18c7270741425fea002c1f18d20ab3"
+    },
+    "ski-vallee-bleue": {
+      "coordinates": [
+        -74.218801,
+        46.025476
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=78688106352077e2f6ad2f2a55e1be73e5380f1e"
+    },
+    "skigebiet-heiligenblut-grossglockner": {
+      "coordinates": [
+        12.851394,
+        47.047868
+      ],
+      "name": "Schareck Talstation",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0e26601b28e950ea854b8e85adb5aa0a51ecc97f"
+    },
+    "skiwelt": {
+      "coordinates": [
+        12.228148,
+        47.462188
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=37ee9c6ba5b44864ba844f804938a8b815f8b717"
+    },
+    "smokey-mountain-ski-club": {
+      "coordinates": [
+        -66.921957,
+        52.977178
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5f049fa511ae919e1b009c8419f71067cf63427c"
+    },
+    "smugglers-notch-resort": {
+      "coordinates": [
+        -72.776202,
+        44.571794
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=4e33ba5d0c4bb24ebff1c1270b9d8ec5f86f3f92"
+    },
+    "snow-creek": {
+      "coordinates": [
+        -94.9702,
+        39.466583
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=88471079dc1586673396596c0f03e3c66ad128ba"
+    },
+    "snow-king-mountain": {
+      "coordinates": [
+        -110.760549,
+        43.472028
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c47e4e0cea10faf86129192a93cfe5136543c1da"
+    },
+    "snow-resort-the-cupid-of-romance": {
+      "coordinates": [
+        138.404847,
+        36.819967
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=cb23e2679d722d6411b1d93cb7f64bd24b6ed669"
+    },
+    "snow-summit": {
+      "coordinates": [
+        -116.888833,
+        34.235448
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=553e5c0881466894501e5f56ab41ba951300fc75"
+    },
+    "snow-valley-mountain-resort": {
+      "coordinates": [
+        -117.035991,
+        34.224019
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=11f2099ea10957844765b5bea3bbb1f13fd592b7"
+    },
+    "snowbasin-resort": {
+      "coordinates": [
+        -111.85841,
+        41.215475
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=423504a1fa53bcfbe5bf956f0cd48c12868c7f06"
+    },
+    "snowbird": {
+      "coordinates": [
+        -111.656343,
+        40.581005
+      ],
+      "name": "Snowbird Center tram base",
+      "source": "https://www.snowbird.com/getting-here/",
+      "kind": "entrance"
+    },
+    "snowriver-mountain-resort-black-river-basin": {
+      "coordinates": [
+        -89.998723,
+        46.504205
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=459353fc5b6623087d5b8d3b7025fbbf270644f9"
+    },
+    "snowshoe-mountain": {
+      "coordinates": [
+        -79.986439,
+        38.41641
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1facaf3d92da6719b1c7aa95f763fbeda72222b3"
+    },
+    "snowy-range-ski-area": {
+      "coordinates": [
+        -106.18225,
+        41.340784
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=a02a76c30b32706348f0d6c0853c124abd4c8baa"
+    },
+    "soelden": {
+      "coordinates": [
+        10.954289,
+        46.958202
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=78e5f98d8527df7216b08962f372659abcd4f711"
+    },
+    "soldier-mountain-ski-area": {
+      "coordinates": [
+        -114.82912,
+        43.484657
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=6b5d7d129610235541aade75781befaa8dd22622"
+    },
+    "solitude-mountain-resort": {
+      "coordinates": [
+        -111.596771,
+        40.622953
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b40e925163e2330550f940711b8571409fafb3a4"
+    },
+    "spieljoch": {
+      "coordinates": [
+        11.797054,
+        47.33104
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=69931ad5166c6a605bdbc8cb48fde87b78117576"
+    },
+    "station-touristique-stoneham": {
+      "coordinates": [
+        -71.384916,
+        47.027225
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=baa17f751db10c008667bd32ac5a284689e8e857"
+    },
+    "steamboat-ski-resort": {
+      "coordinates": [
+        -106.80336,
+        40.457073
+      ],
+      "name": "Steamboat Square gondola base",
+      "source": "https://www.steamboat.com/winter-parking/faqs",
+      "kind": "entrance"
+    },
+    "stoten-i-salen": {
+      "coordinates": [
+        12.895645,
+        61.265853
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7b9ebd11b0f34b0ff27595dacf4573ef0e1dfec4"
+    },
+    "stowe": {
+      "coordinates": [
+        -72.781215,
+        44.531422
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=1688ce1f44c0112805d9755f31a8e82283162cfb"
+    },
+    "stratton-mountain-resort": {
+      "coordinates": [
+        -72.907546,
+        43.112542
+      ],
+      "name": "South American Drive Terminal",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=29d4f3257670a7a1101c27d7df60cb103d5dcd6c"
+    },
+    "sugar-bowl-resort": {
+      "coordinates": [
+        -120.33266,
+        39.304581
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fa95641c38a689ebebd96aa62b6ee049115fbeee"
+    },
+    "sugar-mountain-resort": {
+      "coordinates": [
+        -81.859832,
+        36.130094
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=125edf155ba3fa26990fab722fd3487b85667346"
+    },
+    "sugarbush-resort": {
+      "coordinates": [
+        -72.895635,
+        44.136456
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=51088afbd7eaf31cf6e677c0b2b6e3ca621754ba"
+    },
+    "sugarloaf": {
+      "coordinates": [
+        -70.309496,
+        45.05281
+      ],
+      "name": "Double Runner",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ba6f009c039cdf1008684fbf790a3fef14ec068a"
+    },
+    "sun-peaks-resort": {
+      "coordinates": [
+        -119.885412,
+        50.884966
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9f1d79969a331ae7d0969bf41f5d4910c7d07a0d"
+    },
+    "sun-valley-bald-mountain": {
+      "coordinates": [
+        -114.395313,
+        43.654188
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b9ec1edd75823059c063c7c7b2a4078cf82542ab"
+    },
+    "sundance-mountain-resort": {
+      "coordinates": [
+        -111.579151,
+        40.391524
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=745a3b9611363f0f1ca4f55e5403f39dede94ebb"
+    },
+    "sunday-river": {
+      "coordinates": [
+        -70.858072,
+        44.473496
+      ],
+      "name": "South Ridge Express",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=54bceeb62ccd2209e50b8dc7e06b8daa1727ce34"
+    },
+    "swain-resort": {
+      "coordinates": [
+        -77.856103,
+        42.476071
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b0b9519425df4d4c587f76eec37e302360d9603c"
+    },
+    "takasu-snow-park": {
+      "coordinates": [
+        136.875962,
+        35.997828
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=4ee3f352a5b853868ea8270abd9c5f9643f15b5a"
+    },
+    "telluride-ski-resort": {
+      "coordinates": [
+        -107.836165,
+        37.905457
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=c036edc54d4fe7d4c6f93de5b9f3dcaff34a5a64"
+    },
+    "tenney-mountain": {
+      "coordinates": [
+        -71.764694,
+        43.746606
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7d26be88853e89f3377b2050201f439ebe390a0d"
+    },
+    "terry-peak": {
+      "coordinates": [
+        -103.84076,
+        44.334325
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=64cba5151b6bd43dc67c6be33fdea3d63576b4ef"
+    },
+    "the-highlands-at-harbor-springs": {
+      "coordinates": [
+        -84.935982,
+        45.468169
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d70a38efa1745a52727cf449eb7a657610ebab1c"
+    },
+    "the-remarkables": {
+      "coordinates": [
+        168.813468,
+        -45.054004
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=976d9a75995718d0e06985401b49091331695b48"
+    },
+    "thredbo": {
+      "coordinates": [
+        148.310536,
+        -36.498675
+      ],
+      "name": "Easy Does It Bottom Station",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=d02b7dc18ab40ddd76c8e4d9882f8451121e479f"
+    },
+    "togakushi-ski-resort": {
+      "coordinates": [
+        138.093313,
+        36.75355
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ddb30131027e2ed35f6d5740bb6bdfba7074bcbd"
+    },
+    "togari-onsen-snow-resort": {
+      "coordinates": [
+        138.37718,
+        36.943663
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=2d0444657597437042f88000cae4cf8468681dea"
+    },
+    "tremblant": {
+      "coordinates": [
+        -74.584478,
+        46.213962
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b7cad93e857de92335debf15f4d0bfe9a04f4d1b"
+    },
+    "tsugaike-mountain-resort": {
+      "coordinates": [
+        137.859273,
+        36.753742
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0cbcc6a3e3481cdc6750911f4cfe7c412563905f"
+    },
+    "tussey-mountain": {
+      "coordinates": [
+        -77.752889,
+        40.769527
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fd00fdefb3462da486a46ffe87a05820428c206d"
+    },
+    "vail-mountain": {
+      "coordinates": [
+        -106.373505,
+        39.639325
+      ],
+      "name": "Vail Village Gondola One",
+      "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+      "kind": "entrance"
+    },
+    "val-di-fassa-carezza": {
+      "coordinates": [
+        11.733992,
+        46.439832
+      ],
+      "name": "Pala del Gheiger",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e615b3d384f0063fb20af785b477a97fdce907bc"
+    },
+    "val-di-fiemme-obereggen": {
+      "coordinates": [
+        11.543301,
+        46.349427
+      ],
+      "name": "Campanil",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=748fee00e468b5d11016d8f9dab6e2e214ea78f5"
+    },
+    "val-direne": {
+      "coordinates": [
+        -67.573078,
+        48.472664
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f925374f52ee352c407a54b9a5f14f8f3f35696a"
+    },
+    "val-gardena-alpe-di-siusi": {
+      "coordinates": [
+        11.762583,
+        46.557918
+      ],
+      "name": "Mickey Mouse",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=fca6e2a27977f0cdca3016e8e9c4a9a643d53f2b"
+    },
+    "val-thorens": {
+      "coordinates": [
+        6.582064,
+        45.29528
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b66cd0bd82cf0860c0b65dbe7ba26066f8463554"
+    },
+    "valle-nevado": {
+      "coordinates": [
+        -70.244773,
+        -33.329924
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5599f5c55105bf3996fec9a4e6f309e1a79e421d"
+    },
+    "washigatake-ski-resort": {
+      "coordinates": [
+        136.920265,
+        35.943616
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=323af836e78ff3f811fa43a5de343e67c998f576"
+    },
+    "welch-village": {
+      "coordinates": [
+        -92.731294,
+        44.560261
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=e0c315dfc3d1759447815000e3dd57b01b5e04d4"
+    },
+    "west-mountain-ski-resort": {
+      "coordinates": [
+        -73.726138,
+        43.285983
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=9aa9eb2e7e4946a91f4fef6e021de4cc353742df"
+    },
+    "whaleback": {
+      "coordinates": [
+        -72.181118,
+        43.601503
+      ],
+      "name": "Whaleback main base",
+      "source": "https://www.whaleback.com/",
+      "kind": "entrance"
+    },
+    "whistler-blackcomb": {
+      "coordinates": [
+        -122.95453,
+        50.112753
+      ],
+      "name": "Whistler Village gondola base",
+      "source": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/getting-here.aspx",
+      "kind": "entrance"
+    },
+    "white-pine-resort": {
+      "coordinates": [
+        -109.757814,
+        42.977353
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=09b32bd37bdd1181ae2e1b4b9460352b593d798c"
+    },
+    "whitecap-mountains-resort": {
+      "coordinates": [
+        -90.395846,
+        46.408637
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=b7094d426187b8c49a991c61e46248870ad31d1c"
+    },
+    "whitepia-takasu": {
+      "coordinates": [
+        136.934576,
+        35.954776
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=ad3bc44d99f395ecf777763169d4926de3e0b76e"
+    },
+    "whitetail-resort": {
+      "coordinates": [
+        -77.934434,
+        39.741046
+      ],
+      "name": "EZ Rider",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=97655053adc3665312bf8601a0a73ac25fc9bb38"
+    },
+    "wilmot-mountain": {
+      "coordinates": [
+        -88.190661,
+        42.50078
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=5a1a80c1675044a1264bf0701081f570067d0251"
+    },
+    "wintergreen-resort": {
+      "coordinates": [
+        -78.935829,
+        37.915391
+      ],
+      "name": "Big Acorn Chair Lift",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=f5682086c3b44e006c6a9e21c553a662f538add8"
+    },
+    "winterplace-ski-resort": {
+      "coordinates": [
+        -81.121946,
+        37.598587
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=8cd0e5b9f5a6086fe6eb0135c29784435808d163"
+    },
+    "wisp-resort": {
+      "coordinates": [
+        -79.361475,
+        39.555184
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=474eb18d133632b436ad8ef5adb04b1087dd8d0b"
+    },
+    "wolf-creek-ski-area": {
+      "coordinates": [
+        -106.794271,
+        37.471908
+      ],
+      "name": "Mapped lift base",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=0509d7d69847b7f5da4850cc299a909099d5382f"
+    },
+    "yunding-snow-park": {
+      "coordinates": [
+        115.427834,
+        40.946945
+      ],
+      "name": "1索底站",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=25d31b46a111dd776d81cee73adfc2a5e35aaae5"
+    },
+    "zao-onsen-ski-resort": {
+      "coordinates": [
+        140.398067,
+        38.170861
+      ],
+      "name": "上の台駅",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=7cfdd8ccb96dd792c0ee2357d28a9fd44c7d19c9"
+    },
+    "zillertal-arena": {
+      "coordinates": [
+        12.05244,
+        47.243039
+      ],
+      "name": "Moseltret X-Press",
+      "kind": "lift-base",
+      "source": "https://openskimap.org/?obj=bbbfaa27816f58cfdfecc5b692b0ee59dde891f5"
+    }
+  }
+}

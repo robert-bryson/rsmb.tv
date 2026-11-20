@@ -8,6 +8,7 @@ from datetime import datetime
 import hashlib
 from html import escape
 import json
+from math import cos, hypot, inf, isfinite, radians
 import os
 from pathlib import Path
 import re
@@ -20,7 +21,7 @@ from urllib.parse import urlsplit
 
 DATA = Path(__file__).resolve().parents[1] / 'data'
 SOURCE = 'https://tiles.openskimap.org/openskidata.gpkg'
-MIN_ZOOM, MAX_ZOOM = 11, 14
+MIN_ZOOM, DETAIL_MIN_ZOOM, STATION_MIN_ZOOM, MAX_ZOOM = 9, 11, 13, 14
 RUN_USES = ('downhill', 'nordic', 'skitour', 'snow_park', 'connection')
 LIFT_FREE_USES = {'cross-country': 'nordic', 'ski-touring': 'skitour'}
 AREA_POINTS = 'ski_areas_point'
@@ -147,6 +148,79 @@ def find_areas(db, areas, locations):
     return matched
 
 
+def distance_metres(first, second):
+    longitude = (first[0] - second[0] + 180) % 360 - 180
+    latitude = first[1] - second[1]
+    return 111_195 * hypot(longitude * cos(radians((first[1] + second[1]) / 2)), latitude)
+
+
+def lift_entry_points(first, last):
+    if all(isfinite(point[2]) for point in (first, last)) and abs(first[2] - last[2]) >= 5:
+        bottom = first if first[2] < last[2] else last
+        return (bottom[:2],)
+    return first[:2], last[:2]
+
+
+def select_lift_base(origin, stations, lifts):
+    candidates = []
+    for coordinates, name, source in stations:
+        offset = distance_metres(origin, coordinates)
+        if offset > 1800:
+            continue
+        distances = [min(distance_metres(coordinates, end) for end in lift) for lift in lifts]
+        serving_lifts = sum(distance <= 225 for distance in distances)
+        at_operating_lift = min(distances, default=inf) <= 55
+        if at_operating_lift and (serving_lifts >= 2 or len(lifts) == 1):
+            candidates.append((-serving_lifts, offset, coordinates, name or 'Mapped lift base', source))
+    if candidates:
+        _, _, coordinates, name, source = min(candidates)
+        return {'coordinates': coordinates, 'name': name, 'kind': 'lift-base', 'source': source}
+
+
+def write_resort_bases(db, matched, areas, locations, build_time, work):
+    existing = DATA / 'resort-bases.json'
+    origins = {location['id']: location['coordinates'] for location in locations['locations']}
+    previous = read_json(existing)['bases'] if existing.exists() else {}
+    bases = {area_id: base for area_id, base in previous.items()
+             if area_id in areas and area_id in origins and base['kind'] == 'entrance'}
+    eligible = origins.keys() - bases.keys()
+    access_areas = {}
+    for feature, owners in matched.items():
+        if len(owners) != 1:
+            continue
+        owner, = owners
+        if owner in eligible and areas[owner].get('skiing', 'downhill') in ('downhill', 'both'):
+            access_areas[feature] = owner
+    lifts = defaultdict(list)
+    stations = defaultdict(list)
+    for feature in db.GetLayerByName(FEATURE_LAYERS['lifts'][0]):
+        if feature['status'] != 'operating' or feature['access'] in ('private', 'no') or feature['lift_type'] == 'zip_line':
+            continue
+        geometry = feature.GetGeometryRef()
+        if not geometry or geometry.GetPointCount() < 2:
+            continue
+        entries = lift_entry_points(geometry.GetPoint(0), geometry.GetPoint(geometry.GetPointCount() - 1))
+        for feature_id in values(feature['ski_area_ids']) & access_areas.keys():
+            lifts[feature_id].append(entries)
+    for feature in db.GetLayerByName(FEATURE_LAYERS['stations'][0]):
+        if feature['spot_type'] != 'lift_station' or feature['position'] != 'bottom':
+            continue
+        geometry = feature.GetGeometryRef()
+        if not geometry or geometry.IsEmpty():
+            continue
+        coordinates = (round(geometry.GetX(), 6), round(geometry.GetY(), 6))
+        for feature_id in values(feature['ski_area_ids']) & access_areas.keys():
+            stations[feature_id].append((coordinates, feature['name'], f'https://openskimap.org/?obj={feature_id}'))
+    for feature_id, area in access_areas.items():
+        result = select_lift_base(origins[area], stations[feature_id], lifts[feature_id])
+        if result:
+            bases[area] = result
+    output = work / 'resort-bases.json'
+    output.write_text(json.dumps({'buildTime': build_time, 'license': locations['license'], 'bases': dict(sorted(bases.items()))},
+                                 ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    return output
+
+
 def add_mapped_trail_counts(path, locations, build_time):
     if locations['buildTime'] != build_time:
         return False
@@ -203,6 +277,7 @@ def write_tiles(db, matched, areas, work, attribution):
     groups = {}
     counts = {}
     inputs = []
+    layer_zooms = {'footprints': MIN_ZOOM, 'runs': DETAIL_MIN_ZOOM, 'lifts': DETAIL_MIN_ZOOM, 'stations': STATION_MIN_ZOOM}
     for layer, source_names in {'footprints': (AREA_FOOTPRINTS,), **FEATURE_LAYERS}.items():
         path = work / f'{layer}.geojsonl'
         counts[layer] = 0
@@ -242,7 +317,8 @@ def write_tiles(db, matched, areas, work, attribution):
                         if use:
                             props['use'] = use
                         props['group'] = groups.setdefault(tuple(sorted(use_owners)), len(groups) + 1)
-                        stream.write(json.dumps({'type': 'Feature', 'properties': {k: v for k, v in props.items() if v},
+                        stream.write(json.dumps({'type': 'Feature', 'tippecanoe': {'minzoom': layer_zooms[layer]},
+                                                 'properties': {k: v for k, v in props.items() if v},
                                                  'geometry': geometry_json}, ensure_ascii=False, separators=(',', ':')) + '\n')
                         counts[layer] += 1
         if counts[layer]:
@@ -335,12 +411,13 @@ def main():
         archive, by_area, counts = write_tiles(db, matched, areas, work, attribution)
         manifest = {
             'source': SOURCE, 'buildTime': metadata['run']['finishedAt'], 'sourceSha256': sha256(args.geopackage),
-            'archiveSha256': sha256(archive), 'license': locations['license'], 'minZoom': MIN_ZOOM, 'maxZoom': MAX_ZOOM,
+            'archiveSha256': sha256(archive), 'license': locations['license'], 'minZoom': MIN_ZOOM,
+            'detailMinZoom': DETAIL_MIN_ZOOM, 'stationMinZoom': STATION_MIN_ZOOM, 'maxZoom': MAX_ZOOM,
             'counts': counts, 'groupsByArea': by_area,
         }
         index = work / 'resort-terrain.json'
         index.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-        outputs = [archive]
+        outputs = [archive, write_resort_bases(db, matched, areas, locations, manifest['buildTime'], work)]
         if add_mapped_trail_counts(args.geopackage, locations, manifest['buildTime']):
             location_index = work / 'locations.json'
             location_index.write_text(json.dumps(locations, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

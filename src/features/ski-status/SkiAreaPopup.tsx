@@ -2,7 +2,7 @@ import { useEffect, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { Popup, type Map } from '../../maps/maplibre';
 import { formatSkiLocation } from './browse';
-import type { SkiArea } from './catalog';
+import { skiAreaMapPoint, type SkiArea } from './catalog';
 import type { ResortReport, ResortStatus } from './conditions';
 import { SkiStatusLabel } from './SkiStatusLabel';
 
@@ -16,7 +16,7 @@ interface Props {
 
 export function SkiAreaPopup({ area, mapRef, report, status, now }: Props) {
     const [content] = useState(() => document.createElement('div'));
-    const coordinates = area.location.coordinates;
+    const coordinates = skiAreaMapPoint(area);
 
     useEffect(() => {
         const map = mapRef.current;

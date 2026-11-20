@@ -1,8 +1,9 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { columns, formatSkiLocation, formatSkiStat, type PassFilter, type SkiSort, type SkiUnits } from './browse';
+import { columns, formatSkiLocation, formatSkiStat, type SkiPassSelection, type SkiSort, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
 import type { Conditions, ResortReport, ResortStatus } from './conditions';
 import { markerModes, passAccessAppearance, type MarkerMode } from './mapAppearance';
+import { SkiIcon } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 import { SkiStatusLabel } from './SkiStatusLabel';
 
@@ -20,18 +21,19 @@ interface ListProps {
     statuses: ReadonlyMap<string, ResortStatus>;
     conditions: Conditions;
     colors: MarkerMode;
-    passFilter?: PassFilter;
+    passSelection?: SkiPassSelection;
     units: SkiUnits;
     sort: SkiSort;
     onSort: (key: SkiSort['key']) => void;
     onSelect: (id: string, control: HTMLButtonElement) => void;
 }
 
-export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, passFilter, units, sort, onSort, onSelect }: ListProps) {
+export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, passSelection, units, sort, onSort, onSelect }: ListProps) {
     const [visibleCount, setVisibleCount] = useState(pageSize);
     const list = useRef<HTMLUListElement>(null);
     const nextResult = useRef<number>(undefined);
     const metric = colors === 'default' || colors === 'operatingStatus' || colors === 'pass' ? undefined : colors;
+    const sortAction = sort.direction === 'asc' ? 'Sort descending' : 'Sort ascending';
 
     useLayoutEffect(() => {
         if (nextResult.current === undefined) return;
@@ -40,15 +42,17 @@ export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, p
     }, [visibleCount]);
 
     return <section aria-label="Ski area list" className="flex min-h-0 flex-1 flex-col">
-        <div className="flex flex-wrap items-center gap-2 border-b border-slate-700/80 px-3 py-2">
-            <h2 className="mr-auto text-sm font-semibold text-slate-100">Results</h2>
-            <label className="sr-only" htmlFor="ski-result-sort">Sort results</label>
-            <select id="ski-result-sort" className="ski-input w-auto max-w-48" value={sort.key}
-                onChange={event => onSort(sortOptions.find(({ key }) => key === event.target.value)?.key ?? 'name')}>
-                {sortOptions.map(({ key, label }) => <option key={key} value={key}>{label}</option>)}
-            </select>
-            <button type="button" className="ski-control" aria-label={sort.direction === 'asc' ? 'Sort descending' : 'Sort ascending'}
-                onClick={() => onSort(sort.key)}>{sort.direction === 'asc' ? '↑' : '↓'}</button>
+        <div className="ski-pane-heading">
+            <h2 className="text-sm font-semibold">Results</h2>
+            <div className="ski-actions ski-result-sort">
+                <label className="sr-only" htmlFor="ski-result-sort">Sort results</label>
+                <select id="ski-result-sort" className="ski-input" value={sort.key}
+                    onChange={event => onSort(sortOptions.find(({ key }) => key === event.target.value)?.key ?? 'name')}>
+                    {sortOptions.map(({ key, label }) => <option key={key} value={key}>{label}</option>)}
+                </select>
+                <button type="button" className="ski-control ski-icon-button" aria-label={sortAction} title={sortAction}
+                    onClick={() => onSort(sort.key)}><SkiIcon name={sort.direction === 'asc' ? 'sortAscending' : 'sortDescending'} /></button>
+            </div>
         </div>
         <div className="min-h-0 flex-1 overflow-auto">
             <ul ref={list} className="divide-y divide-slate-700/60">
@@ -58,12 +62,12 @@ export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, p
                     const selection = selectedId === area.id;
                     const counts = status === 'unknown' ? [] : [openCount('lifts', report?.lifts), openCount('trails', report?.trails)].filter(Boolean);
                     const value = metric && formatSkiStat(area, metric, units, conditions);
-                    const access = colors === 'pass' ? passAccessAppearance(area, passFilter) : undefined;
+                    const access = colors === 'pass' ? passAccessAppearance(area, passSelection) : undefined;
                     return <li key={area.id}>
                         <button type="button" aria-label={area.name} aria-describedby={`ski-result-${area.id}`} aria-pressed={selection}
                             className="ski-result" onClick={event => onSelect(area.id, event.currentTarget)}>
                             <span className="block font-semibold text-slate-100">{area.name}</span>
-                            <span id={`ski-result-${area.id}`} className="grid gap-0.5 text-xs text-slate-300">
+                            <span id={`ski-result-${area.id}`} className="ski-result-meta">
                                 <span>{formatSkiLocation(area)}</span>
                                 <span className="flex flex-wrap items-baseline gap-x-2"><SkiStatusLabel status={status} report={report} now={conditions.now} />
                                     {counts.map(count => <span key={count}>{count}</span>)}</span>

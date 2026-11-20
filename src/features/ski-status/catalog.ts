@@ -2,6 +2,7 @@ import { z } from 'zod';
 import areaData from '../../../projects/ski-status/data/areas.json';
 import locationData from '../../../projects/ski-status/data/locations.json';
 import passData from '../../../projects/ski-status/data/passes-2026-27.json';
+import baseData from '../../../projects/ski-status/data/resort-bases.json';
 import { httpsUrl, passSeasonId, skiId } from './schemas';
 
 const label = z.string().trim().min(1);
@@ -90,6 +91,7 @@ const mappedTerrainSchema = z.strictObject({
 }).refine(({ lifts, downhillKm, nordicKm, namedDownhillRuns, namedNordicTrails, elevationM }) =>
     lifts || downhillKm || nordicKm || namedDownhillRuns || namedNordicTrails || elevationM, 'Add a mapped terrain value');
 
+const coordinates = z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]);
 const locationsSchema = z.strictObject({
     source: httpsUrl,
     buildTime: z.iso.datetime(),
@@ -97,11 +99,15 @@ const locationsSchema = z.strictObject({
     attribution: z.record(label, httpsUrl).refine(links => Object.keys(links).length > 0, 'Add a location attribution link'),
     locations: z.array(z.strictObject({
         id: skiId,
-        coordinates: z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]),
+        coordinates,
         upstream: z.array(httpsUrl).min(1),
         mappedTerrain: mappedTerrainSchema.optional(),
         timeZone: skiTimeZone.optional(),
     })),
+});
+const baseSchema = z.strictObject({
+    buildTime: z.iso.datetime(), license: httpsUrl,
+    bases: z.record(skiId, z.strictObject({ coordinates, name: label, source: httpsUrl, kind: z.enum(['entrance', 'lift-base']) })),
 });
 
 export const passFamilySchema = z.enum(['ikon', 'epic', 'indy', 'mountain-collective']);
@@ -122,7 +128,7 @@ const passesSchema = z.strictObject({
 });
 
 export type SkiArea = z.infer<typeof areaSchema> & {
-    location: z.infer<typeof locationsSchema>['locations'][number];
+    location: z.infer<typeof locationsSchema>['locations'][number] & { base?: z.infer<typeof baseSchema>['bases'][string] };
     passes: z.infer<typeof passesSchema>['memberships'];
 };
 
@@ -135,16 +141,20 @@ function indexById<T extends { id: string }>(records: readonly T[], label: strin
     return indexed;
 }
 
-export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passInput: unknown) {
+export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passInput: unknown, baseInput?: unknown) {
     const areas = indexById(z.array(areaSchema).min(1).parse(areaInput), 'ski area');
     const locations = locationsSchema.parse(locationInput);
     const points = indexById(locations.locations, 'map point');
     const passes = passesSchema.parse(passInput);
+    const access = baseInput === undefined ? undefined : baseSchema.parse(baseInput);
+    const bases = new Map(Object.entries(access?.bases ?? {}));
     const memberships = new Map<string, SkiArea['passes']>();
 
     for (const pointId of points.keys()) {
         if (!areas.has(pointId)) throw new Error(`Map point has no ski area ${pointId}`);
     }
+    if (access && access.license !== locations.license) throw new Error('Resort base points must use the location data license');
+    for (const id of bases.keys()) if (!points.has(id)) throw new Error(`Resort base has no ski area ${id}`);
     for (const pass of passes.memberships) {
         if (!areas.has(pass.areaId)) throw new Error(`Pass membership has no ski area ${pass.areaId}`);
         const areaPasses = memberships.get(pass.areaId) ?? [];
@@ -190,7 +200,7 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         }
         if (area.lowestLiftTerminalFt !== undefined && area.highestLiftTerminalFt !== undefined
             && area.lowestLiftTerminalFt > area.highestLiftTerminalFt) throw new Error(`Inverted lift terminal elevations for ${area.id}`);
-        joined.push({ ...area, location, passes: areaPasses });
+        joined.push({ ...area, location: { ...location, base: bases.get(area.id) }, passes: areaPasses });
     }
 
     return {
@@ -201,4 +211,8 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
     };
 }
 
-export const { areas: skiAreas, passSeason, locationAttribution, locationLicense } = readSkiCatalog(areaData, locationData, passData);
+export function skiAreaMapPoint(area: SkiArea) {
+    return area.location.base?.coordinates ?? area.location.coordinates;
+}
+
+export const { areas: skiAreas, passSeason, locationAttribution, locationLicense } = readSkiCatalog(areaData, locationData, passData, baseData);

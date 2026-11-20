@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import seasonData from '../../../projects/ski-status/data/seasons.json';
 import { skiAreas, type SkiArea } from './catalog';
+import { isFreshReport, type Conditions, type ResortReport } from './conditions';
 import { localSkiDate } from './localSkiDate';
 import { httpsUrl, passSeasonId, skiId } from './schemas';
 
@@ -66,8 +67,11 @@ type ActualSeason = z.infer<typeof actualSeason>;
 type PlannedSeason = z.infer<typeof plannedSeason>;
 type RecurringSeason = z.infer<typeof recurring>;
 type CompletedSeason = { season: string; opensOn: string; closesOn: string };
-type TypicalSeason = {
+type SeasonWindow = {
     opensIn: number; closesIn: number; opening: string; closing: string; openingRank: number; closingRank: number;
+    spansYears: boolean; closingYearOffset: number;
+};
+type TypicalSeason = SeasonWindow & {
     evidence: { count: number; latest: string } | { source: string; note?: string };
 };
 type AreaSeasons = { actual: ActualSeason[]; planned: PlannedSeason[]; typical?: TypicalSeason };
@@ -81,7 +85,8 @@ function medianDate(rows: readonly CompletedSeason[], key: 'opensOn' | 'closesOn
     const middle = Math.floor(ordinals.length / 2);
     const median = ordinals.length % 2 ? ordinals[middle] : Math.round((ordinals[middle - 1] + ordinals[middle]) / 2);
     const date = new Date(referenceYear + (median % daysInReferenceYear) * day);
-    return { month: date.getUTCMonth() + 1, label: monthDay.format(date), rank: date.getUTCMonth() * 32 + date.getUTCDate() };
+    return { month: date.getUTCMonth() + 1, label: monthDay.format(date), rank: date.getUTCMonth() * 32 + date.getUTCDate(),
+        yearOffset: Math.floor(median / daysInReferenceYear) };
 }
 
 function typicalSeason(actual: readonly ActualSeason[], recurring: RecurringSeason | undefined, checkedOn: string): TypicalSeason | undefined {
@@ -96,14 +101,17 @@ function typicalSeason(actual: readonly ActualSeason[], recurring: RecurringSeas
         return {
             opensIn: opening.month, opening: opening.label, openingRank: opening.rank,
             closesIn: closing.month, closing: closing.label, closingRank: closing.rank,
+            closingYearOffset: closing.yearOffset, spansYears: recent[0].season.includes('/'),
             evidence: { count: recent.length, latest: recent[0].season },
         };
     }
     if (recurring) {
         const { opensIn, closesIn, source, note } = recurring;
+        const spansYears = opensIn > closesIn;
         return {
             opensIn, opening: shortMonth.format(Date.UTC(2000, opensIn - 1, 1)), openingRank: (opensIn - 1) * 32,
             closesIn, closing: shortMonth.format(Date.UTC(2000, closesIn - 1, 1)), closingRank: (closesIn - 1) * 32 + 31,
+            closingYearOffset: Number(spansYears), spansYears,
             evidence: { source, note },
         };
     }
@@ -121,7 +129,7 @@ export function readSeasonCalendar(input: unknown, areas: readonly { id: string 
             }
         }
         const actual = [...row.actual ?? []].sort((a, b) => b.season.localeCompare(a.season));
-        const planned = [...row.planned ?? []].sort((a, b) => b.season.localeCompare(a.season));
+        const planned = [...row.planned ?? []].sort((a, b) => a.season.localeCompare(b.season));
         for (const item of actual) {
             if ((item.opensOn && item.opensOn > checkedOn) || (item.closesOn && item.closesOn > checkedOn)) {
                 throw Error(`Historical dates are in the future for ${row.areaId}/${item.season}`);
@@ -142,15 +150,84 @@ export function seasonViewDate(area: SkiArea, now?: number) {
     return now === undefined ? seasonCalendar.checkedOn : localSkiDate(now, area.location.timeZone ?? 'UTC');
 }
 
-export function upcomingSeasonPlan(entry: AreaSeasons | undefined, date: string) {
+export function upcomingSeasonPlan(entry: AreaSeasons | undefined, date: string, season?: string) {
     if (!entry) return;
     for (const plan of entry.planned) {
+        if (season && plan.season !== season) continue;
         const actual = entry.actual.find(row => row.season === plan.season);
         if (actual?.closesOn) continue;
         const opensOn = plan.opensOn && plan.opensOn >= date && !actual?.opensOn ? plan.opensOn : undefined;
         const closesOn = plan.closesOn && plan.closesOn >= date ? plan.closesOn : undefined;
         if (opensOn || closesOn) return { ...plan, opensOn, closesOn };
     }
+}
+
+export function reportedOpeningPlan(report: ResortReport | undefined, date: string, now?: number) {
+    if (now !== undefined && report?.opensOn && report.opensOn >= date && isFreshReport(report, now)) {
+        return { date: report.opensOn, source: report.source };
+    }
+}
+
+type SeasonBoundary = { month: number; label: string; date?: string; basis: 'Recorded' | 'Scheduled' | 'Estimated'; source?: string };
+
+function publishedSeasonWindow(area: SkiArea): SeasonWindow | undefined {
+    if (!area.seasonWindow || /\d/.test(area.seasonWindow)) return;
+    const names = area.seasonWindow.match(/[a-z]+/gi) ?? [];
+    const months = names.flatMap(name => seasonMonths.filter(month => month.label.toLowerCase() === name.toLowerCase()));
+    if (months.length !== 2) return;
+    const [open, close] = months;
+    const spansYears = open.month > close.month;
+    return {
+        opensIn: open.month, opening: open.label, openingRank: (open.month - 1) * 32,
+        closesIn: close.month, closing: close.label, closingRank: (close.month - 1) * 32 + 31,
+        closingYearOffset: Number(spansYears), spansYears,
+    };
+}
+
+function seasonForDate(typical: SeasonWindow, date: string, actual: readonly ActualSeason[]) {
+    const [year, month, day] = date.split('-').map(Number);
+    const seasonEnded = (month - 1) * 32 + day > typical.closingRank;
+    let firstYear = year - typical.closingYearOffset + Number(seasonEnded);
+    const seasonAt = (start: number) => typical.spansYears ? `${start}/${String((start + 1) % 100).padStart(2, '0')}` : String(start);
+    if (actual.some(row => row.season === seasonAt(firstYear) && row.closesOn && row.closesOn < date)) firstYear++;
+    return seasonAt(firstYear);
+}
+
+function datedBoundary(date: string, basis: SeasonBoundary['basis'], source: string): SeasonBoundary {
+    return { month: Number(date.slice(5, 7)), label: monthDay.format(Date.parse(`${date}T00:00:00Z`)), date, basis, source };
+}
+
+export function skiSeasonOutlook(area: SkiArea, date: string, conditions?: Conditions, calendar = seasonCalendar) {
+    const entry = calendar.byArea.get(area.id);
+    const actual = entry?.actual ?? [];
+    const typical = entry?.typical ?? publishedSeasonWindow(area);
+    const expectedSeason = typical && seasonForDate(typical, date, actual);
+    const active = actual.find(row => row.opensOn && row.opensOn <= date && (row.closesOn ? row.closesOn >= date : row.season === expectedSeason));
+    const upcoming = upcomingSeasonPlan(entry, date);
+    const season = active?.season ?? upcoming?.season ?? expectedSeason ?? actual[0]?.season;
+    const recorded = actual.find(row => row.season === season);
+    const scheduled = upcoming?.season === season ? upcoming : upcomingSeasonPlan(entry, date, season);
+    const reportedOpen = reportedOpeningPlan(conditions?.reports.get(area.id), date, conditions?.now);
+    const evidence = entry?.typical?.evidence;
+    const estimatedSource = evidence && 'source' in evidence ? calendar.sources[evidence.source]
+        : typical && !evidence ? area.statSources?.find(group => group.fields.includes('seasonWindow'))?.source ?? area.statsUrl ?? area.website : undefined;
+    function boundary(edge: 'opening' | 'closing'): SeasonBoundary | undefined {
+        const opening = edge === 'opening';
+        const key = opening ? 'opensOn' : 'closesOn';
+        const actualDay = recorded?.[key];
+        if (recorded && actualDay) {
+            return datedBoundary(actualDay, 'Recorded', calendar.sources[opening ? recorded.source : recorded.closingSource ?? recorded.source]);
+        }
+        if (opening && reportedOpen) return datedBoundary(reportedOpen.date, 'Scheduled', reportedOpen.source.url);
+        const plannedDay = scheduled?.[key];
+        if (scheduled && plannedDay) {
+            return datedBoundary(plannedDay, 'Scheduled', calendar.sources[opening ? scheduled.source : scheduled.closingSource ?? scheduled.source]);
+        }
+        if (typical) return { month: opening ? typical.opensIn : typical.closesIn, label: typical[edge], basis: 'Estimated', source: estimatedSource };
+    }
+    const opening = boundary('opening');
+    const closing = boundary('closing');
+    return { season, opening, closing, note: scheduled?.note };
 }
 
 export function includesSeasonMonth(typical: TypicalSeason | undefined, month: number) {

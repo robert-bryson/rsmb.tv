@@ -39,6 +39,24 @@ describe('ski-status pass products', () => {
         expect(filterSkiAreas([alta, snowbird], { product: { pass: product('ikon-base'), date: '2027-01-18', now } })).toEqual([snowbird]);
     });
 
+    it('applies the product date to its own pass and keeps access through other selected passes', () => {
+        const parkCity = area('park-city-mountain');
+        const snowbird = area('snowbird');
+        const passProduct = { pass: product('ikon-base'), date: '2026-12-26', now };
+        expect(filterSkiAreas([parkCity, snowbird], { passes: ['ikon', 'epic'], product: passProduct })).toEqual([parkCity]);
+
+        const selection = { passes: ['ikon', 'epic', 'mountain-collective'] as const, product: passProduct };
+        expect(filterSkiAreas([parkCity, snowbird], selection)).toEqual([parkCity, snowbird]);
+        expect(markerAppearance(snowbird, 'pass', selection).passBadge).toBe('mountain-collective-plus');
+    });
+
+    it('prioritizes the product family when the shared selection contains only a product', () => {
+        const snowbird = area('snowbird');
+        const selection = { product: { pass: product('mountain-collective-pass'), now } };
+        expect(filterSkiAreas([snowbird], selection)).toEqual([snowbird]);
+        expect(markerAppearance(snowbird, 'pass', selection).passBadge).toBe('mountain-collective-plus');
+    });
+
     it('honors partner windows across the calendar year', () => {
         const resort = area('alta-badia');
         expect(evaluatePass(product('ikon-pass'), resort, now, '2026-11-14').status).toBe('outside-dates');

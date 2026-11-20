@@ -1,9 +1,9 @@
 import type { FeatureCollection, Point } from 'geojson';
 import type { ExpressionSpecification, Map as MapLibreMap } from '../../maps/maplibre';
-import { passFamilySchema, type SkiArea } from './catalog';
+import { passFamilySchema, skiAreaMapPoint, type SkiArea } from './catalog';
 import { isSkiingStatus, type ResortStatus } from './conditions';
 import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, statusMarkers, type MarkerMode } from './mapAppearance';
-import type { PassFilter } from './browse';
+import type { SkiPassSelection } from './browse';
 import { passIconUrls } from './passIcons';
 
 export const sourceId = 'ski-areas';
@@ -25,10 +25,10 @@ const unclustered: ExpressionSpecification = ['!', ['has', 'point_count']];
 const participating: ExpressionSpecification = ['>', ['get', 'skiingCount'], 0];
 const resortIconScale: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 3, 0.55, 6, 0.75, 9, 1];
 
-export function areaFeatures(areas: readonly SkiArea[], mode: MarkerMode, statuses: ReadonlyMap<string, ResortStatus>, pass?: PassFilter): FeatureCollection<Point> {
+export function areaFeatures(areas: readonly SkiArea[], mode: MarkerMode, statuses: ReadonlyMap<string, ResortStatus>, passes?: SkiPassSelection): FeatureCollection<Point> {
     return { type: 'FeatureCollection', features: areas.map(area => {
         const status = statuses.get(area.id) ?? 'unknown';
-        const appearance = mode === 'operatingStatus' ? statusMarkers[status] : markerAppearance(area, mode, pass);
+        const appearance = mode === 'operatingStatus' ? statusMarkers[status] : markerAppearance(area, mode, passes);
         return {
             type: 'Feature', id: area.id,
             properties: {
@@ -36,7 +36,7 @@ export function areaFeatures(areas: readonly SkiArea[], mode: MarkerMode, status
                 statusIcon: mode === 'operatingStatus' ? `${statusImagePrefix}${status}` : '',
                 skiing: Number(isSkiingStatus(status)),
             },
-            geometry: { type: 'Point', coordinates: area.location.coordinates },
+            geometry: { type: 'Point', coordinates: skiAreaMapPoint(area) },
         };
     }) };
 }

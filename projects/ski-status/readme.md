@@ -10,15 +10,17 @@ Use **Ski today** to find areas with a current report of open or limited skiing.
 
 - On a wide screen, the map and results sit side by side. On a phone, switch between **Map** and **Results**. Open **Compare** for the full-width table.
 - Search in the top bar by area name, alternative name, town, country, or skiing type. Use **Clear search** inside the field to remove the query.
-- Select a pass logo to filter for included access. Select it again to clear the pass filter. Use **Filters** to select a region or change other criteria. Use **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer. Remove an applied filter from the header.
-- Select a **Pass product** to check access on a **Ski date**. A blank date uses today at each ski area. For an Indy Add-On, select your **Home ski area** to exclude it from the results.
+- Select one or more pass buttons for included access. An area matches if any selected pass gives access. Select a pass again to remove it. Open the **Filters** icon for regions and other criteria. Use **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer. Remove other applied filters from the header.
+- Select a **Pass product** to check access on a **Ski date**. The product and date apply to that pass. A blank date uses today at each ski area. For an Indy Add-On, select your **Home ski area** to exclude it from the results for that product.
 - Select a month under **Typical season in** to find areas with a usual ski season in that month. Open a resort for the recorded dates and sources.
 - Select **Conventional downhill** for outdoor lift-served areas. This filter includes areas that also have Nordic trails. Select **Cross-country only** for Nordic centers. Use **Specialty skiing** for Nordic-only areas and other types such as indoor skiing.
 - Select a marker, a result, or a table row to open resort details. Use **Official conditions** or **Resort website and conditions** to read the operator's report. Select **Show runs and lifts** to zoom to mapped resort terrain.
-- Press Escape in the map to clear the selection. You can also select empty map space. Use the keyboard skip links for search, the map, and results. When you close the resort panel, focus returns to the control that opened it if the control is visible.
+- The resort header shows its icon when available. Open Google Maps for the visitor entrance or resort listing. Open Wikipedia for the resort article or a name and location search.
+- In **Season and snowfall**, check the recorded, scheduled, or estimated opening and closing dates. The snow chart shows historical monthly snowfall and depth where available, with sources and measurement locations.
+- Use the close icon in the resort panel. Focus returns to the control that opened the panel if it is visible. Press Escape in the map or select empty map space to clear the selection. Use the keyboard skip links for search, the map, and results.
 - In **Compare**, select a column header to sort. Use **Columns** to choose fields. Select **Export CSV** to download the current matches and the selected fields with export permission.
 
-Select **Share** in the top bar to share the current view. Use the system share menu when it opens. The app can also copy the URL or show it in a dialog. The link saves the search text, filters, sort order, selected resort, view, map position, and layer settings. The browser saves unit and column preferences.
+Select the **Share** icon in the top bar to share the current view. Use the system share menu when it opens. The app can also copy the URL or show it in a dialog. The link saves the search text, filters, sort order, selected resort, view, map position, and layer settings. The browser saves unit and column preferences.
 
 ### Map display
 
@@ -26,9 +28,16 @@ Drag or zoom the globe to explore. The URL updates when the map settles. Select 
 
 At globe scale, markers group nearby resorts. In operating status mode, a group number counts resorts reporting skiing today. The map uses muted groups where no resort reports skiing. Select a group to zoom in. From zoom level 3, small individual resort markers replace the groups. Operating status markers distinguish open, limited, closed, and unknown statuses with symbols and colors. A gold outline marks the selected area.
 
-Use **Layers** to change marker colors, open the map key, or control the terrain overlays. Color by pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The results show the selected metric alongside operating status. A gray marker in a metric layer means the value is unknown.
+The map uses a verified visitor entrance when one is available. It can use an inferred lift base when the mapped lifts support that location.
+**Show runs and lifts** centers the map on the terrain point.
 
-The pass layer uses brand icons for included access. A yellow **+** marks a multi-pass area. The pass filter chooses which brand appears on a multi-pass badge. Orange marks discount-only access. Gray marks unconfirmed access.
+Select the **Layers** icon next to **Fit results**. The panel controls marker colors, the map key, and terrain overlays.
+Color by pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The results show the selected metric and operating status. A gray marker in a metric layer means that the value is unknown.
+
+Select the information icon at the bottom right of the map. It shows the source credits and data license.
+Download the catalog points, base points, or terrain from this panel.
+
+The pass layer uses brand icons for included access. A yellow **+** marks a multi-pass area. The badge gives priority to a selected pass that matches the area. Orange marks discount-only access. Gray marks unconfirmed access.
 
 The app serves the pass images with its site files.
 
@@ -43,7 +52,7 @@ An acreage value such as `200+` gives a minimum. The table sorts by that minimum
 
 The globe uses the CARTO Dark Matter background. In **Layers**, turn on **Terrain relief** to see shaded slopes from zoom level 8. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre projections](https://maplibre.org/maplibre-style-spec/types/#projectiondefinition), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
 
-Zoom in to level 11 to see footprints, runs, and lifts for the current results. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Lift stations appear at zoom level 13. Hover or tap a run or lift to see its mapped name and type. Open **Layers** at resort zoom for the difficulty key and the **Ski terrain** toggle.
+Resort footprints appear at zoom level 9. Runs and lifts appear at zoom level 11, and lift stations appear at zoom level 13. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Hover or tap a run or lift to see its mapped name and type. Open **Layers** for the difficulty key and the **Ski terrain** toggle.
 
 Use **Results** or **Compare** during a map failure. If the background fails, select **Retry background**. If the map or its markers fail, select **Retry map**. The new map opens at the last saved position. It keeps the filters and selected area. The map receives keyboard focus after the retry.
 
@@ -81,11 +90,14 @@ Mapped terrain values cover 536 areas. [First-release data review](../../docs/re
 | File | Use |
 | --- | --- |
 | [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
-| [Locations and mapped terrain](data/locations.json) | Points, local time zones, and mapped values from the November 16 OpenSkiData build. Each point has source links. |
+| [Locations and mapped terrain](data/locations.json) | Terrain points, local time zones, and mapped values from the November 16 OpenSkiData build. Each point has source links. |
+| [Resort bases](data/resort-bases.json) | Visitor entrances verified against operator directions and lower lift stations matched from OpenSkiData. |
 | [Resort terrain index](data/resort-terrain.json) and [PMTiles archive](data/resort-terrain.pmtiles) | Footprints, runs, lifts, and lift stations for 550 areas. The index records source and archive checksums and shared terrain groups. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 | [Pass products](data/pass-rules/) | Verified product rules by family, season, resort, and local date. |
 | [Season dates](data/seasons.json) | Actual first and last ski days, planned dates, and published recurring windows. |
+| [Snow history](data/snow-history.json) | Published annual snowfall, historical monthly snowfall totals, and snow depth. Values use centimeters and include sources. |
+| [Resort links and icons](data/resort-links.json) | Wikipedia article titles and sources for the icons bundled with the app. |
 | [Checked operator reports](data/conditions/operator-reports.json) | Dated operations, open terrain counts, and some named lifts and runs. |
 
 Use the same area ID in the area, location, and pass records. Add one point per area. Add one membership per pass family.
@@ -104,6 +116,19 @@ It covers 534 areas. The **Base**, **Summit**, and lift terminal columns show pu
 The catalog has counts for named mapped downhill runs at 482 areas and for Nordic trails at 45.
 Each count uses operating routes of the given activity. Segments with the same name count once. Routes without names can contribute to the mapped distance. [OpenSkiData dataset and license](https://www.openskidata.org/#license)
 
+### Season and snowfall
+
+The sidebar uses recorded dates first. It uses the current operator report for a scheduled opening when that report is fresh.
+It then uses the nearest applicable schedule. An estimate uses recent complete seasons or the operator's published season window.
+The sidebar labels each date **Recorded**, **Scheduled**, or **Estimated**.
+
+Monthly snowfall shows the average of the monthly totals. Snow depth shows settled snow at the measurement site. The chart gives the period and location.
+The USDA station series use the mean of the daily readings in each month. Each winter has equal weight. The Sunshine Village snow course gives early-month measurements. [USDA Snowbird station](https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=766&state=UT), [Alberta snow survey](https://rivers.alberta.ca/Contents/SnowPack/2016/4/aprmsc.pdf)
+
+Record snowfall and snow depth in centimeters. Use month numbers `1` to `12`. Give a source for each annual or monthly series.
+Keep zero when the source reports zero. Omit the month when the source gives no value. Use `survey` or `station` for depth readings at those sites.
+Use the same area ID in the snow history and the catalog. Use the area ID as the icon file name. Record a source for every bundled icon.
+
 ### Runs and lifts at resort zoom
 
 OpenSkiMap uses OpenSkiData. OpenSkiData combines OpenStreetMap ski features with Skimap.org area records. It adds place names from Who’s On First and elevations from Mapterhorn. Ski-status builds its tiles from the downloadable data under ODbL. [OpenSkiData source and license](https://www.openskidata.org/#license)
@@ -118,11 +143,14 @@ The November 16, 2026 snapshot covers 550 catalog areas. It contains 421 footpri
    python3 projects/ski-status/scripts/build-resort-terrain.py path/to/openskidata.gpkg path/to/metadata.json
    ```
 
-4. Review missing and shared area matches. Run the archive tests to check coverage and the checksum. [Local checks](#local-checks)
-5. Commit the archive, JSON index, and any changes to `locations.json` together.
+4. Review missing and shared area matches. Review changes in base points. Run the archive tests. [Local checks](#local-checks)
+5. Commit the archive, index, bases, and any changes to `locations.json` together.
 
 The importer checks the file size, layer names, feature counts, and build times. It matches each area by source ID or by a footprint that fits its location and activity.
 The tiles assign only Nordic trails to cross-country areas. They assign only ski touring routes to ski touring areas.
+The importer keeps verified entrances for areas in the current catalog. It considers mapped bottom stations near operating lifts.
+It counts only the lower terminal when the two elevations differ by at least 5 m. It can consider both ends of a flat lift.
+The inferred base requires a lift cluster, or one qualifying lift at a single-lift area.
 The importer updates named route counts when the location file uses the same build.
 
 The importer builds files in a temporary directory. It restores the previous output if a file replacement fails. The `data/resort-terrain.pid.lock` file prevents simultaneous builds. If a build stops and leaves this file, verify that its process has stopped before you remove it.
@@ -156,7 +184,7 @@ If the trip media path is unavailable, start Vite directly for ski-status.
 npx vite --host 127.0.0.1
 ```
 
-Run the catalog, table, conditions, and terrain tests. The archive test checks the index against the packaged file.
+Run the catalog, table, conditions, and terrain tests. The archive test checks the index, the packaged file, and the base point snapshot.
 The Python tests check the importer and candidate review. They require no GDAL or Tippecanoe installation.
 
 ```bash
@@ -167,7 +195,8 @@ npx vitest run src/test/skiStatus*.test.* src/test/skiMapArea.test.ts src/test/s
 npm run test:ski-terrain
 ```
 
-Run the browser tests for filters, resort reports, and map behavior. They check terrain byte ranges. They use a fixed clock to check report age.
+Run the browser tests for filters, resort reports, and map behavior. They check attribution downloads and terrain byte ranges.
+They use a fixed clock to check report age.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium

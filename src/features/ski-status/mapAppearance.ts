@@ -1,4 +1,4 @@
-import { formatArea, formatElevation, matchesPassFilter, passFilterFamily, type PassFilter, type SkiUnits } from './browse';
+import { formatArea, formatElevation, matchesSkiPass, selectedSkiPasses, type SkiPassSelection, type SkiUnits } from './browse';
 import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './catalog';
 import { skiDayStatus, statusLabels, type Conditions, type ResortStatus } from './conditions';
 
@@ -65,25 +65,23 @@ export function passBadgeId(family: PassFamily, multiple: boolean) {
     return multiple ? `${family}-plus` as const : family;
 }
 
-export function passAccessAppearance(area: SkiArea, passFilter?: PassFilter): LegendEntry {
-    if (passFilter === 'indy-discounts' && area.passes.some(membership => matchesPassFilter(membership, passFilter))) {
-        return indyDiscount;
-    }
+export function passAccessAppearance(area: SkiArea, selection?: SkiPassSelection): LegendEntry {
     const included = passFamilySchema.options.filter(family =>
         area.passes.some(pass => pass.family === family && pass.access === 'included'));
-    if (!included.length) return area.passes.some(pass => pass.access === 'discount') ? discountOnly : unconfirmedPass;
-
-    const preferredPass = passFilter && passFilterFamily(passFilter);
-    const family = preferredPass && included.includes(preferredPass) ? preferredPass : included[0];
+    const passes = selectedSkiPasses(selection);
+    const preferred = included.find(family => passes.includes(family) && matchesSkiPass(area, family, selection?.product));
+    if (!preferred && passes.includes('indy-discounts') && matchesSkiPass(area, 'indy-discounts')) return indyDiscount;
+    const family = preferred ?? included[0];
+    if (!family) return area.passes.some(pass => pass.access === 'discount') ? discountOnly : unconfirmedPass;
     const multiple = included.length > 1;
     return { color: multiple ? multiplePassColor : passColors[family], label: passNames[family], family, multiple };
 }
 
-export function markerAppearance(area: SkiArea, mode: MarkerMode, passFilter?: PassFilter, conditions?: Conditions): MarkerAppearance {
+export function markerAppearance(area: SkiArea, mode: MarkerMode, passSelection?: SkiPassSelection, conditions?: Conditions): MarkerAppearance {
     if (mode === 'default') return { color: defaultColor };
     if (mode === 'operatingStatus') return { color: statusMarkers[skiDayStatus(conditions?.reports.get(area.id), conditions?.now ?? 0, area.location.timeZone)].color };
     if (mode === 'pass') {
-        const { color, family, multiple } = passAccessAppearance(area, passFilter);
+        const { color, family, multiple } = passAccessAppearance(area, passSelection);
         return family ? { color, passBadge: passBadgeId(family, Boolean(multiple)) } : { color };
     }
     const value = area[mode];

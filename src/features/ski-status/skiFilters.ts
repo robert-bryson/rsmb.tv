@@ -1,4 +1,4 @@
-import { matchesPassFilter, readPassFilter, readSkiingFilter, skiRegionOptions, sortSkiAreas } from './browse';
+import { matchesPassFilter, passFilterKeys, readPassFilters, readSkiingFilter, skiRegionOptions, sortSkiAreas, type PassFilter } from './browse';
 import { skiAreas } from './catalog';
 import { readStatusFilter, type StatusFilter } from './conditions';
 import { passProducts, readSkiDate } from './passRules';
@@ -12,10 +12,37 @@ export const indyHomeAreas = sortSkiAreas(skiAreas.filter(area => area.skiing !=
 
 const legacyFilters = ['q', 'region', 'pass', 'product', 'area', 'skiing', 'night', 'seasonMonth', 'inView', 'color', 'sort', 'terrain', 'skiTerrain'];
 
-export function writeSkiPassFilter(params: URLSearchParams, value?: string) {
-    if (value) params.set('pass', value);
-    else params.delete('pass');
+function clearSkiPassProduct(params: URLSearchParams) {
     for (const key of ['product', 'skiDate', 'homeArea']) params.delete(key);
+}
+
+function writeSkiPasses(params: URLSearchParams, passes: readonly PassFilter[]) {
+    params.delete('pass');
+    for (const pass of passFilterKeys) {
+        if (passes.includes(pass)) params.append('pass', pass);
+    }
+    const product = passProducts.get(params.get('product') ?? '');
+    if (!product || !passes.includes(product.family)) clearSkiPassProduct(params);
+}
+
+export function toggleSkiPassFilter(params: URLSearchParams, pass: PassFilter) {
+    const product = passProducts.get(params.get('product') ?? '');
+    const passes = readPassFilters(params, product?.family);
+    writeSkiPasses(params, passes.includes(pass) ? passes.filter(value => value !== pass) : [...passes, pass]);
+}
+
+export function writeSkiPassProduct(params: URLSearchParams, value: string) {
+    const previous = passProducts.get(params.get('product') ?? '');
+    const passes = readPassFilters(params, previous?.family);
+    const product = passProducts.get(value);
+    if (product) {
+        params.set('product', product.id);
+        if (!product.requiresHomeArea) params.delete('homeArea');
+        writeSkiPasses(params, [...passes, product.family]);
+    } else {
+        clearSkiPassProduct(params);
+        writeSkiPasses(params, passes);
+    }
 }
 
 export function readSkiFilters(params: URLSearchParams) {
@@ -28,7 +55,7 @@ export function readSkiFilters(params: URLSearchParams) {
     const status: SkiStatusFilter = statusParam === 'today' || statusParam === 'all' ? statusParam : readStatusFilter(statusParam) ?? defaultStatus;
     return {
         region: regionLabels.has(region) ? region : '',
-        pass: product?.family ?? readPassFilter(params),
+        passes: readPassFilters(params, product?.family),
         product,
         skiDate: product && readSkiDate(params.get('skiDate')),
         homeArea: product?.requiresHomeArea ? indyHomeAreas.find(area => area.id === params.get('homeArea')) : undefined,

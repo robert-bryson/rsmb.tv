@@ -1,6 +1,8 @@
 import { formatArea, formatSnowDepth, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
-import { seasonCalendar, seasonViewDate, upcomingSeasonPlan } from './seasons';
+import type { Conditions } from './conditions';
+import { seasonCalendar, seasonViewDate } from './seasons';
+import { SkiSeasonChart } from './SkiSeasonChart';
 
 const sourceClass = 'text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
 
@@ -8,15 +10,14 @@ function DateValue({ date }: { date?: string }) {
     return date ? <time dateTime={date}>{date}</time> : <>Unknown</>;
 }
 
-export function SkiSeasonDetails({ area, units, now }: { area: SkiArea; units: SkiUnits; now?: number }) {
+export function SkiSeasonDetails({ area, units, conditions }: { area: SkiArea; units: SkiUnits; conditions?: Conditions }) {
     const entry = seasonCalendar.byArea.get(area.id);
-    if (!entry) return null;
-    const { typical, actual } = entry;
-    const latestPlan = upcomingSeasonPlan(entry, seasonViewDate(area, now));
-    if (!typical && !latestPlan && !actual.length) return null;
+    const typical = entry?.typical;
+    const actual = entry?.actual ?? [];
 
     return <section aria-label="Season dates" className="border-t border-zinc-800 py-2 text-sm">
-        {typical && <p>
+        <SkiSeasonChart area={area} date={seasonViewDate(area, conditions?.now)} units={units} conditions={conditions} />
+        {typical && <p className="mt-2">
             <strong>Typical season</strong>{' · '}
             {'count' in typical.evidence ? <>
                 {typical.opening} to {typical.closing}{' · '}
@@ -25,18 +26,6 @@ export function SkiSeasonDetails({ area, units, now }: { area: SkiArea; units: S
                 {typical.evidence.note ?? `${typical.opening} to ${typical.closing}`}{' · '}
                 <a className={sourceClass} href={seasonCalendar.sources[typical.evidence.source]}>Season source</a>
             </>}
-        </p>}
-        {latestPlan && <p className="mt-1">
-            <strong>Planned {latestPlan.season}</strong>
-            {latestPlan.opensOn && <> · Opens <DateValue date={latestPlan.opensOn} /></>}
-            {latestPlan.closesOn && <> · Closes <DateValue date={latestPlan.closesOn} /></>}
-            {(latestPlan.opensOn || !latestPlan.closingSource) && <>
-                {' · '}<a className={sourceClass} href={seasonCalendar.sources[latestPlan.source]}>Schedule</a>
-            </>}
-            {latestPlan.closesOn && latestPlan.closingSource && <>
-                {' · '}<a className={sourceClass} href={seasonCalendar.sources[latestPlan.closingSource]}>Closing schedule</a>
-            </>}
-            {latestPlan.note && <span className="block text-zinc-300">{latestPlan.note}</span>}
         </p>}
         {actual.length > 0 && <details className="py-1">
             <summary className="min-h-10 cursor-pointer py-2.5 text-zinc-200 hover:text-cyan-300">Opening and closing history</summary>

@@ -6,16 +6,18 @@ import type { MapCamera } from '../../maps/mapCamera';
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
-import { skiAreaBounds, type PassFilter } from './browse';
-import { skiAreas, type SkiArea } from './catalog';
+import { skiAreaBounds, type SkiPassSelection } from './browse';
+import { skiAreaMapPoint, skiAreas, type SkiArea } from './catalog';
 import type { Conditions, ResortStatus } from './conditions';
 import type { MarkerMode } from './mapAppearance';
+import { skiMapAttribution } from './mapAttribution';
 import { resortFootprintLayer, resortTerrainGroups, resortTerrainLabel, resortTerrainMinZoom, resortTerrainSource,
     syncResortTerrain, visibleTerrainConventions, type TerrainConvention } from './resortTerrain';
 import { captureSkiMapArea, encodeSkiMapArea, encodeSkiMapCamera, skiMapMaxZoom, skiMapMinZoom, type SkiMapArea } from './skiMapArea';
 import { addAreaLayers, addCountImage, addPassBadges, areaFeatures, clusterLayer, filterPassBadges, loadPassImages, markerLayers,
     pointLayer, selectionSource, sourceId, updateClusterStyle } from './skiMapLayers';
 import { SkiAreaPopup } from './SkiAreaPopup';
+import { SkiIcon } from './SkiIcon';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './skiAreaPopup.css';
 
@@ -32,7 +34,7 @@ interface Props {
     cameraAreas: readonly SkiArea[];
     selected?: SkiArea;
     colors: MarkerMode;
-    passFilter?: PassFilter;
+    passSelection: SkiPassSelection;
     statuses: ReadonlyMap<string, ResortStatus>;
     conditions: Conditions;
     terrain: boolean;
@@ -64,6 +66,10 @@ function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number
     const padding = Math.min(46, clientWidth / 4, clientHeight / 4);
     if (!padding) return;
     map.resize();
+    if (bounds[0] === bounds[2] && bounds[1] === bounds[3]) {
+        map.easeTo({ center: [bounds[0], bounds[1]], zoom: pointZoom, duration });
+        return;
+    }
     if (bounds[2] - bounds[0] >= 180) {
         // A single face of the globe cannot show results spread around the world.
         let center: maplibre.LngLatLike = overviewCenter;
@@ -71,7 +77,7 @@ function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number
             const current = map.getCenter();
             let nearestDistance = Infinity;
             for (const area of areas) {
-                const location = maplibre.LngLat.convert(area.location.coordinates);
+                const location = maplibre.LngLat.convert(skiAreaMapPoint(area));
                 const distance = current.distanceTo(location);
                 if (distance >= nearestDistance) continue;
                 nearestDistance = distance;
@@ -117,7 +123,7 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<
         const id: unknown = feature.properties.areaId;
         const area = typeof id === 'string' ? areas.get(id) : undefined;
         if (!area) continue;
-        const position = projectVisibleGlobeLocation(map, area.location.coordinates);
+        const position = projectVisibleGlobeLocation(map, skiAreaMapPoint(area));
         if (!position) continue;
         const distance = distanceSquared(point, position);
         if (distance >= nearestDistance) continue;
@@ -144,7 +150,7 @@ function expandCluster(map: maplibre.Map, point: TooltipPoint, duration: number)
     return true;
 }
 
-export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected, colors, passFilter, statuses, conditions, terrain, resortTerrain,
+export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected, colors, passSelection, statuses, conditions, terrain, resortTerrain,
     visible, searchedArea, searchedAreaKey, initializeArea, terrainRequest, camera, navigationKey, restoreHistoryCamera, cameraReader, onCameraChange,
     onSearchArea, onSelect, onTerrainKey, onOpenLayers }: Props) {
     const container = useRef<HTMLDivElement>(null);
@@ -179,8 +185,8 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     }, [areas, selected]);
     const terrainGroups = useMemo(() => resortTerrainGroups(selected ? [...areas, selected] : areas), [areas, selected]);
     const showResortTerrain = visible && resortTerrain && terrainGroups.length > 0;
-    const points = useMemo(() => areaFeatures(areas, colors, statuses, passFilter), [areas, colors, statuses, passFilter]);
-    const selection = useMemo(() => areaFeatures(selected ? [selected] : [], colors, statuses, passFilter), [selected, colors, statuses, passFilter]);
+    const points = useMemo(() => areaFeatures(areas, colors, statuses, passSelection), [areas, colors, statuses, passSelection]);
+    const selection = useMemo(() => areaFeatures(selected ? [selected] : [], colors, statuses, passSelection), [selected, colors, statuses, passSelection]);
     const current = useEffectEvent(() => ({ areasById, points, selection, selected, colors, terrain, duration }));
     const selectArea = useEffectEvent(onSelect);
     const syncResortDetails = useEffectEvent((map: maplibre.Map) => {
@@ -243,7 +249,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         } else if (selected && (historyChanged || selectionChanged)) {
             if (!fromPin) {
                 map.resize();
-                map.easeTo({ center: selected.location.coordinates, zoom: Math.max(pointZoom, map.getZoom()), duration: previous ? duration : 0 });
+                map.easeTo({ center: skiAreaMapPoint(selected), zoom: Math.max(pointZoom, map.getZoom()), duration: previous ? duration : 0 });
             }
         } else if (!selected && !searchedArea && (historyChanged || !previous || (previous.key === null && previous.areas !== cameraAreas &&
             (previous.areas.length !== cameraAreas.length || cameraAreas.some((area, index) => area.id !== previous.areas[index].id))))) {
@@ -283,6 +289,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 instance = new maplibre.Map({
                     container: container.current, style: providerStyle(), center: overviewCenter, zoom: 1,
                     minZoom: skiMapMinZoom, maxZoom: skiMapMaxZoom, dragRotate: false, pitchWithRotate: false,
+                    attributionControl: false,
                 });
             } catch {
                 setRendererFailed(true);
@@ -325,6 +332,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 queueViewport();
             };
             instance.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
+            instance.addControl(skiMapAttribution(), 'bottom-right');
             recoveryRef.current = recoverBasemap(instance, {
                 dataSources: new Set([sourceId, selectionSource, terrainSource, resortTerrainSource]),
                 providerStyle, neutralStyle: () => cartoRasterStyle('dark', ''),
@@ -473,8 +481,9 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const interactive = visible && ready && !failed;
     const showReliefError = interactive && terrain && terrainUnavailable && mapZoom >= reliefMinZoom;
     const showSkiTerrainError = interactive && showResortTerrain && resortTerrainUnavailable && mapZoom >= resortTerrainMinZoom;
-    const canSearch = interactive && !moving && Boolean(viewport) && searchedAreaKey !== viewport;
-    return <div className="flex h-full min-h-0 flex-col" onKeyDown={event => {
+    const areaApplied = Boolean(searchedAreaKey && searchedAreaKey === viewport);
+    const canSearch = interactive && !moving && Boolean(viewport) && !areaApplied;
+    return <div className="ski-map" onKeyDown={event => {
         if (event.key !== 'Escape' || (!selected && !hovered && !terrainPopupRef.current?.isOpen())) return;
         event.preventDefault();
         terrainPopupRef.current?.remove();
@@ -484,32 +493,36 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             mapRef.current?.getCanvas().focus({ preventScroll: true });
         }
     }}>
-        <div className="ski-actions shrink-0 border-b border-slate-700 px-2 py-1">
+        <div className="ski-map-actions">
             <button type="button" className="ski-control ski-primary" aria-disabled={!canSearch} onClick={() => {
                 if (canSearch && viewport) onSearchArea(viewport);
-            }}>Search this area</button>
-            <button type="button" disabled={!interactive || !fitResults.length} className="ski-control" onClick={() => {
-                if (mapRef.current) fitAreas(mapRef.current, fitResults, duration);
-            }}>Fit results</button>
-            <button type="button" className="ski-control" aria-haspopup="dialog" aria-controls="ski-map-layers" onClick={onOpenLayers}>Layers</button>
+            }} title={areaApplied ? 'This area is already searched' : undefined}>
+                <SkiIcon name={areaApplied ? 'check' : 'search'} />Search this area
+            </button>
+            <div className="ski-map-utilities">
+                <button type="button" disabled={!interactive || !fitResults.length} className="ski-control ski-fit-button"
+                    aria-label="Fit results" title="Fit results" onClick={() => {
+                        if (mapRef.current) fitAreas(mapRef.current, fitResults, duration);
+                    }}><SkiIcon name="fit" /><span>Fit results</span></button>
+                <button type="button" className="ski-control ski-icon-button" aria-label="Layers" title="Map layers"
+                    aria-haspopup="dialog" aria-controls="ski-map-layers" onClick={onOpenLayers}><SkiIcon name="layers" /></button>
+            </div>
         </div>
-        <div className="relative min-h-0 flex-1">
-            <p id="ski-map-instructions" className="sr-only">Use the arrow keys to move the map. Use the zoom buttons or plus and minus keys to zoom. Browse Results to select areas by name.</p>
-            <div ref={container} tabIndex={-1} className="h-full w-full" data-testid="ski-status-map" data-map-state={state} />
-            {interactive && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
-                && <SkiAreaPopup area={hovered} mapRef={mapRef} report={conditions.reports.get(hovered.id)} status={statuses.get(hovered.id) ?? 'unknown'} now={conditions.now} />}
-            {(state !== 'ready' || showReliefError || showSkiTerrainError) && <div
-                className="absolute bottom-10 left-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-slate-600 bg-[#152230] px-3 py-2 text-sm text-slate-100"
-                role={failed ? 'alert' : 'status'}>
-                {failed && <p>{markersFailed && !rendererFailed ? 'Resort markers unavailable.' : 'Map unavailable.'} <button type="button"
-                    className="min-h-11 text-cyan-200 underline" onClick={retryMap}>Retry map</button></p>}
-                {state === 'loading' && <p>Loading map…</p>}
-                {state === 'degraded' && <p>Background unavailable. <button type="button" className="min-h-11 text-cyan-200 underline"
-                    onClick={() => recoveryRef.current?.retry()}>Retry background</button></p>}
-                {showReliefError && <p>Terrain relief unavailable.</p>}
-                {showSkiTerrainError && <p><span>Ski terrain unavailable.</span> <button type="button" className="min-h-11 text-cyan-200 underline"
-                    onClick={retrySkiTerrain}>Retry ski terrain</button></p>}
-            </div>}
-        </div>
+        <p id="ski-map-instructions" className="sr-only">Use the arrow keys to move the map. Use the zoom buttons or plus and minus keys to zoom. Browse Results to select areas by name.</p>
+        <div ref={container} tabIndex={-1} className="h-full w-full" data-testid="ski-status-map" data-map-state={state} />
+        {interactive && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
+            && <SkiAreaPopup area={hovered} mapRef={mapRef} report={conditions.reports.get(hovered.id)} status={statuses.get(hovered.id) ?? 'unknown'} now={conditions.now} />}
+        {(state !== 'ready' || showReliefError || showSkiTerrainError) && <div
+            className="absolute bottom-10 left-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-slate-600 bg-[#152230] px-3 py-2 text-sm text-slate-100"
+            role={failed ? 'alert' : 'status'}>
+            {failed && <p>{markersFailed && !rendererFailed ? 'Resort markers unavailable.' : 'Map unavailable.'} <button type="button"
+                className="min-h-11 text-cyan-200 underline" onClick={retryMap}>Retry map</button></p>}
+            {state === 'loading' && <p>Loading map…</p>}
+            {state === 'degraded' && <p>Background unavailable. <button type="button" className="min-h-11 text-cyan-200 underline"
+                onClick={() => recoveryRef.current?.retry()}>Retry background</button></p>}
+            {showReliefError && <p>Terrain relief unavailable.</p>}
+            {showSkiTerrainError && <p><span>Ski terrain unavailable.</span> <button type="button" className="min-h-11 text-cyan-200 underline"
+                onClick={retrySkiTerrain}>Retry ski terrain</button></p>}
+        </div>}
     </div>;
 }

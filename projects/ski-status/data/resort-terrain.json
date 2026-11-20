@@ -2,9 +2,11 @@
   "source": "https://tiles.openskimap.org/openskidata.gpkg",
   "buildTime": "2026-11-16T01:43:51.452Z",
   "sourceSha256": "cf2de163bf7eaf6c0c6a902cc9ecf59655838bf2d98ea4748230f5525709fbbf",
-  "archiveSha256": "36238c993973f3f38246283019aafa8bef9caae08c1019ecf390bff87dcbc26c",
+  "archiveSha256": "39b95a97c8f87108cf23c80718b3cfcabf0ad8c125b8870fa11cf3ddec378e5f",
   "license": "https://opendatacommons.org/licenses/odbl/1-0/",
-  "minZoom": 11,
+  "minZoom": 9,
+  "detailMinZoom": 11,
+  "stationMinZoom": 13,
   "maxZoom": 14,
   "counts": {
     "footprints": 421,

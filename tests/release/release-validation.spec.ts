@@ -87,7 +87,7 @@ if (location.pathname === '/projects/flights/map') {
     ready();
     const map = document.querySelector('[data-map-state]');
     map.innerHTML = '<button type="button">Zoom in</button><button type="button">Layers</button>'
-        + '<dialog aria-label="Map layers"><label><input type="checkbox">Ski terrain</label><button type="button">Done</button></dialog>'
+        + '<dialog aria-label="Map layers"><label><input type="checkbox">Ski terrain</label><button type="button" aria-label="Close">×</button></dialog>'
         + '<canvas class="maplibregl-canvas" width="680" height="400"></canvas><output></output>';
     let zoomClicks = 0;
     let terrainLoaded = false;

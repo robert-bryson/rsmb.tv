@@ -3,7 +3,10 @@ import { conditionColumns, mountainColumns, formatElevation, formatSkiLocation, 
 import { passNames, passSeason, type SkiArea } from './catalog';
 import { areaForecast, localReportTime, reportAgeHours, reportAgeLabel, skiDayStatus, terrainStatusText, type Conditions, type ResortReport } from './conditions';
 import { accessLabels, evaluatePass, type PassProduct } from './passRules';
+import { skiResortIcon } from './resortDetailsData';
+import { SkiIcon } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
+import { SkiResortLinks } from './SkiResortLinks';
 import { SkiSeasonDetails } from './SkiSeasonDetails';
 import { SkiStatusLabel } from './SkiStatusLabel';
 
@@ -33,6 +36,8 @@ function detailSourceLinks(area: SkiArea) {
     for (const group of area.statSources ?? []) seen.add(group.source);
     addLink(area.statsUrl, 'Mountain stats source');
     addLink(area.location.mappedTerrain?.source, 'OpenSkiMap terrain');
+    const base = area.location.base;
+    if (base) addLink(base.source, base.kind === 'entrance' ? base.name : 'Mapped lift base');
     let extra = 0;
     for (const url of area.additionalSources ?? []) {
         if (seen.has(url)) continue;
@@ -98,15 +103,22 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
     const rule = access?.rule;
     const links = detailSourceLinks(area);
     const officialConditions = links.find(({ url }) => url === area.reportUrl);
-    return <section id="ski-area-details" ref={sectionRef} tabIndex={-1} aria-labelledby="ski-area-name" className="px-3 py-2">
-        <div className="flex flex-wrap items-start justify-between gap-2">
-            <div>
-                <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>
-                <p className="text-sm text-zinc-300">{formatSkiLocation(area)}</p>
+    const icon = skiResortIcon(area.id);
+    return <section id="ski-area-details" ref={sectionRef} tabIndex={-1} aria-labelledby="ski-area-name" className="ski-details">
+        <div className="ski-details-heading">
+            <div className="ski-resort-identity">
+                {icon && <img className="ski-resort-icon" src={icon} width={42} height={42} alt="" />}
+                <div>
+                    <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>
+                    <p className="text-sm text-zinc-300">{formatSkiLocation(area)}</p>
+                </div>
             </div>
-            <button type="button" onClick={onClose} className="ski-control min-h-11 px-2 text-sm">Close details</button>
+            <button type="button" onClick={onClose} className="ski-control ski-icon-button ski-quiet-button" aria-label="Close details" title="Close details">
+                <SkiIcon name="close" />
+            </button>
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+            <SkiResortLinks area={area} />
             <SkiStatusLabel status={status} report={report} now={now} />
             {officialConditions && <a className={linkClass} href={officialConditions.url}>{officialConditions.label}</a>}
             {onShowTerrain && <button type="button" className="ski-control" onClick={onShowTerrain}>Show runs and lifts</button>}
@@ -142,7 +154,7 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
             </dl>
             {report?.terrain && conditions && <ReportedTerrain report={report} area={area} now={conditions.now} />}
         </section>}
-        <SkiSeasonDetails area={area} units={units} now={conditions?.now} />
+        <SkiSeasonDetails area={area} units={units} conditions={conditions} />
         <div className="flex flex-wrap gap-x-5 text-sm">
             {links.filter(link => link !== officialConditions).map(({ url, label }) => <a key={url} className={linkClass} href={url}>{label}</a>)}
         </div>

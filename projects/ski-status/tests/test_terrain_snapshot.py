@@ -1,5 +1,6 @@
 from contextlib import closing
 from importlib.util import module_from_spec, spec_from_file_location
+import json
 from pathlib import Path
 import sqlite3
 from tempfile import TemporaryDirectory
@@ -137,6 +138,59 @@ class TerrainPublicationTest(unittest.TestCase):
         self.assertEqual((self.directory / archive.name).read_text(encoding='utf-8'), f'Old {archive.name}')
         self.assertEqual((self.directory / index.name).read_text(encoding='utf-8'), f'Old {index.name}')
         self.assertFalse((self.directory / locations.name).exists())
+
+
+class ResortBaseTest(unittest.TestCase):
+    def test_counts_only_lower_lift_terminals_when_the_elevations_differ(self):
+        base = (-120.005, 39, 1800)
+        transfer = (-120.001, 39, 2100)
+        summit = (-120.001, 39.005, 2400)
+        stations = [
+            (transfer[:2], 'Transfer', 'https://example.test/transfer'),
+            (base[:2], 'Lodge', 'https://example.test/base'),
+        ]
+        lifts = [terrain.lift_entry_points(transfer, base), terrain.lift_entry_points(transfer, summit),
+                 terrain.lift_entry_points(base, summit)]
+        self.assertEqual(terrain.select_lift_base((-120, 39), stations, lifts)['name'], 'Lodge')
+        self.assertEqual(terrain.lift_entry_points(base, transfer), (base[:2],))
+        self.assertEqual(terrain.lift_entry_points(base, (*transfer[:2], base[2] + 1)), (base[:2], transfer[:2]))
+
+    def test_drops_verified_entrances_for_deleted_catalog_areas(self):
+        directory = Path(self.enterContext(TemporaryDirectory()))
+        staging = directory / 'staging'
+        staging.mkdir()
+        entrance = {'kind': 'entrance', 'coordinates': [4, 6], 'source': 'https://example.test/base', 'name': 'Lodge'}
+        original = directory / 'resort-bases.json'
+        original.write_text(json.dumps({'bases': {'kept': entrance, 'removed': entrance}}), encoding='utf-8')
+        locations = {'license': 'https://example.test/license', 'locations': [{'id': 'kept', 'coordinates': [4, 5]}]}
+        db = type('EmptyDatabase', (), {'GetLayerByName': lambda self, _name: []})()
+        with patch.object(terrain, 'DATA', directory):
+            output = terrain.write_resort_bases(db, {}, {'kept': {}}, locations, '2026-11-20T12:00:00Z', staging)
+        self.assertEqual(terrain.read_json(output)['bases'], {'kept': entrance})
+
+    def test_chooses_a_lift_cluster_and_ignores_a_distant_station(self):
+        closer, lodge, distant = (-120.001, 39), (-120.005, 39), (-120.04, 39)
+        stations = [
+            (closer, 'Upper chair', 'https://example.test/upper'),
+            (lodge, 'Main lift', 'https://example.test/base'),
+            (distant, 'Other area', 'https://example.test/distant'),
+        ]
+        lifts = [
+            (closer, (-120.001, 39.005)),
+            (lodge, (-120.005, 39.005)),
+            ((-120.006, 39), (-120.006, 39.005)),
+            (distant, (-120.04, 39.005)),
+            (distant, (-120.04, 39.006)),
+            (distant, (-120.04, 39.007)),
+        ]
+        self.assertEqual(terrain.select_lift_base((-120, 39), stations, lifts), {
+            'coordinates': lodge, 'name': 'Main lift', 'kind': 'lift-base', 'source': 'https://example.test/base',
+        })
+
+    def test_requires_a_station_next_to_an_operating_lift(self):
+        station = ((-120, 39), None, 'https://example.test/station')
+        lift = ((-120.001, 39), (-120.001, 39.005))
+        self.assertIsNone(terrain.select_lift_base((-120, 39), [station], [lift]))
 
 
 class TerrainRunOwnershipTest(unittest.TestCase):

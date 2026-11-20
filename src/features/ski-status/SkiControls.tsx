@@ -1,11 +1,12 @@
 import type { ReactNode, RefObject } from 'react';
-import { passFilterFamily, passFilterOptions, skiingFilterOptions, type SkiUnits } from './browse';
+import { passFilterKeys, passFilterOptions, skiingFilterOptions, type SkiUnits } from './browse';
 import { statusFilterLabels } from './conditions';
 import { markerLegend, markerModes, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passProducts, readSkiDate } from './passRules';
 import { skiRunLegend, skiTerrainLegend, type TerrainConvention } from './resortTerrain';
-import { countries, indyHomeAreas, regions, writeSkiPassFilter, type SkiFilters } from './skiFilters';
+import { countries, indyHomeAreas, regions, toggleSkiPassFilter, writeSkiPassProduct, type SkiFilters } from './skiFilters';
 import { seasonMonths } from './seasons';
+import { SkiIcon } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 
 interface DialogProps {
@@ -20,9 +21,10 @@ export function SkiDialog({ dialog, id, title, children, onClose }: DialogProps)
     return <dialog ref={dialog} id={id} aria-labelledby={`${id}-title`} className="ski-dialog" onClose={onClose}>
         <div className="ski-dialog-heading">
             <h2 id={`${id}-title`} className="text-lg font-semibold">{title}</h2>
-            <button type="button" className="ski-control" onClick={() => dialog.current?.close()}>Done</button>
+            <button type="button" className="ski-control ski-icon-button ski-quiet-button" aria-label="Close" title="Close"
+                onClick={() => dialog.current?.close()}><SkiIcon name="close" /></button>
         </div>
-        <div className="p-4">{children}</div>
+        <div className="ski-dialog-content">{children}</div>
     </dialog>;
 }
 
@@ -40,26 +42,44 @@ interface FilterProps {
 }
 
 export function SkiFilterDialog({ dialog, filters, units, onUnitsChange, setParam, updateParams }: FilterProps) {
-    const { region, pass, product, skiDate, homeArea, skiing, night, seasonMonth, status } = filters;
-    const family = pass && passFilterFamily(pass);
-    const products = [...passProducts.values()].filter(option => !family || option.family === family);
-
-    function changeProduct(value: string) {
-        const next = passProducts.get(value);
-        updateParams(params => {
-            if (next) {
-                params.set('product', next.id);
-                params.set('pass', next.family);
-            } else {
-                params.delete('product');
-                params.delete('skiDate');
-            }
-            if (!next?.requiresHomeArea) params.delete('homeArea');
-        });
-    }
+    const { region, passes, product, skiDate, homeArea, skiing, night, seasonMonth, status } = filters;
+    const products = [...passProducts.values()].filter(option => !passes.length || passes.includes(option.family));
+    const productFamilyHint = product && passes.length > 1 && `Product and ski date apply to ${passFilterOptions[product.family]}.`;
 
     return <SkiDialog dialog={dialog} id="ski-filters" title="Filters">
         <div className="ski-fields">
+            <fieldset className="ski-pass-options" aria-describedby="ski-pass-help">
+                <legend className="font-semibold">Passes</legend>
+                <p id="ski-pass-help" className="mb-2 text-sm text-slate-300">Match any selected pass.</p>
+                <div className="ski-pass-options-grid">
+                    {passFilterKeys.map(pass => <label key={pass} className="ski-pass-option">
+                        <input type="checkbox" checked={passes.includes(pass)}
+                            onChange={() => updateParams(params => toggleSkiPassFilter(params, pass))} />
+                        {pass !== 'indy-discounts' && <SkiPassIcon family={pass} size={18} />}
+                        {passFilterOptions[pass]}
+                    </label>)}
+                </div>
+            </fieldset>
+            {products.length > 0 && <div className="col-span-full"><SkiField id="ski-pass-product" label="Pass product">
+                <select id="ski-pass-product" className="ski-input" value={product?.id ?? ''}
+                    aria-describedby={productFamilyHint ? 'ski-product-help' : undefined}
+                    onChange={event => updateParams(params => writeSkiPassProduct(params, event.target.value))}>
+                    <option value="">Any product</option>
+                    {products.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+                </select>
+                {productFamilyHint && <p id="ski-product-help" className="text-sm text-slate-300">{productFamilyHint}</p>}
+            </SkiField></div>}
+            {product && <SkiField id="ski-ski-date" label="Ski date (local)">
+                <input id="ski-ski-date" className="ski-input" type="date" value={skiDate ?? ''} aria-describedby={skiDate ? undefined : 'ski-date-help'}
+                    onChange={event => setParam('skiDate', readSkiDate(event.target.value))} />
+            </SkiField>}
+            {product?.requiresHomeArea && <SkiField id="ski-home-area" label="Home ski area">
+                <select id="ski-home-area" className="ski-input" value={homeArea?.id ?? ''} onChange={event => setParam('homeArea', event.target.value)}>
+                    <option value="">Select your home ski area</option>
+                    {indyHomeAreas.map(area => <option key={area.id} value={area.id}>{area.name}</option>)}
+                </select>
+            </SkiField>}
+            {product && !skiDate && <p id="ski-date-help" className="col-span-full text-sm text-slate-300">A blank ski date uses today at each area.</p>}
             <SkiField id="ski-region" label="Region">
                 <select id="ski-region" className="ski-input" value={region} onChange={event => setParam('region', event.target.value)}>
                     <option value="">All regions</option>
@@ -74,30 +94,6 @@ export function SkiFilterDialog({ dialog, filters, units, onUnitsChange, setPara
                     {Object.entries(statusFilterLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                 </select>
             </SkiField>
-            <SkiField id="ski-pass" label={<span className="flex items-center gap-1.5">{family && <SkiPassIcon family={family} />}Pass</span>}>
-                <select id="ski-pass" className="ski-input" value={pass ?? ''}
-                    onChange={event => updateParams(params => writeSkiPassFilter(params, event.target.value))}>
-                    <option value="">All ski areas</option>
-                    {Object.entries(passFilterOptions).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
-                </select>
-            </SkiField>
-            {pass !== 'indy-discounts' && products.length > 0 && <SkiField id="ski-pass-product" label="Pass product">
-                <select id="ski-pass-product" className="ski-input" value={product?.id ?? ''} onChange={event => changeProduct(event.target.value)}>
-                    <option value="">All products</option>
-                    {products.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
-                </select>
-            </SkiField>}
-            {product && <SkiField id="ski-ski-date" label="Ski date (local)">
-                <input id="ski-ski-date" className="ski-input" type="date" value={skiDate ?? ''} aria-describedby={skiDate ? undefined : 'ski-date-help'}
-                    onChange={event => setParam('skiDate', readSkiDate(event.target.value))} />
-            </SkiField>}
-            {product?.requiresHomeArea && <SkiField id="ski-home-area" label="Home ski area">
-                <select id="ski-home-area" className="ski-input" value={homeArea?.id ?? ''} onChange={event => setParam('homeArea', event.target.value)}>
-                    <option value="">Select your home ski area</option>
-                    {indyHomeAreas.map(area => <option key={area.id} value={area.id}>{area.name}</option>)}
-                </select>
-            </SkiField>}
-            {product && !skiDate && <p id="ski-date-help" className="col-span-full text-sm text-slate-300">A blank ski date uses today at each area.</p>}
             <SkiField id="ski-type" label="Skiing type">
                 <select id="ski-type" className="ski-input" value={skiing ?? ''} onChange={event => setParam('skiing', event.target.value)}>
                     <option value="">All skiing types</option>

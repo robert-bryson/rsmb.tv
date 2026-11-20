@@ -4,7 +4,7 @@ import { dolomitiTerrainReport } from '../../projects/ski-status/scripts/conditi
 import { filterSkiAreas, formatSkiStat, sortSkiAreas } from '../features/ski-status/browse';
 import { skiAreas } from '../features/ski-status/catalog';
 import { mergeResortReports, reportSnapshotSchema, reportStatus, reportStatusText, skiDayStatus, terrainStatusText, type ResortReport } from '../features/ski-status/conditions';
-import { includesSeasonMonth, readSeasonCalendar, readSeasonMonth, seasonCalendar, upcomingSeasonPlan } from '../features/ski-status/seasons';
+import { includesSeasonMonth, readSeasonCalendar, readSeasonMonth, seasonCalendar, skiSeasonOutlook, upcomingSeasonPlan } from '../features/ski-status/seasons';
 import { skiAreaCsv } from '../features/ski-status/skiCsv';
 
 const area = (id: string) => skiAreas.find(candidate => candidate.id === id)!;
@@ -44,6 +44,23 @@ describe('ski season dates', () => {
         expect(readSeasonMonth('13')).toBeUndefined();
     });
 
+    it('uses local season boundaries and advances to typical dates after the current schedule', () => {
+        const sunshine = area('banff-sunshine');
+        expect(skiSeasonOutlook(sunshine, '2027-01-20')).toMatchObject({
+            season: '2026/27',
+            opening: { date: '2026-11-07', basis: 'Recorded' },
+            closing: { date: '2027-05-24', basis: 'Scheduled' },
+        });
+        expect(skiSeasonOutlook(sunshine, '2027-07-15')).toMatchObject({
+            season: '2027/28',
+            opening: { month: 11, label: 'Nov 8', basis: 'Estimated' },
+            closing: { month: 5, label: 'May 19', basis: 'Estimated' },
+        });
+        expect(skiSeasonOutlook(area('coronet-peak'), '2026-12-01')).toMatchObject({
+            season: '2027', opening: { month: 5, basis: 'Scheduled' }, closing: { month: 10, basis: 'Scheduled' },
+        });
+    });
+
     const sources = { operator: 'https://example.test/seasons' };
     const candidate = {
         season: '2025/26', source: 'operator', opensOn: '2025-12-31', closesOn: '2026-04-10',
@@ -60,6 +77,31 @@ describe('ski season dates', () => {
         expect(result).toMatchObject({ opening: 'Jan 1', closing: 'Apr 11' });
         expect(includesSeasonMonth(result, 2)).toBe(true);
         expect(includesSeasonMonth(result, 12)).toBe(false);
+    });
+
+    it('retains the season label when typical operations begin and end in the second calendar year', () => {
+        const fixture = readSeasonCalendar(calendar([
+            { ...candidate, opensOn: '2026-01-05' },
+            { ...candidate, season: '2024/25', opensOn: '2025-01-08', closesOn: '2025-04-20' },
+            { ...candidate, season: '2023/24', opensOn: '2024-01-10', closesOn: '2024-04-01' },
+        ]), skiAreas);
+        expect(skiSeasonOutlook(area('alta'), '2026-12-01', undefined, fixture)).toMatchObject({
+            season: '2026/27',
+            opening: { basis: 'Estimated', label: 'Jan 8' },
+            closing: { basis: 'Estimated', label: 'Apr 10' },
+        });
+    });
+
+    it('uses the nearest viable schedule and advances after its closing date', () => {
+        const first = { ...candidate, season: '2026/27', opensOn: '2026-12-01', closesOn: '2027-04-11' };
+        const next = { ...candidate, season: '2027/28', opensOn: '2027-12-02', closesOn: '2028-04-08' };
+        const fixture = readSeasonCalendar({
+            ...calendar([]), areas: [{ areaId: 'alta', planned: [next, first] }],
+        }, skiAreas);
+        const plans = fixture.byArea.get('alta');
+        expect(upcomingSeasonPlan(plans, '2026-11-20')).toEqual(first);
+        expect(upcomingSeasonPlan(plans, '2027-04-12')).toEqual(next);
+        expect(skiSeasonOutlook(area('alta'), '2026-11-20', undefined, fixture)).toMatchObject({ season: '2026/27' });
     });
 
     it('keeps only the remaining plan for a season that has already opened', () => {
@@ -194,7 +236,7 @@ describe('ski operations and terrain', () => {
         expect(skiAreaCsv([resort], ['name', 'opensOn'], 'imperial', conditions)).not.toContain('2026-12-05');
     });
 
-    it('uses the same planned opening and source in the table and CSV', () => {
+    it('uses the same fresh opening date in the table, details, and CSV', () => {
         const resort = area('telluride-ski-resort');
         const report = reports.get(resort.id)!;
         const current: ResortReport = {
@@ -203,9 +245,11 @@ describe('ski operations and terrain', () => {
         const conditions = { reports: new Map([[resort.id, current]]), forecasts: new Map(), now };
         expect(formatSkiStat(resort, 'opensOn', 'imperial', conditions)).toBe('2026-12-07');
         expect(skiAreaCsv([resort], ['name', 'opensOn'], 'imperial', conditions)).toContain('2026-12-07');
+        expect(skiSeasonOutlook(resort, '2026-11-20', conditions).opening?.date).toBe('2026-12-07');
         const closingOfOpeningDay = Date.parse('2026-12-06T06:59:59.999Z');
         const stale = { ...conditions, now: closingOfOpeningDay };
         expect(formatSkiStat(resort, 'opensOn', 'imperial', stale)).toBe('2026-12-05');
+        expect(skiSeasonOutlook(resort, '2026-12-05', stale).opening?.date).toBe('2026-12-05');
         expect(skiAreaCsv([resort], ['name', 'opensOn'], 'imperial', stale)).not.toContain('Planned opening');
         expect(formatSkiStat(resort, 'opensOn', 'imperial', { ...stale, now: closingOfOpeningDay + 1 })).toBeUndefined();
     });

@@ -1,6 +1,6 @@
 import type { Page, Request, Response } from '@playwright/test';
 
-export const SKI_TERRAIN_ROUTE = '/projects/ski-status/map?q=heavenly&view=map&skiTerrain=0';
+export const SKI_TERRAIN_ROUTE = '/projects/ski-status/map?q=heavenly&status=all&view=map&skiTerrain=0&camera=-119.912,38.943699,9,0,0';
 export const skiTerrainArchivePath = /\/resort-terrain(?:-[\w-]+)?\.pmtiles$/;
 
 type RangeResponse = Pick<Response, 'status' | 'headers' | 'body'> & { request(): Pick<Request, 'headers'> };
@@ -27,10 +27,10 @@ export async function verifySkiTerrainResponse(response: RangeResponse, archive:
     }
 }
 
-// Offsets from the Heavenly marker at zoom 13. The tooltips exercise the rendered layers.
+// Offsets from the Heavenly terrain camera at zoom 13. The tooltips exercise the rendered layers.
 const heavenlyFeatures = [
-    { label: 'Heavenly Gondola · gondola', x: -146, y: -94 },
-    { label: 'Cloud 9 · Ski run · intermediate', x: 109, y: -110 },
+    { label: 'Heavenly Gondola · gondola', x: -36, y: 82 },
+    { label: 'Cloud 9 · Ski run · intermediate', x: 118, y: -15 },
 ];
 
 export async function verifyRenderedSkiTerrain(page: Page, timeoutMs: number) {
@@ -38,13 +38,14 @@ export async function verifyRenderedSkiTerrain(page: Page, timeoutMs: number) {
     const ready = page.getByTestId('ski-status-map').and(page.locator('[data-map-state="ready"], [data-map-state="degraded"]'));
     await ready.waitFor({ state: 'visible' });
 
-    // A single result fits at zoom 9. The route keeps terrain off until the final zoom.
+    // Start at zoom 9 over the terrain and enable the archive at the final zoom.
     const zoomIn = page.getByRole('button', { name: 'Zoom in', exact: true });
     for (let clicks = 0; clicks < 4; clicks++) await zoomIn.click();
     await page.getByRole('button', { name: 'Layers', exact: true }).click();
     const layers = page.getByRole('dialog', { name: 'Map layers', exact: true });
     await layers.getByRole('checkbox', { name: 'Ski terrain', exact: true }).check();
-    await layers.getByRole('button', { name: 'Done', exact: true }).click();
+    await layers.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(layers).toBeHidden();
 
     const canvas = await ready.locator('.maplibregl-canvas').boundingBox();
     if (!canvas) throw new Error('Heavenly map canvas is unavailable.');

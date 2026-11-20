@@ -24,10 +24,11 @@
     "coronet-peak": "https://www.coronetpeak.co.nz/mountain-info",
     "coronet-peak-first-timer-guide": "https://www.coronetpeak.co.nz/first-timer-guide",
     "fernie-alpine-resort": "https://skifernie.com/discover-fernie/mountain-stats/",
+    "heavenly-opening-2026": "https://www.skiheavenly.com/explore-the-resort/experience-heavenly/event-detail-page.aspx?id=%7B412c9a0f-a7b7-4071-a084-06bb28219347%7D",
     "homewood": "https://skihomewood.com/",
     "hurricane-ridge": "https://www.nps.gov/olym/planyourvisit/hurricane-ridge-in-winter.htm",
     "ischgl-samnaun": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
-    "killington-2026": "https://killington.com/press-releases/killington-resort-receives-positive-snow-control-for-audi-fis-ski-world-cup-races-on-november-28-29",
+    "killington-2026-opening": "https://killington.com/press-releases/killington-resort-opens-november-17-kicking-off-winter-202627-in-new-england",
     "killington-hours": "https://killington.com/hours",
     "kimberley-alpine-resort": "https://skikimberley.com/discover-kimberley/mountain-stats/",
     "lake-louise": "https://www.skilouise.com/explore-winter/winter-ski-ride/mountain-stats/",
@@ -41,7 +42,8 @@
     "loveland-season-history": "https://skiloveland.com/openingclosingdates/",
     "loveland-terrain-updates": "https://skiloveland.com/snowmaking/",
     "madarao-mountain-resort": "https://www.madarao.jp/information/14065",
-    "mammoth-mountain": "https://www.mammothmountain.com/on-the-mountain/winter-trail-map",
+    "mammoth-mountain": "https://sc.mammothmountain.com/-/media/project/mammoth/library/pdfs/23-24_mmsa_fact-sheets_85x11.pdf?hash=A2B4F107E61D776F805B73EE16500330&rev=14788c480b3e4295aa138b5fadb0ce80",
+    "mammoth-opening-2026": "https://www.mammothmountain.com/things-to-do/events/opening-day",
     "mont-sainte-anne": "https://mont-sainte-anne.com/en/mont-sainte-anne-mountain-statistics/",
     "monterosa-ski": "https://monterosaski.eu/en/experiences/monterosa-ski-opening-dates-winter-29318",
     "mount-cain": "https://www.mountcain.com/mountain-stats/",
@@ -62,6 +64,7 @@
     "skibig3-2023-closing": "https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/",
     "skibig3-2023-opening": "https://www.skibig3.com/blog/mt-norquay-lake-louise-launch-the-23-24-winter-ski-season/",
     "skibig3-2025-closing": "https://www.skibig3.com/blog/closing-dates-and-what-to-expect-this-month-at-ski-big3-/",
+    "skibig3-season-dates": "https://www.skibig3.com/snow-conditions/",
     "snowbird": "https://mountaincollective.com/resort/snowbird/",
     "snowmass": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
     "sugarloaf": "https://www.sugarloaf.com/media-room",
@@ -71,6 +74,7 @@
     "sunshine-2024-opening": "https://www.skibig3.com/blog/banff-sunshine-opens-on-for-2425/",
     "sunshine-2025-opening": "https://www.skibig3.com/blog/banff-sunshine-opening-day/",
     "sunshine-2026-opening": "https://playcanmore.com/banff-ski-conditions-this-week/",
+    "sunshine-2027-closing": "https://www.skibanff.com/events/events/events-calendar/slush-cup",
     "telluride-winter-schedule": "https://tellurideskiresort.com/ski/",
     "the-remarkables": "https://www.theremarkables.co.nz/mountain-info",
     "valle-nevado": "https://www.vallenevado.com/en/frequently-asked-questions/",
@@ -310,6 +314,13 @@
     },
     {
       "areaId": "banff-sunshine",
+      "planned": [
+        {
+          "season": "2026/27",
+          "closesOn": "2027-05-24",
+          "source": "sunshine-2027-closing"
+        }
+      ],
       "recurring": {
         "opensIn": 11,
         "closesIn": 5,
@@ -773,6 +784,17 @@
       }
     },
     {
+      "areaId": "heavenly",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-20",
+          "source": "heavenly-opening-2026",
+          "note": "Opening terrain on the California side."
+        }
+      ]
+    },
+    {
       "areaId": "hidden-valley-ski-resort",
       "actual": [
         {
@@ -1011,7 +1033,7 @@
         {
           "season": "2026/27",
           "opensOn": "2026-11-17",
-          "source": "killington-2026",
+          "source": "killington-2026-opening",
           "note": "Passholders had access November 17. General public access began November 18."
         }
       ]
@@ -1038,6 +1060,13 @@
     },
     {
       "areaId": "lake-louise",
+      "planned": [
+        {
+          "season": "2026/27",
+          "closesOn": "2027-05-02",
+          "source": "skibig3-season-dates"
+        }
+      ],
       "recurring": {
         "opensIn": 11,
         "closesIn": 5,
@@ -1279,8 +1308,15 @@
         "opensIn": 11,
         "closesIn": 6,
         "source": "mammoth-mountain",
-        "note": "November–June"
-      }
+        "note": "November to June. The closing date varies with snow coverage."
+      },
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-05",
+          "source": "mammoth-opening-2026"
+        }
+      ]
     },
     {
       "areaId": "meribel",
@@ -1388,6 +1424,13 @@
     },
     {
       "areaId": "mt-norquay",
+      "planned": [
+        {
+          "season": "2026/27",
+          "closesOn": "2027-04-30",
+          "source": "skibig3-season-dates"
+        }
+      ],
       "actual": [
         {
           "season": "2026/27",

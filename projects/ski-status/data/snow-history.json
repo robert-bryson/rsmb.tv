@@ -1,0 +1,224 @@
+{
+  "alta": {
+    "snowfall": {
+      "label": "Alta Ski Area",
+      "source": "https://www.alta.com/weather",
+      "annualCm": 1391.92,
+      "annualSource": "https://www.alta.com/stories/mid-season-report-card",
+      "period": "Since 1980",
+      "location": "Collins Study Plot",
+      "monthlyCm": {
+        "1": 239.78,
+        "2": 226.82,
+        "3": 245.87,
+        "4": 195.83,
+        "10": 67.56,
+        "11": 181.1,
+        "12": 230.12
+      }
+    },
+    "depth": {
+      "label": "Alta Ski Area",
+      "source": "https://www.alta.com/weather",
+      "period": "Since 1980",
+      "location": "Collins Study Plot",
+      "kind": "base",
+      "monthlyCm": {
+        "1": 210.82,
+        "2": 264.16,
+        "3": 309.88,
+        "4": 317.5,
+        "10": 81.28,
+        "11": 99.06,
+        "12": 147.32
+      }
+    }
+  },
+  "banff-sunshine": {
+    "snowfall": {
+      "label": "Banff Sunshine Village",
+      "source": "https://www.skibanff.com/the-mountain/mountain-report/historical-snowfall",
+      "annualCm": 723,
+      "period": "2018–2026",
+      "location": "Mid and upper mountain snow plots",
+      "monthlyCm": {
+        "1": 83,
+        "2": 96,
+        "3": 112,
+        "4": 69,
+        "5": 32,
+        "11": 137,
+        "12": 133
+      }
+    },
+    "depth": {
+      "label": "Alberta snow surveys",
+      "source": "https://rivers.alberta.ca/Contents/SnowPack/2016/4/aprmsc.pdf",
+      "period": "Averages published 2013–2016",
+      "location": "Sunshine Village snow course, 2,230 m",
+      "kind": "survey",
+      "monthlyCm": {
+        "1": 102,
+        "2": 140,
+        "3": 159,
+        "4": 176,
+        "5": 167
+      },
+      "monthlySources": {
+        "1": "https://rivers.alberta.ca/Contents/SnowPack/2016/1/janmsc.pdf",
+        "2": "https://rivers.alberta.ca/Contents/SnowPack/2013/2/febmsc.pdf",
+        "3": "https://rivers.alberta.ca/Contents/SnowPack/2013/3/marmsc.pdf",
+        "4": "https://rivers.alberta.ca/Contents/SnowPack/2016/4/aprmsc.pdf",
+        "5": "https://rivers.alberta.ca/Contents/SnowPack/2016/5/maymsc.pdf"
+      }
+    }
+  },
+  "heavenly": {
+    "snowfall": {
+      "label": "Heavenly Mountain Resort",
+      "source": "https://www.skiheavenly.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 637.54
+    },
+    "depth": {
+      "label": "USDA SNOTEL",
+      "source": "https://wcc.sc.egov.usda.gov/reportGenerator/view/customSingleStationReport/daily/518:CA:SNTL/2016-10-01,2026-06-30/SNWD::value",
+      "period": "10 winters, 2016/17–2025/26",
+      "location": "Heavenly Valley station, 8,540 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 106.48,
+        "2": 142.18,
+        "3": 171.32,
+        "4": 134.7,
+        "11": 12.74,
+        "12": 50.92
+      }
+    }
+  },
+  "jackson-hole-mountain-resort": {
+    "snowfall": {
+      "label": "Jackson Hole Mountain Resort",
+      "source": "https://www.jacksonhole.com/the-big-one",
+      "annualCm": 1163.32
+    }
+  },
+  "killington": {
+    "snowfall": {
+      "label": "Killington Resort",
+      "source": "https://killington.com/mountain-stats",
+      "annualCm": 635,
+      "location": "4,000-foot snow plot",
+      "monthlyCm": {
+        "1": 132.08,
+        "2": 139.7,
+        "3": 144.78,
+        "4": 60.96,
+        "11": 73.66,
+        "12": 83.82
+      }
+    }
+  },
+  "lake-louise": {
+    "snowfall": {
+      "label": "Lake Louise Ski Resort",
+      "source": "https://www.skilouise.com/wp-content/uploads/2023/10/2023-Media-Kit-LLSR.pdf",
+      "annualCm": 454
+    }
+  },
+  "mammoth-mountain": {
+    "snowfall": {
+      "label": "Mammoth Mountain",
+      "source": "https://www.mammothmountain.com/on-the-mountain/snowfall-history",
+      "annualCm": 970.79,
+      "period": "10 seasons, 2016/17–2025/26",
+      "monthlyCm": {
+        "1": 213.61,
+        "2": 211.84,
+        "3": 191.52,
+        "4": 72.39,
+        "5": 20.07,
+        "6": 0.25,
+        "10": 15.75,
+        "11": 89.66,
+        "12": 154.69
+      }
+    }
+  },
+  "mt-norquay": {
+    "snowfall": {
+      "label": "Mt. Norquay",
+      "source": "https://banffnorquay.com/trail-map/",
+      "annualCm": 300
+    }
+  },
+  "palisades-tahoe": {
+    "snowfall": {
+      "label": "Palisades Tahoe",
+      "source": "https://www.palisadestahoe.com/mountain-information/snowfall-tracker",
+      "annualCm": 1181.35,
+      "period": "10 seasons, 2016/17–2025/26",
+      "location": "Belmont snow plot, 8,000 ft",
+      "monthlyCm": {
+        "1": 235.97,
+        "2": 270.76,
+        "3": 271.02,
+        "4": 104.65,
+        "11": 88.9,
+        "12": 203.2
+      }
+    }
+  },
+  "park-city-mountain": {
+    "snowfall": {
+      "label": "Park City Mountain",
+      "source": "https://www.parkcitymountain.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 901.7
+    }
+  },
+  "snowbird": {
+    "snowfall": {
+      "label": "Snowbird",
+      "source": "https://www.snowbird.com/faq/",
+      "annualCm": 1270
+    },
+    "depth": {
+      "label": "USDA SNOTEL",
+      "source": "https://wcc.sc.egov.usda.gov/reportGenerator/view/customSingleStationReport/daily/766:UT:SNTL/2016-10-01,2026-06-30/SNWD::value",
+      "period": "10 winters, 2016/17–2025/26",
+      "location": "Snowbird station, 9,170 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 152.43,
+        "2": 205.35,
+        "3": 247.99,
+        "4": 239.7,
+        "5": 146.91,
+        "11": 31.43,
+        "12": 80.68
+      }
+    }
+  },
+  "vail-mountain": {
+    "snowfall": {
+      "label": "Vail Mountain",
+      "source": "https://www.vail.com/the-mountain/mountain-conditions/snow-and-weather-report",
+      "annualCm": 899.16
+    }
+  },
+  "whistler-blackcomb": {
+    "snowfall": {
+      "label": "Whistler Blackcomb",
+      "source": "https://www.whistlerblackcomb.com/-/aemasset/image/upload/whistler-blackcomb/Products/about-the-resort/groups-and-weddings/social-and-leisuregroups/WBRRWGroupsBooklet1617.pdf",
+      "annualCm": 1163,
+      "period": "10-year average published in 2016/17",
+      "monthlyCm": {
+        "1": 220,
+        "2": 150,
+        "3": 240,
+        "4": 90,
+        "11": 230,
+        "12": 210
+      }
+    }
+  }
+}

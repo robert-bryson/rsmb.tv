@@ -1,16 +1,17 @@
 import { normalizeSearch } from '../../utils/search';
-import { isSpecialtySkiing, passFamilySchema, passNames, skiingSchema, type PassFamily, type SkiArea, type Skiing } from './catalog';
+import { isSpecialtySkiing, passNames, skiAreaMapPoint, skiingSchema, type PassFamily, type SkiArea, type Skiing } from './catalog';
 import {
-    areaForecast, isFreshReport, matchesOperatingStatus, openPercent, reportAgeLabel, reportStatusText, skiDayStatus, statusLabels,
+    areaForecast, matchesOperatingStatus, openPercent, reportAgeLabel, reportStatusText, skiDayStatus, statusLabels,
     type Conditions, type ResortReport, type StatusFilter,
 } from './conditions';
 import { evaluatePass, matchesPassProduct, type PassProduct } from './passRules';
-import { includesSeasonMonth, seasonCalendar, seasonViewDate, upcomingSeasonPlan } from './seasons';
+import { includesSeasonMonth, reportedOpeningPlan, seasonCalendar, seasonViewDate, upcomingSeasonPlan } from './seasons';
 
 export type SkiUnits = 'imperial' | 'metric';
 export type PassFilter = PassFamily | 'indy-discounts';
 
 export const passFilterOptions: Record<PassFilter, string> = { ...passNames, 'indy-discounts': 'Indy discounts' };
+export const passFilterKeys = Object.keys(passFilterOptions) as PassFilter[];
 
 export function passFilterFamily(pass: PassFilter): PassFamily {
     return pass === 'indy-discounts' ? 'indy' : pass;
@@ -133,9 +134,10 @@ export function readSkiSort(params: URLSearchParams): SkiSort {
     return { key: column?.key ?? 'name', direction: column && direction === 'desc' ? 'desc' : 'asc' };
 }
 
-export function readPassFilter(params: URLSearchParams): PassFilter | undefined {
-    const pass = params.get('pass');
-    return pass === 'indy-discounts' ? pass : passFamilySchema.safeParse(pass).data;
+export function readPassFilters(params: URLSearchParams, productFamily?: PassFamily): PassFilter[] {
+    const selected = new Set(params.getAll('pass'));
+    if (productFamily) selected.add(productFamily);
+    return passFilterKeys.filter(pass => selected.has(pass));
 }
 
 const countryNames = new Intl.DisplayNames('en', { type: 'region' });
@@ -164,28 +166,42 @@ export function skiRegionOptions(areas: readonly SkiArea[]) {
     return { countries: countries.sort((first, second) => first.label.localeCompare(second.label)), regions };
 }
 
-interface SkiAreaFilters {
+export interface SkiPassSelection {
+    passes?: readonly PassFilter[];
+    product?: { pass: PassProduct; date?: string; now: number; homeAreaId?: string };
+}
+
+export function selectedSkiPasses({ passes = [], product }: SkiPassSelection = {}) {
+    const family = product?.pass.family;
+    return family && !passes.includes(family) ? [...passes, family] : passes;
+}
+
+interface SkiAreaFilters extends SkiPassSelection {
     query?: string;
     region?: string;
-    pass?: PassFilter;
     night?: boolean;
     skiing?: SkiingFilter;
-    product?: { pass: PassProduct; date?: string; now: number; homeAreaId?: string };
     operations?: { filter: StatusFilter; reports: Conditions['reports']; now: number };
     seasonMonth?: number;
 }
 
+export function matchesSkiPass(area: SkiArea, filter: PassFilter, product?: SkiPassSelection['product']) {
+    if (filter === product?.pass.family) {
+        const { status } = evaluatePass(product.pass, area, product.now, product.date, product.homeAreaId);
+        return matchesPassProduct(status);
+    }
+    return area.passes.some(membership => matchesPassFilter(membership, filter));
+}
+
 export function filterSkiAreas(areas: readonly SkiArea[], {
-    query = '', region = '', pass, night, skiing, product, operations, seasonMonth,
+    query = '', region = '', passes = [], night, skiing, product, operations, seasonMonth,
 }: SkiAreaFilters = {}) {
     const words = normalizeSearch(query).split(' ').filter(Boolean);
     const country = region.startsWith(countryPrefix) ? region.slice(countryPrefix.length) : '';
+    const selectedPasses = selectedSkiPasses({ passes, product });
     return areas.filter(area => {
         if (country ? !areaCountries(area).includes(country) : region && !area.region?.split('/').includes(region)) return false;
-        if (product) {
-            const { status } = evaluatePass(product.pass, area, product.now, product.date, product.homeAreaId);
-            if (!matchesPassProduct(status)) return false;
-        } else if (pass && !area.passes.some(membership => matchesPassFilter(membership, pass))) return false;
+        if (selectedPasses.length && !selectedPasses.some(pass => matchesSkiPass(area, pass, product))) return false;
         if (night && area.nightSkiing !== true) return false;
         if (skiing && !matchesSkiingFilter(area.skiing, skiing)) return false;
         if (operations) {
@@ -204,7 +220,7 @@ export function filterSkiAreas(areas: readonly SkiArea[], {
 
 export function skiAreaBounds(areas: readonly SkiArea[]): [number, number, number, number] | undefined {
     if (!areas.length) return;
-    const coordinates = areas.map(area => area.location.coordinates);
+    const coordinates = areas.map(skiAreaMapPoint);
     const longitudes = coordinates.map(([longitude]) => longitude).sort((a, b) => a - b);
     const latitudes = coordinates.map(([, latitude]) => latitude);
     let west = longitudes[0];
@@ -228,11 +244,10 @@ export function plannedOpening(area: SkiArea, conditions?: Conditions) {
     const seasons = seasonCalendar.byArea.get(area.id);
     if (!report?.opensOn && !seasons?.planned.length) return;
     const date = seasonViewDate(area, conditions?.now);
-    if (conditions && report?.opensOn && report.opensOn >= date && isFreshReport(report, conditions.now)) {
-        return { date: report.opensOn, source: report.source };
-    }
-    const plan = upcomingSeasonPlan(seasons, date);
-    if (plan?.opensOn) return { date: plan.opensOn };
+    const reported = reportedOpeningPlan(report, date, conditions?.now);
+    if (reported) return reported;
+    const planned = upcomingSeasonPlan(seasons, date)?.opensOn;
+    if (planned) return { date: planned, source: undefined };
 }
 
 function skiStat(area: SkiArea, key: ColumnKey, conditions?: Conditions) {

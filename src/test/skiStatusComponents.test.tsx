@@ -43,13 +43,13 @@ describe('ski-status results and comparison', () => {
 
     it('shows map access labels and logos alongside the resort results', () => {
         const areas = skiAreas.filter(area => ['alta', 'north-cascade-heli', 'big-snow-american-dream'].includes(area.id));
-        const { rerender } = render(<SkiAreaList {...listDefaults} areas={areas} colors="pass" passFilter="mountain-collective" />);
+        const { rerender } = render(<SkiAreaList {...listDefaults} areas={areas} colors="pass" passSelection={{ passes: ['mountain-collective'] }} />);
         const list = within(screen.getByRole('region', { name: 'Ski area list' }));
         const multiPass = list.getByText('Mountain Collective + other passes');
         expect(multiPass.querySelector('img')).toHaveAttribute('src', expect.stringContaining('mountain-collective.png'));
         expect(list.getByText('No confirmed access')).toBeVisible();
         expect(list.getByText('Discount only')).toBeVisible();
-        rerender(<SkiAreaList {...listDefaults} areas={areas} colors="pass" passFilter="indy-discounts" />);
+        rerender(<SkiAreaList {...listDefaults} areas={areas} colors="pass" passSelection={{ passes: ['indy-discounts'] }} />);
         expect(list.getByText('Indy discount')).toBeVisible();
     });
 
@@ -87,14 +87,15 @@ describe('ski-status share control', () => {
 
     afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
 
-    it('announces the copied link while keeping the Share label visible', async () => {
+    it('announces the copied link while keeping the share icon and accessible name', async () => {
         vi.useFakeTimers();
         const copy = vi.fn().mockResolvedValue(undefined);
         navigatorApis(undefined, copy);
         render(<SkiShareButton getUrl={() => url} />);
         await act(async () => fireEvent.click(shareButton()));
         expect(copy).toHaveBeenCalledExactlyOnceWith(url);
-        expect(shareButton()).toHaveTextContent(/^Share$/);
+        expect(shareButton()).toHaveAccessibleName('Share current view');
+        expect(shareButton().querySelector('svg')).toBeInTheDocument();
         expect(screen.getByRole('status')).toHaveTextContent('Link copied');
         act(() => { vi.advanceTimersByTime(2500); });
         expect(screen.getByRole('status')).toBeEmptyDOMElement();
@@ -147,6 +148,22 @@ describe('ski-status column settings', () => {
 });
 
 describe('ski-status area details', () => {
+    it('shows measured depth sources and leaves missing months empty in the selected units', () => {
+        const sunshine = skiAreas.find(area => area.id === 'banff-sunshine')!;
+        render(<SkiAreaDetails area={sunshine} units="metric" onClose={vi.fn()}
+            conditions={{ reports: new Map(), forecasts: new Map(), now: Date.parse('2026-11-20T18:00:00Z') }} />);
+        const season = within(screen.getByRole('region', { name: 'Season dates' }));
+        expect(season.getByRole('link', { name: '723 cm' })).toHaveAttribute('href', expect.stringContaining('historical-snowfall'));
+        expect(season.getByText('Nov 7')).toHaveAttribute('datetime', '2026-11-07');
+        expect(season.getByText('May 24')).toHaveAttribute('datetime', '2027-05-24');
+        const snow = within(season.getByRole('table', { name: 'Typical monthly snow' }));
+        const november = within(snow.getByRole('row', { name: /November/ }));
+        expect(november.getByRole('cell', { name: '137 cm' })).toBeVisible();
+        expect(november.getByRole('cell', { name: 'Unavailable' })).toBeVisible();
+        const january = within(snow.getByRole('row', { name: /January/ }));
+        expect(january.getByRole('link', { name: '102 cm' })).toHaveAttribute('href', expect.stringContaining('janmsc.pdf'));
+    });
+
     it('marks counts, named terrain and night operations from the previous local day as stale', () => {
         const area = skiAreas.find(area => area.id === 'alta')!;
         const report: ResortReport = {
@@ -182,7 +199,10 @@ describe('ski-status area details', () => {
 
         const details = screen.getByRole('region', { name: 'Whaleback Mountain' });
         const links = within(details).getAllByRole('link');
-        expect(links.map(link => link.getAttribute('href'))).toEqual([area.website, area.location.mappedTerrain?.source, more, source]);
+        expect(links.map(link => link.getAttribute('href'))).toEqual([
+            'https://www.google.com/maps/search/?api=1&query=43.601503%2C-72.181118', 'https://en.wikipedia.org/wiki/Whaleback_(ski_area)',
+            area.website, area.location.mappedTerrain?.source, more, source,
+        ]);
         expect(within(details).getByRole('link', { name: 'Resort website and conditions' })).toHaveAttribute('href', area.website);
         expect(within(details).getByRole('link', { name: 'OpenSkiMap terrain' })).toHaveAttribute('href', area.location.mappedTerrain?.source);
         expect(within(details).getByRole('link', { name: 'Indy' })).toHaveAttribute('href', source);

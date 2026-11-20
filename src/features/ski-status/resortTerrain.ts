@@ -7,6 +7,7 @@ import type { SkiArea } from './catalog';
 
 export const resortTerrainSource = 'ski-resort-terrain';
 export const resortTerrainMinZoom = manifest.minZoom;
+const resortDetailMinZoom = manifest.detailMinZoom;
 export const resortFootprintLayer = 'ski-resort-footprints';
 const liftLayer = 'ski-resort-lifts';
 const runLayer = 'ski-resort-runs';
@@ -37,7 +38,7 @@ const runCasing: ExpressionSpecification = ['case', ['==', runColor, '#18181b'],
 const layers: (FillLayerSpecification | LineLayerSpecification | CircleLayerSpecification)[] = [
     {
         id: resortFootprintLayer, type: 'fill', source: resortTerrainSource, 'source-layer': 'footprints', minzoom: resortTerrainMinZoom,
-        paint: { 'fill-color': '#38bdf8', 'fill-opacity': 0.12 },
+        paint: { 'fill-color': '#38bdf8', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 9, 0.22, 11, 0.12] },
     },
     {
         id: 'ski-resort-footprint-outline', type: 'line', source: resortTerrainSource, 'source-layer': 'footprints', minzoom: resortTerrainMinZoom,
@@ -48,27 +49,27 @@ const layers: (FillLayerSpecification | LineLayerSpecification | CircleLayerSpec
         paint: { 'fill-color': runColor, 'fill-opacity': 0.25 },
     },
     {
-        id: 'ski-resort-run-outline', type: 'line', source: resortTerrainSource, 'source-layer': 'runs', minzoom: resortTerrainMinZoom,
+        id: 'ski-resort-run-outline', type: 'line', source: resortTerrainSource, 'source-layer': 'runs', minzoom: resortDetailMinZoom,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': runCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 2.5, 15, 5] },
     },
     {
-        id: runLayer, type: 'line', source: resortTerrainSource, 'source-layer': 'runs', minzoom: resortTerrainMinZoom,
+        id: runLayer, type: 'line', source: resortTerrainSource, 'source-layer': 'runs', minzoom: resortDetailMinZoom,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': runColor, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 1.25, 15, 3] },
     },
     {
-        id: liftLayer, type: 'line', source: resortTerrainSource, 'source-layer': 'lifts', minzoom: resortTerrainMinZoom,
+        id: liftLayer, type: 'line', source: resortTerrainSource, 'source-layer': 'lifts', minzoom: resortDetailMinZoom,
         paint: { 'line-color': terrainColors.lift, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 1.75, 15, 3.5], 'line-dasharray': [2.5, 1.4] },
     },
     {
-        id: stationLayer, type: 'circle', source: resortTerrainSource, 'source-layer': 'stations', minzoom: 13,
+        id: stationLayer, type: 'circle', source: resortTerrainSource, 'source-layer': 'stations', minzoom: manifest.stationMinZoom,
         paint: { 'circle-color': terrainColors.lift, 'circle-stroke-color': '#18181b', 'circle-stroke-width': 1, 'circle-radius': 3.5 },
     },
 ];
 
 export function visibleTerrainConventions(map: MapLibreMap): TerrainConvention[] {
-    if (!map.getLayer(runLayer) || map.getZoom() < resortTerrainMinZoom) return [];
+    if (!map.getLayer(runLayer) || map.getZoom() < resortDetailMinZoom) return [];
     const conventions = new Set<TerrainConvention>();
     for (const feature of map.queryRenderedFeatures({ layers: [runLayer] })) {
         const convention = feature.properties.convention;
@@ -119,7 +120,7 @@ const runTypes = new Map([
 ]);
 
 export function resortTerrainLabel(map: MapLibreMap, point: TooltipPoint) {
-    if (map.getZoom() < resortTerrainMinZoom || !map.getSource(resortTerrainSource)) return;
+    if (map.getZoom() < resortDetailMinZoom || !map.getSource(resortTerrainSource)) return;
     const inspectable = [stationLayer, liftLayer, runLayer, runFillLayer].filter(id => map.getLayer(id));
     if (!inspectable.length) return;
     const [feature] = map.queryRenderedFeatures([
