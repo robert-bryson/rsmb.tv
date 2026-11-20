@@ -58,7 +58,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
-| 2026-11-19 | [ski-status catalog and layout review](reviews/2026-11-19-ski-status-expansion-review.md) |
+| 2026-11-19 | [ski-status catalog, layout, and terrain review](reviews/2026-11-19-ski-status-expansion-review.md) |
 | 2026-11-19 | [ski-status pilot review](reviews/2026-11-19-ski-status-quality-review.md) |
 | 2026-11-17 | [Main branch review: shared UI, search previews, atlas alignment, and flight separation](reviews/2026-11-17-main-branch-review.md) |
 | 2026-11-15 | [Project quality review: safe image output, preview integrity, feature dates, coverage, and documentation](reviews/2026-11-15-project-quality-review.md) |

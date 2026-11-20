@@ -20,17 +20,17 @@ On a wide screen, the page starts in **Split**. On a narrow screen, it starts in
 - Use **Region** to select a country, state, or province. A shared ski area appears under each country that it covers. On a narrow screen, select **Filters** to open the filter controls.
 - Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
 - Use **Skiing type** to filter the map and table. **Conventional downhill** includes outdoor lift-served areas that also offer Nordic trails. **Cross-country only** selects Nordic-only areas. **Specialty skiing** shows the Nordic-only, indoor, heli-skiing, cat-skiing, ski touring, dry slope, and lift-served freeride areas together. Select a single type to narrow the results.
-- Turn on **In map view** beside the results count to limit the table to the visible side of the globe.
+- Turn on **In map view** beside the results count to show only areas with markers inside the map pane.
 - Select a column header to change the sort order.
 - Hover over a dot to see the area name and location. Zoom in to separate nearby dots.
 - Click or tap a dot to select the area and open its map popup. Select a table row to open the same popup when the map is visible.
-- Use **View resort details** in the popup or select the area name below the filters. On a narrow screen, the full details are below the map.
+- Use **View resort details** in the popup or select the area name below the filters. On a narrow screen in **Map** view, the details are below the map.
 - Click or tap empty map space to clear the selection. You can also use the popup close button or press Escape with focus in the map.
 - Select **Official conditions** to open the operator's report. If the resort publishes conditions on its main page, use **Resort website and conditions**.
 
 The URL stores the search text, filters, sort order, selected area, view, and map settings. The browser stores your unit preference.
 
-The map keeps its position when you change views. With **In map view** off, filter changes fit the results when the map is visible and no area is selected. If the background fails, select **Retry background**. The table stays available during map failures.
+The map keeps its position when you change views. With **In map view** off, filter changes can fit the results. The map must be visible and have no selected area. If the background fails, select **Retry background**. You can use the table during a map failure.
 
 ### Map display
 
@@ -61,7 +61,9 @@ An acreage value such as `200+` gives a minimum. The table sorts by that minimum
 
 The globe uses the hosted CARTO Dark Matter vector style. Turn on **Terrain relief** to see shaded slopes from zoom level 8. CARTO continues to provide the streets and labels. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre projections](https://maplibre.org/maplibre-style-spec/types/#projectiondefinition), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
 
-Zoom in to level 11 to see ski-area outlines, runs, and lifts for the current results. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan runs show Nordic trails and violet runs show ski touring routes. Lift stations appear at zoom level 13. Hover or tap a run or lift to see its mapped name and type. Use **Ski terrain** to hide or show these layers.
+Zoom in to level 11 to see footprints, runs, and lifts for the current results. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Lift stations appear at zoom level 13. Hover or tap a run or lift to see its mapped name and type. Use **Ski terrain** to hide or show these layers.
+
+If the ski terrain fails to load, select **Retry ski terrain**. The retry keeps the map position and filters. You can retry terrain on the fallback map. [Terrain coverage and updates](#runs-and-lifts-at-resort-zoom)
 
 CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate Winter basemap. [CARTO styles](https://carto.com/basemaps/#styles), [MapTiler topographic and winter maps](https://www.maptiler.com/maps/outdoor-topo/)
 
@@ -78,11 +80,26 @@ Each area has a published fact or a mapped terrain value. The catalog has at lea
 | [Resort terrain index](data/resort-terrain.json) and [PMTiles archive](data/resort-terrain.pmtiles) | Footprints, runs, lifts, and lift stations for 533 catalog areas. The index records the source date, checksums, and which areas share terrain. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 
-Use the same area ID in the area, location, and pass records. The terrain importer uses those IDs. Add one point per area and one membership per pass family. Put the country of the representative point in `country`. Put verified additional countries of a shared area in `otherCountries`. Add state or province codes to North American areas that use them.
+Use the same area ID in the area, location, and pass records. The terrain importer uses those IDs. Add one point per area and one membership per pass family. Put the country of the map point in `country`. Put verified additional countries of a shared area in `otherCountries`. Add state or province codes where applicable.
 
 Use the operator's statistics when the source names the terrain or equipment that the figures cover. Keep the source of the pass rules with the membership. Use absolute HTTPS source links. The catalog checks IDs, references, statistics, and the format of geographic codes. It checks the location attribution and the pass season. [Catalog validation](../../src/features/ski-status/catalog.ts)
 
 Use the **Mapped** columns for OpenSkiData figures. The elevation range covers mapped terrain. The **Base**, **Summit**, and lift terminal columns show published elevations for those locations. Published lift and trail counts have their own columns. Each area with mapped figures links to the source in its details. [OpenSkiData dataset and license](https://www.openskidata.org/#license)
+
+### Runs and lifts at resort zoom
+
+OpenSkiMap uses OpenSkiData. OpenSkiData combines OpenStreetMap ski features with Skimap.org area records. It adds place names from Who’s On First and elevations from Mapterhorn. Ski-status builds its tiles from the downloadable data under ODbL. [OpenSkiData source and license](https://www.openskidata.org/#license)
+
+The November 16, 2026 snapshot covers 533 catalog areas. It contains 406 footprints, 40,688 run features, 5,535 lift features, and 7,148 lift stations. A run feature can be one trail segment. Catalog entries for a shared ski area can use the same geometry. Use the operator report to check current openings. [OpenSkiData datasets](https://www.openskidata.org/#whats-in-the-data)
+
+1. Download the GeoPackage and its matching `metadata.json`. Use Python with GDAL bindings and install Tippecanoe. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [Tippecanoe](https://github.com/felt/tippecanoe)
+2. Run the importer. It checks the file size, layer names, feature counts, and build times before it writes data. It matches areas by source ID or by a mapped footprint that fits the location and activity.
+
+   ```bash
+   python3 projects/ski-status/scripts/build-resort-terrain.py path/to/openskidata.gpkg path/to/metadata.json
+   ```
+
+3. Review missing and shared area matches. Commit the archive and its JSON index together. Run the archive tests to check coverage and the checksum. [Local checks](#local-checks)
 
 ### Ikon destinations
 
@@ -108,13 +125,14 @@ The catalog uses the published roster figures for vertical drop, lifts, trail co
 
 Install the repository dependencies. Run `npm run dev` to start Vite. Open `/projects/ski-status/map` on the local server.
 
-Run the unit tests for the catalog, table, details, and markers.
+Run the catalog, table, and terrain tests. The archive test checks the index against the packaged file. The Python tests use small fixtures and require no GDAL or Tippecanoe installation.
 
 ```bash
-npx vitest run src/test/skiStatus.test.ts src/test/skiStatusComponents.test.tsx
+npx vitest run src/test/skiStatus.test.ts src/test/skiStatusComponents.test.tsx src/test/skiResortTerrainMap.test.ts scripts/__tests__/skiResortTerrain.test.ts
+npm run test:ski-terrain
 ```
 
-Run the browser tests. They check globe fit, the skiing type filter, visible results, pass colors, popups, view changes, and error recovery.
+Run the browser tests for globe fit, filters, popups, and view changes. They also check byte range requests and terrain recovery.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
@@ -226,7 +244,7 @@ On November 19, the SnoCountry demo returned Bolton Valley, Bromley, and Burke. 
 
 The project uses React, TypeScript, Vite, and MapLibre. The `/projects/ski-status` route opens `/projects/ski-status/map`. Keep data preparation in `projects/ski-status/`. Keep feature code in `src/features/ski-status/`. Use the shared CARTO configuration and map recovery. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Project routes](../../src/App.tsx)
 
-The client uses a GeoJSON source for the dots and JSON for the table. Both views use the same results. The map applies camera changes when its resort layer is ready and it has a visible viewport.
+The client uses a GeoJSON source for the dots and JSON for the table. Both views use the same results. The map applies camera changes when its resort layer is ready and visible. The app serves the PMTiles archive with its site assets. It requests byte ranges from the archive at resort zoom.
 
 Join static facts, pass rules, resort reports, and forecasts by the local area ID in later stages. The following diagram shows the planned data flow.
 
@@ -256,6 +274,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 
 | Work | Acceptance check |
 | --- | --- |
+| Ski terrain | Check the archive on the hosted preview. Verify that a byte range request returns HTTP `206`, the expected `Content-Range`, and the original bytes. Check that Heavenly shows runs and lifts at resort zoom. [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
 | Pass products | Test shared days, reservations, excluded products, blackout dates, and discount partners. Match each included partner or record why it is outside scope. |
 | Conditions pilot | Measure report age and field coverage for a week. Compare values with operator reports. Test failed updates, stale reports, unknown values, zero values, and partial openings. |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
@@ -279,20 +298,6 @@ Give each ski area a conditions panel in its details. Match reports and forecast
 - Use the app's unit setting for temperature, snow depth, elevation, and wind speed. Keep precipitation chance as a percentage. Give the source name and a link to each report or forecast.
 - Show forecasts and measured snowfall with separate labels. Apply the [report and forecast rules](#report-and-forecast-rules) for stale and missing values. Show **Unknown** for missing data and **N/A** for fields that do not apply. Keep reported zeros.
 - Test complete, partial, and stale reports. Check that the forecast starts on the resort's local date and that changing units preserves unknown values and zeros. Check that the panel can open for an area with no reports.
-
-### Runs and lifts at resort zoom
-
-OpenSkiMap uses OpenSkiData. Its pipeline combines OpenStreetMap ski features with Skimap.org area records. It adds place names from Who’s On First and elevations from Mapterhorn. The ski-status overlay uses a snapshot of the downloadable data under ODbL. [OpenSkiData source and license](https://www.openskidata.org/#license)
-
-The November 16, 2026 snapshot gives the catalog 406 footprints, 40,688 run features, 5,535 lifts, and 7,148 lift stations. A run feature can be one segment of a trail. Shared ski areas can use the same geometry. Use operator reports to check current openings and closures. [OpenSkiData datasets](https://www.openskidata.org/#whats-in-the-data)
-
-To update the overlay, download the GeoPackage and its matching `metadata.json`. Use the system Python with GDAL bindings and install Tippecanoe. The importer matches source IDs and checks the catalog location against mapped footprints when the source IDs leave a gap. Update both output files together. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [Tippecanoe](https://github.com/felt/tippecanoe)
-
-```bash
-python3 projects/ski-status/scripts/build-resort-terrain.py path/to/openskidata.gpkg path/to/metadata.json
-```
-
-The app serves the archive with its site assets. Check HTTP `206 Partial Content` and `Content-Range` on the hosted archive. Keep the stored byte offsets when you move it to object storage. [PMTiles on cloud storage](https://docs.protomaps.com/pmtiles/cloud-storage), [Repository tile delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md)
 
 ### Access routes and webcams
 

@@ -221,6 +221,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ### First release
 
+- [ ] Check the ski terrain archive on the hosted preview. Verify byte ranges and render the detail layers near Heavenly. [Release checks](projects/ski-status/readme.md#release-checks)
 - [ ] Review the remaining North American areas by region. Record the source and decision for each area. List unresolved areas. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
 - [ ] Add rules by pass product and local ski date. Test day limits, shared days, blackout dates, and reservations. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
 - [ ] Add resort reports and forecasts from sources that permit reuse. Measure field coverage and report age. [Conditions pilot](projects/ski-status/readme.md#sources-and-pilot)
@@ -231,12 +232,12 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 - [ ] Check each pass roster at the start of the season. Verify included access and discounts. Check the countries that each shared area covers. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
 - [ ] Fill missing published statistics and conditions links. Start with lift terminal elevations, night skiable acres, and season dates. Check the units and terrain that each figure covers. Update the field counts. [Mountain statistics](projects/ski-status/readme.md#comparable-mountain-statistics)
+- [ ] Review ski areas with missing or shared map coverage after each terrain update. Record any manual matches and the source for each match. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
 
 ### Version 2
 
 - [ ] Add a conditions panel to ski area details. Show current weather, a 5-day forecast, and reported snowfall. Test local dates, units, and missing values. [Resort conditions](projects/ski-status/readme.md#resort-conditions-and-5-day-forecast)
-- [ ] Check the terrain archive with byte range requests after deployment. Review missing or shared map coverage. Link to official resort trail maps. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
-- [ ] Mark official and unofficial trail areas where sources identify them. Show run length, maximum slope, and grooming status where sources supply them. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
+- [ ] Link to official resort trail maps. Mark trail areas with a verified access type. Show run length, maximum slope, and grooming status where sources supply them. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
 - [ ] Use operator directions to match resorts to access roads. Show agency road restrictions. Link to official agency and resort webcams. [Access routes and webcams](projects/ski-status/readme.md#access-routes-and-webcams)
 - [ ] Record parking locations, prices, and shuttle service where operators publish them. [Access routes and webcams](projects/ski-status/readme.md#access-routes-and-webcams)
 - [ ] Add device-local visits, a visited filter, and a backup format. [Visited areas](projects/ski-status/readme.md#visited-areas)

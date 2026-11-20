@@ -741,7 +741,12 @@ test('loads and filters resort terrain by zoom and pass using byte ranges', asyn
     const layers = ['ski-resort-footprints', 'ski-resort-lifts', 'ski-resort-runs', 'ski-resort-lift-stations'];
     const counts = () => renderer.evaluate((map, ids) => ids.map(id => map.getLayer(id)
         ? map.queryRenderedFeatures({ layers: [id] }).length : 0), layers);
+    const rangeResponse = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/resort-terrain.pmtiles')
+        && Boolean(response.request().headers().range));
     await renderer.evaluate(map => { map.jumpTo({ center: [-119.896153, 38.943699], zoom: 13.05 }); });
+    const response = await rangeResponse;
+    expect(response.status()).toBe(206);
+    expect(response.headers()['content-range']).toMatch(/^bytes 0-\d+\/\d+$/);
     await expect.poll(async () => (await counts()).every(count => count > 0)).toBe(true);
     expect(requests.length).toBeGreaterThan(0);
     expect(requests.every(range => /^bytes=\d+-\d+$/.test(range))).toBe(true);
@@ -792,6 +797,54 @@ test('keeps the basemap and resort dots available if the terrain archive fails',
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
     expect(await renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-points'] })
         .some(feature => feature.properties.areaId === 'heavenly'))).toBe(true);
+    await renderer.dispose();
+});
+
+test('reopens ski terrain after an archive outage when the overlay is toggled', async ({ page }) => {
+    await prepare(page);
+    let failArchive = true;
+    await page.route('**/resort-terrain.pmtiles', route => failArchive
+        ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.continue());
+    const renderer = await captureMap(page);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-119.896153, 38.943699], zoom: 13 }); });
+    const error = page.getByText('Ski terrain unavailable.', { exact: true });
+    await expect(error).toBeVisible();
+
+    const toggle = page.getByRole('checkbox', { name: 'Ski terrain', exact: true });
+    await toggle.uncheck();
+    await expect(error).toBeHidden();
+    failArchive = false;
+    await toggle.check();
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-resort-runs'] }).length)).toBeGreaterThan(0);
+    await expect(error).toBeHidden();
+    await renderer.dispose();
+});
+
+test('retries ski terrain on the fallback map and hides its error at overview zoom', async ({ page }) => {
+    await prepare(page, null);
+    let failArchive = true;
+    await page.route('**/resort-terrain.pmtiles', route => failArchive
+        ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.continue());
+    const renderer = await captureMap(page, { state: 'degraded' });
+    await renderer.evaluate(map => { map.jumpTo({ center: [-119.896153, 38.943699], zoom: 13 }); });
+    const retrySkiTerrain = page.getByRole('button', { name: 'Retry ski terrain' });
+    const retryBackground = page.getByRole('button', { name: 'Retry background' });
+    await expect(retrySkiTerrain).toBeVisible();
+    await expect(retryBackground).toBeVisible();
+
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 10 }); });
+    await expect(retrySkiTerrain).toBeHidden();
+    await expect(retryBackground).toBeVisible();
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 13 }); });
+    await expect(retrySkiTerrain).toBeVisible();
+    failArchive = false;
+    await retrySkiTerrain.click();
+    await expect(page.locator('.maplibregl-canvas')).toBeFocused();
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-resort-runs'] }).length)).toBeGreaterThan(0);
+    await expect(retrySkiTerrain).toBeHidden();
+    await expect(retryBackground).toBeVisible();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'degraded');
+    expect(await renderer.evaluate(map => map.getZoom())).toBe(13);
     await renderer.dispose();
 });
 

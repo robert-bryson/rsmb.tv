@@ -65,3 +65,30 @@ The four UI regression tests failed before the fixes. All 18 Chromium tests pass
 The focused unit coverage includes ski-status and its shared search hook. It rose from 39.31% to 46.11% for lines and from 39.05% to 49.83% for branches. The Chromium suite covers map and page interactions.
 
 The guide uses short instructions, active verbs, and the app's terms. The task list keeps the checks for each season with the release work. [ASD-STE100 writing rules](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf), [ski-status tasks](../../TODO.md#ski-status)
+
+## Terrain overlay review
+
+The review covers the terrain overlay at `e4e4ae7`. It checks the import, tile delivery, filter changes, and map recovery.
+
+| Defect | Correction |
+| --- | --- |
+| The PMTiles cache kept a failed archive header request. The overlay could stay blank after the user turned it off and on. | Replace the archive reader when retrying a failed source. Keep the map camera and marker layers. |
+| The map hid ski terrain errors when the CARTO background failed. An error could also stay visible at overview zoom. | Show background and terrain errors together. Show a terrain error only at its layer's zoom range. Add a separate retry for ski terrain. |
+| The importer used only file size to match the GeoPackage and metadata. A different build could have the same size. | Check the layers, feature counts, and update times before processing the geometry. |
+| The importer wrote source labels and URLs directly into archive attribution HTML. | Encode labels as HTML text and URLs as attribute values. |
+
+Both new Chromium tests failed on the original code. They pass after the fixes. One checks the overlay toggle after an archive failure. The other checks the retry on a fallback map. [Browser tests](../../tests/e2e/ski-status.spec.ts)
+
+Six Python tests check the import validation and attribution. A rebuild from the November 16 snapshot produced the same archive checksum and terrain groups. [Import tests](../../projects/ski-status/tests/test_terrain_snapshot.py)
+
+The focused V8 check covers the ski-status feature modules. It includes the 10 new overlay unit tests. [Overlay tests](../../src/test/skiResortTerrainMap.test.ts)
+
+| Measure | Before | After |
+| --- | ---: | ---: |
+| Statements | 41.20% | 47.36% |
+| Branches | 50.37% | 55.91% |
+| Lines | 40.55% | 46.09% |
+
+Vitest passed 3,737 tests. The Python suites passed 24 tests. All 28 ski-status Chromium tests passed. Type checks and lint passed. The npm audit reported zero known vulnerabilities.
+
+The guide puts terrain setup with the current catalog. The task list puts the hosted byte range check with the first release. [Terrain guide](../../projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom), [Release checks](../../projects/ski-status/readme.md#release-checks)

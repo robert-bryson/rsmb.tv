@@ -1,12 +1,15 @@
-import { Protocol } from 'pmtiles';
+import { PMTiles, Protocol } from 'pmtiles';
 import { addProtocol } from './maplibre';
 
-let registered = false;
+let protocol: Protocol | undefined;
 
-export function pmtilesSourceUrl(asset: string) {
-    if (!registered) {
-        addProtocol('pmtiles', new Protocol().tile);
-        registered = true;
+export function pmtilesSourceUrl(asset: string, reload = false) {
+    if (!protocol) {
+        protocol = new Protocol();
+        addProtocol('pmtiles', protocol.tile);
     }
-    return `pmtiles://${new URL(asset, window.location.href).href}`;
+    const url = new URL(asset, window.location.href).href;
+    // The PMTiles promise cache retains failed header and directory reads.
+    if (reload) protocol.add(new PMTiles(url));
+    return `pmtiles://${url}`;
 }

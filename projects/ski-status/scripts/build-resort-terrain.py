@@ -3,23 +3,26 @@
 
 import argparse
 from collections import defaultdict
+from contextlib import closing
+from datetime import datetime
 import hashlib
+from html import escape
 import json
 import os
 from pathlib import Path
 import re
+import sqlite3
 import subprocess
 from tempfile import TemporaryDirectory
 from urllib.parse import urlsplit
-
-from osgeo import ogr
-
 
 DATA = Path(__file__).resolve().parents[1] / 'data'
 SOURCE = 'https://tiles.openskimap.org/openskidata.gpkg'
 MIN_ZOOM, MAX_ZOOM = 11, 14
 RUN_USES = ('downhill', 'nordic', 'skitour', 'snow_park', 'connection')
 LIFT_FREE_TYPES = {'cross-country', 'ski-touring'}
+AREA_POINTS = 'ski_areas_point'
+AREA_FOOTPRINTS = 'ski_areas_multipolygon'
 FEATURE_LAYERS = {
     'lifts': ('lifts_linestring',),
     'runs': ('runs_linestring', 'runs_multipolygon'),
@@ -29,6 +32,39 @@ FEATURE_LAYERS = {
 
 def read_json(path):
     return json.loads(path.read_text(encoding='utf-8'))
+
+
+def validate_snapshot(path, metadata):
+    if path.stat().st_size != metadata['files']['geoPackage']:
+        raise ValueError('GeoPackage size does not match the source metadata.')
+    start = datetime.fromisoformat(metadata['run']['startedAt'].replace('Z', '+00:00'))
+    end = datetime.fromisoformat(metadata['run']['finishedAt'].replace('Z', '+00:00'))
+    counts = metadata['counts']
+    expected_counts = {
+        'ski areas': ((AREA_POINTS,), counts['skiAreas']['total']),
+        'lifts': (FEATURE_LAYERS['lifts'], counts['lifts']),
+        'runs': (FEATURE_LAYERS['runs'], counts['runs']),
+        'spots': (FEATURE_LAYERS['stations'], counts['spots']),
+    }
+    with closing(sqlite3.connect(f'{path.resolve().as_uri()}?mode=ro', uri=True)) as connection:
+        changes = dict(connection.execute('''
+            SELECT contents.table_name, contents.last_change FROM gpkg_contents AS contents
+            JOIN sqlite_schema AS schema ON schema.name = contents.table_name AND schema.type = 'table'
+        '''))
+        for layer in (AREA_POINTS, AREA_FOOTPRINTS, *(name for names in FEATURE_LAYERS.values() for name in names)):
+            if layer not in changes:
+                raise ValueError(f'GeoPackage does not contain layer {layer}.')
+            changed = datetime.fromisoformat(changes[layer].replace('Z', '+00:00'))
+            if not start <= changed <= end:
+                raise ValueError(f'GeoPackage layer {layer} is outside the source build times.')
+        for label, (layers, expected) in expected_counts.items():
+            actual = sum(connection.execute(f'SELECT COUNT(*) FROM "{layer}"').fetchone()[0] for layer in layers)
+            if actual != expected:
+                raise ValueError(f'GeoPackage has {actual} {label}. The source metadata lists {expected}.')
+
+
+def format_attribution(credits):
+    return ' · '.join(f'<a href="{escape(url)}">{escape(name, quote=False)}</a>' for name, url in credits.items())
 
 
 def values(field):
@@ -48,9 +84,11 @@ def source_key(url):
 
 
 def find_areas(db, areas, locations):
+    from osgeo import ogr
+
     by_id = {}
     by_source = defaultdict(set)
-    for feature in db.GetLayerByName('ski_areas_point'):
+    for feature in db.GetLayerByName(AREA_POINTS):
         if feature['status'] != 'operating':
             continue
         identifier = feature['feature_id']
@@ -59,7 +97,7 @@ def find_areas(db, areas, locations):
         for source in json.loads(feature['sources']):
             by_source[source['type'], str(source['id'])].add(identifier)
 
-    footprints = db.GetLayerByName('ski_areas_multipolygon')
+    footprints = db.GetLayerByName(AREA_FOOTPRINTS)
     matched = defaultdict(set)
     for record in locations:
         area = areas[record['id']]
@@ -98,7 +136,7 @@ def write_tiles(db, matched, areas, work, attribution):
     groups = {}
     counts = {}
     inputs = []
-    for layer, source_names in {'footprints': ('ski_areas_multipolygon',), **FEATURE_LAYERS}.items():
+    for layer, source_names in {'footprints': (AREA_FOOTPRINTS,), **FEATURE_LAYERS}.items():
         path = work / f'{layer}.geojsonl'
         counts[layer] = 0
         with path.open('w', encoding='utf-8') as stream:
@@ -167,9 +205,14 @@ def main():
     parser.add_argument('geopackage', type=Path)
     parser.add_argument('metadata', type=Path)
     args = parser.parse_args()
-    metadata = read_json(args.metadata)
-    if args.geopackage.stat().st_size != metadata['files']['geoPackage']:
-        raise SystemExit('GeoPackage size does not match the source metadata.')
+    try:
+        metadata = read_json(args.metadata)
+        validate_snapshot(args.geopackage, metadata)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError, sqlite3.DatabaseError) as error:
+        parser.error(f'Invalid OpenSkiData snapshot. {error}')
+
+    from osgeo import ogr
+
     db = ogr.Open(str(args.geopackage))
     if db is None:
         raise SystemExit('Cannot read the OpenSkiData GeoPackage.')
@@ -179,7 +222,7 @@ def main():
     if not matched:
         raise SystemExit('No OpenSkiData areas match the catalog.')
     credits = {**locations['attribution'], 'ODbL': locations['license']}
-    attribution = ' · '.join(f'<a href="{url}">{name}</a>' for name, url in credits.items())
+    attribution = format_attribution(credits)
 
     with TemporaryDirectory(prefix='resort-terrain-', dir=DATA) as temporary:
         work = Path(temporary)

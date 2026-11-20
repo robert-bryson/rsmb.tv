@@ -25,6 +25,7 @@ const selectedPassImagePrefix = 'ski-status-selected-pass-badge-';
 const markerLayers = [selectedLayer, pointLayer, passBadgeLayer, selectedPassBadgeLayer];
 const terrainSource = 'ski-terrain-dem';
 const terrainLayer = 'ski-terrain-relief';
+const reliefMinZoom = 8;
 const pointZoom = 9;
 const minZoom = -2;
 const maxZoom = 16;
@@ -195,7 +196,7 @@ function syncTerrain(map: maplibre.Map, enabled: boolean) {
     const firstLabel = map.getStyle().layers.find(layer => layer.type === 'symbol' && !markerLayers.includes(layer.id));
     const before = firstLabel?.id ?? (map.getLayer(resortFootprintLayer) ? resortFootprintLayer : pointLayer);
     map.addLayer({
-        id: terrainLayer, type: 'hillshade', source: terrainSource, minzoom: 8,
+        id: terrainLayer, type: 'hillshade', source: terrainSource, minzoom: reliefMinZoom,
         paint: { 'hillshade-exaggeration': 0.4, 'hillshade-shadow-color': '#09090b', 'hillshade-highlight-color': '#cbd5e1' },
     }, before);
 }
@@ -236,11 +237,13 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
     const [failed, setFailed] = useState(false);
     const [terrainUnavailable, setTerrainUnavailable] = useState(false);
     const [resortTerrainUnavailable, setResortTerrainUnavailable] = useState(false);
+    const [mapZoom, setMapZoom] = useState(1);
     const [hovered, setHovered] = useState<SkiArea>();
     const reducedMotion = useReducedMotion();
     const duration = reducedMotion ? 0 : 280;
     const areasById = useMemo(() => new Map(areas.map(area => [area.id, area])), [areas]);
     const terrainGroups = useMemo(() => resortTerrainGroups(areas), [areas]);
+    const showResortTerrain = visible && resortTerrain && terrainGroups.length > 0;
     const points = useMemo<FeatureCollection<Point>>(() => ({
         type: 'FeatureCollection',
         features: areas.map(area => ({
@@ -250,7 +253,10 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
     }), [areas, colors, passFilter]);
     const current = useEffectEvent(() => ({ areasById, points, selected, colors, terrain }));
     const syncResortDetails = useEffectEvent((map: maplibre.Map) => {
-        syncResortTerrain(map, pointLayer, terrainGroups, visible && resortTerrain);
+        const reload = showResortTerrain && resortTerrainUnavailable && !map.getSource(resortTerrainSource)
+            && map.getZoom() >= resortTerrainMinZoom && Boolean(map.getLayer(pointLayer));
+        if (reload) setResortTerrainUnavailable(false);
+        syncResortTerrain(map, pointLayer, showResortTerrain ? terrainGroups : [], reload);
     });
     const selectArea = useEffectEvent(onSelect);
     const syncPassBadges = useEffectEvent((map: maplibre.Map) => {
@@ -345,6 +351,12 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 terrainPopup.remove();
                 updateHover();
             };
+            const settleViewport = () => {
+                const zoom = instance.getZoom();
+                setMapZoom(zoom);
+                if (zoom >= resortTerrainMinZoom && !instance.getSource(resortTerrainSource)) syncResortDetails(instance);
+                queueViewport();
+            };
             instance.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
             recoveryRef.current = recoverBasemap(instance, {
                 dataSources: new Set([sourceId, terrainSource, resortTerrainSource]), providerStyle, neutralStyle: () => cartoRasterStyle('dark', ''),
@@ -363,8 +375,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 setTerrainUnavailable(false);
                 setResortTerrainUnavailable(false);
                 syncCamera(instance);
-                syncResortDetails(instance);
-                queueViewport();
+                settleViewport();
             });
             instance.on('resize', () => {
                 clearHover();
@@ -372,10 +383,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 queueViewport();
             });
             instance.on('movestart', clearHover);
-            instance.on('moveend', () => {
-                if (instance.getZoom() >= resortTerrainMinZoom && !instance.getSource(resortTerrainSource)) syncResortDetails(instance);
-                queueViewport();
-            });
+            instance.on('moveend', settleViewport);
             instance.on('projectiontransition', queueViewport);
             instance.on('sourcedata', event => {
                 if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
@@ -438,7 +446,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         terrainPopupRef.current?.remove();
         const map = mapRef.current;
         if (map) syncResortDetails(map);
-    }, [terrainGroups, resortTerrain, visible]);
+    }, [terrainGroups, showResortTerrain]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -453,8 +461,18 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         onSelect();
     }
 
+    function retrySkiTerrain() {
+        const map = mapRef.current;
+        if (!map) return;
+        map.getCanvas().focus({ preventScroll: true });
+        setResortTerrainUnavailable(false);
+        syncResortTerrain(map, pointLayer, terrainGroups, true);
+    }
+
     const state = failed ? 'error' : !ready || basemap === 'loading' ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready';
     const showPopups = visible && ready && !failed;
+    const showReliefError = showPopups && terrain && terrainUnavailable && mapZoom >= reliefMinZoom;
+    const showSkiTerrainError = showPopups && showResortTerrain && resortTerrainUnavailable && mapZoom >= resortTerrainMinZoom;
     const fitLabel = inView ? 'Fit all results' : 'Fit results';
     return <div className="relative h-full min-h-0" onKeyDown={event => {
         if (event.key !== 'Escape' || (!selected && !hovered && !terrainPopupRef.current?.isOpen())) return;
@@ -475,21 +493,21 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             {selected && <span className="sm:hidden">Fit</span>}
             <span className={selected ? 'hidden sm:inline' : undefined}>{fitLabel}</span>
         </button>}
-        {state === 'ready' && ((terrain && terrainUnavailable) || (resortTerrain && resortTerrainUnavailable)) && <div role="status"
-            className="absolute bottom-9 left-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100">
-            {terrain && terrainUnavailable && <p>Terrain relief unavailable.</p>}
-            {resortTerrain && resortTerrainUnavailable && <p>Ski terrain unavailable.</p>}
-        </div>}
-        {state !== 'ready' && <div
+        {(state !== 'ready' || showReliefError || showSkiTerrainError) && <div
             className="absolute bottom-9 left-2 right-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
             role={failed ? 'alert' : 'status'}>
-            {failed ? <>Map unavailable. <button type="button" className="min-h-9 text-cyan-300 underline" onClick={() => {
+            {failed && <p>Map unavailable. <button type="button" className="min-h-9 text-cyan-300 underline" onClick={() => {
                 setReady(false);
                 setBasemap('loading');
                 setFailed(false);
                 setAttempt(value => value + 1);
-            }}>Retry map</button></> : state === 'degraded' ? <>Background unavailable. <button type="button" className="min-h-9 text-cyan-300 underline"
-                onClick={() => recoveryRef.current?.retry()}>Retry background</button></> : 'Loading map…'}
+            }}>Retry map</button></p>}
+            {state === 'loading' && <p>Loading map…</p>}
+            {state === 'degraded' && <p>Background unavailable. <button type="button" className="min-h-9 text-cyan-300 underline"
+                onClick={() => recoveryRef.current?.retry()}>Retry background</button></p>}
+            {showReliefError && <p>Terrain relief unavailable.</p>}
+            {showSkiTerrainError && <p><span>Ski terrain unavailable.</span> <button type="button" className="min-h-9 text-cyan-300 underline"
+                onClick={retrySkiTerrain}>Retry ski terrain</button></p>}
         </div>}
     </div>;
 }

@@ -62,22 +62,21 @@ const layers: (FillLayerSpecification | LineLayerSpecification | CircleLayerSpec
     },
 ];
 
-export function syncResortTerrain(map: MapLibreMap, before: string, groups: number[], enabled: boolean) {
+export function syncResortTerrain(map: MapLibreMap, before: string, groups: number[], reload = false) {
     if (!map.getLayer(before)) return;
     const installed = Boolean(map.getSource(resortTerrainSource));
-    if (!enabled || !groups.length) {
-        if (!installed) return;
+    if (installed && (!groups.length || reload)) {
         for (const { id } of layers) if (map.getLayer(id)) map.removeLayer(id);
         map.removeSource(resortTerrainSource);
-        return;
     }
+    if (!groups.length) return;
 
     const filter: FilterSpecification = ['in', ['get', 'group'], ['literal', groups]];
-    if (installed) {
+    if (installed && !reload) {
         for (const layer of layers) map.setFilter(layer.id, filter);
     } else if (map.getZoom() >= resortTerrainMinZoom) {
         map.addSource(resortTerrainSource, {
-            type: 'vector', url: pmtilesSourceUrl(archive), minzoom: manifest.minZoom, maxzoom: manifest.maxZoom,
+            type: 'vector', url: pmtilesSourceUrl(archive, reload), minzoom: manifest.minZoom, maxzoom: manifest.maxZoom,
             attribution: '<a href="https://www.openskidata.org/">OpenSkiData</a> · <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>',
         });
         for (const layer of layers) map.addLayer({ ...layer, filter }, before);
