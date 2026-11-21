@@ -461,6 +461,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=f6950418728474f314474e4a9f083b8928636181"
     },
+    "camden-snow-bowl": {
+      "coordinates": [
+        -69.1314385,
+        44.2177097
+      ],
+      "name": "Camden Snow Bowl Base Lodge and main arrival",
+      "kind": "entrance",
+      "source": "https://camdensnowbowl.com/contact/"
+    },
     "camelback-mountain-resort": {
       "coordinates": [
         -75.35577,
@@ -685,6 +694,15 @@
       "name": "Mapped lift base",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=bf2acdeaa2a1f3d3bd04ac406819c73b6165a33c"
+    },
+    "detroit-mountain": {
+      "coordinates": [
+        -95.783266,
+        46.813091
+      ],
+      "name": "Main Lodge",
+      "source": "https://www.openstreetmap.org/way/681729993",
+      "kind": "entrance"
     },
     "diavolezza-lagalb": {
       "coordinates": [
@@ -1045,6 +1063,15 @@
       "name": "Mapped lift base",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=0220b9172bf819d9b5fbd07c2f2218a8cfabb864"
+    },
+    "hyland-hills": {
+      "coordinates": [
+        -93.363666,
+        44.843671
+      ],
+      "name": "Hyland Hills Chalet",
+      "source": "https://www.openstreetmap.org/way/195174806",
+      "kind": "entrance"
     },
     "innsbruck-region": {
       "coordinates": [
@@ -1469,14 +1496,23 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=443f083a450bb1a2f3beb7248d51c7c195c55a97"
     },
+    "mont-rigaud": {
+      "coordinates": [
+        -74.3390278,
+        45.4680556
+      ],
+      "name": "Mont Rigaud public ski base",
+      "kind": "entrance",
+      "source": "https://montrigaud.com/cartes-des-sentiers/"
+    },
     "mont-ripley-ski-area": {
       "coordinates": [
-        -88.55952,
-        47.1278
+        -88.560093,
+        47.12796
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=af975d2da6cc5807757e938661e9894ae228718d"
+      "name": "Mont Ripley Chalet",
+      "source": "https://www.openstreetmap.org/way/186239150",
+      "kind": "entrance"
     },
     "montage-mountain": {
       "coordinates": [
@@ -1523,6 +1559,15 @@
       "kind": "entrance",
       "source": "https://www.skimountbaldy.ca/contact"
     },
+    "mount-kato": {
+      "coordinates": [
+        -94.033246,
+        44.13312
+      ],
+      "name": "Mount Kato Chalet",
+      "source": "https://www.openstreetmap.org/way/461449889",
+      "kind": "entrance"
+    },
     "mount-racey-ski-resort": {
       "coordinates": [
         141.96973,
@@ -1540,6 +1585,15 @@
       "name": "Bluebird Express #17 Return Terminal",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=74dd4473e21693f4e2d2fdfb66ed5eee9493d4cc"
+    },
+    "mount-st-louis-moonstone": {
+      "coordinates": [
+        -79.666907,
+        44.6231625
+      ],
+      "name": "Mount St. Louis Base Chalet",
+      "kind": "entrance",
+      "source": "https://www.mountstlouis.com/directions/"
     },
     "mountain-high": {
       "coordinates": [
@@ -2126,6 +2180,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=6ecf3eac97891cee8e38aa2e836e878db6ebe5a3"
     },
+    "searchmont-resort": {
+      "coordinates": [
+        -84.046249,
+        46.768923
+      ],
+      "name": "Searchmont Resort main lodge",
+      "source": "https://www.openstreetmap.org/way/266674805",
+      "kind": "entrance"
+    },
     "seven-springs-mountain-resort": {
       "coordinates": [
         -79.297664,
@@ -2378,6 +2441,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=69931ad5166c6a605bdbc8cb48fde87b78117576"
     },
+    "spirit-mountain": {
+      "coordinates": [
+        -92.21673,
+        46.717956
+      ],
+      "name": "Skyline Chalet",
+      "source": "https://www.openstreetmap.org/way/146915066",
+      "kind": "entrance"
+    },
     "station-touristique-stoneham": {
       "coordinates": [
         -71.384916,
@@ -2594,6 +2666,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=b7cad93e857de92335debf15f4d0bfe9a04f4d1b"
     },
+    "trollhaugen-ski-area": {
+      "coordinates": [
+        -92.618079,
+        45.351325
+      ],
+      "name": "Trollhaugen Main Lodge",
+      "source": "https://www.openstreetmap.org/way/769061050",
+      "kind": "entrance"
+    },
     "tsugaike-mountain-resort": {
       "coordinates": [
         137.859273,
@@ -2721,13 +2802,13 @@
       "kind": "entrance"
     },
     "white-pine-resort": {
+      "name": "White Pine Resort base lodge",
       "coordinates": [
-        -109.757814,
-        42.977353
+        -109.7586597,
+        42.9778494
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=09b32bd37bdd1181ae2e1b4b9460352b593d798c"
+      "kind": "entrance",
+      "source": "https://www.whitepineresort.com/plan#conditions"
     },
     "whitecap-mountains-resort": {
       "coordinates": [

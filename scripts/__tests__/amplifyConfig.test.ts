@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import ts from 'typescript';
 import { parse } from 'yaml';
+import { snowDepthTileEndpoint } from '../../src/features/ski-status/skiMapOverlays';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const npmInstallCommand = `npm install --global "$(node -p "require('./package.json').packageManager")"`;
@@ -263,6 +264,7 @@ describe('Amplify response headers', () => {
         expect(imageSources).toContain('https://tile.opentopomap.org');
         expect(imageSources).toContain('https://tiles.mapterhorn.com');
         expect(imageSources).toContain('https://tiles.openfreemap.org');
+        expect(imageSources?.split(/\s+/)).toContain(snowDepthTileEndpoint);
         expect(connectSources).toContain('https://cloud.umami.is');
         expect(connectSources).toContain('https://gateway.umami.is');
         expect(connectSources).toContain('https://data.rcc-acis.org');
@@ -272,6 +274,7 @@ describe('Amplify response headers', () => {
         expect(connectSources).toContain('https://tile.opentopomap.org');
         expect(connectSources).toContain('https://tiles.mapterhorn.com');
         expect(connectSources).toContain('https://tiles.openfreemap.org');
+        expect(connectSources?.split(/\s+/)).toContain(snowDepthTileEndpoint);
     });
 });
 

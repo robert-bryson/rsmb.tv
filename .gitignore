@@ -202,6 +202,13 @@ public/data/tornadoes/track-points/*.geojson
 # === Trip preview assets ===
 public/data/trips/
 
+# === Project: Ski Status ===
+/projects/ski-status/data/resort-terrain.pmtiles
+/projects/ski-status/data/resort-terrain.pid.lock
+/projects/ski-status/data/resort-terrain-*/
+/src/features/ski-status/pass-icons/
+/src/features/ski-status/resort-icons/
+
 # === Project: Ride Ledger ===
 projects/ride-ledger/data/
 projects/ride-ledger/exports/

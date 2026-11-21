@@ -5,6 +5,7 @@ export const passSeasonId = z.string().regex(/^\d{4}\/\d{2}$/).refine(value =>
     Number(value.slice(5)) === (Number(value.slice(0, 4)) + 1) % 100, 'Pass season must end the next year');
 export const sha256 = z.string().regex(/^[a-f0-9]{64}$/);
 export const isoTime = z.iso.datetime({ offset: true });
+export const skiCoordinates = z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]);
 
 export const httpsUrl = z.string().trim().refine(value => {
     if (!/^https:\/\/[^/]/i.test(value) || /[\\\s]/u.test(value)) return false;

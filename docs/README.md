@@ -5,7 +5,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 
 ## Writing rules
 
-Use [ASD-STE100](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) as the language guide for repository documentation.
+Use ASD-STE100 Issue 9 as the language guide for repository documentation. [ASD-STE100 specification](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf)
 Aim for simplified technical English in at least 80% of new or revised prose.
 Use short sentences and active voice.
 Give one instruction in each sentence. Use no more than 20 words in an instruction.
@@ -13,7 +13,7 @@ Use no more than 25 words in a description.
 Use one term for each concept. Define technical terms before their first use.
 Keep commands, identifiers, product names, and source quotations exact.
 Keep dated findings and measurements as evidence. Add a new report when findings change.
-Record each incomplete task once. Use the [repository task list](../TODO.md) to find project task lists. Link each task to its acceptance conditions.
+Record each incomplete task once. Link each task to its acceptance conditions. Find project tasks from the repository task list. [Open work](../TODO.md)
 Keep an alt description separate from a photo caption.
 An alt description states the visible content. A caption can supply other information.
 
@@ -59,6 +59,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-21 | [ski-status asset and visitor data review](reviews/2026-11-21-ski-status-assets-and-visitor-review.md) |
 | 2026-11-21 | [ski-status season and catalog review](reviews/2026-11-21-ski-status-season-and-catalog-review.md) |
 | 2026-11-21 | [ski-status catalog coverage](reviews/2026-11-21-ski-status-catalog-coverage.md) |
 | 2026-11-21 | [ski-status engineering review](reviews/2026-11-21-ski-status-engineering-review.md) |

@@ -1,9 +1,9 @@
 import baseDownload from '../../../projects/ski-status/data/resort-bases.json?url';
 import locationDownload from '../../../projects/ski-status/data/locations.json?url';
-import terrainDownload from '../../../projects/ski-status/data/resort-terrain.pmtiles?url';
 import { AttributionControl, type IControl } from '../../maps/maplibre';
 import { escapeHtml } from '../../utils/escapeHtml';
 import { locationAttribution, locationLicense } from './catalog';
+import { skiTerrainArchiveUrl } from './resortTerrainData';
 
 const credits = {
     MapLibre: 'https://maplibre.org/',
@@ -13,7 +13,7 @@ const credits = {
 const downloads = [
     { label: 'Catalog points', url: locationDownload, filename: 'ski-status-locations.json' },
     { label: 'Base points', url: baseDownload, filename: 'ski-status-resort-bases.json' },
-    { label: 'Terrain data', url: terrainDownload, filename: 'ski-status-resort-terrain.pmtiles' },
+    { label: 'Terrain data', url: skiTerrainArchiveUrl, filename: 'ski-status-resort-terrain.pmtiles' },
 ];
 
 export function skiMapAttribution(): IControl {

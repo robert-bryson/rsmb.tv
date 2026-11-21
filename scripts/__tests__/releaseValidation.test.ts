@@ -54,10 +54,11 @@ describe('hosted release validation', () => {
         expect(() => assertTornadoGeometry({ ...collection, features: [{ ...feature, geometry: { type: 'LineString', coordinates: [[-190, 35], [-91, 36]] } }] }, '/tornadoes/tracks/2025.geojson')).toThrow('geometry');
         expect(() => assertTornadoGeometry({}, '/tornadoes/tracks/2025.geojson')).toThrow('geometry');
     });
-    it.each(['chunk.js', 'styles.css', 'photo.avif', 'photo.webp', 'flights.geojson', 'recentRecords.json'])('rejects SPA HTML served for %s', file => {
+    it.each(['chunk.js', 'styles.css', 'photo.avif', 'photo.webp', 'resort.ico', 'flights.geojson', 'recentRecords.json'])('rejects SPA HTML served for %s', file => {
         expect(() => assertAssetType(`https://preview.example/${file}`, 'text/html; charset=utf-8')).toThrow('Wrong MIME type');
     });
-    it.each([['chunk.js', 'text/javascript'], ['photo.avif', 'image/avif'], ['flights.geojson', 'application/geo+json']])('accepts the asset type for %s', (file, type) => {
+    it.each([['chunk.js', 'text/javascript'], ['photo.avif', 'image/avif'], ['flights.geojson', 'application/geo+json'],
+        ['resort.ico', 'image/vnd.microsoft.icon'], ['resort.ico', 'image/x-icon']])('accepts the asset type for %s', (file, type) => {
         expect(() => assertAssetType(`https://preview.example/${file}`, type)).not.toThrow();
     });
     it.each([['photo.avif', 'image/png'], ['photo.webp', 'image/jpeg'], ['font.woff2', 'text/plain']])('rejects a mismatched asset MIME type for %s', (file, type) => {

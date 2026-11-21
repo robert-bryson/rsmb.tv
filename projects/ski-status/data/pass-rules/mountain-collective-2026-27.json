@@ -467,10 +467,10 @@
       ],
       "access": "included",
       "days": 2,
-      "reservation": "check",
-      "note": "After the included days, additional days are offered at half price.",
-      "source": "https://mountaincollective.com/2026-27-mountain-collective-passes-now-on-sale-2/",
-      "checkedOn": "2026-11-20",
+      "reservation": "none",
+      "note": "Sugar Bowl accepts the current Mountain Collective pass directly at the lift. Additional days are half price at the ticket window after the two included days.",
+      "source": "https://www.sugarbowl.com/mountaincollective",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",

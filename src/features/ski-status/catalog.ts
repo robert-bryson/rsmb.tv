@@ -3,7 +3,7 @@ import areaData from '../../../projects/ski-status/data/areas.json';
 import locationData from '../../../projects/ski-status/data/locations.json';
 import passData from '../../../projects/ski-status/data/passes-2026-27.json';
 import baseData from '../../../projects/ski-status/data/resort-bases.json';
-import { httpsUrl, passSeasonId, skiId } from './schemas';
+import { httpsUrl, passSeasonId, skiCoordinates, skiId } from './schemas';
 
 const label = z.string().trim().min(1);
 const countryCode = z.string().regex(/^[A-Z]{2}$/);
@@ -94,7 +94,6 @@ const mappedTerrainSchema = z.strictObject({
 }).refine(({ lifts, downhillKm, nordicKm, namedDownhillRuns, namedNordicTrails, elevationM }) =>
     lifts || downhillKm || nordicKm || namedDownhillRuns || namedNordicTrails || elevationM, 'Add a mapped terrain value');
 
-const coordinates = z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]);
 const locationsSchema = z.strictObject({
     source: httpsUrl,
     buildTime: z.iso.datetime(),
@@ -102,7 +101,7 @@ const locationsSchema = z.strictObject({
     attribution: z.record(label, httpsUrl).refine(links => Object.keys(links).length > 0, 'Add a location attribution link'),
     locations: z.array(z.strictObject({
         id: skiId,
-        coordinates,
+        coordinates: skiCoordinates,
         upstream: z.array(httpsUrl).min(1),
         mappedTerrain: mappedTerrainSchema.optional(),
         timeZone: skiTimeZone.optional(),
@@ -110,7 +109,7 @@ const locationsSchema = z.strictObject({
 });
 const baseSchema = z.strictObject({
     buildTime: z.iso.datetime(), license: httpsUrl,
-    bases: z.record(skiId, z.strictObject({ coordinates, name: label, source: httpsUrl, kind: z.enum(['entrance', 'lift-base']) })),
+    bases: z.record(skiId, z.strictObject({ coordinates: skiCoordinates, name: label, source: httpsUrl, kind: z.enum(['entrance', 'lift-base']) })),
 });
 
 export const passFamilySchema = z.enum(['ikon', 'epic', 'indy', 'mountain-collective']);

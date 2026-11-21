@@ -10,12 +10,12 @@ import {
 import { passFamilySchema, passNames, skiAreaMapPoint, skiAreas } from '../features/ski-status/catalog';
 import { matchesOperatingStatus, skiDayStatus, statusFilterLabels, type ResortStatus } from '../features/ski-status/conditions';
 import { readMarkerMode } from '../features/ski-status/mapAppearance';
-import { resortTerrainGroups, type TerrainConvention } from '../features/ski-status/resortTerrainData';
+import { resortTerrainGroups } from '../features/ski-status/resortTerrainData';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaList } from '../features/ski-status/SkiAreaList';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
 import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
-import { SkiDialog, SkiFilterDialog, SkiLayerDialog, SkiTerrainKey } from '../features/ski-status/SkiControls';
+import { SkiDialog, SkiFilterDialog } from '../features/ski-status/SkiControls';
 import { SkiIcon, SkiIconButton } from '../features/ski-status/SkiIcon';
 import { SkiPassIcon } from '../features/ski-status/SkiPassIcon';
 import { SkiShareButton } from '../features/ski-status/SkiShareButton';
@@ -26,6 +26,7 @@ import { matchesSkiLocations, type SkiLocationFilters } from '../features/ski-st
 import { readSkiMapArea, readSkiMapCamera, skiMapAreaContains } from '../features/ski-status/skiMapArea';
 import { seasonMonths } from '../features/ski-status/seasons';
 import { downloadSkiAreaCsv, skiAreaCsv } from '../features/ski-status/skiCsv';
+import { useSkiArchive } from '../features/ski-status/useSkiArchive';
 import { useSkiConditions } from '../features/ski-status/useSkiConditions';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
@@ -60,6 +61,7 @@ export default function SkiStatus() {
     const [storedColumns, setColumns] = usePersistedState<ColumnKey[]>('ski-status-columns', defaultSkiColumns);
     const [savedExclusions, setExclusions] = usePersistedState<unknown>('ski-status-excluded-locations', []);
     const conditions = useSkiConditions();
+    const archive = useSkiArchive();
     const units = storedUnits === 'metric' ? 'metric' : 'imperial';
     const columnPreference = visibleSkiColumns(storedColumns).map(({ key }) => key);
     const wide = useMediaQuery('(min-width: 64rem)');
@@ -84,6 +86,7 @@ export default function SkiStatus() {
     const defaultColors = status === 'today' ? 'operatingStatus' : 'default';
     const colors = colorParam === null ? defaultColors : readMarkerMode(colorParam);
     const terrain = searchParams.get('terrain') === '1';
+    const snowDepth = searchParams.get('snowDepth') === '1';
     const resortTerrain = searchParams.get('skiTerrain') !== '0';
     const mapAreaParam = searchParams.get('mapArea');
     const searchedArea = useMemo(() => readSkiMapArea(mapAreaParam), [mapAreaParam]);
@@ -95,9 +98,10 @@ export default function SkiStatus() {
     const passSelection = useMemo<SkiPassSelection>(() => ({
         passes, product: product && { pass: product, date: skiDate, now: passNow, homeAreaId },
     }), [passes, product, skiDate, passNow, homeAreaId]);
-    const catalogMatches = useMemo(() => filterSkiAreas(skiAreas, {
-        query, locations, night, skiing, seasonMonth, ...passSelection,
-    }), [query, locations, night, skiing, seasonMonth, passSelection]);
+    const discoveryFilters = useMemo(() => ({ query, locations, night, skiing, seasonMonth }),
+        [query, locations, night, skiing, seasonMonth]);
+    const cameraFitKey = JSON.stringify(discoveryFilters);
+    const catalogMatches = useMemo(() => filterSkiAreas(skiAreas, { ...discoveryFilters, ...passSelection }), [discoveryFilters, passSelection]);
     const scoped = useMemo(() => {
         if (!searchedArea) return catalogMatches;
         const contains = skiMapAreaContains(searchedArea);
@@ -112,7 +116,6 @@ export default function SkiStatus() {
     const currentReports = scoped.filter(area => statuses.get(area.id) !== 'unknown').length;
     const [terrainRequest, setTerrainRequest] = useState<SkiTerrainRequest>();
     const [locationRequest, setLocationRequest] = useState<{ place: string }>();
-    const [terrainConventions, setTerrainConventions] = useState<readonly TerrainConvention[]>([]);
     const detailsOpen = Boolean(selected && searchParams.get('details') !== '0');
     const searchInput = useRef<HTMLInputElement>(null);
     const cameraReader = useRef<(() => string | undefined) | null>(null);
@@ -121,7 +124,6 @@ export default function SkiStatus() {
     const allResortsButton = useRef<HTMLButtonElement>(null);
     const filterButton = useRef<HTMLButtonElement>(null);
     const filterDialog = useRef<HTMLDialogElement>(null);
-    const layersDialog = useRef<HTMLDialogElement>(null);
     const columnsDialog = useRef<HTMLDialogElement>(null);
     const sourceControl = useRef<HTMLElement | null>(null);
     const nextFocus = useRef<'details' | 'opener' | 'map' | undefined>(undefined);
@@ -429,17 +431,18 @@ export default function SkiStatus() {
                 </div>}
                 <div className="min-h-0 flex-1">
                     {(mapOpened || showMap) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={status === 'today' ? scoped : matching} fitResults={matching} cameraAreas={catalogMatches}
-                            selected={selected} colors={colors} passSelection={passSelection} statuses={statuses} conditions={conditions}
-                            terrain={terrain} resortTerrain={resortTerrain} visible={showMap} searchedArea={searchedArea}
-                            layersModified={colors !== defaultColors || terrain || !resortTerrain}
+                        <SkiStatusMap areas={status === 'today' ? scoped : matching} fitResults={matching}
+                            cameraAreas={catalogMatches} cameraFitKey={cameraFitKey}
+                            selected={selected} colors={colors} units={units} passSelection={passSelection} statuses={statuses} conditions={conditions}
+                            archive={archive}
+                            terrain={terrain} snowDepth={snowDepth} resortTerrain={resortTerrain} visible={showMap} searchedArea={searchedArea}
+                            layersModified={colors !== defaultColors || terrain || snowDepth || !resortTerrain}
                             searchedAreaKey={searchedArea ? mapAreaParam : null} initializeArea={legacyArea}
                             terrainRequest={terrainRequest} locationRequest={locationRequest} willDockDetails={!wide && !detailsOpen}
                             camera={camera} navigationKey={location.key} restoreHistoryCamera={restoreHistoryCamera}
                             cameraReader={cameraReader} mapRegion={mapSection} onCameraChange={commitMapCamera}
                             onSearchArea={commitMapArea} onSelect={selectArea} onShowTerrain={showTerrain}
-                            onZoomLocation={zoomToLocation} onTerrainKey={setTerrainConventions}
-                            onOpenLayers={() => layersDialog.current?.showModal()} />
+                            onZoomLocation={zoomToLocation} onLayerChange={setParam} />
                     </Suspense></ErrorBoundary>}
                 </div>
             </section>
@@ -464,6 +467,7 @@ export default function SkiStatus() {
             </aside>}
             {selected && detailsOpen && <aside key={selected.id} className="ski-sidebar min-h-0 min-w-0 overflow-auto">
                 <SkiAreaDetails area={selected} sectionRef={detailSection} units={units} onClose={closeDetails} conditions={conditions}
+                    archive={archive?.get(selected.id)}
                     product={product} skiDate={skiDate} homeAreaId={homeAreaId} onShowTerrain={canShowTerrain ? () => showTerrain({ id: selected.id }) : undefined}
                     onZoomLocation={zoomToLocation} />
             </aside>}
@@ -471,8 +475,6 @@ export default function SkiStatus() {
         <SkiFilterDialog dialog={filterDialog} filters={filters} resultCount={matching.length} units={units}
             onShowResults={() => { if (!wide && view === 'map') setView('results'); }}
             onUnitsChange={setUnits} onChangeLocation={toggleLocationFilter} setParam={setParam} updateParams={updateSkiParams} />
-        <SkiLayerDialog dialog={layersDialog} colors={colors} units={units} indyDiscounts={passes.length === 1 && passes.includes('indy-discounts')} terrain={terrain}
-            resortTerrain={resortTerrain} setParam={setParam} terrainKey={terrainConventions.length > 0 && <SkiTerrainKey conventions={terrainConventions} />} />
         <SkiDialog dialog={columnsDialog} id="ski-columns" title="Columns">
             <SkiColumnSettings columns={columnPreference} onChange={columns => {
                 setColumns(columns);

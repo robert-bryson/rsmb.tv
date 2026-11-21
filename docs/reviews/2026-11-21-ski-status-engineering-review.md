@@ -46,7 +46,7 @@ The preview returned revision `0ec3dfd` for Amplify job 22 on November 21.
 The candidate still needs a hosted byte-range and tooltip check. [Preview deployment record](https://release-preview.d38ki8k4lanh8s.amplifyapp.com/deployment.json), [Terrain release checks](../../projects/ski-status/readme.md#release-checks)
 
 The sync workflow was absent from `origin/main`. The public manifest returned HTTP 403.
-Track the first scoped sync and its manifest archive in the release tasks. [Conditions manifest](https://data.rsmb.tv/ski-status/manifest.json), [Release tasks](../../projects/ski-status/TODO.md#before-release)
+Track the first scoped sync and its manifest archive in the release tasks. [Conditions manifest](https://data.rsmb.tv/ski-status/manifest.json), [Release tasks](../../projects/ski-status/TODO.md#release-checks)
 
 ## Rockies spot checks
 
@@ -61,4 +61,4 @@ The local **Ski today** check showed Sunshine and Lake Louise. Both left the res
 The test also checked that the app kept an undated report out of current results.
 
 The API describes the XML format and update schedule. Public display and archive storage still need operator terms for Sunshine and Norquay.
-The seven-day check remains open. [SkiBig3 terms](https://www.skibig3.com/terms-of-use/), [Norquay terms](https://banffnorquay.com/terms-conditions/), [Rockies tasks](../../projects/ski-status/TODO.md#before-publishing-the-rockies-feed)
+The seven-day check remains open. [SkiBig3 terms](https://www.skibig3.com/terms-of-use/), [Norquay terms](https://banffnorquay.com/terms-conditions/), [Rockies tasks](../../projects/ski-status/TODO.md#rockies-report-pilot)

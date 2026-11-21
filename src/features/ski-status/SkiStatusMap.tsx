@@ -7,7 +7,7 @@ import type { MapCamera } from '../../maps/mapCamera';
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
-import { skiAreaBounds, type SkiPassSelection } from './browse';
+import { skiAreaBounds, type SkiPassSelection, type SkiUnits } from './browse';
 import { skiAreaMapPoint, skiAreas, type SkiArea } from './catalog';
 import type { Conditions, ResortStatus } from './conditions';
 import type { MarkerMode } from './mapAppearance';
@@ -18,37 +18,21 @@ import { matchesSkiLocation, skiRegionName } from './skiGeography';
 import { captureSkiMapArea, encodeSkiMapArea, encodeSkiMapCamera, skiMapMaxZoom, skiMapMinZoom, type SkiMapArea } from './skiMapArea';
 import { addAreaLayers, addPassBadges, addResortImages, areaFeatures, filterPassBadges, loadPassImages, loadResortImages, markerLayers,
     pointLayer, resortIconLayer, selectionSource, sourceId } from './skiMapLayers';
+import { reliefMinZoom, reliefSource, revealSkiMapOverlay, snowDepthMinZoom, snowDepthSource, syncSkiMapOverlays,
+    type SkiMapOverlaySource } from './skiMapOverlays';
+import { addHighwayShieldImages, regionalRoadLayer, skiGlobeStyle } from './skiMapStyle';
 import { SkiAreaPopup } from './SkiAreaPopup';
 import { SkiIcon, SkiIconButton } from './SkiIcon';
+import { SkiLayerPanel, type SetSkiLayer } from './SkiLayerPanel';
+import type { SkiArchive } from './useSkiArchive';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './skiAreaPopup.css';
 
-const terrainSource = 'ski-terrain-dem';
-const terrainLayer = 'ski-terrain-relief';
-const reliefMinZoom = 8;
-const reliefExaggeration: maplibre.ExpressionSpecification = [
-    'interpolate', ['linear'], ['zoom'], reliefMinZoom, 0, 9, 0.04, 10, 0.1, 11, 0.2, 12, 0.3, 13, 0.4,
-];
 const pointZoom = 9;
 const terrainZoom = 13;
 const markerClickDelay = 300;
 const overviewCenter: [number, number] = [-100, 44];
 const providerStyle = () => cartoVectorStyleUrl('dark-matter');
-const detailStartZoom = 3;
-const detailLayers = new Set(['park_nature_reserve', 'landuse', 'waterway', 'water_shadow', 'waterway_label', 'watername_ocean', 'watername_lake_line']);
-
-const skiGlobeStyle: maplibre.TransformStyleFunction = (_, style) => {
-    if (!Array.isArray(style?.layers)) return style;
-    return {
-        ...style,
-        projection: { type: 'globe' },
-        sky: { 'sky-color': '#080e16', 'fog-ground-blend': 0, 'atmosphere-blend': 0 },
-        // Keep the coastline, boundaries, and place labels at the globe overview.
-        layers: style.layers.map(layer => layer && detailLayers.has(layer.id)
-            && (layer.maxzoom ?? 24) > detailStartZoom && (layer.minzoom ?? 0) < detailStartZoom
-            ? { ...layer, minzoom: detailStartZoom } : layer),
-    };
-};
 
 export interface SkiTerrainRequest {
     id: string;
@@ -59,12 +43,16 @@ interface Props {
     areas: readonly SkiArea[];
     fitResults: readonly SkiArea[];
     cameraAreas: readonly SkiArea[];
+    cameraFitKey: string;
     selected?: SkiArea;
     colors: MarkerMode;
+    units: SkiUnits;
     passSelection: SkiPassSelection;
     statuses: ReadonlyMap<string, ResortStatus>;
     conditions: Conditions;
+    archive?: SkiArchive;
     terrain: boolean;
+    snowDepth: boolean;
     resortTerrain: boolean;
     visible: boolean;
     layersModified: boolean;
@@ -84,8 +72,7 @@ interface Props {
     onSelect: (id?: string, control?: HTMLElement) => void;
     onShowTerrain: (request: SkiTerrainRequest, control: HTMLElement) => void;
     onZoomLocation: (place: string) => void;
-    onTerrainKey: (conventions: readonly TerrainConvention[]) => void;
-    onOpenLayers: () => void;
+    onLayerChange: SetSkiLayer;
 }
 
 function readCamera(map: maplibre.Map): MapCamera {
@@ -143,26 +130,6 @@ function fitLocation(map: maplibre.Map, place: string, duration: number) {
     else fitAreas(map, skiAreas.filter(area => matchesSkiLocation(area, place)), duration);
 }
 
-function syncTerrain(map: maplibre.Map, enabled: boolean) {
-    if (!enabled) {
-        if (map.getLayer(terrainLayer)) map.removeLayer(terrainLayer);
-        if (map.getSource(terrainSource)) map.removeSource(terrainSource);
-        return;
-    }
-    if (map.getLayer(terrainLayer) || !map.getLayer(pointLayer)) return;
-    map.addSource(terrainSource, {
-        type: 'raster-dem', tiles: ['https://tiles.mapterhorn.com/{z}/{x}/{y}.webp'],
-        encoding: 'terrarium', tileSize: 512, minzoom: reliefMinZoom, maxzoom: 12,
-        attribution: '<a href="https://mapterhorn.com/attribution/">© Mapterhorn terrain</a>',
-    });
-    const firstLabel = map.getStyle().layers.find(layer => layer.type === 'symbol' && layer.source !== sourceId && layer.source !== selectionSource);
-    const before = firstLabel?.id ?? (map.getLayer(resortFootprintLayer) ? resortFootprintLayer : pointLayer);
-    map.addLayer({
-        id: terrainLayer, type: 'hillshade', source: terrainSource, minzoom: reliefMinZoom,
-        paint: { 'hillshade-exaggeration': 0, 'hillshade-shadow-color': '#09090b', 'hillshade-highlight-color': '#cbd5e1' },
-    }, before);
-}
-
 function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<string, SkiArea>, padding = 0) {
     const layers = markerLayers.filter(layer => map.getLayer(layer));
     if (!layers.length) return;
@@ -186,18 +153,19 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<
     return nearest;
 }
 
-export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected, colors, passSelection, statuses, conditions, terrain, resortTerrain,
+export default function SkiStatusMap({ areas, fitResults, cameraAreas, cameraFitKey, selected, colors, units, passSelection, statuses, conditions, archive, terrain, snowDepth, resortTerrain,
     visible, layersModified, searchedArea, searchedAreaKey, initializeArea, willDockDetails, terrainRequest, locationRequest, camera, navigationKey, restoreHistoryCamera,
-    cameraReader, mapRegion, onCameraChange, onSearchArea, onSelect, onShowTerrain, onZoomLocation, onTerrainKey, onOpenLayers }: Props) {
+    cameraReader, mapRegion, onCameraChange, onSearchArea, onSelect, onShowTerrain, onZoomLocation, onLayerChange }: Props) {
     const container = useRef<HTMLDivElement>(null);
+    const layersButton = useRef<HTMLButtonElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
     const passImages = useRef<ReturnType<typeof loadPassImages> | undefined>(undefined);
-    const resortImages = useRef<ReturnType<typeof loadResortImages> | undefined>(undefined);
+    const resortImages = useRef<{ archive?: SkiArchive; loading: ReturnType<typeof loadResortImages> }>(undefined);
     const passLayers = useRef(false);
     const terrainPopupRef = useRef<maplibre.Popup | undefined>(undefined);
     const appliedCamera = useRef<{
-        areas: readonly SkiArea[]; id?: string; key: string | null; historyKey?: string; visible: boolean;
+        areas: readonly SkiArea[]; fitKey: string; id?: string; key: string | null; historyKey?: string; visible: boolean;
     }>(undefined);
     const appliedTerrainRequest = useRef<Props['terrainRequest']>(undefined);
     const terrainAnimation = useRef<SkiTerrainRequest>(undefined);
@@ -211,10 +179,14 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const [rendererFailed, setRendererFailed] = useState(false);
     const [markersFailed, setMarkersFailed] = useState(false);
     const [terrainUnavailable, setTerrainUnavailable] = useState(false);
+    const [snowDepthUnavailable, setSnowDepthUnavailable] = useState(false);
     const [resortTerrainUnavailable, setResortTerrainUnavailable] = useState(false);
     const [mapZoom, setMapZoom] = useState(1);
     const [previousView, setPreviousView] = useState<MapCamera>();
     const [hovered, setHovered] = useState<SkiArea>();
+    const [layersOpen, setLayersOpen] = useState(false);
+    const [terrainConventions, setTerrainConventions] = useState<readonly TerrainConvention[]>([]);
+    if (!visible && layersOpen) setLayersOpen(false);
     const keepHoverOpen = useCallback(() => {
         window.clearTimeout(hoverDismissal.current);
         hoverDismissal.current = undefined;
@@ -240,7 +212,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const showResortTerrain = visible && resortTerrain && terrainGroups.length > 0;
     const points = useMemo(() => areaFeatures(areas, colors, statuses, passSelection), [areas, colors, statuses, passSelection]);
     const selection = useMemo(() => areaFeatures(selected ? [selected] : [], colors, statuses, passSelection), [selected, colors, statuses, passSelection]);
-    const current = useEffectEvent(() => ({ areasById, points, selection, selected, colors, terrain, visible, willDockDetails }));
+    const current = useEffectEvent(() => ({ areasById, points, selection, selected, colors, visible, willDockDetails }));
     const initialCamera = useEffectEvent((element: HTMLElement) => {
         if (camera) return camera;
         if (searchedArea) return { center: searchedArea.center, zoom: searchedArea.zoom };
@@ -249,12 +221,14 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     });
     const selectArea = useEffectEvent(onSelect);
     const showTerrain = useEffectEvent(onShowTerrain);
-    const revealTerrain = useEffectEvent((map: maplibre.Map) => {
-        if (!map.getLayer(terrainLayer) || map.getPaintProperty(terrainLayer, 'hillshade-exaggeration') !== 0) return;
-        // Fade in the initial view together so tile edges stay hidden while loading.
-        map.setPaintProperty(terrainLayer, 'hillshade-exaggeration-transition', { duration });
-        map.setPaintProperty(terrainLayer, 'hillshade-exaggeration', reliefExaggeration);
+    const syncOverlays = useEffectEvent((map: maplibre.Map) => {
+        if (!map.getLayer(pointLayer)) return;
+        const foreground = map.getStyle().layers.find(layer => layer.id === regionalRoadLayer
+            || (layer.type === 'symbol' && layer.source !== sourceId && layer.source !== selectionSource));
+        const before = foreground?.id ?? (map.getLayer(resortFootprintLayer) ? resortFootprintLayer : pointLayer);
+        syncSkiMapOverlays(map, before, terrain, snowDepth, duration);
     });
+    const revealOverlay = useEffectEvent((map: maplibre.Map, source: SkiMapOverlaySource) => revealSkiMapOverlay(map, source, duration));
     const syncResortDetails = useEffectEvent((map: maplibre.Map) => {
         const reload = showResortTerrain && resortTerrainUnavailable && !map.getSource(resortTerrainSource)
             && map.getZoom() >= resortTerrainMinZoom && Boolean(map.getLayer(pointLayer));
@@ -266,13 +240,13 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         const key = conventions.join(',');
         if (key === lastTerrainKey.current) return;
         lastTerrainKey.current = key;
-        onTerrainKey(conventions);
+        setTerrainConventions(conventions);
     });
     const syncPassBadges = useEffectEvent((map: maplibre.Map) => {
         if (colors !== 'pass' || !map.getSource(sourceId) || passLayers.current) return;
-        passImages.current ??= loadPassImages(map);
-        void passImages.current.then(images => {
-            if (mapRef.current !== map || !map.getSource(sourceId) || passLayers.current) return;
+        const request = passImages.current ??= loadPassImages(map);
+        void request.then(images => {
+            if (passImages.current !== request || mapRef.current !== map || !map.getSource(sourceId) || passLayers.current) return;
             const data = current();
             if (data.colors !== 'pass') return;
             addPassBadges(map, images);
@@ -282,9 +256,13 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     });
     const syncResortIcons = useEffectEvent((map: maplibre.Map) => {
         if (colors !== 'default' || !map.getLayer(resortIconLayer)) return;
-        resortImages.current ??= loadResortImages();
-        void resortImages.current.then(images => {
-            if (mapRef.current === map && current().colors === 'default' && map.getLayer(resortIconLayer)) addResortImages(map, images);
+        if (!resortImages.current || resortImages.current.archive !== archive) {
+            resortImages.current = { archive, loading: loadResortImages(archive) };
+        }
+        const request = resortImages.current;
+        void request.loading.then(images => {
+            if (resortImages.current === request && mapRef.current === map
+                && current().colors === 'default' && map.getLayer(resortIconLayer)) addResortImages(map, images);
         });
     });
     const syncCamera = useEffectEvent((map: maplibre.Map) => {
@@ -295,7 +273,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         }
         if (!map.getLayer(pointLayer) || !map.getContainer().clientWidth || !map.getContainer().clientHeight) return;
         const cameraHistoryKey = restoreHistoryCamera ? navigationKey : undefined;
-        appliedCamera.current = { areas: cameraAreas, id: selected?.id, key: searchedAreaKey, historyKey: cameraHistoryKey, visible: true };
+        appliedCamera.current = { areas: cameraAreas, fitKey: cameraFitKey, id: selected?.id, key: searchedAreaKey, historyKey: cameraHistoryKey, visible: true };
         const historyChanged = cameraHistoryKey !== undefined && cameraHistoryKey !== previous?.historyKey;
         if (previous && historyChanged) {
             appliedTerrainRequest.current = terrainRequest;
@@ -341,9 +319,11 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 map.resize();
                 map.easeTo({ center: skiAreaMapPoint(selected), zoom: Math.max(pointZoom, map.getZoom()), duration: previous ? duration : 0 });
             }
-        } else if (!selected && !searchedArea && (historyChanged || !previous || (previous.key === null && previous.areas !== cameraAreas &&
-            (previous.areas.length !== cameraAreas.length || cameraAreas.some((area, index) => area.id !== previous.areas[index].id))))) {
-            fitAreas(map, cameraAreas, previous ? duration : 0);
+        } else if (!selected && !searchedArea) {
+            // Pass filters update the results in the current view. Discovery filters can request a new fit.
+            const refit = previous?.key === null && previous.fitKey !== cameraFitKey && previous.areas !== cameraAreas
+                && (previous.areas.length !== cameraAreas.length || cameraAreas.some((area, index) => area.id !== previous.areas[index].id));
+            if (historyChanged || !previous || refit) fitAreas(map, cameraAreas, previous ? duration : 0);
         }
     });
     const reportViewport = useEffectEvent((map: maplibre.Map) => {
@@ -401,7 +381,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             });
             terrainPopupRef.current = terrainPopup;
             let previousLabel: string | undefined;
-            let hasReliefTile = false;
+            const loadedOverlays = new Set<SkiMapOverlaySource>();
             let clickedMarker: string | undefined;
             const showTerrainLabel = (event: maplibre.MapMouseEvent) => {
                 const label = resortTerrainLabel(instance, event.point);
@@ -431,7 +411,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             instance.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
             instance.addControl(skiMapAttribution(), 'bottom-right');
             recoveryRef.current = recoverBasemap(instance, {
-                dataSources: new Set([sourceId, selectionSource, terrainSource, resortTerrainSource]),
+                dataSources: new Set([sourceId, selectionSource, reliefSource, snowDepthSource, resortTerrainSource]),
                 providerStyle, neutralStyle: () => skiGlobeStyle(undefined, cartoRasterStyle('dark', '')),
             }, state => {
                 setBasemap(state);
@@ -440,12 +420,17 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             instance.on('style.load', () => {
                 clearHover();
                 const data = current();
+                passImages.current = undefined;
                 passLayers.current = false;
+                resortImages.current = undefined;
+                addHighwayShieldImages(instance);
                 if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points, data.selection);
                 syncPassBadges(instance);
                 syncResortIcons(instance);
-                syncTerrain(instance, data.terrain);
+                loadedOverlays.clear();
                 setTerrainUnavailable(false);
+                setSnowDepthUnavailable(false);
+                syncOverlays(instance);
                 setResortTerrainUnavailable(false);
                 syncCamera(instance);
                 settleViewport();
@@ -469,27 +454,32 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             instance.on('projectiontransition', queueViewport);
             instance.on('idle', () => {
                 syncTerrainKey(instance);
-                if (hasReliefTile && instance.getSource(terrainSource) && instance.isSourceLoaded(terrainSource)) revealTerrain(instance);
+                for (const source of loadedOverlays) {
+                    if (instance.getSource(source) && instance.isSourceLoaded(source)) revealOverlay(instance, source);
+                }
             });
             instance.on('sourcedata', event => {
-                if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
-                if (event.sourceId === terrainSource) {
+                const source = event.sourceId;
+                if (source === sourceId && event.isSourceLoaded) setReady(true);
+                if (source === reliefSource || source === snowDepthSource) {
                     if (event.sourceDataType === 'metadata') {
-                        setTerrainUnavailable(false);
-                        hasReliefTile = false;
+                        loadedOverlays.delete(source);
+                        if (source === reliefSource) setTerrainUnavailable(false);
+                        else setSnowDepthUnavailable(false);
                     }
                     const tile: maplibre.Tile | undefined = event.tile;
-                    hasReliefTile ||= Boolean(tile?.dem);
-                    if (hasReliefTile && event.isSourceLoaded) revealTerrain(instance);
+                    if (source === reliefSource ? tile?.dem : tile?.state === 'loaded') loadedOverlays.add(source);
+                    if (loadedOverlays.has(source) && event.isSourceLoaded) revealOverlay(instance, source);
                 }
-                if (event.sourceId === resortTerrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setResortTerrainUnavailable(false);
+                if (source === resortTerrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setResortTerrainUnavailable(false);
             });
             instance.on('webglcontextlost', () => setRendererFailed(true));
             instance.on('webglcontextrestored', () => setRendererFailed(false));
             instance.on('error', event => {
                 const failedSource = 'sourceId' in event ? event.sourceId : undefined;
                 if (failedSource === sourceId || failedSource === selectionSource) setMarkersFailed(true);
-                else if (failedSource === terrainSource) setTerrainUnavailable(true);
+                else if (failedSource === reliefSource) setTerrainUnavailable(true);
+                else if (failedSource === snowDepthSource) setSnowDepthUnavailable(true);
                 else if (failedSource === resortTerrainSource) setResortTerrainUnavailable(true);
                 else if (/webgl|context|worker/i.test(event.error?.message ?? '')) setRendererFailed(true);
             });
@@ -582,12 +572,12 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             syncCamera(map);
             reportViewport(map);
         }
-    }, [camera, cameraAreas, navigationKey, restoreHistoryCamera, selected, searchedAreaKey, visible, terrainRequest, locationRequest]);
+    }, [camera, cameraAreas, cameraFitKey, navigationKey, restoreHistoryCamera, selected, searchedAreaKey, visible, terrainRequest, locationRequest]);
 
     useEffect(() => {
         const map = mapRef.current;
-        if (map) syncTerrain(map, terrain);
-    }, [terrain]);
+        if (map) syncOverlays(map);
+    }, [terrain, snowDepth, duration]);
 
     useEffect(() => {
         terrainPopupRef.current?.remove();
@@ -607,7 +597,21 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
 
     useEffect(() => {
         if (mapRef.current) syncResortIcons(mapRef.current);
-    }, [colors]);
+    }, [colors, archive]);
+
+    useEffect(() => {
+        if (!layersOpen) return;
+        const dismissOutsideMap = (event: PointerEvent) => {
+            if (event.target instanceof Node && !mapRegion.current?.contains(event.target)) setLayersOpen(false);
+        };
+        document.addEventListener('pointerdown', dismissOutsideMap);
+        return () => document.removeEventListener('pointerdown', dismissOutsideMap);
+    }, [layersOpen, mapRegion]);
+
+    function closeLayers() {
+        setLayersOpen(false);
+        layersButton.current?.focus({ preventScroll: true });
+    }
 
     function retryMap() {
         container.current?.focus({ preventScroll: true });
@@ -632,12 +636,23 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const state = failed ? 'error' : !ready || basemap === 'loading' ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready';
     const interactive = visible && ready && !failed;
     const showReliefError = interactive && terrain && terrainUnavailable && mapZoom >= reliefMinZoom;
+    const showSnowDepthError = interactive && snowDepth && snowDepthUnavailable && mapZoom >= snowDepthMinZoom;
     const showSkiTerrainError = interactive && showResortTerrain && resortTerrainUnavailable && mapZoom >= resortTerrainMinZoom;
     const areaApplied = Boolean(searchedAreaKey && searchedAreaKey === viewport);
     const canSearch = interactive && !moving && Boolean(viewport) && !areaApplied;
     const promoteAreaSearch = canSearch && (searchSuggested || Boolean(searchedAreaKey));
-    return <div className="ski-map" onKeyDown={event => {
-        if (event.key !== 'Escape' || (!selected && !hovered && !terrainPopupRef.current?.isOpen())) return;
+    const indyDiscounts = passSelection.passes?.length === 1 && passSelection.passes[0] === 'indy-discounts';
+    return <div className="ski-map" onBlur={event => {
+        if (layersOpen && event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) setLayersOpen(false);
+    }} onKeyDown={event => {
+        if (event.key !== 'Escape') return;
+        if (layersOpen) {
+            event.preventDefault();
+            event.stopPropagation();
+            closeLayers();
+            return;
+        }
+        if (!selected && !hovered && !terrainPopupRef.current?.isOpen()) return;
         event.preventDefault();
         keepHoverOpen();
         terrainPopupRef.current?.remove();
@@ -662,11 +677,15 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                     disabled={!interactive || !fitResults.length} onClick={() => {
                         if (mapRef.current) fitAreas(mapRef.current, fitResults, duration);
                     }} />
-                <SkiIconButton icon="layers" label="Layers" hint="Map layers"
-                    aria-haspopup="dialog" aria-controls="ski-map-layers" data-active={layersModified || undefined}
+                <SkiIconButton ref={layersButton} icon="layers" label="Layers" hint="Map layers"
+                    aria-haspopup="dialog" aria-expanded={layersOpen} aria-controls={layersOpen ? 'ski-map-layers' : undefined}
+                    data-active={layersModified || layersOpen || undefined}
                     aria-description={layersModified ? 'Custom map layers' : undefined}
-                    onClick={onOpenLayers} />
+                    onClick={() => { if (layersOpen) closeLayers(); else setLayersOpen(true); }} />
             </div>
+            {layersOpen && <SkiLayerPanel colors={colors} units={units} indyDiscounts={indyDiscounts}
+                terrain={terrain} snowDepth={snowDepth} resortTerrain={resortTerrain} conventions={terrainConventions}
+                onChange={onLayerChange} onClose={closeLayers} />}
             {previousView && <SkiIconButton icon="back" label="Previous view" hint="Return to previous map view" showLabel
                 className="ski-previous-view" disabled={!interactive} onClick={() => {
                     const map = mapRef.current;
@@ -681,7 +700,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         {interactive && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
             && <SkiAreaPopup area={hovered} mapRef={mapRef} report={conditions.reports.get(hovered.id)} status={statuses.get(hovered.id) ?? 'unknown'}
                 now={conditions.now} onZoomLocation={onZoomLocation} onKeepOpen={keepHoverOpen} onDismiss={dismissHover} />}
-        {(state !== 'ready' || showReliefError || showSkiTerrainError) && <div
+        {(state !== 'ready' || showReliefError || showSnowDepthError || showSkiTerrainError) && <div
             className="absolute bottom-10 left-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-slate-600 bg-[#152230] px-3 py-2 text-sm text-slate-100"
             role={failed ? 'alert' : 'status'}>
             {failed && <p>{markersFailed && !rendererFailed ? 'Resort markers unavailable.' : 'Map unavailable.'} <button type="button"
@@ -690,6 +709,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             {state === 'degraded' && <p>Background unavailable. <button type="button" className="min-h-11 text-cyan-200 underline"
                 onClick={() => recoveryRef.current?.retry()}>Retry background</button></p>}
             {showReliefError && <p>Terrain relief unavailable.</p>}
+            {showSnowDepthError && <p>Snow depth unavailable.</p>}
             {showSkiTerrainError && <p><span>Ski terrain unavailable.</span> <button type="button" className="min-h-11 text-cyan-200 underline"
                 onClick={retrySkiTerrain}>Retry ski terrain</button></p>}
         </div>}

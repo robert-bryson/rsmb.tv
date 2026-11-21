@@ -18,6 +18,7 @@ export interface ReleaseValidationOptions {
     browser?: Browser;
     outputPath?: string;
     timeoutMs?: number;
+    terrainChecksum?: string;
 }
 
 export function validateReleasePreview(options: ReleaseValidationOptions): Promise<ReleaseValidationReport>;

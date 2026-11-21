@@ -47,4 +47,4 @@ The audit checked the area IDs, source dates, and lift elevation order. The full
 
 ## Remaining gaps
 
-The task list tracks the 228 downhill areas with comparison gaps and the 36 missing conditions links. [Catalog tasks](../../projects/ski-status/TODO.md#catalog-gaps)
+At the time of this review, 228 downhill areas had comparison gaps. There were 36 areas without conditions links. [Catalog tasks](../../projects/ski-status/TODO.md#catalog-and-report-gaps)

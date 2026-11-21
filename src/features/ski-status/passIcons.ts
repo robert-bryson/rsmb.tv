@@ -1,10 +1,17 @@
+import runtimeIcons from '../../../projects/ski-status/data/runtime-icons.json' with { type: 'json' };
+import { skiAssetUrl, skiRuntimeIconFile } from '../../../shared/skiAssets';
 import type { PassFamily } from './catalog';
-import epic from './pass-icons/epic.png?no-inline';
-import ikon from './pass-icons/ikon.png?no-inline';
-import indy from './pass-icons/indy.png?no-inline';
-import mountainCollective from './pass-icons/mountain-collective.png?no-inline';
 
 export const passIconSize = 16;
+
+function passIconUrl(family: PassFamily) {
+    const file = `pass-icons/${family}.png` as const;
+    return skiAssetUrl(skiRuntimeIconFile(file, runtimeIcons[file]));
+}
+
 export const passIconUrls: Record<PassFamily, string> = {
-    ikon, epic, indy, 'mountain-collective': mountainCollective,
+    ikon: passIconUrl('ikon'),
+    epic: passIconUrl('epic'),
+    indy: passIconUrl('indy'),
+    'mountain-collective': passIconUrl('mountain-collective'),
 };

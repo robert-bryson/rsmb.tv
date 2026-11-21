@@ -104,6 +104,26 @@ class TerrainPublicationTest(unittest.TestCase):
     def setUp(self):
         self.directory = Path(self.enterContext(TemporaryDirectory()))
 
+    def test_publishes_immutable_archives_outside_the_checkout(self):
+        work = self.directory / 'working.pmtiles'
+        work.write_bytes(b'first archive')
+        first_checksum = terrain.sha256(work)
+        first = terrain.publish_terrain_archive(work, self.directory, first_checksum)
+        self.assertEqual(first.relative_to(self.directory).as_posix(),
+                         f'runtime/terrain/{first_checksum}/resort-terrain.pmtiles')
+        self.assertEqual(terrain.publish_terrain_archive(work, self.directory, first_checksum), first)
+
+        work.write_bytes(b'next archive')
+        next_checksum = terrain.sha256(work)
+        second = terrain.publish_terrain_archive(work, self.directory, next_checksum)
+        self.assertEqual(first.read_bytes(), b'first archive')
+        self.assertEqual(second.read_bytes(), b'next archive')
+
+        first.write_bytes(b'corrupt archive')
+        with self.assertRaisesRegex(OSError, 'Existing terrain archive does not match'):
+            terrain.publish_terrain_archive(work, self.directory, first_checksum)
+        self.assertEqual(first.read_bytes(), b'corrupt archive')
+
     def test_releases_the_lock_after_an_interrupted_build(self):
         with self.assertRaisesRegex(OSError, 'build failed'), terrain.lock_output(self.directory):
             with self.assertRaisesRegex(RuntimeError, 'already running'), terrain.lock_output(self.directory):

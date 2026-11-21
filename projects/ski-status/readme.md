@@ -15,7 +15,7 @@ Select **All resorts** to include all areas that match the other filters.
 ### Find an area
 
 - Search by name, alternative name, town, state, province, country, or skiing type. Select **Clear search** to remove the search text.
-- Select one or more pass buttons. An area matches if any selected pass gives included access. **Results** lists the matching passes if you select more than one. Select an active pass again to remove it.
+- Select one or more pass buttons. An area matches if any selected pass gives included access. **Results** lists the matching passes if you select more than one. Select an active pass again to remove it. Pass filters keep the map at its current position and zoom. Select **Fit results** to zoom to the matches.
 - Open **Filters**. Choose a continent, country, state, or province. Select **Include** or **Exclude**. Include California and Japan to see ski areas in either place. Exclude Europe to hide its areas. An exclusion takes priority over an inclusion.
 - Remove a location from the dialog or the header. The browser saves each exclusion you add or remove. A shared link applies its own list during that visit. Edits from a shared view save only the places you change.
 - Check the filter icon for the number of active filters. Select **Show results** to close the dialog. On a phone, this opens **Results** from the map.
@@ -27,6 +27,7 @@ Select **All resorts** to include all areas that match the other filters.
 ### Inspect and compare areas
 
 - Select a marker, result, or table row to open the area details. Open **Official conditions** for the operator's report. Some areas show **Resort website and conditions**. Select **Show runs and lifts** to see the mapped terrain.
+- Open **Visitor information** for trail maps, day-ticket prices, lodges, parking, shuttles, and webcams. Check the recorded season and date. Prices use local currencies. Use the source links to check current prices and access.
 - Select a state, province, or country in a resort location to focus the map on that place. The view switches to the map when necessary. The search and filters stay in effect.
 - Open Google Maps for a verified resort listing or visitor entrance. The map search uses the area's name, location, and ski activity. A Wikipedia link opens a verified article or ski area section.
 - Check the dates in **Season and snowfall**. Open **Monthly values** to read the amounts. Select **Snow depth** when that option is available. Open **Snow sources** to check the measurement sites and periods.
@@ -43,21 +44,23 @@ The browser saves units and columns.
 
 Pan or zoom the globe to explore. The URL updates when the map stops. Select **Search this area** to set the map area. Remove the **Map area** filter to clear it. Open a shared link to restore the map position and search area at any screen width.
 
-The map draws one marker for each ski area at every zoom level. **Resort icons** uses the resort's icon when available. Other areas use a mountain symbol. At globe scale, the icons are small and can overlap. Zoom in to see larger markers. The operating status layer uses symbols and colors. A gold outline marks the selected area.
+The map draws one marker for each ski area at every zoom level. **Resort icons** puts each available logo on a contrasting background. Other areas use a mountain symbol. Icons stay small at globe scale and grow as you zoom in. Resort names fade in between zoom levels 7 and 9.5 where they have space. The operating status layer uses symbols and colors. A gold outline marks the selected area.
+
+Hover over a marker to preview the area. **Skiing status unknown** means the app has no verified operating report for today. Open **Check official conditions** in the preview for the operator's report.
 
 The map uses a verified visitor entrance when available. It can use an inferred base when the mapped lifts support that location.
 Double-click a resort marker or select **Show runs and lifts** to zoom to its terrain. Select **Previous view** to restore the map position, zoom, and angle. On a phone, the map appears above the open details. The map receives keyboard focus when it loads.
 The map fits countries, states, and provinces using shared geographic bounds. The continent filter matches the `CONTINENT` and `ISO_A2_EH` fields in Natural Earth v5.1.2. [Natural Earth country data](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/), [Terms of use](https://www.naturalearthdata.com/about/terms-of-use/)
 
-Select the **Layers** icon next to **Fit results**. On a phone, **Fit results** uses a frame icon. The Layers panel controls marker colors, the map key, and terrain overlays.
-Color by pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The results show the selected metric and operating status. A gray marker in a metric layer means that the value is unknown.
+Select the **Layers** icon next to **Fit results**. The panel opens next to the map controls. Layer changes apply immediately. You can pan or zoom the map while the panel is open. Press Escape or select **Close** to return focus to **Layers**.
+Use **Map markers** to show resort icons, operating status, pass access, or a mountain statistic. The results show the selected metric and operating status. A gray marker in a metric layer means that the value is unknown.
 
 Select the information icon at the bottom right of the map. It shows the source credits and data license.
 Download the catalog points, base points, or terrain from this panel.
 
 The pass layer uses brand icons for included access. A yellow **+** marks a multi-pass area. The badge gives priority to a selected pass that matches the area. Orange marks discount-only access. Gray marks unconfirmed access.
 
-The app serves the pass images with its site files.
+The app serves pass images with its site files. If an image fails, the map uses a colored dot. Pass controls show initials.
 
 | Pass | Source |
 | --- | --- |
@@ -68,44 +71,48 @@ The app serves the pass images with its site files.
 
 An acreage value such as `200+` gives a minimum. The table sorts by that minimum. If the minimum leaves more than one possible color range, the map shows a gray dot.
 
-The globe uses the CARTO Dark Matter background. Land-use details, waterways, and water labels appear from zoom level 3. In **Layers**, turn on **Terrain relief** to see shaded slopes. Shading starts at zoom level 8. It increases with zoom up to level 13. At close zooms, it fades in after the visible tiles load. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre hillshade](https://maplibre.org/maplibre-style-spec/layers/#hillshade-exaggeration), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
+The globe uses the CARTO Dark Matter background. Land-use details, waterways, and water labels appear from zoom level 3. In **Layers**, turn on **Terrain relief** to see shaded slopes. The shading starts to fade in at zoom level 4. It increases up to level 13. The first view fades in after the visible tiles load. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre hillshade](https://maplibre.org/maplibre-style-spec/layers/#hillshade-exaggeration), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
 
-Resort footprints appear at zoom level 9. Runs and lifts appear at zoom level 11, and lift stations appear at zoom level 13. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Hover or tap a run or lift to see its mapped name and type. Open **Layers** for the difficulty key and the **Ski terrain** toggle.
+Interstates and other major highways start to fade in near zoom level 6. They get brighter near level 9 so you can follow them over the terrain and snow layers. Route shields fade in between levels 9 and 10 where the basemap has a route number. Place and ski area labels have priority. The detailed basemap roads take over at level 12.
+
+Turn on **Snow depth** to see NOAA estimates for the contiguous United States. The layer fades in at regional zoom. It becomes lighter near trail zoom. NOAA uses grid cells about 1 km across. Open **Layers** for depth ranges in the selected units. [NOAA Snow Analysis](https://www.nohrsc.noaa.gov/nsa/), [Snow depth service](https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer)
+
+Resort footprints start to fade in at zoom level 9. Runs and lifts start at level 11. Lift stations start at level 13. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Hover or tap a run or lift to see its mapped name and type. Open **Layers** for the difficulty key and the **Ski terrain** toggle.
 
 Use **Results** or **Compare** during a map failure. If the background fails, select **Retry background**. If the map or its markers fail, select **Retry map**. The new map opens at the last saved position. It keeps the filters and selected area. The map receives keyboard focus after the retry.
 
-If the shading fails, turn **Terrain relief** off. Turn it on again to load new tiles.
+If a shading layer fails, turn **Terrain relief** or **Snow depth** off. Turn it on again to load new tiles.
 
 If the ski terrain fails, select **Retry ski terrain** at resort zoom. This retry keeps the map position and filters. [Terrain coverage and updates](#runs-and-lifts-at-resort-zoom)
 
 ## Catalog
 
-On November 21, 2026, the catalog had 583 map points in 21 countries.
-The United States had 334 points. Canada had 72. Other countries had 177.
+On November 21, 2026, the catalog had 585 map points in 21 countries.
+The United States had 334 points. Canada had 74. Other countries had 177.
 The country filter also includes Germany through shared areas.
-The catalog had 129 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
+The catalog had 129 areas with Ikon access, 98 with Epic access, 297 with included Indy access, and 34 with Mountain Collective access.
 
-All 583 areas have at least one published statistic. The catalog has 525 conventional downhill areas, including areas with Nordic trails. Of these, 305 have all six main comparison fields. Mapped terrain values cover 536 areas.
-There are 329 direct Wikipedia links, 10 verified Google Maps destinations, and 16 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md)
+All 585 areas have at least one published statistic. The catalog has 527 conventional downhill areas, including areas with Nordic trails. Of these, 313 have all six main comparison fields. Mapped terrain values cover 538 areas.
+There are 331 direct Wikipedia links, 10 verified Google Maps destinations, and 16 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md)
 
 | Published field | Areas |
 | --- | ---: |
-| Skiable acreage | 383 |
-| Vertical drop | 466 |
-| Lift count | 492 |
-| Trail count | 504 |
-| Base elevation | 417 |
-| Summit elevation | 423 |
+| Skiable acreage | 385 |
+| Vertical drop | 467 |
+| Lift count | 494 |
+| Trail count | 506 |
+| Base elevation | 421 |
+| Summit elevation | 431 |
 | Downhill trail length | 91 |
 | Nordic trail length | 64 |
-| Highest lift terminal | 54 |
+| Highest lift terminal | 56 |
 | Lowest lift terminal | 25 |
 | Night skiable acreage | 10 |
-| Difficulty breakdown | 293 |
-| Season window | 65 |
-| Official conditions link | 551 |
-| Planned season dates | 159 |
-| Average annual snowfall | 170 |
+| Difficulty breakdown | 294 |
+| Season window | 67 |
+| Official conditions link | 553 |
+| Planned season dates | 166 |
+| Average annual snowfall | 171 |
 | Average monthly snowfall | 65 |
 | Monthly snow depth series | 81 |
 
@@ -116,7 +123,8 @@ Indy Pass profiles give acreage, elevations, and difficulty figures for individu
 | [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
 | [Locations and mapped terrain](data/locations.json) | Terrain points, local time zones, and mapped values from the November 16 OpenSkiData build. Each point has source links. |
 | [Resort bases](data/resort-bases.json) | Visitor entrances verified against operator directions and lower lift stations matched from OpenSkiData. |
-| [Resort terrain index](data/resort-terrain.json) and [PMTiles archive](data/resort-terrain.pmtiles) | Footprints, runs, lifts, and lift stations for 550 areas. The index records source and archive checksums and shared terrain groups. |
+| [Resort terrain index](data/resort-terrain.json) and its [NAS archive](#local-assets) | Footprints, runs, lifts, and lift stations for 552 areas. The index records source and archive checksums and shared terrain groups. |
+| [Runtime icon index](data/runtime-icons.json) | File paths and SHA-256 checksums for the icons in the app. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 | [Pass products](data/pass-rules/) | Verified product rules by family, season, resort, and local date. |
 | [Season dates](data/seasons.json) | Actual first and last ski days, planned dates, and published recurring windows. |
@@ -137,8 +145,8 @@ Use `statsUrl` for published fields without a field-specific citation. Use absol
 Panorama's summit elevation covers Goldie Plateau. Its highest lift terminal covers the Summit Quad. Lutsen reports 825 feet of lift-served vertical. [Panorama mountain stats](https://www.panoramaresort.com/public/while-you-are-here/mountain-stats), [Lutsen mountain stats](https://www.lutsen.com/mountain-info/trail-map-mountain-stats)
 
 The **Mapped** columns use OpenSkiData. **Mapped elevation span** subtracts the mapped low point from the mapped high point.
-It covers 534 areas. The **Base**, **Summit**, and lift terminal columns show published elevations for those locations.
-The catalog has counts for named mapped downhill runs at 482 areas and for Nordic trails at 45.
+It covers 536 areas. The **Base**, **Summit**, and lift terminal columns show published elevations for those locations.
+The catalog has counts for named mapped downhill runs at 484 areas and for Nordic trails at 45.
 Each count uses operating routes of the given activity. Segments with the same name count once. Routes without names can contribute to the mapped distance. [OpenSkiData dataset and license](https://www.openskidata.org/#license)
 
 ### Season and snowfall
@@ -178,7 +186,7 @@ Use `survey` for snow depth surveys. Use `station` for averages of daily station
 
 OpenSkiMap uses OpenSkiData. OpenSkiData combines OpenStreetMap ski features with Skimap.org area records. It adds place names from Who’s On First and elevations from Mapterhorn. Ski-status builds its tiles from the downloadable data under ODbL. [OpenSkiData source and license](https://www.openskidata.org/#license)
 
-The November 16, 2026 snapshot covers 550 catalog areas. It contains 421 footprints, 41,834 run features, 5,665 lift features, and 7,266 lift stations. A run feature can be one trail segment. Catalog entries for a shared ski area can use the same geometry. Use the operator report to check current openings. [OpenSkiData datasets](https://www.openskidata.org/#whats-in-the-data)
+The November 16, 2026 snapshot covers 552 catalog areas. It contains 422 footprints, 41,895 run features, 5,680 lift features, and 7,286 lift stations. A run feature can be one trail segment. Catalog entries for a shared ski area can use the same geometry. Use the operator report to check current openings. [OpenSkiData datasets](https://www.openskidata.org/#whats-in-the-data)
 
 1. Download the GeoPackage and its `metadata.json` from the same build. [OpenSkiData downloads](https://www.openskidata.org/#downloads)
 2. Install the Python bindings for GDAL and the Tippecanoe command. [Tippecanoe](https://github.com/felt/tippecanoe)
@@ -188,8 +196,9 @@ The November 16, 2026 snapshot covers 550 catalog areas. It contains 421 footpri
    python3 projects/ski-status/scripts/build-resort-terrain.py path/to/openskidata.gpkg path/to/metadata.json
    ```
 
-4. Review missing and shared area matches. Review changes in base points. Run the archive tests. [Local checks](#local-checks)
-5. Commit the archive, index, bases, and any changes to `locations.json` together.
+4. Review missing and shared area matches. Review changes to base points.
+5. Update the browser terrain fixture if the Heavenly or Lake Louise groups change. Run the archive tests. [Terrain fixture](#terrain-fixture)
+6. Keep the full PMTiles file on the NAS. Commit the index, bases, and any changes to `locations.json` together.
 
 The importer checks the file size, layer names, feature counts, and build times. It matches each area by source ID or by a footprint that fits its location and activity.
 The tiles assign only Nordic trails to cross-country areas. They assign only ski touring routes to ski touring areas.
@@ -198,7 +207,45 @@ It counts only the lower terminal when the two elevations differ by at least 5 m
 The inferred base requires a lift cluster, or one qualifying lift at a single-lift area.
 The importer updates named route counts when the location file uses the same build.
 
-The importer builds files in a temporary directory. It restores the previous output if a file replacement fails. The `data/resort-terrain.pid.lock` file prevents simultaneous builds. If a build stops and leaves this file, verify that its process has stopped before you remove it.
+The importer builds files in a temporary directory. It verifies the archive before it updates the index.
+It saves each archive in a NAS folder with its checksum as the folder name.
+If a file replacement fails, the importer restores the previous JSON files.
+The `data/resort-terrain.pid.lock` file prevents simultaneous builds.
+If a build leaves this file, verify that the process has stopped. Then, remove the file.
+
+### Local assets
+
+The ski-status asset folder is `N:\projects\ski-status\assets` on Windows. On WSL, Vite uses `/mnt/n/projects/ski-status/assets`.
+Connect to the share in Windows. If WSL cannot see the drive, mount it from an Ubuntu shell.
+
+```bash
+sudo mount -t drvfs N: /mnt/n
+```
+
+If you use a different path, set `SKI_ASSETS_ROOT` in `.env.local`. Restart Vite.
+Set the same variable in the shell before you run the archive tests or the terrain importer.
+The importer also accepts `--assets-root`.
+
+- `runtime/pass-icons/` and `runtime/resort-icons/` hold the release icons. Update the checksum in `data/runtime-icons.json` when you change an icon. Keep the source in the catalog or pass documentation.
+- `runtime/terrain/<checksum>/resort-terrain.pmtiles` holds the archive named in the terrain index. Vite sends the byte ranges that the map requests.
+- `trail-maps/` and `resort-icons/` hold research copies. Open Vite on localhost to use these copies.
+  Vite lists available files from the batch manifests. The app uses the icon previews and links to matching NAS trail maps.
+  Refresh the page after a batch saves a new manifest.
+
+### Release assets
+
+Vite packages the runtime files in the icon and terrain indexes.
+Each URL includes the file's SHA-256 checksum. The browser loads the files from the same origin as the site.
+
+1. Build the candidate revision on a machine with the NAS. Use `npm run build`.
+2. Copy the files from `dist/data/ski-status/assets/runtime/` to the mirror's `runtime/` folder.
+   Keep earlier checksum folders so you can rebuild earlier revisions.
+3. Set `SKI_ASSETS_BASE_URL` to the HTTPS folder that contains `runtime/`. Use a URL without credentials, a query, or a fragment.
+   Set this variable in the Amplify app environment. [Preview validation](../../docs/release-validation.md#ski-status-build-assets)
+4. Run the release checks on the preview. Confirm its revision and Amplify job. [Release checks](#release-checks)
+
+Vite reads the local files first. It reads missing files from the mirror.
+A missing file or a checksum error stops the build.
 
 ### Ikon destinations
 
@@ -214,7 +261,7 @@ The three Australian resorts have access in the 2027 winter season. Select **Epi
 
 ### Indy destinations
 
-The catalog covers all 302 cards from the November 19 roster, plus the Gore Mountain Nordic Center. It includes 69 destinations outside the United States and Canada. The 303 records have 298 included memberships and five discounts. [Indy resort roster](https://www.indyskipass.com/our-resorts), [Indy November additions](https://www.indyskipass.com/this-is-indy/news/whiteface-gore-and-belleayre-join-allied-program-as-indy-pass-announces-15-additional-resorts-for)
+The catalog covers all 302 cards from the November 19 roster, plus the Gore Mountain Nordic Center. It includes 69 destinations outside the United States and Canada. The 303 records have 297 included memberships, five discounts, and one roster listing for Eagle Point, which is closed for 2026/27. [Indy resort roster](https://www.indyskipass.com/our-resorts), [Indy November additions](https://www.indyskipass.com/this-is-indy/news/whiteface-gore-and-belleayre-join-allied-program-as-indy-pass-announces-15-additional-resorts-for), [Eagle Point season closure](https://www.eaglepointresort.com/eagle-point-resort-announces-2026-27-winter-season-closure-following-cottonwood-fire/)
 
 Gore has a pin for downhill discounts and a separate pin for included Nordic access. Manning Park also has separate downhill and Nordic pins. Use the group link for shared day limits and redemption rules. Portes du Soleil appears under France and Switzerland. Oberstdorf Kleinwalsertal and Steinplatte appear under Austria and Germany. Each group has one representative pin. [Innsbruck access](https://www.indyskipass.com/our-resorts/innsbruck-region), [Portes du Soleil access](https://www.indyskipass.com/our-resorts/portes-du-soleil), [Oberstdorf and Kleinwalsertal ski areas](https://www.ok-bergbahnen.com/en/skigebiete/), [Steinplatte ski area](https://www.steinplatte.tirol/en/steinplatte-winklmoosalm-ski-area-in-winter.html)
 
@@ -229,33 +276,46 @@ If the trip media path is unavailable, start Vite directly for ski-status.
 npx vite --host 127.0.0.1
 ```
 
-Run the project tests with V8 coverage. Use the same file selection to compare coverage before and after a change.
+Run the project tests with V8 coverage. Use the same source paths for each comparison.
 
 ```bash
-npx vitest run src/test/ski*.test.* scripts/__tests__/ski*.test.ts \
-  scripts/__tests__/syncSkiStatus.test.ts scripts/__tests__/lakeLouiseConditions.test.ts \
-  scripts/__tests__/mammothConditions.test.ts scripts/__tests__/releaseSkiTerrain.test.ts \
-  src/test/tripAtlasGeography.test.ts scripts/__tests__/atlasGeographyBounds.test.ts --coverage \
+npm run test:coverage -- ski \
   --coverage.include='src/features/ski-status/**' \
-  --coverage.include='src/pages/SkiStatus.tsx' \
-  --coverage.include='projects/ski-status/scripts/**/*.ts' \
-  --coverage.include='scripts/ski-conditions-dev-plugin.ts' \
-  --coverage.include='scripts/release-ski-terrain.ts'
+  --coverage.include='scripts/ski-*.ts' \
+  --coverage.include='shared/ski*.ts'
 ```
 
-Run the shared search tests. Run the Python tests for the terrain importer and candidate review.
-The Python tests can run without GDAL or Tippecanoe.
+Run the repository suite for the shared search, report collectors, and release checks.
+The suite includes Python tests for the terrain importer and candidate review.
+The Python tests run without GDAL or Tippecanoe.
 
 ```bash
-npx vitest run src/test/useSearchQuery.test.tsx
-npm run test:ski-terrain
+npm test
 ```
 
-Run the browser tests for filters, resort reports, and map behavior. They check attribution downloads and terrain byte ranges.
-They use a fixed clock to check report age.
+Run the browser tests for filters, resort reports, and map behavior.
+The tests check downloads, terrain byte ranges, and report age.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
+```
+
+### Terrain fixture
+
+The browser tests use sample icons and a terrain fixture when the NAS is unavailable.
+The NAS check uses the full archive. It verifies the checksum and opens the Heavenly tooltips.
+The fixture contains only Heavenly and Lake Louise geometry from OpenSkiData. It keeps the source credits and ODbL license. [OpenSkiData license](https://www.openskidata.org/#license)
+
+If either area's terrain group changes, run these commands from the repository root. Use Tippecanoe's `tile-join`.
+
+```bash
+asset_root="${SKI_ASSETS_ROOT:-/mnt/n/projects/ski-status/assets}"
+index='./projects/ski-status/data/resort-terrain.json'
+checksum=$(node -p 'require(process.argv[1]).archiveSha256' "$index")
+filter=$(node -p 'const { groupsByArea } = require(process.argv[1]); JSON.stringify({ "*": ["in", "group", ...groupsByArea.heavenly, ...groupsByArea["lake-louise"]] })' "$index")
+tile-join --force --no-tile-size-limit --feature-filter="$filter" \
+  --output=tests/fixtures/ski-status/terrain.pmtiles \
+  "$asset_root/runtime/terrain/$checksum/resort-terrain.pmtiles"
 ```
 
 ### Lighthouse
@@ -318,7 +378,16 @@ Amihari Onsen's current course description places the Todomatsu start at 1,234 m
 
 ### Recurring data batches
 
-Open a Codex session at the repository root. Use the prompt below to verify a batch of resort data. Check the batch log for a list of completed work and follow-ups. Access records apply to one local ski season. They include visitor bases, parking, webcams, official trail maps, and adult day-ticket prices where available. [Data quality skill](.agents/skills/ski-status-data-quality/SKILL.md), [Batch log](research/data-quality-log.md), [2026/27 resort access](research/resort-access-2026-27.json)
+Open a Codex session at the repository root. Use the prompt below to verify one batch. Check the batch log for completed work and follow-up checks. [Data quality skill](.agents/skills/ski-status-data-quality/SKILL.md), [Batch log](research/data-quality-log.md)
+
+Use a separate access file for each local ski season. Vite checks the files and uses the latest record for each area.
+The site includes the fields that **Visitor information** displays. Research notes stay in the repository.
+The panel shows map editions when the source gives them. Camera links open the published image, player, or operator page. [2026/27 resort access](research/resort-access-2026-27.json)
+
+On November 21, 2026, seasonal access records covered 101 resorts. All 101 have lodge or day facility records.
+There are 55 checked resort map points. These points include both entrances and lift bases.
+There are 90 resorts with parking records and 95 with official trail maps.
+There are 61 resorts with adult day prices or price bounds and 71 with operator cameras. [2026/27 resort access](research/resort-access-2026-27.json)
 
 ```text
 Follow projects/ski-status/.agents/skills/ski-status-data-quality/SKILL.md.
@@ -354,7 +423,7 @@ The audit counts candidates before the acreage and pass checks. A named row can 
 
 The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726a9df5`.
 
-The November 20 review records an initial decision for each candidate. Filter the review log by region and decision. Review Mexico and Greenland in their own groups. [Candidate review log](research/north-america-2026-11-16.csv), [Regional counts](research/north-america-2026-11-16-summary.csv)
+The November 20 review recorded an initial decision for each candidate. As of November 21, 462 of 848 candidates remain unresolved, including 28 in Ontario. Filter the review log by region and decision. Review Mexico and Greenland in their own groups. [Candidate review log](research/north-america-2026-11-16.csv), [Regional counts](research/north-america-2026-11-16-summary.csv)
 
 Use the same CSV for the mapped terrain values and the existing points. Match one operating row by its upstream source URL and coordinates. Check that the row covers the ski area. Leave the field empty when one row combines multiple areas that the catalog lists on their own. Use the downhill and Nordic lengths that apply to the venue. Keep the terrain source URL in `mappedTerrain`. [OpenSkiData statistics and source IDs](https://www.openskidata.org/#whats-in-the-data)
 
@@ -391,7 +460,7 @@ The Ikon Pass includes two separate days at each of 14 Bonus Mountains. Their bl
 
 Indy Add-On access requires verification of an unrestricted home season pass. Select a home area to apply the exclusion. The app shows the requirement in the pass terms. [Indy Add-On rules](https://www.indyskipass.com/this-is-indy/how-it-works)
 
-Seventeen Indy areas have verified product rules. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
+59 Indy areas have verified product rules, including 53 with rules for all four products. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [2026/27 Indy rules](data/pass-rules/indy-2026-27.json), [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
 
 Ski Arlberg requires a direct booking with a lodging partner. The app shows this requirement with the shared three-day allowance. [Ski Arlberg pass terms](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
@@ -414,7 +483,7 @@ Each checked report expires at the end of its local ski day. Alberta uses UTC−
 
 ### Opening and closing dates
 
-The season file has 167 records of actual dates for 33 areas. It has plans for 159 areas. Sixteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
+The season file has 180 records of actual dates for 46 areas. It has plans for 168 areas. 25 records include terrain or conditions from opening day. For 2026/27, 25 areas have recorded first ski days and 165 have at least one scheduled date. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
@@ -567,7 +636,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 
 | Work | Acceptance check |
 | --- | --- |
-| Ski terrain | Run the release validator on the hosted preview for the candidate revision. It checks for `206`, the expected `Content-Range`, and the original bytes. It opens a lift and run tooltip at Heavenly. Check the revision and `previewJobId` in the report. Confirm that `skiTerrainRanges` is greater than zero. [Release validator](../../docs/release-validation.md), [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
+| Ski assets | Build from the HTTPS mirror. Run the release validator on the hosted preview. Check the revision and `previewJobId` in the report. Confirm that `skiTerrainRanges` is greater than zero. The validator checks the checksum, byte range responses, and both Heavenly tooltips. [Release validator](../../docs/release-validation.md), [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
 | Pass products | Test shared days, reservations, access requirements, excluded products, blackout dates, and discounts. Match each included partner. Record exceptions. |
 | Discovery | Open a resort's report from **Results** on a phone. Pan the map. Check the results before and after **Search this area**. Test Back and Forward. Open a shared view at a different width. Check keyboard focus. Check the map position after a retry. |
 | Snow history | Open an area with snow measurements outside the scheduled season. Verify that the table shows those months. Verify the annual and monthly source links. Check the details at 320 pixels wide. |

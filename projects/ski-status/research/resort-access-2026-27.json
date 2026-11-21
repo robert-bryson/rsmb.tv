@@ -74,6 +74,117 @@
         "checkedOn": "2026-11-21"
       }
     },
+    "arapahoe-basin": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Area Guest Services",
+          "role": "day access, pass pickup and lift tickets",
+          "source": "https://www.arapahoebasin.com/blog/opening-day-2026/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Black Mountain Lodge",
+          "role": "mid-mountain lodge at Black Mountain Express",
+          "source": "https://www.arapahoebasin.com/blog/opening-day-2026/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Early Riser Lot",
+          "location": "walk to the ski base",
+          "source": "https://www.arapahoebasin.com/parking/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "ordinary weekdays"
+            }
+          ],
+          "policy": "Accessible and EV spaces. Weekend reservations January 2–May 2."
+        },
+        {
+          "name": "High Noon, Last Chance, and Upper Last Chance lots",
+          "location": "walk to the ski base",
+          "source": "https://www.arapahoebasin.com/parking/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "ordinary weekdays"
+            }
+          ],
+          "policy": "Weekend reservations January 2–May 2. Shuttles on peak days."
+        },
+        {
+          "name": "Drop-Off Lot",
+          "location": "next to public day facilities",
+          "source": "https://www.arapahoebasin.com/parking/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 40,
+              "currency": "USD",
+              "appliesTo": "winter daytime parking"
+            }
+          ],
+          "policy": "Accessible spaces and a short-stay 15-minute drop-off. No overnight parking in any resort lot."
+        }
+      ],
+      "shuttle": {
+        "description": "The free Summit Stage Swan Mountain Flyer serves the resort daily during the peak ski season.",
+        "source": "https://www.arapahoebasin.com/parking/",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "winter resort overview including the front side and Montezuma Bowl",
+          "assetUrl": "https://www.arapahoebasin.com/uploaded/trailmaps/a%20basin%20map%202025.pdf",
+          "note": "Operator download named 2025 and listed as the current overview.",
+          "source": "https://www.arapahoebasin.com/trail-maps/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Snow Stake Time Lapse"
+          },
+          {
+            "name": "Mountain Goat Plaza",
+            "location": "base area",
+            "view": "Black Mountain Express. Operator refreshes the image about every five minutes."
+          },
+          {
+            "name": "A-Basin Summit",
+            "location": "Snow Plume Refuge, 12,456 ft",
+            "view": "east toward the East Wall"
+          },
+          {
+            "name": "Black Mountain Lodge",
+            "location": "mid-mountain",
+            "view": "Lenawee Express terrain and East Wall"
+          },
+          {
+            "name": "Montezuma Bowl",
+            "location": "back bowl",
+            "view": "south toward Zuma and the Tenmile Range"
+          },
+          {
+            "name": "Pali and Molly",
+            "location": "lower terminals",
+            "view": "Molly Hogan and Pallavicini lifts"
+          }
+        ],
+        "termsSource": "https://www.arapahoebasin.com/terms",
+        "reuse": "HD Relay players and still cameras are published on the operator page. External embedding and rebroadcast permission is unverified.",
+        "source": "https://www.arapahoebasin.com/mountain-cams/",
+        "checkedOn": "2026-11-21"
+      }
+    },
     "banff-sunshine": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -219,6 +330,253 @@
         "source": "https://www.skibanff.com/the-mountain/mountain-report/opening-day-early-season-2627",
         "checkedOn": "2026-11-21"
       }
+    },
+    "bear-valley-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Bear Valley Day Lodge",
+          "role": "mountain skier base with cafeteria, Maury’s, rentals and ski school",
+          "source": "https://www.bearvalley.com/post/it-s-opening-day-at-bear-valley",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Bear Valley Lodge",
+          "role": "public village lodging and food service",
+          "source": "https://www.bearvalley.com/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main base parking",
+          "location": "ski area near the Day Lodge",
+          "source": "https://www.bearvalley.com/parking-shuttles",
+          "checkedOn": "2026-11-21",
+          "policy": "Preferred season permit guarantees entry until 10 a.m. and excludes overnight parking."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full Bear Valley winter terrain",
+          "assetUrl": "https://static.wixstatic.com/media/93e5c3_2b113dd44f224ea1b52904cf8f933423~mv2.jpg",
+          "season": "2025/26",
+          "note": "Current operator page labels its artwork 25–26.",
+          "source": "https://www.bearvalley.com/trail-map",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 89,
+            "appliesTo": "November 21–22, age 13+, online"
+          },
+          {
+            "amount": 109,
+            "appliesTo": "November 21–22, age 13+, at resort"
+          }
+        ],
+        "note": "These full-day rates apply to opening weekend.",
+        "source": "https://www.bearvalley.com/post/it-s-opening-day-at-bear-valley",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Bear Valley mountain webcam"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://www.bearvalley.com/webcam",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://www.bearvalley.com/_files/ugd/93e5c3_297506f5629749cfa059b43b3ebf6ec3.pdf"
+      }
+    },
+    "beaver-mountain": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Beaver Mountain Lodge",
+          "role": "Primary downhill day lodge",
+          "source": "https://www.skithebeav.com/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main base parking",
+          "location": "At the mountain lodge, with seasonal uphill parking provisions",
+          "source": "https://www.skithebeav.com/mountain/conditions/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 75,
+            "appliesTo": "full mountain, 9 a.m. to 4 p.m., ages 12–69"
+          }
+        ],
+        "note": "The 2026/27 page lists a one-time $5 RFID card. Pickup is at the mountain ticket counter or Logan office.",
+        "source": "https://www.skithebeav.com/tickets-and-passes/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://www.skithebeav.com/mountain/conditions/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Lodge and Dream Lift Cam",
+            "embedUrl": "https://g1.ipcamlive.com/player/player.php?alias=lodgedreamliftcam&skin=white&autoplay=1&mute=1&disablefullscreen=1&disablevideofit=1&timelapseplayerenabled=1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Base lodge"
+          },
+          {
+            "name": "Little Beaver Cam",
+            "embedUrl": "https://g1.ipcamlive.com/player/player.php?alias=littlebeavercam&skin=white&autoplay=1&mute=1&disablefullscreen=1&disablevideofit=1&timelapseplayerenabled=1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Little Beaver lift"
+          },
+          {
+            "name": "Snow Depth Board",
+            "embedUrl": "https://g1.ipcamlive.com/player/player.php?alias=beaversnowdepthboard&skin=white&autoplay=1&mute=1&disablefullscreen=1&disablevideofit=1&timelapseplayerenabled=1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "view": "Snow depth reference board"
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      },
+      "trailMaps": [
+        {
+          "coverage": "Downhill ski trails, lifts, and main base",
+          "source": "https://www.skithebeav.com/mountain/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.skithebeav.com/wp-content/uploads/2020/11/Beaver-Mountain-trail-map-2020.pdf",
+          "season": "2020",
+          "note": "The operator links this print map. Its website terms require written consent to retain a copy."
+        }
+      ]
+    },
+    "big-moose": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Lodge",
+          "role": "Ski rentals, food, and ski school at the downhill base",
+          "source": "https://www.indyskipass.com/our-resorts/big-moose",
+          "checkedOn": "2026-11-21",
+          "address": "447 Ski Resort Road, Greenville Junction, ME 04442"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Lower lift-served mountain and labeled upper-mountain routes",
+          "source": "https://skibigmoose.com/trail-map",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://img1.wsimg.com/blobby/go/d9686d90-24b3-48b8-a200-b81ae5e14909/BigMooseMap_web%20(1).pdf",
+          "note": "See the operator report for upper-mountain access and which trails are lift-served."
+        },
+        {
+          "coverage": "Nordic trail network and access lodge",
+          "source": "https://skibigmoose.com/trail-map",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://img1.wsimg.com/blobby/go/d9686d90-24b3-48b8-a200-b81ae5e14909/2022%20Nordic%20Map.pdf",
+          "season": "2022",
+          "note": "The operator download labels the Nordic map 2022."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 50,
+            "appliesTo": "listed adult full-day ticket"
+          },
+          {
+            "amount": 45,
+            "appliesTo": "online adult rate with the operator’s $5 online discount"
+          }
+        ],
+        "note": "The operator lists $50 and advertises a $5 online discount per lift ticket.",
+        "source": "https://skibigmoose.com/ticket-and-pricing",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://skibigmoose.com/live-web-cam",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Mountain Cam",
+            "embedUrl": "https://www.youtube.com/embed/8cGtyN9MiwA?rel=0&showinfo=0&autoplay=0&loop=0&muted=0&controls=1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Base Lodge",
+            "view": "View from the base lodge"
+          },
+          {
+            "name": "Lift Cam",
+            "embedUrl": "https://www.youtube.com/embed/zhwKjVmnMQ8?rel=0&showinfo=0&autoplay=0&loop=0&muted=0&controls=1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Lift house",
+            "view": "Chairlift"
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
+    "big-rock-mountain": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Lodge",
+          "role": "Day lodge with the ticket office and rentals",
+          "source": "https://bigrockmaine.com/plan-your-visit/hours-operations/",
+          "checkedOn": "2026-11-21",
+          "address": "37 Graves Road, Mars Hill, ME 04758"
+        }
+      ],
+      "parking": [
+        {
+          "name": "General guest parking",
+          "location": "Big Rock base at Graves Road",
+          "source": "https://bigrockmaine.com/plan-your-visit/faqs/",
+          "checkedOn": "2026-11-21",
+          "policy": "General guest parking is free. The designated lower lot allows eligible self-contained guests by advance permission and a free camping pass.",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "general guest day parking"
+            }
+          ],
+          "rateSource": "https://bigrockmaine.com/plan-your-visit/faqs/"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Full downhill mountain with the base lodge, parking, lifts, and trails",
+          "source": "https://bigrockmaine.com/mountain/trail-report/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://bigrockmaine.com/wp-content/uploads/2026/09/Big-Rock_Trail-Map_Web.jpg",
+          "note": "The 7,048 × 7,800 native file is the full map linked in a scaled version from the operator report. Map edition is unmarked."
+        }
+      ]
     },
     "big-white-ski-resort": {
       "checkedOn": "2026-11-21",
@@ -408,6 +766,65 @@
         "checkedOn": "2026-11-21"
       }
     },
+    "black-mountain-of-maine": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Lodge",
+          "role": "Main winter lodge with café and Last Run Pub",
+          "source": "https://skiblackmountain.org/about-1",
+          "checkedOn": "2026-11-21",
+          "address": "39 Glover Road, Rumford, ME 04276"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Base parking",
+          "location": "At the base lodge and ticket facilities on Glover Road",
+          "source": "https://skiblackmountain.org/maps",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Downhill trails, glades, lift lines, and the Glover Road base",
+          "source": "https://skiblackmountain.org/maps",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://images.squarespace-cdn.com/content/v1/6239f187acd93328188c9223/42209aae-32fb-4ff5-9035-96ca43ae12dc/AlpineMap.png"
+        },
+        {
+          "coverage": "John Roderick Trail System and Broomhall Stadium Nordic network",
+          "source": "https://skiblackmountain.org/maps",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://images.squarespace-cdn.com/content/v1/6239f187acd93328188c9223/ac8dbcbf-cde2-43b8-81b8-37fc7b55930d/2020NordicMap.png",
+          "season": "2020"
+        },
+        {
+          "coverage": "John Roderick Trail System snowshoe routes",
+          "source": "https://skiblackmountain.org/maps",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://images.squarespace-cdn.com/content/v1/6239f187acd93328188c9223/07cb6b3e-0eaf-4f2b-826f-e3ddfee1e292/SnowshoeMap21.jpg",
+          "season": "2021"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 70,
+            "appliesTo": "Saturday, Sunday, or holiday nonresident"
+          },
+          {
+            "amount": 60,
+            "appliesTo": "Saturday, Sunday, or holiday Rumford resident"
+          }
+        ],
+        "note": "The 2026/27 rate table still lists Thursday and Friday as pending. The Nordic network has separate free access.",
+        "source": "https://skiblackmountain.org/season-passes-on-sale-now-1",
+        "checkedOn": "2026-11-21"
+      }
+    },
     "bolton-valley-resort": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -516,6 +933,307 @@
         "checkedOn": "2026-11-21"
       }
     },
+    "breckenridge-ski-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Peak 8 Base",
+          "role": "main opening-day skiing and public arrival via BreckConnect",
+          "source": "https://news.vailresorts.com/BreckOpeningDay2026",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Peak 9 Base",
+          "role": "public base reached by seasonal skier buses",
+          "source": "https://www.breckenridge.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Ice Rink Lot",
+          "location": "south of downtown",
+          "source": "https://www.breckenridge.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Bus to Peak 9 or BreckConnect Gondola."
+        },
+        {
+          "name": "McCain Drive Lot",
+          "location": "off Coyne Valley Road",
+          "source": "https://www.breckenridge.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "winter day parking"
+            }
+          ],
+          "policy": "Free bus to the BreckConnect Gondola."
+        },
+        {
+          "name": "North and South Gondola lots",
+          "location": "near BreckConnect Gondola",
+          "source": "https://www.breckpark.com/skier-parking",
+          "checkedOn": "2026-11-21",
+          "policy": "Paid parking. Reserve in advance through Reserve ’N Ski where offered."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "winter trail map covering Peaks 6 through 10",
+          "assetUrl": "https://www.breckenridge.com/-/aemasset/digital-experience-assets-library/destination-resorts/breckenridge/mountain-operations/winter-2026-2027/20261103_BR_winter-trail_map_001.pdf",
+          "season": "2026/27",
+          "source": "https://www.breckenridge.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Official Snow Stake",
+            "location": "Peak 8 mid-mountain, 11,237 ft"
+          },
+          {
+            "name": "Peak 9"
+          },
+          {
+            "name": "Peak 8 view from Peak 9",
+            "location": "Peak 9",
+            "view": "Peak 8"
+          },
+          {
+            "name": "Peak 7"
+          }
+        ],
+        "termsSource": "https://www.vail.com/policies?tc_1=4",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.breckenridge.com/the-mountain/mountain-conditions/mountain-cams.aspx",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "brundage-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Mountain Adventure Center",
+          "role": "Main base lodge with guest services and rentals",
+          "source": "https://brundage.com/hours-of-operation/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main Lot",
+          "location": "At the main base",
+          "source": "https://brundage.com/directions-parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "First-come, first-served."
+        },
+        {
+          "name": "Easy Street Lot",
+          "location": "At the Easy Street side of the base",
+          "source": "https://brundage.com/directions-parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "First-come, first-served."
+        },
+        {
+          "name": "Centennial Lot",
+          "location": "By the Centennial side of the base",
+          "source": "https://brundage.com/directions-parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "Required for vehicles over 20 feet long or over 9 feet wide."
+        },
+        {
+          "name": "West Lot",
+          "location": "West side of the base",
+          "source": "https://brundage.com/directions-parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "First-come, first-served."
+        }
+      ],
+      "shuttle": {
+        "description": "Free winter Bluebird Express from McCall Transit Center and Shore Lodge. The operator posts special dates when confirmed.",
+        "source": "https://brundage.com/directions-parking/",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Frontside downhill trails, lifts, and base",
+          "source": "https://brundage.com/winter-maps/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://brundage.com/content/uploads/2026/11/2025-26_FrontsideMap-2.jpg",
+          "season": "2025/26",
+          "note": "The current operator page links a native raster named for the 2025/26 edition."
+        },
+        {
+          "coverage": "Lakeview Bowl",
+          "source": "https://brundage.com/winter-maps/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://brundage.com/content/uploads/2024/11/Brundage_2024-25-Lakeview-web-scaled-1.jpg",
+          "season": "2024/25"
+        },
+        {
+          "coverage": "Hidden Valley",
+          "source": "https://brundage.com/winter-maps/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://brundage.com/content/uploads/2024/11/Brundage_2024-25-HiddenValley-web-scaled-1.jpg",
+          "season": "2024/25"
+        },
+        {
+          "coverage": "Beartopia beginner and family zone",
+          "source": "https://brundage.com/winter-maps/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://brundage.com/content/uploads/2026/11/26_web_breartopida-4.jpg"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 65,
+            "appliesTo": "selected dates with online advance purchase",
+            "kind": "minimum"
+          }
+        ],
+        "note": "Published dynamic starting price for the full mountain. Add a reusable RFID card if you need one. Check exact dates and card cost during checkout.",
+        "source": "https://brundage.com/daily-lift-tickets/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://brundage.com/live-cams/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Top Bird Cam",
+            "feedUrl": "https://brundage.com/webcam/bmrsummit.jpg",
+            "format": "JPEG snapshot",
+            "location": "Top of Bluebird Express at 7,640 ft",
+            "view": "Rotating summit view",
+            "availability": "The public JPEG opened on November 21."
+          },
+          {
+            "name": "Base Area Snow Cam",
+            "feedUrl": "https://brundage.com/webcam/snowcam.jpg",
+            "format": "JPEG snapshot",
+            "location": "Brundage base at 6,050 ft",
+            "view": "Snow board, cleared daily at 4 p.m.",
+            "availability": "The public JPEG opened on November 21."
+          },
+          {
+            "name": "Bear Cam",
+            "feedUrl": "https://brundage.com/webcam/bmrbear.jpg",
+            "format": "JPEG snapshot",
+            "location": "Top of Bear Chair at 6,490 ft",
+            "view": "Rotating Bear Chair view",
+            "availability": "The public JPEG opened on November 21."
+          },
+          {
+            "name": "May Marina Cam",
+            "feedUrl": "https://brundage.com/webcam/marina.jpg",
+            "format": "JPEG snapshot",
+            "location": "May Marina",
+            "view": "Across Payette Lake toward the back of Brundage",
+            "availability": "The public JPEG opened on November 21."
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "Four operator JPEG snapshots opened. No syndication or rebroadcast terms were found."
+        }
+      }
+    },
+    "buffalo-ski-club": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Tamarack Lodge",
+          "role": "Main guest base with snowsports school and food",
+          "source": "https://www.buffaloskicenter.com/history/",
+          "checkedOn": "2026-11-21",
+          "address": "7414 State Road, Colden, NY 14033"
+        },
+        {
+          "name": "Sitzmarker Lodge",
+          "role": "Secondary public arrival at the Sitzmarker sector",
+          "source": "https://www.buffaloskicenter.com/history/",
+          "checkedOn": "2026-11-21",
+          "address": "7595 Lower East Hill Road, Colden, NY 14033"
+        },
+        {
+          "name": "Buffalo Lodge",
+          "role": "Secondary arrival at the Buffalo sector",
+          "source": "https://www.buffaloskicenter.com/history/",
+          "checkedOn": "2026-11-21",
+          "address": "7707 Lower East Hill Road, Colden, NY 14033"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Tamarack Lodge parking",
+          "location": "7414 State Road, Colden, NY 14033",
+          "source": "https://www.buffaloskicenter.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "policy": "Check lodge-specific access during winter operations."
+        },
+        {
+          "name": "Sitzmarker Lodge parking",
+          "location": "7595 Lower East Hill Road, Colden, NY 14033",
+          "source": "https://www.buffaloskicenter.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "policy": "Check lodge-specific access during winter operations."
+        },
+        {
+          "name": "Buffalo Lodge parking",
+          "location": "7707 Lower East Hill Road, Colden, NY 14033",
+          "source": "https://www.buffaloskicenter.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "policy": "Check lodge-specific access during winter operations."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Tamarack, Sitzmarker, and Buffalo downhill sectors and base facilities",
+          "source": "https://www.buffaloskicenter.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.buffaloskicenter.com/wp-content/uploads/2019/11/BSC-map-111319.pdf",
+          "season": "2019",
+          "note": "Print map named for its November 2019 edition. Use the live report for current terrain."
+        }
+      ],
+      "webcams": {
+        "source": "https://www.buffaloskicenter.com/slope-cameras/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "TAM CAM",
+            "embedUrl": "https://www.youtube.com/embed/DOJwy9f70IM?autoplay=1&mute=1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Tamarack sector"
+          },
+          {
+            "name": "SITZ CAM",
+            "embedUrl": "https://www.youtube.com/embed/piySo9PJ9n0?autoplay=1&mute=1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Sitzmarker sector"
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
     "burke-mountain-resort": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -592,6 +1310,344 @@
         ],
         "note": "Standard rates vary by date. Wednesday discounts exclude the published holiday periods.",
         "source": "https://skiburke.com/tickets-passes/winter-day-tickets",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "camden-snow-bowl": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Lodge",
+          "role": "Main downhill day lodge",
+          "source": "https://camdensnowbowl.com/winter-policies/",
+          "checkedOn": "2026-11-21",
+          "address": "20 Barnestown Road, Camden, ME 04843"
+        },
+        {
+          "name": "Ticket Building",
+          "role": "Lift-ticket sales and RFID pickup",
+          "source": "https://camdensnowbowl.com/lift-ticket/",
+          "checkedOn": "2026-11-21",
+          "address": "20 Barnestown Road, Camden, ME 04843"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Snow Bowl base parking",
+          "location": "Between Barnestown Road, the Base Lodge, and Hosmer Pond",
+          "source": "https://camdensnowbowl.com/ski-trail-map/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "Camden Snow Bowl Base Lodge and main arrival",
+        "coordinates": [
+          -69.1314385,
+          44.2177097
+        ],
+        "result": "updated",
+        "source": "https://camdensnowbowl.com/contact/",
+        "mapSource": "https://www.google.com/maps/place/The+Camden+Snow+Bowl/@44.2177135,-69.1340134,17z/data=!3m1!4b1!4m6!3m5!1s0x4cadd9bacb0378e1:0xa3660b9f7f48b64d!8m2!3d44.2177097!4d-69.1314385",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Ragged Mountain downhill trails and glades, winter routes, and base services",
+          "source": "https://camdensnowbowl.com/ski-trail-map/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://camdensnowbowl.com/wp-content/uploads/2025/06/Camden-Trail-Map-8x10-2025_3.pdf",
+          "season": "2025",
+          "note": "The current town page links the June 2025 print map."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 55,
+            "appliesTo": "Wednesday to Friday outside vacation weeks"
+          },
+          {
+            "amount": 65,
+            "appliesTo": "weekends, holidays, and vacation weeks"
+          }
+        ],
+        "note": "Purchase online or at the Ticket Building. First reusable Snow Bowl RFID card and replacement cards are $5 each.",
+        "source": "https://camdensnowbowl.com/lift-ticket/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://camdensnowbowl.com/web-cam/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Snow Bowl webcam",
+            "embedUrl": "https://player.brownrice.com/embed/camdensnowbowl1",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified."
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
+    "camp-fortune": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Valley Lodge",
+          "role": "main day lodge and services",
+          "source": "https://campfortune.com/fr/carte-des-pistes/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Skyline Lodge",
+          "role": "public second ski base",
+          "source": "https://campfortune.com/fr/carte-des-pistes/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main base parking",
+          "location": "Valley base",
+          "source": "https://campfortune.com/wp-content/uploads/2025/11/CF-Sign_Final.jpg",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Skyline parking",
+          "location": "Skyline base",
+          "source": "https://campfortune.com/wp-content/uploads/2025/11/CF-Sign_Final.jpg",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full downhill ski area including Valley, Meech and Skyline",
+          "assetUrl": "https://campfortune.com/wp-content/uploads/2025/11/CF-Sign_Final.jpg",
+          "source": "https://campfortune.com/fr/carte-des-pistes/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "CAD",
+        "rates": [
+          {
+            "amount": 53.6,
+            "appliesTo": "regular season December–March, published lower bound",
+            "kind": "minimum"
+          },
+          {
+            "amount": 67,
+            "appliesTo": "regular season December–March, published upper bound",
+            "kind": "maximum"
+          }
+        ],
+        "note": "Adult day rate from opening to close. The operator offers online RFID reload and ticket-counter pickup for new cards.",
+        "source": "https://campfortune.com/fr/billets-de-remontees-mecaniques/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Camp Fortune webcam"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://campfortune.com/fr/webcam/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "centre-vorlage": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Centre Vorlage lodge",
+          "role": "public ski base and in-person ticket sales",
+          "address": "65 Ch. Burnside, Wakefield, QC J0X 3G0",
+          "source": "https://centrevorlage.ca/winter/tickets/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Le Hub Bistro",
+          "role": "public base dining",
+          "source": "https://centrevorlage.ca/winter/tickets/",
+          "checkedOn": "2026-11-21"
+        }
+      ]
+    },
+    "cherry-peak": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Grand Lodge",
+          "role": "Resort lodge at the ski hill",
+          "source": "https://www.skicpr.com/chloe-agnew",
+          "checkedOn": "2026-11-21",
+          "address": "3200 E 11000 N, Richmond, UT 84333"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Grand Lodge base parking",
+          "location": "Lower mountain by the Grand Lodge and access road",
+          "source": "https://www.skicpr.com/trail-map",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Full downhill schematic, lifts, lower base, and legend",
+          "source": "https://www.skicpr.com/trail-map",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://static.wixstatic.com/media/4e9fba_1dc56b08a42149cbbc75b1609c93665f~mv2.jpg",
+          "note": "Native map artwork used on the operator page. The reverse brochure panel has activity information."
+        }
+      ]
+    },
+    "copper-mountain": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Center Village",
+          "role": "public American Eagle base and ticket pickup",
+          "source": "https://www.visitcoppermountain.com/copper-corner/fa0cx4rfzhd9ndx2xtjqagjiv8jxsd",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Aerie",
+          "role": "mid-mountain lodge at the American Eagle upper terminal",
+          "source": "https://www.visitcoppermountain.com/copper-corner/fa0cx4rfzhd9ndx2xtjqagjiv8jxsd",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Alpine Lot and Far East Lot",
+          "location": "CO-91 south of Copper Road",
+          "source": "https://www.coppercolorado.com/the-mountain/getting-to-around-copper/parking/?season=winter",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "daily during winter operating hours"
+            }
+          ],
+          "policy": "Free winter visitor parking."
+        },
+        {
+          "name": "Alpine Lot overnight",
+          "location": "CO-91 south of Copper Road",
+          "source": "https://www.coppercolorado.com/the-mountain/getting-to-around-copper/parking/?season=winter",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 20,
+              "currency": "USD",
+              "appliesTo": "overnight from 10 p.m. to 5 a.m."
+            }
+          ],
+          "policy": "Overnight parking permitted in this lot only."
+        },
+        {
+          "name": "Ten Mile, Chapel, Beeler, and Union Creek",
+          "location": "interior resort lots",
+          "source": "https://www.coppercolorado.com/the-mountain/getting-to-around-copper/parking/?season=winter",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "entry after 2 p.m."
+            }
+          ],
+          "policy": "Variable paid parking before 2 p.m. Pay using the posted code."
+        },
+        {
+          "name": "Wheeler Lot",
+          "location": "interior resort lot",
+          "source": "https://www.coppercolorado.com/the-mountain/getting-to-around-copper/parking/?season=winter",
+          "checkedOn": "2026-11-21",
+          "policy": "Variable paid rates."
+        },
+        {
+          "name": "Flyer Lot",
+          "location": "inside the resort",
+          "source": "https://www.coppercolorado.com/the-mountain/getting-to-around-copper/parking/?season=winter",
+          "checkedOn": "2026-11-21",
+          "policy": "Winter parking passholders only."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "front side and main winter terrain",
+          "assetUrl": "https://cms.coppercolorado.com/sites/default/files/2026-11/FY27_Maps_Web_MainTrailMap.pdf",
+          "season": "2026/27",
+          "source": "https://www.coppercolorado.com/the-mountain/trail-area-maps/winter-trail-map/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Copper Bowl detail",
+          "assetUrl": "https://cms.coppercolorado.com/sites/default/files/2024-10/FY25_Copper_Bowl.pdf",
+          "season": "2024/25",
+          "note": "The operator links the FY25 print PDF alongside a newer preview.",
+          "source": "https://www.coppercolorado.com/the-mountain/trail-area-maps/winter-trail-map/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Spaulding Bowl detail",
+          "assetUrl": "https://cms.coppercolorado.com/sites/default/files/2024-10/FY25_Spaulding.pdf",
+          "season": "2024/25",
+          "note": "The operator links the FY25 print PDF alongside a newer preview.",
+          "source": "https://www.coppercolorado.com/the-mountain/trail-area-maps/winter-trail-map/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 99,
+            "appliesTo": "Play Forever Thursdays on select dates, advance online purchase"
+          }
+        ],
+        "note": "The listed price is for the dated Thursday product. A new Copper Card costs $5. Standard adult day prices vary.",
+        "source": "https://www.coppercolorado.com/tickets-passes/lift-tickets/tickets/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Snowstake"
+          },
+          {
+            "name": "Center Village HD"
+          },
+          {
+            "name": "Excelerator"
+          },
+          {
+            "name": "Super Bee HD"
+          },
+          {
+            "name": "Aerie"
+          },
+          {
+            "name": "Woodward Terrain Park"
+          },
+          {
+            "name": "Union Peak"
+          }
+        ],
+        "termsSource": "https://www.powdr.com/terms",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.coppercolorado.com/the-mountain/webcams/",
         "checkedOn": "2026-11-21"
       }
     },
@@ -740,6 +1796,365 @@
           "assetUrl": "https://www.yukidaruma-kogen.com/cms/wp-content/themes/cupidValley2022/images/winter/gelande_map-2025_pc.jpg"
         }
       ]
+    },
+    "dartmouth-skiway": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "McLane Family Lodge",
+          "role": "Main base lodge with ticket windows at the front",
+          "source": "https://dartmouthskiway.com/tickets/",
+          "checkedOn": "2026-11-21",
+          "address": "39 Grafton Turnpike Road, Lyme Center, NH 03769"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Dartmouth Skiway base parking",
+          "location": "At the ski area off Grafton Turnpike Road",
+          "source": "https://dartmouthskiway.com/mountain-2/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "general guest day parking"
+            }
+          ],
+          "rateSource": "https://dartmouthskiway.com/mountain-2/"
+        }
+      ],
+      "shuttle": {
+        "description": "Free shuttle for the Dartmouth community. It runs daily January 5 to March 9, 2027.",
+        "source": "https://dartmouthskiway.com/shuttle/",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Winslow and Holt’s Ledge trails, lifts, and shared base",
+          "source": "https://dartmouthskiway.com/mountain-2/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://dartmouthskiway.com/files/2022/12/DSW_22-23-Final-Map.png",
+          "season": "2022/23",
+          "note": "The current operator page links this 2022/23 file."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 40,
+            "appliesTo": "online weekdays and non-peak dates"
+          },
+          {
+            "amount": 47,
+            "appliesTo": "ticket window weekdays and non-peak dates"
+          },
+          {
+            "amount": 60,
+            "appliesTo": "online weekends and peak dates"
+          },
+          {
+            "amount": 67,
+            "appliesTo": "ticket window weekends and peak dates"
+          }
+        ],
+        "note": "Peak holiday dates are Dec. 26, 2026 to Jan. 3, 2027, Jan. 18, and Feb. 15–19. The operator offers RFID pickup at the lodge window.",
+        "source": "https://dartmouthskiway.com/tickets/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "destination-owls-head": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "MTN Haus",
+          "role": "main lodge, ticket services, dining and rentals",
+          "source": "https://maneige.ski/en/stations/owls-head/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Ski base parking",
+          "location": "next to the MTN Haus approach",
+          "source": "https://owlshead.com/wp-content/uploads/2026/11/Carte-hiver2027_OH.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "complete winter downhill trail and lift network",
+          "assetUrl": "https://owlshead.com/wp-content/uploads/2026/11/Carte-hiver2027_OH.pdf",
+          "season": "2026/27",
+          "source": "https://owlshead.com/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "alpine touring routes",
+          "assetUrl": "https://owlshead.com/wp-content/uploads/2025/12/OWLS_HEAD_RANDO_ALPINE_MAP-scaled.jpg",
+          "source": "https://owlshead.com/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "CAD",
+        "rates": [
+          {
+            "amount": 77,
+            "appliesTo": "Monday–Thursday online"
+          },
+          {
+            "amount": 84,
+            "appliesTo": "Monday–Thursday at the resort"
+          },
+          {
+            "amount": 93,
+            "appliesTo": "Friday–Sunday and posted holidays online"
+          },
+          {
+            "amount": 99,
+            "appliesTo": "Friday–Sunday and posted holidays at the resort"
+          }
+        ],
+        "note": "2026/27 adult day tickets before tax. Holiday dates include December 28–31 and March 1–4.",
+        "source": "https://owlshead.com/tarifs-journaliers/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Summit",
+            "embedUrl": "https://g3.ipcamlive.com/player/player.php?alias=summit",
+            "format": "IPCamLive player"
+          },
+          {
+            "name": "Outside the chalet",
+            "embedUrl": "https://g1.ipcamlive.com/player/player.php?alias=chaletoutside",
+            "format": "IPCamLive player"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://owlshead.com/webcams/",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://owlshead.com/conditions-dutilisation/"
+      }
+    },
+    "detroit-mountain": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Main Lodge",
+          "role": "day lodge with arrival services",
+          "source": "https://detroitmountain.com/pricing-hours/",
+          "checkedOn": "2026-11-21",
+          "address": "29409 170th Street, Detroit Lakes, MN",
+          "coordinates": [
+            -95.783266,
+            46.813091
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/681729993"
+        }
+      ],
+      "mapPin": {
+        "base": "Main Lodge",
+        "coordinates": [
+          -95.783266,
+          46.813091
+        ],
+        "result": "updated",
+        "source": "https://detroitmountain.com/trail-maps/",
+        "checkedOn": "2026-11-21",
+        "mapSource": "https://www.openstreetmap.org/way/681729993"
+      },
+      "parking": [
+        {
+          "name": "Main base parking",
+          "location": "Visitor lots on the lodge approach off 170th Street",
+          "source": "https://detroitmountain.com/trail-maps/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Alpine ski runs, lifts, statistics and race course",
+          "source": "https://detroitmountain.com/trail-maps/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://detroitmountain.com/wp-content/uploads/2026/01/23-24-Winter-Race-Course-Details-01.jpg",
+          "season": "2023/24",
+          "note": "The older course artwork is the file currently linked as Alpine Trail Map."
+        },
+        {
+          "coverage": "Winter cross-country routes and Landslide tubing area",
+          "source": "https://detroitmountain.com/trail-maps/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://detroitmountain.com/wp-content/uploads/2026/01/2026-WINTER-TRAILS-EDIT.jpg",
+          "season": "2025/26",
+          "note": "Selected the larger operator-hosted raster of the linked Nordic edition."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 49,
+            "appliesTo": "weekday adult full day"
+          },
+          {
+            "amount": 59,
+            "appliesTo": "weekend or holiday adult full day"
+          }
+        ],
+        "note": "Public day tickets are sold online. Tax is added.",
+        "source": "https://detroitmountain.com/pricing-hours/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "dodge-ridge": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Dodge Ridge base area",
+          "role": "public ski arrival and day services",
+          "address": "1 Dodge Ridge Road, Pinecrest, CA",
+          "source": "https://dodgeridge.com/how-to-get-here/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main Lower Lot",
+          "location": "base area lower parking",
+          "source": "https://dodgeridge.com/preferred-parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "Season permit spots guaranteed until 11 a.m."
+        },
+        {
+          "name": "Motherlode Lot",
+          "location": "preferred parking",
+          "source": "https://dodgeridge.com/preferred-parking/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 40,
+              "currency": "USD",
+              "appliesTo": "Saturdays, Sundays and holidays"
+            }
+          ],
+          "policy": "First come, first served. Season permit spots guaranteed until 11 a.m."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "whole downhill area and freestyle terrain",
+          "assetUrl": "https://dodgeridge.b-cdn.net/wp-content/uploads/2025/12/DodgeRidge_TrailMap_freestyle-update-12-4-LRG-min-scaled.jpg",
+          "note": "Full-resolution map from the current trail map page.",
+          "source": "https://dodgeridge.com/trail-maps/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Summit"
+          },
+          {
+            "name": "Base Area"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://dodgeridge.com/webcams/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "dry-hill-ski-area": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Lodge",
+          "role": "Main winter base with the snack bar, rentals, and tuning",
+          "source": "https://skidryhill.com/",
+          "checkedOn": "2026-11-21",
+          "address": "18160 Alpine Ridge Road, Watertown, NY 13601"
+        }
+      ],
+      "webcams": {
+        "source": "https://www.skidryhill.com/webcam",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Dry Hill live webcam",
+            "embedUrl": "https://www.youtube.com/embed/d3QkaaLkUHg?autoplay=0",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified."
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
+    "eldora-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Indian Peaks Lodge",
+          "role": "alpine day-ticket pickup and skier base",
+          "source": "https://www.eldora.com/tickets-passes/tickets/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Nordic Center",
+          "role": "Nordic ticket pickup and trail access",
+          "source": "https://www.eldora.com/tickets-passes/tickets/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Eldora base parking",
+          "location": "ski area at the end of Eldora Road",
+          "source": "https://www.eldora.com/the-mountain/mountain-info/getting-to-eldora",
+          "checkedOn": "2026-11-21",
+          "policy": "The operator lists 2026/27 single-occupancy fee dates as pending."
+        }
+      ],
+      "shuttle": {
+        "description": "RTD Route NB serves the lifts during public winter operations. The dedicated Justice Center shuttle has ended.",
+        "source": "https://www.eldora.com/the-mountain/mountain-info/getting-to-eldora",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "alpine downhill terrain",
+          "assetUrl": "https://cms.eldora.com/sites/default/files/2025-11/Eldora_25.26_Alpine%20Map_Web.pdf",
+          "season": "2025/26",
+          "note": "The current operator alpine page still links the 2025/26 print edition.",
+          "source": "https://www.eldora.com/the-mountain/maps/alpine-trail-map/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Snow Stake"
+          },
+          {
+            "name": "Alpenglow"
+          },
+          {
+            "name": "Lower Mountain"
+          }
+        ],
+        "termsSource": "https://www.powdr.com/terms",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.eldora.com/the-mountain/current-conditions/webcams/",
+        "checkedOn": "2026-11-21"
+      }
     },
     "fairmont-hot-springs": {
       "checkedOn": "2026-11-21",
@@ -943,6 +2358,327 @@
         }
       ]
     },
+    "greek-peak-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Ski Area Main Base and Mountain Shop",
+          "role": "Day-skier arrival and on-site Indy redemption",
+          "source": "https://www.greekpeak.net/ski-ride/indy-pass/",
+          "checkedOn": "2026-11-21",
+          "address": "2000 NYS Route 392, Cortland, NY 13045"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main ski-area parking",
+          "location": "Signed lots along NYS Route 392 at the ski base",
+          "source": "https://www.greekpeak.net/ski-ride/current-conditions/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Full 2026/27 downhill trail map and ski-base area",
+          "source": "https://www.greekpeak.net/ski-ride/current-conditions/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.greekpeak.net/wp-content/uploads/2026/10/GPwintertrailmap26-27_full.png",
+          "season": "2026/27",
+          "note": "Public operator link. The site’s use license limits copies to temporary viewing. Archive and derivative use require permission."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 125,
+            "appliesTo": "online one-day lift ticket, open to close"
+          }
+        ],
+        "note": "Online purchase required. Replacement GoPass costs $5. The operator does not identify an additional first-card fee.",
+        "source": "https://www.greekpeak.net/lift-tickets/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://www.greekpeak.net/ski-ride/webcams/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Base Cam",
+            "embedUrl": "https://www.youtube.com/embed/JWugDNXhOoA?feature=oembed",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Main base"
+          },
+          {
+            "name": "Snowfall Cam",
+            "embedUrl": "https://www.youtube.com/embed/Cm0NAIS5z9o?feature=oembed",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "view": "Snowfall reference"
+          },
+          {
+            "name": "Lodge Cam",
+            "embedUrl": "https://www.youtube.com/embed/WK5nRpqGkd8?feature=oembed",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified."
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
+    "heavenly": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "California Lodge",
+          "role": "main opening-day ski base with tickets, rentals, dining, ski school and childcare",
+          "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Boulder Lodge",
+          "role": "Nevada public ski base with tickets, food and ski school",
+          "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Stagecoach Lodge",
+          "role": "Nevada ski base with ticket and rental pickup and food",
+          "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Heavenly Village Gondola",
+          "role": "village access and alternative arrival base",
+          "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "California Main Lodge",
+        "coordinates": [
+          -119.939702,
+          38.934956
+        ],
+        "result": "confirmed",
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "California Lodge lot",
+          "location": "California base",
+          "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 20,
+              "currency": "USD",
+              "appliesTo": "weekend and peak mornings with 1–3 riders"
+            },
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "4+ riders, non-peak weekdays, or after 11:30 a.m. on peak days"
+            }
+          ],
+          "policy": "Peak and weekend parking before 11:30 a.m. requires advance reservation."
+        },
+        {
+          "name": "Boulder Lodge and Stagecoach Lodge lots",
+          "location": "Nevada side",
+          "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "daily winter parking"
+            }
+          ],
+          "policy": "Limited spaces at Stagecoach."
+        }
+      ],
+      "shuttle": {
+        "description": "Free shuttle runs between California Lodge and Heavenly Village. There is also a Boulder to Stagecoach connection.",
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "winter downhill terrain across the California and Nevada sides",
+          "assetUrl": "https://scene7.vailresorts.com/is/image/vailresorts/20241105_HV_winter-trail_map_001?wid=2927&hei=4000&fit=constrain,1&resMode=sharp2",
+          "note": "High-resolution raster linked on the operator trail map page.",
+          "source": "https://www.skiheavenly.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Top of Dipper"
+          },
+          {
+            "name": "Top of Tram"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://www.skiheavenly.com/the-mountain/mountain-conditions/mountain-cams.aspx",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://www.skiheavenly.com/policies?tc_1=4"
+      }
+    },
+    "homewood-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Homewood North Base",
+          "role": "main planned winter arrival",
+          "address": "5145 West Lake Boulevard, Homewood, CA",
+          "source": "https://skihomewood.com/parking/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Homewood South Base",
+          "role": "secondary site on the winter trail map",
+          "source": "https://skihomewood.com/wp-content/uploads/2026/06/HW-Trail-Map-Sign-EDIT-2026.04.16-V1.png",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "North Base Main Parking Lot",
+          "location": "5145 West Lake Boulevard",
+          "source": "https://skihomewood.com/parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "Operator advises first-come parking subject to construction. No overnight or trailer parking. Check winter operation rules."
+        },
+        {
+          "name": "South Base parking",
+          "location": "secondary base",
+          "source": "https://skihomewood.com/parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "Check availability during construction. No overnight or trailer parking."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "winter ski area, bases and lift layout",
+          "assetUrl": "https://skihomewood.com/wp-content/uploads/2026/06/HW-Trail-Map-Sign-EDIT-2026.04.16-V1.png",
+          "note": "The April 2026 map artwork may include facilities under construction. Check live lift status.",
+          "source": "https://skihomewood.com/trailmap/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Big Blue View",
+            "location": "Homewood",
+            "view": "Lake Tahoe view"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://skihomewood.com/webcams/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "hyland-hills": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Hyland Hills Chalet",
+          "role": "main public day lodge with guest services and rental desk",
+          "source": "https://www.threeriversparks.org/page/hyland-hills-ski-area-hours-rates",
+          "checkedOn": "2026-11-21",
+          "address": "8800 Chalet Road, Bloomington, MN",
+          "coordinates": [
+            -93.363666,
+            44.843671
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/195174806"
+        }
+      ],
+      "mapPin": {
+        "base": "Hyland Hills Chalet",
+        "coordinates": [
+          -93.363666,
+          44.843671
+        ],
+        "result": "updated",
+        "source": "https://www.threeriversparks.org/location/hyland-hills-ski-area",
+        "checkedOn": "2026-11-21",
+        "mapSource": "https://www.openstreetmap.org/way/195174806"
+      },
+      "parking": [
+        {
+          "name": "Normandale parking lots",
+          "location": "Free lots with shuttle during the ski area’s operating hours",
+          "source": "https://www.threeriversparks.org/page/hyland-hills-ski-area-hours-rates",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "appliesTo": "day parking",
+              "currency": "USD"
+            }
+          ],
+          "note": "Follow the park district’s shuttle information."
+        },
+        {
+          "name": "Premium chalet lot",
+          "location": "At the ski chalet",
+          "source": "https://www.threeriversparks.org/page/hyland-hills-ski-area-hours-rates",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 3,
+              "appliesTo": "hourly",
+              "currency": "USD"
+            },
+            {
+              "amount": 12,
+              "appliesTo": "daily maximum",
+              "currency": "USD"
+            }
+          ],
+          "note": "Winter only. Tax included. The park district identifies a disability parking exemption."
+        },
+        {
+          "name": "Bush Lake overflow lot",
+          "location": "Overflow lot on the approach to Hyland Hills",
+          "source": "https://www.threeriversparks.org/page/hyland-hills-ski-area-hours-rates",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Alpine runs, terrain park, lifts and chalet",
+          "source": "https://www.threeriversparks.org/page/hyland-hills-ski-runs-terrain-park",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.threeriversparks.org/sites/default/files/inline-images/HylandHills_TrailMap-2022.jpg",
+          "note": "Published trail image filename identifies the 2022 artwork."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 46,
+            "appliesTo": "regular adult all-day ticket"
+          }
+        ],
+        "note": "Adult ages 12–61. Tax is included. Some holidays use special rates.",
+        "source": "https://www.threeriversparks.org/page/hyland-hills-ski-area-hours-rates",
+        "checkedOn": "2026-11-21"
+      }
+    },
     "jay-peak-resort": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -1125,6 +2861,148 @@
         }
       ]
     },
+    "keystone-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "River Run Village",
+          "role": "public gondola base and opening-day access",
+          "source": "https://news.vailresorts.com/keystone-opening-2026",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Mountain House",
+          "role": "public base for the Peru Express and learning terrain",
+          "source": "https://www.keystoneresort.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Summit House",
+          "role": "day lodge at the top of Dercum Mountain",
+          "source": "https://news.vailresorts.com/keystone-opening-2026",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "River Run Gondola Lot",
+          "location": "River Run base",
+          "source": "https://www.keystoneresort.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Preferred family and 4+ carpool spots when available. Paid overnight."
+        },
+        {
+          "name": "Mountain House West A",
+          "location": "next to Discovery Lift",
+          "source": "https://www.keystoneresort.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 16,
+              "currency": "USD",
+              "appliesTo": "non-peak Monday–Thursday"
+            },
+            {
+              "amount": 27,
+              "currency": "USD",
+              "appliesTo": "Friday–Sunday and peak dates"
+            },
+            {
+              "amount": 31,
+              "currency": "USD",
+              "appliesTo": "overnight up to seven nights"
+            }
+          ],
+          "policy": "Winter only. No camping."
+        },
+        {
+          "name": "Mountain House East D",
+          "location": "Peru Express base",
+          "source": "https://www.keystoneresort.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Open 7 a.m.–midnight, subject to event closures."
+        },
+        {
+          "name": "Mountain House E",
+          "location": "Peru Express base",
+          "source": "https://www.keystoneresort.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            },
+            {
+              "amount": 31,
+              "currency": "USD",
+              "appliesTo": "overnight in winter"
+            }
+          ],
+          "policy": "Subject to event closures. No camping."
+        },
+        {
+          "name": "North Shuttle and Powerline lots",
+          "location": "signed winter overflow lots",
+          "source": "https://www.keystoneresort.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Free base shuttle every 10–15 minutes when the overflow lots are open. No overnight parking at Powerline."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full winter downhill area and base access",
+          "assetUrl": "https://www.keystoneresort.com/-/aemasset/digital-experience-assets-library/destination-resorts/keystone/mountain-operations/winter-2026-2027/20261020_KY_winter-trail_map_001.pdf",
+          "season": "2026/27",
+          "source": "https://www.keystoneresort.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Snow Stake",
+            "location": "North Peak mid-mountain"
+          },
+          {
+            "name": "Dercum Mountain",
+            "location": "11,640 ft",
+            "view": "northwest toward Dillon Reservoir and I-70"
+          },
+          {
+            "name": "River Run"
+          },
+          {
+            "name": "Lakeside Village"
+          }
+        ],
+        "termsSource": "https://www.vail.com/policies?tc_1=4",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.keystoneresort.com/the-mountain/mountain-conditions/mountain-cams.aspx",
+        "checkedOn": "2026-11-21"
+      }
+    },
     "kicking-horse": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -1301,6 +3179,91 @@
           "note": "The operator-linked map still shows Tamarack Double. Opening-day information describes a replacement lift."
         }
       ]
+    },
+    "kirkwood-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Village Plaza",
+          "role": "central public skier base",
+          "source": "https://www.kirkwood.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Timber Creek",
+          "role": "secondary base and learning area",
+          "source": "https://www.kirkwood.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Red Cliffs Lodge",
+          "role": "base visitor services and parking access",
+          "source": "https://www.kirkwood.com/-/aemasset/sitecore/kirkwood/maps/winter-2025-2026/20251202_KW_winter-trail_map_001.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Village and Red Cliffs paid and carpool lots",
+          "location": "Village Plaza and Red Cliffs areas",
+          "source": "https://www.kirkwood.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 20,
+              "currency": "USD",
+              "appliesTo": "selected reserved lots, 1–3 riders"
+            },
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "reserved 4+ carpool or non-peak arrival"
+            }
+          ],
+          "policy": "Reserve before noon on weekends and posted peak dates. February 20 is exempt."
+        },
+        {
+          "name": "Timber Creek and other free reserved lots",
+          "location": "winter skier parking",
+          "source": "https://www.kirkwood.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Peak and weekend reservations apply before noon except February 20."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full winter downhill terrain and ski bases",
+          "assetUrl": "https://www.kirkwood.com/-/aemasset/sitecore/kirkwood/maps/winter-2025-2026/20251202_KW_winter-trail_map_001.pdf",
+          "season": "2025/26",
+          "note": "Operator currently links this edition.",
+          "source": "https://www.kirkwood.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Timber Creek"
+          },
+          {
+            "name": "Cornice"
+          },
+          {
+            "name": "Red Cliffs"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://www.kirkwood.com/the-mountain/mountain-conditions/mountain-cams.aspx",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://www.skiheavenly.com/policies?tc_1=4"
+      }
     },
     "lake-louise": {
       "checkedOn": "2026-11-21",
@@ -1833,6 +3796,60 @@
         "checkedOn": "2026-11-21"
       }
     },
+    "massif-du-sud": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Refuge du Sommet",
+          "role": "summit refuge at 915 m",
+          "source": "https://massifdusud.net/fr/webcams",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Massif du Sud main lodge",
+          "role": "day services at the ski base",
+          "source": "https://www.datocms-assets.com/166861/1765557839-4735_mas_cartepistes2025_web_1290x700.png",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full winter ski terrain",
+          "assetUrl": "https://www.datocms-assets.com/166861/1765557839-4735_mas_cartepistes2025_web_1290x700.png",
+          "note": "Current operator map image with no printed season confirmed.",
+          "source": "https://massifdusud.net/fr/ouvertures",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "CAD",
+        "rates": [
+          {
+            "amount": 84.5,
+            "appliesTo": "Monday–Thursday, adult age 18–64"
+          },
+          {
+            "amount": 99,
+            "appliesTo": "Friday–Sunday, adult age 18–64"
+          }
+        ],
+        "note": "2026/27 posted rates. Applicable tax is additional.",
+        "source": "https://massifdusud.net/fr/tarifs",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Refuge du Sommet",
+            "location": "915 m at the summit refuge"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://massifdusud.net/fr/webcams",
+        "checkedOn": "2026-11-21"
+      }
+    },
     "middlebury-snowbowl": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -1918,6 +3935,272 @@
         ],
         "note": "The operator advertises an advance online discount on most tickets.",
         "source": "https://middleburysnowbowl.com/lift-tickets/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "mont-edouard": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Chalet principal",
+          "role": "public ski day lodge",
+          "source": "https://www.montedouard.com/fr/station",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "alpine downhill terrain",
+          "assetUrl": "https://images.squarespace-cdn.com/content/v1/5ebec2555f0d06531312eeb2/1734547227193-VV6RPKGHQFI2F7KP3JV3/Capture+d%E2%80%99e%CC%81cran%2C+le+2024-12-18+a%CC%80+13.39.39.png",
+          "note": "Undated version from the operator map page.",
+          "source": "https://www.montedouard.com/fr/cartes-des-pistes",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Haute Route backcountry and refuges",
+          "assetUrl": "https://images.squarespace-cdn.com/content/v1/5ebec2555f0d06531312eeb2/1790613386836-NDZ2YU3HVOBSZO5MQAL8/Carte+Haute+Route+2026-2027+-+pour+site+web+8.5x11+version+2.jpg",
+          "season": "2026/27",
+          "source": "https://www.montedouard.com/fr/cartes-des-pistes",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Base",
+            "location": "ski base",
+            "embedUrl": "https://www.skaping.com/mont-edouard/base",
+            "format": "Skaping player"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://www.montedouard.com/fr/cameradirect",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "mont-rigaud": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Mont Rigaud main base",
+          "role": "public day access and ticket services",
+          "address": "321 des Érables, Rigaud, QC J0P 1P0",
+          "source": "https://montrigaud.com/se-rendre-a-la-montagne/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "Mont Rigaud public ski base",
+        "coordinates": [
+          -74.3390278,
+          45.4680556
+        ],
+        "result": "updated",
+        "source": "https://montrigaud.com/cartes-des-sentiers/",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "Mont Rigaud visitor parking",
+          "location": "321 des Érables base area",
+          "source": "https://montrigaud.com/se-rendre-a-la-montagne/",
+          "checkedOn": "2026-11-21",
+          "policy": "The lot is at the foot of the slopes with four EV chargers and direct walk-up access."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "winter downhill trail and lift map",
+          "assetUrl": "https://montrigaud.com/wp-content/uploads/2026/08/Carte_pistes_ski_2027_Web_V6.pdf",
+          "season": "2026/27",
+          "source": "https://montrigaud.com/cartes-des-sentiers/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "French alpine touring map",
+          "assetUrl": "https://montrigaud.com/wp-content/uploads/2026/07/Carte_RandoAlpine_Web_FR.pdf",
+          "source": "https://montrigaud.com/cartes-des-sentiers/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "CAD",
+        "rates": [
+          {
+            "amount": 57,
+            "appliesTo": "regular full day, 9 a.m.–9 p.m."
+          },
+          {
+            "amount": 49,
+            "appliesTo": "weekday full-day special, Monday–Friday"
+          }
+        ],
+        "note": "The weekday price is subject to operator restrictions. The operator lists a CA$5 replacement card fee including tax.",
+        "source": "https://montrigaud.com/billetterie-hiver/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Mountain base",
+            "embedUrl": "https://www.skaping.com/mont-rigaud/base-montagne",
+            "format": "Skaping player"
+          },
+          {
+            "name": "Mountain summit",
+            "embedUrl": "https://www.skaping.com/mont-rigaud/sommet-montagne",
+            "format": "Skaping player"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://montrigaud.com/webcams/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "mont-ripley-ski-area": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Mont Ripley Chalet",
+          "role": "main ski day lodge",
+          "source": "https://www.mtu.edu/mont-ripley/about/trail-map/",
+          "checkedOn": "2026-11-21",
+          "address": "49051 Ski Hill Road, Hancock, MI",
+          "coordinates": [
+            -88.560093,
+            47.12796
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/186239150"
+        }
+      ],
+      "mapPin": {
+        "base": "Mont Ripley Chalet",
+        "coordinates": [
+          -88.560093,
+          47.12796
+        ],
+        "result": "updated",
+        "source": "https://www.mtu.edu/mont-ripley/about/trail-map/",
+        "checkedOn": "2026-11-21",
+        "mapSource": "https://www.openstreetmap.org/way/186239150"
+      },
+      "parking": [
+        {
+          "name": "Main visitor parking",
+          "location": "Along Ski Hill Road below the chalet",
+          "source": "https://www.mtu.edu/mont-ripley/pdf/trail-map.pdf",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Mont Ripley overflow parking",
+          "location": "West of the main entrance",
+          "source": "https://www.mtu.edu/mont-ripley/pdf/trail-map.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "source": "https://www.mtu.edu/webcams/ripley/index.html",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Mont Ripley Ski Hill",
+            "format": "jpeg-still",
+            "feedUrl": "https://www.mtu.edu/mtu_resources/php/webcams/cache/mont-ripley.jpg",
+            "view": "Mont Ripley ski slopes"
+          }
+        ]
+      },
+      "trailMaps": [
+        {
+          "coverage": "Downhill ski area, chalet, lifts and base parking",
+          "source": "https://www.mtu.edu/mont-ripley/about/trail-map/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.mtu.edu/mont-ripley/pdf/trail-map.pdf"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 75,
+            "appliesTo": "single day"
+          },
+          {
+            "amount": 85,
+            "appliesTo": "Saturday full day"
+          }
+        ],
+        "note": "Published for all ages. Michigan Tech student access is listed separately.",
+        "source": "https://www.mtu.edu/mont-ripley/tickets-passes/lift-tickets/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "mont-sutton": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Chalet Alt. 400 m",
+          "role": "main ski day base and services",
+          "source": "https://montsutton.com/services/chalets-et-restaurants/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Chalet Alt. 520 m",
+          "role": "secondary day lodge",
+          "source": "https://montsutton.com/services/chalets-et-restaurants/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Chalet Alt. 680 m",
+          "role": "warming lodge at the top of Chair II",
+          "source": "https://montsutton.com/services/chalets-et-restaurants/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Chalet Alt. 840 m",
+          "role": "upper-mountain day lodge",
+          "source": "https://montsutton.com/services/chalets-et-restaurants/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "P1 and adjoining base lots",
+          "location": "main Alt. 400 base approach",
+          "source": "https://montsutton.com/wp-content/uploads/2026/11/AJour-CartePistes_Web_2027_HD.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "winter downhill terrain and access",
+          "assetUrl": "https://montsutton.com/wp-content/uploads/2026/11/AJour-CartePistes_Web_2027_HD.pdf",
+          "season": "2026/27",
+          "source": "https://montsutton.com/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "alpine ascent routes",
+          "assetUrl": "https://montsutton.com/wp-content/uploads/2026/10/Carte-sentiers-ascension-2025-2026.pdf",
+          "season": "2025/26",
+          "note": "Operator-linked previous ascent map.",
+          "source": "https://montsutton.com/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Alt. 400 m",
+            "location": "base area",
+            "embedUrl": "https://www.youtube.com/embed/isfR607kS6A",
+            "format": "YouTube player"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://montsutton.com/conditions/",
         "checkedOn": "2026-11-21"
       }
     },
@@ -2041,6 +4324,201 @@
         "note": "Window lists distinct half-day, night, and special weekday rates.",
         "source": "https://www.skimountbaldy.ca/tickets-and-passes",
         "checkedOn": "2026-11-21"
+      }
+    },
+    "mount-kato": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Mount Kato Chalet",
+          "role": "ski day chalet with food, ticket office and rental shop nearby",
+          "source": "https://mountkato.com/",
+          "checkedOn": "2026-11-21",
+          "address": "20461 Old Hwy 66, Mankato, MN",
+          "coordinates": [
+            -94.033246,
+            44.13312
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/461449889"
+        }
+      ],
+      "mapPin": {
+        "base": "Mount Kato Chalet",
+        "coordinates": [
+          -94.033246,
+          44.13312
+        ],
+        "result": "updated",
+        "source": "https://mountkato.com/",
+        "checkedOn": "2026-11-21",
+        "mapSource": "https://www.openstreetmap.org/way/461449889"
+      },
+      "parking": [
+        {
+          "name": "Base visitor lots",
+          "location": "Along Old Hwy 66 and the ticket office approach",
+          "source": "https://www.openstreetmap.org/way/1109119380",
+          "checkedOn": "2026-11-21",
+          "note": "The mapped lots are marked for customers. Check current operator rates and overnight rules."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Interactive alpine terrain, lifts and trail labels",
+          "source": "https://mountkato.com/",
+          "checkedOn": "2026-11-21",
+          "note": "The full-size static artwork and the interactive route labels are served separately."
+        }
+      ]
+    },
+    "mount-st-louis-moonstone": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Mount St. Louis Base Chalet",
+          "role": "Main public downhill base with food, rentals and Guest Services",
+          "address": "24 Mount St. Louis Road West, Coldwater, ON L0K 1E0",
+          "coordinates": [
+            -79.666907,
+            44.6231625
+          ],
+          "source": "https://mountstlouis.com/pdf/MSLM-Trail-Guide-26-27.pdf",
+          "mapSource": "https://www.openstreetmap.org/node/2633998617",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Moonstone Base Chalet",
+          "role": "Second winter base with rentals and cafeteria",
+          "coordinates": [
+            -79.6628549,
+            44.6284625
+          ],
+          "source": "https://mountstlouis.com/pdf/MSLM-Trail-Guide-26-27.pdf",
+          "mapSource": "https://www.openstreetmap.org/node/2633998618",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "Mount St. Louis Base Chalet",
+        "coordinates": [
+          -79.666907,
+          44.6231625
+        ],
+        "result": "updated",
+        "source": "https://www.mountstlouis.com/directions/",
+        "mapSource": "https://www.openstreetmap.org/node/2633998617",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "Mount St. Louis base lots",
+          "location": "Below the main chalet, with signed arrivals from Mount St. Louis Road West.",
+          "source": "https://mountstlouis.com/pdf/MSLM-Trail-Guide-26-27.pdf",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Moonstone base lot",
+          "location": "Beside the Moonstone Base Chalet and the Concession 7 access.",
+          "source": "https://mountstlouis.com/pdf/MSLM-Trail-Guide-26-27.pdf",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "West lot",
+          "location": "Signed west of the Louis base.",
+          "source": "https://mountstlouis.com/pdf/MSLM-Trail-Guide-26-27.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "season": "2026/27",
+          "coverage": "Ski runs, lifts, freestyle areas, parking and facilities at both Mount St. Louis and Moonstone",
+          "source": "https://www.mountstlouis.com/status/",
+          "assetUrl": "https://mountstlouis.com/pdf/MSLM-Trail-Guide-26-27.pdf",
+          "checkedOn": "2026-11-21",
+          "note": "Official 2026/27 print PDF with the complete 5,000-pixel map and the new Butternut carpet."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "CAD",
+        "checkedOn": "2026-11-21",
+        "source": "https://shop.mountstlouis.com/lift-tickets/day/",
+        "rates": [
+          {
+            "amount": 95,
+            "appliesTo": "advance online, 9 a.m. to 4 p.m."
+          },
+          {
+            "amount": 115,
+            "appliesTo": "resort price, 9 a.m. to 4 p.m."
+          }
+        ],
+        "note": "The operator adds a $3 processing fee. Separate day-and-night tickets are CA$105 online or CA$125 at the resort, before the fee."
+      },
+      "webcams": {
+        "source": "https://www.mountstlouis.com/status/",
+        "cameras": [
+          {
+            "name": "Elfie Huter Express Base",
+            "location": "Base of the Elfie Huter Express lift",
+            "source": "https://www.youtube.com/watch?v=B9DekY3M1vo",
+            "format": "YouTube public watch page",
+            "availability": "Operator-linked watch page opened on November 21. Check playback when the resort is operating."
+          },
+          {
+            "name": "Adventure Top",
+            "location": "Upper Adventure 8 terminal",
+            "source": "https://www.youtube.com/watch?v=qxTnaRG5JH4",
+            "format": "Operator JPEG snapshot and YouTube watch page",
+            "availability": "Operator-linked watch page opened on November 21. Check playback when the resort is operating.",
+            "feedUrl": "https://mountstlouis.com/webcams-upload/adventure-top/image-1.jpg"
+          },
+          {
+            "name": "Moonstone Base",
+            "location": "Moonstone base area",
+            "source": "https://www.youtube.com/watch?v=lnUmvtezBnE",
+            "format": "Operator JPEG snapshot and YouTube watch page",
+            "availability": "Operator-linked watch page opened on November 21. Check playback when the resort is operating.",
+            "feedUrl": "https://mountstlouis.com/webcams-upload/moonstone-base/image-1.jpg"
+          },
+          {
+            "name": "MSLM Base",
+            "location": "Mount St. Louis base area",
+            "source": "https://www.youtube.com/watch?v=O3XL8Eca880",
+            "format": "Operator JPEG snapshot and YouTube watch page",
+            "availability": "Operator-linked watch page opened on November 21. Check playback when the resort is operating.",
+            "feedUrl": "https://mountstlouis.com/webcams-upload/mslm-base/image-1.jpg"
+          },
+          {
+            "name": "The JunkYard",
+            "location": "Junkyard terrain park",
+            "source": "https://www.youtube.com/watch?v=zqPPvB__VbY",
+            "format": "Operator JPEG snapshot and YouTube watch page",
+            "availability": "Operator-linked watch page opened on November 21. Check playback when the resort is operating.",
+            "feedUrl": "https://mountstlouis.com/webcams-upload/junkyard/image-1.jpg"
+          },
+          {
+            "name": "Beginner Area",
+            "location": "Beginner terrain",
+            "source": "https://www.youtube.com/watch?v=ZjCfdY6Vl7s",
+            "format": "Operator JPEG snapshot and YouTube watch page",
+            "availability": "Operator-linked watch page opened on November 21. Check playback when the resort is operating.",
+            "feedUrl": "https://mountstlouis.com/webcams-upload/beginner-area/image-1.jpg"
+          },
+          {
+            "name": "Josl Huter Express",
+            "location": "Josl Huter Express lift",
+            "source": "https://www.youtube.com/watch?v=NuT2SlMUjao",
+            "format": "YouTube public watch page",
+            "availability": "Operator-linked watch page opened on November 21. Check playback when the resort is operating."
+          }
+        ],
+        "checkedOn": "2026-11-21",
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator publishes these camera links. Determine separate embedding and rebroadcast permission."
+        }
       }
     },
     "mt-eyak": {
@@ -2224,6 +4702,80 @@
         ],
         "note": "Adult ages 18 and older.",
         "source": "https://banffnorquay.com/lift-tickets/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "mt-rose-ski-tahoe": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Main Lodge",
+          "role": "primary winter lodge at 8,260 ft, including ski ticket services",
+          "address": "22222 Mt. Rose Highway, Reno, NV",
+          "source": "https://skirose.com/mountain-information/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Winters Creek Lodge",
+          "role": "Slide Bowl public base served by Zephyr Express",
+          "address": "22600 Mt. Rose Highway, Reno, NV",
+          "source": "https://skirose.com/getting-here/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main Lodge and Winters Creek Lodge parking",
+          "location": "operator addresses along Mount Rose Highway",
+          "source": "https://skirose.com/getting-here/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Main Lodge and front-side downhill terrain",
+          "assetUrl": "https://skirose.com/wp-content/uploads/2025/08/MtROSE-frontside-1.jpg",
+          "source": "https://skirose.com/trail-maps/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Main Lodge beginner area",
+          "assetUrl": "https://skirose.com/wp-content/uploads/2025/08/MtROSE-beginner-01.jpg",
+          "source": "https://skirose.com/trail-maps/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Slide Bowl",
+          "assetUrl": "https://skirose.com/wp-content/uploads/2022/06/MtROSE-slide-bowl-2023.pdf",
+          "note": "Operator print map for the Slide Bowl sector.",
+          "source": "https://skirose.com/trail-maps/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 189,
+            "appliesTo": "adult full-price at the window"
+          }
+        ],
+        "note": "The resort advertises advance online discounts when purchased by midnight the day before.",
+        "source": "https://skirose.com/lift-tickets/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Tahoe Vista"
+          },
+          {
+            "name": "Lakeview Express"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://skirose.com/snow-report/",
         "checkedOn": "2026-11-21"
       }
     },
@@ -2773,6 +5325,295 @@
         "checkedOn": "2026-11-21"
       }
     },
+    "northstar-california-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Village at Northstar",
+          "role": "primary public gondola arrival, tickets and village dining",
+          "source": "https://news.vailresorts.com/Tahoe-Opening-Days-2026",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Big Springs mid-mountain base",
+          "role": "arrival area from Big Springs Gondola",
+          "source": "https://www.northstarcalifornia.com/-/aemasset/sitecore/northstar/maps/winter-2025-2026/20251022_NS_winter-trail_map_001.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Preferred Paid Lot",
+          "location": "closest to the Village",
+          "source": "https://www.northstarcalifornia.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 25,
+              "currency": "USD",
+              "appliesTo": "non-peak Monday–Friday"
+            },
+            {
+              "amount": 50,
+              "currency": "USD",
+              "appliesTo": "weekends and peak days"
+            }
+          ],
+          "policy": "Weekend and peak reservations required from 7 a.m. to 3 p.m."
+        },
+        {
+          "name": "Village View Lots",
+          "location": "off Big Springs Drive",
+          "source": "https://www.northstarcalifornia.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "non-peak weekdays, 4+ with reservation, or after 11:30 a.m."
+            },
+            {
+              "amount": 20,
+              "currency": "USD",
+              "appliesTo": "weekends and peak mornings with 1–3 occupants"
+            }
+          ],
+          "policy": "Weekends and peak days require reservations from 7 to 11:30 a.m. Free village shuttles."
+        },
+        {
+          "name": "Castle Peak Lots",
+          "location": "200 Northstar Drive, Truckee",
+          "source": "https://www.northstarcalifornia.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "daily"
+            }
+          ],
+          "policy": "No reservation required. Use the village shuttle."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full winter downhill terrain",
+          "assetUrl": "https://www.northstarcalifornia.com/-/aemasset/sitecore/northstar/maps/winter-2025-2026/20251022_NS_winter-trail_map_001.pdf",
+          "season": "2025/26",
+          "note": "Current operator-linked print edition.",
+          "source": "https://www.northstarcalifornia.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "winter village and services",
+          "assetUrl": "https://www.northstarcalifornia.com/-/aemasset/digital-experience-assets-library/regional-west-resorts/northstar/mountain-operations/winter-2026-2027/20261106_NS_village-winter_directory_001.pdf",
+          "season": "2026/27",
+          "source": "https://www.northstarcalifornia.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "cross-country and snowshoe trails",
+          "assetUrl": "https://www.northstarcalifornia.com/-/aemasset/sitecore/northstar/maps/20221215_NS_XC_TrailMap_Caboose_001.pdf",
+          "source": "https://www.northstarcalifornia.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Snow Stake",
+            "view": "Official snow stake cleared daily at 4:30 p.m."
+          },
+          {
+            "name": "Mt. Pluto Summit"
+          },
+          {
+            "name": "Mid-mountain"
+          },
+          {
+            "name": "Northstar Village"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://www.northstarcalifornia.com/the-mountain/mountain-conditions/mountain-cams.aspx",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://www.skiheavenly.com/policies?tc_1=4"
+      }
+    },
+    "norway-mountain": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Norway Mountain visitor day facilities",
+          "role": "resort dining and winter arrival at the Briar Mountain Road base",
+          "source": "https://norwaymt.com/contact",
+          "checkedOn": "2026-11-21",
+          "address": "4948 Briar Mountain Road, Norway, MI"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 64,
+            "appliesTo": "online in advance"
+          },
+          {
+            "amount": 74,
+            "appliesTo": "published window adult day rate"
+          }
+        ],
+        "note": "The operator publishes a $10 advance online discount off the $74 adult day price.",
+        "source": "https://norwaymt.com/tickets",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "nutt-hill": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Nutt Hill Chalet",
+          "role": "public warming and day chalet with snack bar and restrooms",
+          "source": "https://nutthillwinterpark.com/pages/faqs",
+          "checkedOn": "2026-11-21",
+          "address": "750 W Main St, Plymouth, WI"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Alpine skiing, shared conveyor, chalet and separate tubing lanes",
+          "source": "https://nutthillwinterpark.com/pages/ski-snowboard",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://cdn.shopify.com/s/files/1/0676/5402/5379/files/Nutt_Hill_MapRendering_11.03.25.pdf?v=1762269512",
+          "note": "The operator currently links the map dated November 3, 2025 in its filename."
+        }
+      ]
+    },
+    "palisades-tahoe": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Palisades Olympic Valley base",
+          "role": "main Village services and aerial tram access",
+          "source": "https://www.palisadestahoe.com/plan-your-visit/pre-arrival-guide",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Alpine Lodge",
+          "role": "public Alpine base with services and lifts",
+          "source": "https://www.palisadestahoe.com/-/media/palisades-tahoe/pdfs/trail-maps/alpine-front-side-trail.pdf?rev=d16a1e2f47a24af8991e4924d5f4f7d2",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "Olympic Valley tram base",
+        "coordinates": [
+          -120.235956,
+          39.19681
+        ],
+        "result": "confirmed",
+        "source": "https://www.palisadestahoe.com/plan-your-visit/pre-arrival-guide",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "Palisades and Alpine base lots",
+          "location": "both winter bases",
+          "source": "https://www.palisadestahoe.com/mountain-information/parking-and-road-conditions/parking-program",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "standard weekly reservation release or non-peak arrival"
+            },
+            {
+              "amount": 30,
+              "currency": "USD",
+              "appliesTo": "limited advance-paid reservations"
+            }
+          ],
+          "policy": "Reserve on weekends and select holidays before 1 p.m. between December 5 and April 11. Free arrivals after 1 p.m. as space permits."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Palisades side",
+          "assetUrl": "https://www.palisadestahoe.com/-/media/palisades-tahoe/pdfs/trail-maps/palisadesmaintrailmap.pdf?rev=4a11b9e6cc8848bc8fa504fd1ff12139",
+          "source": "https://www.palisadestahoe.com/mountain-information/trail-maps",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Alpine front side",
+          "assetUrl": "https://www.palisadestahoe.com/-/media/palisades-tahoe/pdfs/trail-maps/alpine-front-side-trail.pdf?rev=d16a1e2f47a24af8991e4924d5f4f7d2",
+          "source": "https://www.palisadestahoe.com/mountain-information/trail-maps",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Alpine back side",
+          "assetUrl": "https://www.palisadestahoe.com/-/media/palisades-tahoe/pdfs/trail-maps/alpine-back-side-trail.pdf?rev=605e0041d6af471eb74b96978e3b8b46",
+          "source": "https://www.palisadestahoe.com/mountain-information/trail-maps",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 99,
+            "appliesTo": "opening offer November 21–24, online or Ticket & Pass Office"
+          }
+        ],
+        "note": "Adult full-day opening-period offer. Standard dates use a separate retail calendar.",
+        "source": "https://www.palisadestahoe.com/events-and-activities/events-calendar/opening-day",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Palisades Base at 6,200 ft",
+            "embedUrl": "https://relay.ozolio.com/pub.api?cmd=embed&oid=EMB_ZIGI00000147",
+            "format": "Ozolio player"
+          },
+          {
+            "name": "Palisades Scope at 8,200 ft",
+            "embedUrl": "https://relay.ozolio.com/pub.api?cmd=embed&oid=EMB_EIFC0000015B",
+            "format": "Ozolio player"
+          },
+          {
+            "name": "Palisades Siberia",
+            "embedUrl": "https://relay.ozolio.com/pub.api?cmd=embed&oid=EMB_OBCE00000ECB",
+            "format": "Ozolio player"
+          },
+          {
+            "name": "Far East",
+            "embedUrl": "https://relay.ozolio.com/pub.api?cmd=embed&oid=EMB_EMST000001C4",
+            "format": "Ozolio player"
+          },
+          {
+            "name": "Alpine Peak",
+            "embedUrl": "https://relay.ozolio.com/pub.api?cmd=embed&oid=EMB_VPAY0000014C",
+            "format": "Ozolio player"
+          },
+          {
+            "name": "Alpine Race",
+            "embedUrl": "https://relay.ozolio.com/pub.api?cmd=embed&oid=EMB_KIYV000003C2",
+            "format": "Ozolio player"
+          },
+          {
+            "name": "Alpine Chalet",
+            "embedUrl": "https://relay.ozolio.com/pub.api?cmd=embed&oid=EMB_FPOI000010AB",
+            "format": "Ozolio player"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://www.palisadestahoe.com/mountain-information/webcams",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://www.alterramtn.co/terms-of-use"
+      }
+    },
     "pats-peak": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -2873,6 +5714,385 @@
         ],
         "note": "The ticket is loaded onto a reloadable RFID card.",
         "source": "https://www.patspeak.com/plan-your-visit/tickets-passes/lift-ticket-rates/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "paul-bunyan-ski-hill": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Paul Bunyan Ski Hill Lodge",
+          "role": "main visitor lodge labeled on the resort map",
+          "source": "https://www.indyskipass.com/sites/default/files/2026-04/0ec616c0-ce26-4d17-9689-4b6b9ce2ce04_961x542.jpg",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Base parking",
+          "location": "The mapped lot lies downhill of the lodge",
+          "source": "https://www.indyskipass.com/sites/default/files/2026-04/0ec616c0-ce26-4d17-9689-4b6b9ce2ce04_961x542.jpg",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Public ski hill with chair, tow, lodge and parking",
+          "source": "https://www.indyskipass.com/our-resorts/paul-bunyan-ski-hill",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.indyskipass.com/sites/default/files/2026-04/0ec616c0-ce26-4d17-9689-4b6b9ce2ce04_961x542.jpg",
+          "note": "Operator-branded map from the pass issuer’s resort profile."
+        }
+      ]
+    },
+    "pebble-creek-ski-area": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Day Lodge",
+          "role": "Restaurant, rental shop, and lockers",
+          "source": "https://pebblecreekskiarea.com/the-mountain/",
+          "checkedOn": "2026-11-21",
+          "address": "3340 E Green Canyon Road, Inkom, ID 83245"
+        },
+        {
+          "name": "Office Building",
+          "role": "Ticket sales and ski school registration",
+          "source": "https://pebblecreekskiarea.com/the-mountain/",
+          "checkedOn": "2026-11-21",
+          "address": "3340 E Green Canyon Road, Inkom, ID 83245"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Base parking",
+          "location": "Below the Day Lodge and beginner slopes",
+          "source": "https://pebblecreekskiarea.com/the-mountain/trails-grooming/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Full alpine terrain including Skyline, Stardust, Aspen and the base",
+          "source": "https://pebblecreekskiarea.com/the-mountain/trails-grooming/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://pebblecreekskiarea.com/media/tgzduuen/2025-pebble-creek-map-update-9-3-2025-opt.jpg",
+          "season": "2025",
+          "note": "Operator publishes the September 2025 update."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 83,
+            "appliesTo": "regular adult 18+ full day"
+          }
+        ],
+        "note": "2026/27 online and ticket-window price. Night access is separate and the operator lists a $15 upgrade.",
+        "source": "https://pebblecreekskiarea.com/tickets-passes/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://pebblecreekskiarea.com/the-mountain/webcam/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Pebble Creek Webcam",
+            "format": "operator webcam page",
+            "availability": "Operator camera page opened. A direct public player was unverified."
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
+    "pomerelle-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Lodge",
+          "role": "Day lodge with food, rentals, and lockers",
+          "source": "https://www.pomerelle.com/the-mountain",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Upper lot",
+          "location": "Upper parking at the mountain",
+          "source": "https://www.pomerelle.com/conditions",
+          "checkedOn": "2026-11-21",
+          "policy": "Ski-in/ski-out with no services. The operator recommends 4-wheel drive."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Downhill mountain including night trails, terrain parks, lifts, and main lodge",
+          "source": "https://www.pomerelle.com/trail-map",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://static.wixstatic.com/media/786061_0a547e7a21ef4a39888abb5349752297~mv2.jpg"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 58,
+            "appliesTo": "online advance purchase, ages 13+"
+          },
+          {
+            "amount": 73,
+            "appliesTo": "ticket window, ages 13+"
+          }
+        ],
+        "note": "Full-day ticket is for 9 a.m.–4 p.m. A required reusable RFID card costs $5. Night access is sold separately.",
+        "source": "https://www.pomerelle.com/reload",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "powder-ridge": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Powder Ridge Lodge",
+          "role": "main public chalet at the ski base",
+          "source": "https://powderridge.com/ski-ride/trail-map/",
+          "checkedOn": "2026-11-21",
+          "address": "15015 93rd Ave, Kimball, MN"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Base parking",
+          "location": "Main parking beside the alpine lodge and road entrance",
+          "source": "https://powderridge.com/wp-content/uploads/2023/09/Powder-Ridge-Trail-Map.jpg",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Alpine terrain, lodge, and parking",
+          "source": "https://powderridge.com/ski-ride/trail-map/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://powderridge.com/wp-content/uploads/2023/09/Powder-Ridge-Trail-Map.jpg"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 46,
+            "appliesTo": "weekday online"
+          },
+          {
+            "amount": 51,
+            "appliesTo": "weekday onsite"
+          },
+          {
+            "amount": 64,
+            "appliesTo": "weekend or holiday online"
+          },
+          {
+            "amount": 69,
+            "appliesTo": "weekend or holiday onsite"
+          }
+        ],
+        "note": "Adult ages 13 and older. Ticket quantities are limited.",
+        "source": "https://powderridge.com/ski-ride/ticket-rental-rates/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "powder-ridge-connecticut": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "The Marketplace",
+          "role": "Base lodge with skier services and food",
+          "source": "https://powderridgepark.com/the-marketplace/",
+          "checkedOn": "2026-11-21",
+          "address": "99 Powder Hill Road, Middlefield, CT 06455"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Base parking",
+          "location": "Main lot near The Marketplace and first aid across from the pond",
+          "source": "https://powderridgepark.com/trail-map/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Winter downhill trails, feature parks, ski lifts, tubing, and the base area",
+          "source": "https://powderridgepark.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://powderridgepark.com/wp-content/uploads/sites/7/2026/02/pr-winter-map-20260220a.pdf",
+          "note": "Operator’s February 20, 2026 revision. The operator has not labeled a season on the print map."
+        }
+      ],
+      "webcams": {
+        "source": "https://powderridgepark.com/powder-ridge-webcam/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Powder Ridge Park webcam",
+            "source": "https://www.webcamgalore.com/webcam/USA/Middlefield-Connecticut/26000.html",
+            "format": "Webcam Galore public viewer",
+            "availability": "The operator links the public viewer. Live playback is unverified."
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
+    "purgatory-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Purgatory Village",
+          "role": "public main winter base and Purgatory Express",
+          "address": "1 Skier Place, Durango, CO 81301",
+          "source": "https://www.purgatory.ski/event/scheduled-opening-day/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Dante’s Lodge",
+          "role": "on-mountain public lodge",
+          "source": "https://www.purgatory.ski/wp-content/uploads/sites/2/2026/11/Purgatory_Winter26-27_TrailMap_Website.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full winter resort and lift network",
+          "assetUrl": "https://www.purgatory.ski/wp-content/uploads/sites/2/2026/11/Purgatory_Winter26-27_TrailMap_Website.pdf",
+          "season": "2026/27",
+          "source": "https://www.purgatory.ski/mountain/purgatory-mountain/trail-maps/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Colorado Couloir expert expansion",
+          "assetUrl": "https://www.purgatory.ski/wp-content/uploads/sites/2/2026/11/couloir-trail-map.pdf",
+          "season": "2026/27",
+          "source": "https://www.purgatory.ski/mountain/purgatory-mountain/trail-maps/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Purgatory Express Base",
+            "location": "Lift 1 base",
+            "embedUrl": "https://vauth.command.verkada.com/__v/purgatory/embed/html/ba02eb1a-bb47-47ca-8e92-49477b96ce64/",
+            "format": "Verkada player"
+          },
+          {
+            "name": "Unofficial Snow Stake",
+            "embedUrl": "https://player.brownrice.com/embed/purgatorysnowstake1/live",
+            "format": "Brownrice player"
+          },
+          {
+            "name": "Purgatory Express Summit",
+            "location": "Lift 1 summit",
+            "embedUrl": "https://player.brownrice.com/embed/purgatoryparadise",
+            "format": "Brownrice player"
+          },
+          {
+            "name": "Legends Summit",
+            "embedUrl": "https://player.brownrice.com/embed/purgatoryraysridge",
+            "format": "Brownrice player"
+          },
+          {
+            "name": "Purgatory Village Plaza",
+            "location": "8,793 ft",
+            "embedUrl": "https://player.brownrice.com/embed/purgatoryplaza",
+            "format": "Brownrice player"
+          }
+        ],
+        "termsSource": "https://www.purgatory.ski/website-terms-of-use/",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.purgatory.ski/mountain/weather-conditions-webcams/webcams/",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "Main Village Lot",
+          "location": "Purgatory Village base",
+          "source": "https://www.purgatory.ski/first-time-at-purgatory-resort/",
+          "checkedOn": "2026-11-21",
+          "policy": "Holiday parking is reserved for vehicles with at least four occupants."
+        },
+        {
+          "name": "Gelandé Parking",
+          "location": "off US 550",
+          "source": "https://www.purgatory.ski/wp-content/uploads/sites/2/2022/07/EV-Area-Map-2.pdf",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Upper and Lower Columbine lots",
+          "location": "Columbine base approach",
+          "source": "https://www.purgatory.ski/wp-content/uploads/sites/2/2022/07/EV-Area-Map-2.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "shuttle": {
+        "description": "Free parking-lot shuttle from 8 a.m. to 5 p.m. during mountain operations.",
+        "source": "https://www.purgatory.ski/plan-your-trip/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "quarry-road-trails": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Welcome Center Yurt",
+          "role": "Rope-tow tickets and winter information",
+          "source": "https://quarryroad.org/rope-tow",
+          "checkedOn": "2026-11-21",
+          "address": "300 Quarry Road, Waterville, ME 04901"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Event parking lot",
+          "location": "Marked on the operator’s winter map near the rope tow",
+          "source": "https://quarryroad.org/winter-trails",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Nordic network, downhill rope tow, snowshoeing, singletrack, and parking",
+          "source": "https://quarryroad.org/winter-trails",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://quarryroad.org/s/Quarry-Road-Trail-Map-2027-for-Web.pdf",
+          "season": "2026/27",
+          "note": "The linked print file is identified as the 2027 winter map."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 20,
+            "appliesTo": "regular adult rope-tow day ticket"
+          },
+          {
+            "amount": 10,
+            "appliesTo": "Waterville resident adult rope-tow day ticket"
+          }
+        ],
+        "note": "2026/27 operator rate table. Purchase a downhill day ticket at the Welcome Center Yurt.",
+        "source": "https://quarryroad.org/tickets",
         "checkedOn": "2026-11-21"
       }
     },
@@ -3244,6 +6464,288 @@
         "checkedOn": "2026-11-21"
       }
     },
+    "searchmont-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Searchmont Resort main lodge",
+          "role": "main public day lodge",
+          "source": "https://searchmont.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "address": "103 Searchmont Resort Rd., Searchmont, ON P0S 1J0",
+          "coordinates": [
+            -84.046249,
+            46.768923
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/266674805"
+        },
+        {
+          "name": "The Kiln",
+          "role": "slopeside restaurant with a cafeteria and coffee shop",
+          "source": "https://searchmont.com/the-kiln/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "Searchmont Resort main lodge",
+        "coordinates": [
+          -84.046249,
+          46.768923
+        ],
+        "result": "updated",
+        "source": "https://searchmont.com/directions/",
+        "checkedOn": "2026-11-21",
+        "mapSource": "https://www.openstreetmap.org/way/266674805"
+      },
+      "parking": [
+        {
+          "name": "Main lodge visitor parking",
+          "location": "Between the main lodge and Searchmont Resort Road, with parking marked toward the Learning Centre.",
+          "source": "https://searchmont.com/wp-content/uploads/2025/12/Searchmont_TrailMap2025.jpg",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "All downhill terrain, the Learning Centre, terrain parks, base facilities, and marked multi-use trails",
+          "source": "https://searchmont.com/trail-map/",
+          "assetUrl": "https://searchmont.com/wp-content/uploads/2025/12/Searchmont_TrailMap2025.jpg",
+          "checkedOn": "2026-11-21",
+          "note": "The 2,546 × 1,008 px operator original has the full map. Its filename says 2025 and the map has no printed season."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "CAD",
+        "source": "https://searchmont.com/lift-tickets/",
+        "checkedOn": "2026-11-21",
+        "rates": [
+          {
+            "amount": 80,
+            "appliesTo": "weekdays outside holiday periods, 9 am to 4 pm"
+          },
+          {
+            "amount": 85,
+            "appliesTo": "weekends and holidays, 9 am to 4 pm"
+          }
+        ],
+        "note": "The operator posts 2026/27 holiday rates for December 18 to January 3, January 17, February 15, and March 12 to 21."
+      }
+    },
+    "sierra-at-tahoe-ski-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Main Plaza and Base Lodge",
+          "role": "public ski base and guest services",
+          "source": "https://sierraattahoe.com/trail-map/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "West Bowl base",
+          "role": "secondary ski sector",
+          "source": "https://sierraattahoe.com/trail-map/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Lots A–F",
+          "location": "Public winter lots off US 50",
+          "source": "https://sierraattahoe.com/parking/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 25,
+              "currency": "USD",
+              "appliesTo": "reserved weekends and holidays before noon, vehicles of 1–3 without a Sierra pass"
+            },
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "4+ carpool, Sierra pass reservations, or after noon"
+            }
+          ],
+          "policy": "Reserve from December 19 through April 4 on weekends and posted holidays. Ikon and Powder Alliance holders use the ordinary carpool exemption."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full downhill network including West Bowl",
+          "assetUrl": "https://sierraattahoe.com/wp-content/uploads/2025/11/trailmap_2025_updated-scaled-jpg.avif",
+          "note": "High-resolution version from the current operator trail map page.",
+          "source": "https://sierraattahoe.com/trail-map/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 167,
+            "appliesTo": "non-peak adult, age 23–64"
+          },
+          {
+            "amount": 191,
+            "appliesTo": "peak adult, age 23–64"
+          }
+        ],
+        "note": "2026/27 rates. Peak periods include November 27–28, December 19–January 3, January 16–18 and February 13–21.",
+        "source": "https://sierraattahoe.com/lift-tickets/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Summit"
+          },
+          {
+            "name": "Plaza"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://sierraattahoe.com/live-cams/",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://sierraattahoe.com/terms-and-conditions/"
+      }
+    },
+    "silver-mountain-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Gondola Village",
+          "role": "Kellogg arrival and gondola boarding",
+          "source": "https://silvermt.com/getting-here/",
+          "checkedOn": "2026-11-21",
+          "address": "610 Bunker Avenue, Kellogg, ID 83837"
+        },
+        {
+          "name": "Mountain House",
+          "role": "On-mountain day lodge at 5,700 feet",
+          "source": "https://silvermt.com/webcams/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Kellogg and Wardner Peaks, downhill trails, lifts, and Mountain House",
+          "source": "https://silvermt.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://silvermt.com/wp-content/uploads/trail-map-2026.webp",
+          "season": "2026",
+          "note": "The operator page identifies the 2026 map and links the native file."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 64,
+            "appliesTo": "online advance weekday"
+          },
+          {
+            "amount": 76,
+            "appliesTo": "online advance weekend"
+          },
+          {
+            "amount": 80,
+            "appliesTo": "online advance holiday"
+          }
+        ],
+        "note": "Online sales close at midnight the night before. Holiday pricing applies Dec. 19–Jan. 3, Jan. 16–18, and Feb. 13–15.",
+        "source": "https://silvermt.com/lift-tickets/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://silvermt.com/webcams/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "KREM 2 Cam",
+            "source": "https://silvermt.com/webcams/"
+          },
+          {
+            "name": "Mountain House",
+            "location": "Mountain House at 5,700 ft",
+            "view": "Kellogg Peak"
+          },
+          {
+            "name": "Kellogg Snow Stake",
+            "location": "Kellogg Peak",
+            "view": "Snow reference stake"
+          },
+          {
+            "name": "Kellogg Peak",
+            "location": "Kellogg Peak",
+            "view": "Upper lift terminal"
+          },
+          {
+            "name": "Snow Tubing Park",
+            "location": "On-mountain lodge",
+            "view": "Tubing hill"
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
+    "ski-saint-bruno": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Chalet principal",
+          "role": "main public ski day lodge",
+          "address": "550 Rang des Vingt-Cinq Est, Saint-Bruno, QC J3V 0G6",
+          "source": "https://skisaintbruno.ca/conditions-de-glisse/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "interactive winter slope maps for the north and south areas",
+          "note": "The operator layers the piste inventory and labels over images. A complete labeled print download remains due.",
+          "source": "https://skisaintbruno.ca/conditions-de-glisse/#pistes",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Sommet"
+          },
+          {
+            "name": "SKIGO / SNOGO"
+          },
+          {
+            "name": "Forêt Enchantée"
+          },
+          {
+            "name": "Chalet principal",
+            "feedUrl": "https://skisaintbruno.ca/webcam-chalet-principal/",
+            "format": "Operator player page"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://skisaintbruno.ca/conditions-de-glisse/#webcams",
+        "checkedOn": "2026-11-21",
+        "termsSource": "https://skisaintbruno.ca/termes-conditions/"
+      }
+    },
+    "ski-vallee-bleue": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Ski Vallée Bleue chalet",
+          "role": "public day lodge with food service",
+          "source": "https://maneige.ski/en/stations/vallee-bleue-la-station-familiale/",
+          "checkedOn": "2026-11-21"
+        }
+      ]
+    },
     "smugglers-notch-resort": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -3314,6 +6816,431 @@
           "season": "2024/25"
         }
       ]
+    },
+    "soldier-mountain-ski-area": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Base Lodge",
+          "role": "Winter skier arrival and lodge facilities",
+          "source": "https://soldiermountain.com/restrictions-policies/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Base parking",
+          "location": "Short walk from the lodge to the lifts",
+          "source": "https://soldiermountain.com/restrictions-policies/",
+          "checkedOn": "2026-11-21",
+          "policy": "First come, first served. Accessible stalls require a permit. Load and unload only in signed zones.",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "general guest day parking"
+            }
+          ],
+          "rateSource": "https://soldiermountain.com/restrictions-policies/"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Downhill trails and glades, lift lines, and base lodge",
+          "source": "https://www.indyskipass.com/our-resorts/soldier-mountain",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.indyskipass.com/sites/default/files/2023-11/Soldier_Trailmap-Digital_Final_211203_V1%20-%20Tucker%20Ray.jpg",
+          "season": "2021",
+          "note": "Operator artwork published by the pass issuer. File identifies December 2021 revision."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 74,
+            "appliesTo": "regular window day ticket"
+          },
+          {
+            "amount": 29,
+            "appliesTo": "temporary first-time visitor online promotion"
+          }
+        ],
+        "note": "The $29 Welcome Pass is a limited-time 2026/27 offer. The operator verifies first-visit eligibility.",
+        "source": "https://soldiermountain.com/welcome-pass/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "spirit-mountain": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Skyline Chalet",
+          "role": "main alpine day lodge with tickets, rentals, dining and lessons",
+          "source": "https://spiritmt.com/winter/snow-report/",
+          "checkedOn": "2026-11-21",
+          "address": "9500 Spirit Mountain Place, Duluth, MN",
+          "coordinates": [
+            -92.21673,
+            46.717956
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/146915066"
+        },
+        {
+          "name": "Grand Avenue Chalet",
+          "role": "lower public base with ticketing, dining and Nordic access",
+          "source": "https://spiritmt.com/hours/",
+          "checkedOn": "2026-11-21",
+          "address": "8551 Grand Avenue, Duluth, MN",
+          "coordinates": [
+            -92.20572,
+            46.715556
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/1150220697"
+        }
+      ],
+      "mapPin": {
+        "base": "Skyline Chalet",
+        "coordinates": [
+          -92.21673,
+          46.717956
+        ],
+        "result": "updated",
+        "source": "https://spiritmt.com/winter/snow-report/",
+        "checkedOn": "2026-11-21",
+        "mapSource": "https://www.openstreetmap.org/way/146915066"
+      },
+      "parking": [
+        {
+          "name": "Skyline Chalet lot",
+          "location": "At the main alpine visitor chalet",
+          "source": "https://spiritmt.com/winter/snow-report/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Grand Avenue Chalet lot",
+          "location": "At the lower base on Grand Avenue",
+          "source": "https://spiritmt.com/winter/snow-report/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "source": "https://spiritmt.com/live-cam/",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Spirit Mountain live camera",
+            "format": "resortcams-embed",
+            "embedUrl": "https://www.resortcams.com/webcams/spirit-mountain/iframe/"
+          }
+        ]
+      },
+      "trailMaps": [
+        {
+          "coverage": "Full alpine trail system, Skyline Chalet, and Grand Avenue Chalet",
+          "source": "https://spiritmt.com/winter/snow-report/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://spiritmt.com/wp-content/uploads/2025/12/Map_for_2025-11.png",
+          "season": "2025/26"
+        },
+        {
+          "coverage": "Nordic Center at Grand and connector",
+          "source": "https://spiritmt.com/winter/nordic/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://spiritmt.com/wp-content/uploads/2024/12/Nordic-Center-At-Grand-Single-Map.pdf"
+        },
+        {
+          "coverage": "Upper Nordic trail network",
+          "source": "https://spiritmt.com/winter/nordic/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://spiritmt.com/wp-content/uploads/2024/01/Upper-Nordic.jpg"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 83,
+            "appliesTo": "online full-day alpine ticket"
+          },
+          {
+            "amount": 88,
+            "appliesTo": "full-day alpine ticket at the counter"
+          }
+        ],
+        "note": "Ages 13 and older. Tax is added.",
+        "source": "https://spiritmt.com/winter/tickets-rentals/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "steamboat-ski-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Steamboat Square",
+          "role": "main gondola base, ticket office and guest services",
+          "address": "2305 Mt. Werner Circle, Steamboat Springs, CO 80487",
+          "source": "https://www.steamboat.com/plan-your-trip/~/link.aspx?_id=48B4C2F628CF47BEB6422EC0AF45F071&_z=z",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Thunderhead Lodge",
+          "role": "mid-mountain lodge at 9,080 ft",
+          "source": "https://www.steamboat.com/explore/~/link.aspx?_id=E809B87C2ACA49FC9EDF5F424B455EFC&_z=z",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Four Points Lodge",
+          "role": "on-mountain lodge at 9,716 ft",
+          "source": "https://www.steamboat.com/explore/~/link.aspx?_id=E809B87C2ACA49FC9EDF5F424B455EFC&_z=z",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "Steamboat Square gondola base",
+        "coordinates": [
+          -106.80336,
+          40.457073
+        ],
+        "result": "confirmed",
+        "source": "https://www.steamboat.com/winter-parking/faqs",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "Meadows Lot",
+          "location": "satellite visitor lot",
+          "source": "https://www.steamboat.com/winter-parking/parking-basics",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "non-peak Monday–Thursday, 3+ occupants or after 1 p.m."
+            },
+            {
+              "amount": 15,
+              "currency": "USD",
+              "appliesTo": "Friday–Sunday and peak days before 1 p.m. with 1–2 occupants"
+            }
+          ],
+          "policy": "Carpool parking is first come, first served. Peak dates are December 26, 2026 through January 3, 2027, February 15, and March 4."
+        },
+        {
+          "name": "Upper Knoll Lot",
+          "location": "closest carpool surface lot",
+          "source": "https://www.steamboat.com/winter-parking/parking-basics",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 20,
+              "currency": "USD",
+              "appliesTo": "non-peak Monday–Thursday"
+            },
+            {
+              "amount": 25,
+              "currency": "USD",
+              "appliesTo": "Friday–Sunday and peak days"
+            },
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "3+ occupants with advance reservation or after 1 p.m."
+            }
+          ]
+        },
+        {
+          "name": "Lower Knoll Lot",
+          "location": "near Steamboat Square",
+          "source": "https://www.steamboat.com/winter-parking/parking-basics",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 25,
+              "currency": "USD",
+              "appliesTo": "non-peak Monday–Thursday"
+            },
+            {
+              "amount": 45,
+              "currency": "USD",
+              "appliesTo": "Friday–Sunday and peak days"
+            }
+          ]
+        },
+        {
+          "name": "Steamboat Square Garage",
+          "location": "main village garage",
+          "source": "https://www.steamboat.com/winter-parking/parking-basics",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 55,
+              "currency": "USD",
+              "appliesTo": "non-peak Monday–Thursday"
+            },
+            {
+              "amount": 65,
+              "currency": "USD",
+              "appliesTo": "Friday–Sunday and peak days"
+            }
+          ],
+          "policy": "Accessible spaces available."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full winter downhill trail map",
+          "assetUrl": "https://www.steamboat.com/-/media/steamboat/maps/winter-26-27/winter-trail-map-final-2026-2027.jpg?rev=d80d7c6177a1402285dc75637d45fa12",
+          "season": "2026/27",
+          "source": "https://www.steamboat.com/the-mountain/trail-map",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "winter public base access map",
+          "assetUrl": "https://www.steamboat.com/-/media/steamboat/maps/winter-26-27/base-area-map-w2627.jpg?rev=3ec420e233424a7aa3595fdd7786f3b1",
+          "season": "2026/27",
+          "source": "https://www.steamboat.com/the-mountain/trail-map",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Mid Mountain Snow Cam",
+            "location": "Thunderhead Lodge, 9,080 ft",
+            "view": "official snowfall stake"
+          },
+          {
+            "name": "Champagne Powder Snow Cam",
+            "location": "Sunshine Peak, 10,384 ft",
+            "view": "unofficial snowfall stake"
+          },
+          {
+            "name": "Steamboat Square",
+            "location": "base, 6,900 ft"
+          },
+          {
+            "name": "Steamboat Gondola",
+            "location": "base, 6,900 ft"
+          },
+          {
+            "name": "Christie Peak Express and Wild Blue Gondola",
+            "location": "base, 6,900 ft"
+          },
+          {
+            "name": "Four Points",
+            "location": "Four Points Lodge, 9,716 ft"
+          },
+          {
+            "name": "Thunderhead",
+            "location": "Thunderhead Lodge, 9,080 ft"
+          }
+        ],
+        "termsSource": "https://www.alterramtn.co/terms-of-use",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.steamboat.com/explore/~/link.aspx?_id=E809B87C2ACA49FC9EDF5F424B455EFC&_z=z",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "sugar-bowl-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Village Lodge",
+          "role": "opening-weekend lift access and village skier services",
+          "source": "https://www.sugarbowl.com/hours",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Main Lodge",
+          "role": "resort visitor parking and main skier services",
+          "source": "https://www.sugarbowl.com/directions",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Judah Lodge",
+          "role": "secondary winter lodge and arrival at Mount Judah",
+          "source": "https://www.sugarbowl.com/trailmaps",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main Lodge lots",
+          "location": "Main Lodge approach",
+          "source": "https://www.sugarbowl.com/directions",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "ordinary first-come lots"
+            }
+          ],
+          "policy": "Use Main Lodge for early-season parking and walk to the Village."
+        },
+        {
+          "name": "Main Lodge Upper Lot",
+          "location": "preferred area at Main Lodge",
+          "source": "https://www.sugarbowl.com/directions",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 35,
+              "currency": "USD",
+              "appliesTo": "weekends and holidays, 1–2 riders"
+            },
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "3+ carpool parking when available"
+            }
+          ]
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full downhill winter map",
+          "assetUrl": "https://blog.sugarbowl.com/wp-content/uploads/maps/SugarBowl_Map_sm_2526.pdf",
+          "season": "2025/26",
+          "note": "This is the print edition linked by the operator.",
+          "source": "https://www.sugarbowl.com/trailmaps",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "village and skier services",
+          "assetUrl": "https://blog.sugarbowl.com/wp-content/uploads/2024site/pdf/maps/villageMap.pdf",
+          "source": "https://www.sugarbowl.com/trailmaps",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Powder Cam",
+            "location": "summit patrol snow stake",
+            "view": "12-hour accumulations"
+          },
+          {
+            "name": "Judah Lodge",
+            "location": "Judah Lodge",
+            "view": "Mount Judah and Jerome Hill lifts"
+          },
+          {
+            "name": "Mt. Disney",
+            "location": "Disney Nose and upper Mt. Lincoln"
+          },
+          {
+            "name": "Race Arena",
+            "location": "Van Ruiten venue"
+          }
+        ],
+        "reuse": "Linked operator viewers. Permission for independent embedding or rebroadcast remains due.",
+        "source": "https://www.sugarbowl.com/webcams",
+        "checkedOn": "2026-11-21"
+      }
     },
     "sun-peaks-resort": {
       "checkedOn": "2026-11-21",
@@ -3470,6 +7397,117 @@
         }
       ]
     },
+    "tamarack-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "The Village at Tamarack",
+          "role": "Snowfront and village ticket kiosks",
+          "source": "https://tamarackidaho.com/activities/skiing-and-snowboarding",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Alfredo Miguel Afif Mid-Mountain Lodge",
+          "role": "Mid-mountain day lodge",
+          "source": "https://cdn.brandfolder.io/VX7FCGVA/at/9tr4kxbq5vz38xm7twfqmqx/TR_26-27_Winter_Trail_Map_Final.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main Lot",
+          "location": "By the Village and snowfront",
+          "source": "https://tamarackidaho.com/getting-here",
+          "checkedOn": "2026-11-21",
+          "policy": "Skier drop-off is provided."
+        },
+        {
+          "name": "Trillium Lots",
+          "location": "By Tamarack Express and the snowfront",
+          "source": "https://tamarackidaho.com/getting-here",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Arling Lot",
+          "location": "Short walk to the Village and snowfront",
+          "source": "https://tamarackidaho.com/getting-here",
+          "checkedOn": "2026-11-21",
+          "policy": "Closest parking for Nordic trails."
+        },
+        {
+          "name": "Aspen Lot",
+          "location": "Overflow lot",
+          "source": "https://tamarackidaho.com/getting-here",
+          "checkedOn": "2026-11-21",
+          "policy": "On-demand overflow shuttle to the Village and snowfront runs about every 15 minutes."
+        }
+      ],
+      "shuttle": {
+        "description": "The operator lists a free resort Dial-A-Ride and the Aspen overflow shuttle. The Treasure Valley bus page still carries last winter’s schedule.",
+        "source": "https://tamarackidaho.com/getting-here",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Full downhill resort, the Village inset, lifts, mid-mountain lodge, and snowfront",
+          "source": "https://tamarackidaho.com/the-mountain/maps",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://cdn.brandfolder.io/VX7FCGVA/at/9tr4kxbq5vz38xm7twfqmqx/TR_26-27_Winter_Trail_Map_Final.pdf",
+          "season": "2026/27"
+        },
+        {
+          "coverage": "Village, day-skier facilities, ticket kiosks, and resort parking",
+          "source": "https://tamarackidaho.com/the-mountain/maps",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://tamarackidaho.com/wp-content/uploads/2026/01/Village-Map-Image.jpg"
+        }
+      ],
+      "webcams": {
+        "source": "https://tamarackidaho.com/about/webcams",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "Summit",
+            "embedUrl": "https://www.youtube.com/embed/3fJt-3O3bec",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Summit"
+          },
+          {
+            "name": "Mountain Lodge",
+            "embedUrl": "https://www.youtube.com/embed/t-kCPs2Epms",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Mid-Mountain Lodge"
+          },
+          {
+            "name": "Snow Stake",
+            "embedUrl": "https://www.youtube.com/embed/0RzvG2LDymc",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Mid-Mountain Lodge"
+          },
+          {
+            "name": "Osprey Meadows Golf Course",
+            "embedUrl": "https://www.youtube.com/embed/4tV07tNZ9Jg",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Osprey Meadows"
+          },
+          {
+            "name": "Marina",
+            "embedUrl": "https://www.youtube.com/embed/AjWJk4x5mGw",
+            "format": "provider HTML player",
+            "availability": "Linked player endpoint opened on November 21. Live playback is unverified.",
+            "location": "Marina"
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
     "togari-onsen-snow-resort": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -3588,6 +7626,358 @@
         "checkedOn": "2026-11-21"
       }
     },
+    "trollhaugen-ski-area": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Main Lodge",
+          "role": "main alpine day lodge beside the ticket office",
+          "source": "https://trollhaugen.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "address": "2232 100th Ave, Dresser, WI",
+          "coordinates": [
+            -92.618079,
+            45.351325
+          ],
+          "mapSource": "https://www.openstreetmap.org/way/769061050"
+        }
+      ],
+      "mapPin": {
+        "base": "Trollhaugen Main Lodge",
+        "coordinates": [
+          -92.618079,
+          45.351325
+        ],
+        "result": "updated",
+        "source": "https://trollhaugen.com/trail-map/",
+        "checkedOn": "2026-11-21",
+        "mapSource": "https://www.openstreetmap.org/way/769061050"
+      },
+      "parking": [
+        {
+          "name": "Lower and upper parking lots",
+          "location": "Ski area lots by the Main Lodge and public access road",
+          "source": "https://trollhaugen.com/wp-content/uploads/2024/09/TrailMap.png",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Tubing parking lot",
+          "location": "At the separate 2294 100th Ave snow-tubing entrance",
+          "source": "https://trollhaugen.com/directions/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Alpine trails and separate tubing and ski access lots",
+          "source": "https://trollhaugen.com/trail-map/",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://trollhaugen.com/wp-content/uploads/2024/09/TrailMap.png"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 70,
+            "appliesTo": "regular all-day ticket, opening to close"
+          }
+        ],
+        "note": "Ages 13–61. Advance online purchase is the published channel. Preseason rates depend on available terrain.",
+        "source": "https://trollhaugen.com/hours-and-rates/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "vail-mountain": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Vail Village Gondola One",
+          "role": "primary public base for opening-day lift access",
+          "source": "https://news.vailresorts.com/news-and-stories?item=123201",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Lionshead Village",
+          "role": "public Eagle Bahn Gondola base",
+          "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Golden Peak",
+          "role": "public ski school and lift base",
+          "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Cascade Village",
+          "role": "public lift access and free in-town bus connections",
+          "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "mapPin": {
+        "base": "Vail Village Gondola One",
+        "coordinates": [
+          -106.373505,
+          39.639325
+        ],
+        "result": "confirmed",
+        "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "Vail Village Parking Structure",
+          "location": "241 E Meadow Drive",
+          "source": "https://discovervail.com/parking-in-vail/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "first hour"
+            },
+            {
+              "amount": 10,
+              "currency": "USD",
+              "appliesTo": "per daytime hour after the first"
+            },
+            {
+              "amount": 30,
+              "currency": "USD",
+              "appliesTo": "non-peak daytime maximum"
+            },
+            {
+              "amount": 50,
+              "currency": "USD",
+              "appliesTo": "peak daytime maximum"
+            },
+            {
+              "amount": 60,
+              "currency": "USD",
+              "appliesTo": "parking through the 4–5 a.m. overnight charge period"
+            }
+          ],
+          "policy": "Winter rates begin November 20. Free for entries after 3 p.m. and before 4 a.m."
+        },
+        {
+          "name": "Lionshead Parking Structure",
+          "location": "395 S Frontage Road W",
+          "source": "https://discovervail.com/parking-in-vail/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "first hour"
+            },
+            {
+              "amount": 10,
+              "currency": "USD",
+              "appliesTo": "per daytime hour after the first"
+            },
+            {
+              "amount": 30,
+              "currency": "USD",
+              "appliesTo": "non-peak daytime maximum"
+            },
+            {
+              "amount": 50,
+              "currency": "USD",
+              "appliesTo": "peak daytime maximum"
+            },
+            {
+              "amount": 60,
+              "currency": "USD",
+              "appliesTo": "parking through the 4–5 a.m. overnight charge period"
+            }
+          ],
+          "policy": "Same winter rate schedule as Vail Village."
+        }
+      ],
+      "shuttle": {
+        "description": "The free town bus connects satellite parking with the main villages. Frontage Road overflow opens when the other lots fill.",
+        "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Front Side",
+          "assetUrl": "https://scene7.vailresorts.com/is/image/vailresorts/20261014_VL_front-side-winter-trail-partners_map_001?fit=constrain%2C1&hei=2467&resMode=sharp2&wid=4000",
+          "season": "2026/27",
+          "source": "https://www.vail.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Back Bowls",
+          "assetUrl": "https://scene7.vailresorts.com/is/image/vailresorts/20261014_VL_back-bowls-winter-trail-partners_map_001-1?fit=constrain%2C1&hei=2000&resMode=sharp2&wid=4000",
+          "season": "2026/27",
+          "source": "https://www.vail.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Blue Sky Basin",
+          "assetUrl": "https://scene7.vailresorts.com/is/image/vailresorts/20261014_VL_blue-sky-winter-trail-partners_map_001-1?fit=constrain%2C1&hei=3111&resMode=sharp2&wid=4000",
+          "season": "2026/27",
+          "source": "https://www.vail.com/the-mountain/about-the-mountain/trail-map.aspx",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "webcams": {
+        "cameras": [
+          {
+            "name": "The Back Bowls"
+          },
+          {
+            "name": "Gore Range"
+          },
+          {
+            "name": "Eagle’s Nest"
+          },
+          {
+            "name": "Snow Stake Summit"
+          }
+        ],
+        "termsSource": "https://www.vail.com/policies?tc_1=4",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.vail.com/the-mountain/mountain-conditions/mountain-cams.aspx",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "val-direne": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Chalet principal",
+          "role": "public skier day lodge",
+          "address": "115 route de Val-d’Irène, Sainte-Irène, QC G0J 2P0",
+          "source": "https://valdi.ski/tarifs-et-horaire/tarification.html",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "lift-served Versant Sud",
+          "assetUrl": "https://valdi.ski/images/Upload/montagne/carte_versant_sud_final_2023-2024.jpg",
+          "season": "2023/24",
+          "note": "Current page links the 2023/24 file.",
+          "source": "https://valdi.ski/montagne/carte-des-pistes.html",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Diamants Blancs, north expert sector",
+          "assetUrl": "https://valdi.ski/images/Upload/montagne/carte_diamants_blancs_final_2023-2024.jpg",
+          "season": "2023/24",
+          "note": "Current page links the 2023/24 file.",
+          "source": "https://valdi.ski/montagne/carte-des-pistes.html",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "CAD",
+        "rates": [
+          {
+            "amount": 53.55,
+            "appliesTo": "2026/27 adult full day"
+          }
+        ],
+        "note": "Taxes and the CA$5 reloadable card are additional. The north-side shuttle is purchased separately at CA$4 per trip on the bus, tax included.",
+        "source": "https://valdi.ski/tarifs-et-horaire/tarification.html",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Parc régional de Val-d’Irène",
+            "embedUrl": "https://www.skaping.com/tourisme-gaspesie/parc-regional-val-irene",
+            "format": "Skaping player"
+          }
+        ],
+        "reuse": "Operator viewing page or published player. Independent embedding and rebroadcast permission is unverified.",
+        "source": "https://www.skaping.com/tourisme-gaspesie/parc-regional-val-irene",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "white-pine-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "White Pine Base Lodge",
+          "role": "Lift tickets, lessons, and rentals under one roof",
+          "source": "https://www.whitepineresort.com/buy",
+          "checkedOn": "2026-11-21",
+          "address": "74 White Pine Road, Pinedale, WY 82941"
+        }
+      ],
+      "mapPin": {
+        "base": "White Pine Resort base lodge",
+        "coordinates": [
+          -109.7586597,
+          42.9778494
+        ],
+        "result": "updated",
+        "source": "https://www.whitepineresort.com/plan#conditions",
+        "mapSource": "https://maps.app.goo.gl/KMUd1ib27y18P8zP9",
+        "checkedOn": "2026-11-21"
+      },
+      "parking": [
+        {
+          "name": "Base lodge parking",
+          "location": "At the main lodge",
+          "source": "https://www.whitepineresort.com/plan#conditions",
+          "checkedOn": "2026-11-21",
+          "policy": "Free parking with signed accessible spaces near the entrance.",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "general guest day parking"
+            }
+          ],
+          "rateSource": "https://www.whitepineresort.com/plan#conditions"
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Fortification Mountain downhill runs, two lifts, parking, and the base lodge",
+          "source": "https://www.whitepineresort.com/play",
+          "checkedOn": "2026-11-21",
+          "assetUrl": "https://www.whitepineresort.com/s/White-Pine-Trail-Map-100.png",
+          "note": "The official download PNG has the same edition and footprint as the linked front JPG."
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 70,
+            "appliesTo": "advertised full-day adult lift ticket online"
+          }
+        ],
+        "note": "Current operator rate from its ticket page. Check dated checkout for any fees.",
+        "source": "https://www.whitepineresort.com/buy",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "source": "https://www.whitepineresort.com/play",
+        "checkedOn": "2026-11-21",
+        "cameras": [
+          {
+            "name": "White Pine ski hill camera",
+            "format": "linked AlertWest public console",
+            "availability": "The operator publishes the camera listing. Its provider console returned HTTP 403 during this check."
+          }
+        ],
+        "reuse": {
+          "status": "unverified",
+          "note": "The operator links these player endpoints. Public playback and independent embedding or rebroadcast permission remain unverified."
+        }
+      }
+    },
     "whitepia-takasu": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -3651,6 +8041,271 @@
         ],
         "note": "The joint Washigatake ticket has separate pricing.",
         "source": "https://whitepia.jp/liftticket/",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "winter-park-resort": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Balcony House Guest Services",
+          "role": "public day base services on the Winter Park side",
+          "source": "https://www.winterparkresort.com/~/link.aspx?_id=1D9EE77BEE5D4E7ABE38FE0410CE91A9&_z=z",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Lunch Rock Lodge",
+          "role": "mid-mountain facility on the Mary Jane side",
+          "source": "https://www.winterparkresort.com/the-mountain/mountain-cams",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "G Lot",
+          "location": "Winter Park base approach",
+          "source": "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Free resort shuttle November 14–April 4."
+        },
+        {
+          "name": "Old Town Lots",
+          "location": "Winter Park Drive north of the resort, including Bus Barn and Blue Spruce",
+          "source": "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ]
+        },
+        {
+          "name": "Village Parking Garage",
+          "location": "center of the Winter Park Village",
+          "source": "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 45,
+              "currency": "USD",
+              "appliesTo": "Monday–Friday full day"
+            },
+            {
+              "amount": 55,
+              "currency": "USD",
+              "appliesTo": "Saturday–Sunday full day"
+            },
+            {
+              "amount": 25,
+              "currency": "USD",
+              "appliesTo": "half day starting at noon"
+            },
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "3 p.m. until 6:59 a.m."
+            }
+          ],
+          "policy": "Top-level drop-off allows 60 minutes free with registration, then $12 per hour."
+        },
+        {
+          "name": "Vintage Lot",
+          "location": "upper terminus of the Village Cabriolet",
+          "source": "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 15,
+              "currency": "USD",
+              "appliesTo": "non-holiday weekdays"
+            },
+            {
+              "amount": 40,
+              "currency": "USD",
+              "appliesTo": "weekends and posted holidays"
+            }
+          ],
+          "policy": "Cabriolet runs during the ski season."
+        },
+        {
+          "name": "Mary Jane lots",
+          "location": "Mary Jane base side",
+          "source": "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Use the official lot map for individual locations."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full winter downhill terrain including Winter Park and Mary Jane",
+          "assetUrl": "https://www.winterparkresort.com/-/media/winter-park/winter/winterparkresort_wintertrailmap.pdf?rev=3913478cfedb4536a70c66c41ae30530",
+          "season": "2026/27",
+          "source": "https://www.winterparkresort.com/the-mountain/mountain-information/maps",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 113,
+            "appliesTo": "standard daily adult, published minimum",
+            "kind": "minimum"
+          },
+          {
+            "amount": 89,
+            "appliesTo": "select Thursday adult rate"
+          }
+        ],
+        "note": "The operator comparison lists one-day prices. Date-specific standard prices vary.",
+        "source": "https://www.winterparkresort.com/plan-your-trip/tickets-and-passes/winter-lift-tickets",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Snow Stake"
+          },
+          {
+            "name": "West Portal",
+            "location": "top of West Portal Station",
+            "view": "Winter Park base and Village"
+          },
+          {
+            "name": "Lunch Rock",
+            "location": "Lunch Rock Lodge on Mary Jane",
+            "view": "Parry Peak and Sunnyside Express"
+          },
+          {
+            "name": "Snoasis",
+            "location": "Snoasis lodge roof",
+            "view": "Explorer Express, Cranmer and Lower Rail Yard"
+          },
+          {
+            "name": "Tubing Hill"
+          },
+          {
+            "name": "Town of Winter Park",
+            "location": "Best Western Alpenglo",
+            "view": "town road and weather view",
+            "feedUrl": "https://cams.winterparkresort.com/best-western-cam.jpg",
+            "format": "JPEG still"
+          }
+        ],
+        "termsSource": "https://www.alterramtn.co/terms-of-use",
+        "reuse": "The published terms limit site content to personal use. External embedding and rebroadcast permission needs operator confirmation.",
+        "source": "https://www.winterparkresort.com/the-mountain/mountain-cams",
+        "checkedOn": "2026-11-21"
+      }
+    },
+    "wolf-creek-ski-area": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Wolf Creek Lodge",
+          "role": "main public day lodge",
+          "source": "https://wolfcreekski.com/webcams/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Prospector Grill",
+          "role": "base dining and peak-period ticket pickup",
+          "source": "https://wolfcreekski.com/tickets-passes/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Upper Lodge",
+          "role": "on-mountain dining",
+          "source": "https://wolfcreekski.com/wcs-snow-report/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Main highway-side ski area lots",
+          "location": "public skier parking on US 160",
+          "source": "https://wolfcreekski.com/parking-at-wolf-creek-ski-area-co/",
+          "checkedOn": "2026-11-21",
+          "rates": [
+            {
+              "amount": 0,
+              "currency": "USD",
+              "appliesTo": "day parking"
+            }
+          ],
+          "policy": "Follow attendant directions. Free lower-lot shuttles to the ticket office. No overnight parking."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "full downhill trail and lift network",
+          "assetUrl": "https://wolfcreekski.com/wp-content/uploads/2026/03/WolfCreekTrailMap_2026_small.pdf",
+          "note": "The print download is labeled 2026 in the asset name.",
+          "source": "https://wolfcreekski.com/area-maps/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "liftTickets": {
+        "product": "Adult full-day downhill lift ticket",
+        "currency": "USD",
+        "rates": [
+          {
+            "amount": 96,
+            "appliesTo": "regular adult dates"
+          },
+          {
+            "amount": 110,
+            "appliesTo": "published peak dates"
+          }
+        ],
+        "note": "Peak dates are Dec 20–23 and 26–31, Jan 1–2 and 16–17, Feb 12–14, and Mar 14–18. A new reloadable ticket bought online has a $2 initial charge.",
+        "source": "https://wolfcreekski.com/tickets-passes/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Base Area",
+            "location": "base of Treasure Stoke",
+            "view": "west towards Wolf Creek Lodge, Nova and Bonanza",
+            "embedUrl": "https://live2.brownrice.com/embed/wolfcreektreasure&em=1",
+            "format": "Brownrice player"
+          },
+          {
+            "name": "Summit",
+            "location": "Treasure Stoke upper terminal",
+            "view": "southeast toward Prospector Ridge and Alberta Peak",
+            "embedUrl": "https://live2.brownrice.com/embed/wolfcreeksummit",
+            "format": "Brownrice player"
+          },
+          {
+            "name": "Treasure Stoke Lift Line",
+            "location": "Treasure Stoke lower terminal",
+            "view": "west up the lift line",
+            "embedUrl": "https://live2.brownrice.com/embed/wolfcreektresurlift",
+            "format": "Brownrice player"
+          }
+        ],
+        "termsSource": "https://wolfcreekski.com/webcams/",
+        "reuse": "Operator page available. Independent embedding and rebroadcast permission unverified.",
+        "source": "https://wolfcreekski.com/webcams/",
         "checkedOn": "2026-11-21"
       }
     }

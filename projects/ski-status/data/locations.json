@@ -6722,6 +6722,28 @@
       "timeZone": "America/New_York"
     },
     {
+      "id": "mount-st-louis-moonstone",
+      "coordinates": [
+        -79.666407,
+        44.622961
+      ],
+      "upstream": [
+        "https://openskimap.org/?obj=59502ccf9594422399bf75afaa641f1943de0dc2",
+        "https://skimap.org/SkiAreas/view/132"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=59502ccf9594422399bf75afaa641f1943de0dc2",
+        "lifts": 10,
+        "downhillKm": 15.5174,
+        "elevationM": [
+          215.4,
+          370.3
+        ],
+        "namedDownhillRuns": 41
+      },
+      "timeZone": "America/Toronto"
+    },
+    {
       "id": "mount-sunapee",
       "coordinates": [
         -72.075288,
@@ -9116,6 +9138,27 @@
         "https://www.openstreetmap.org/way/31766959"
       ],
       "timeZone": "America/New_York"
+    },
+    {
+      "id": "searchmont-resort",
+      "coordinates": [
+        -84.04493,
+        46.766822
+      ],
+      "upstream": [
+        "https://openskimap.org/?obj=acf98e56a3ab6ac1fdc702835ad737ae68622058"
+      ],
+      "mappedTerrain": {
+        "source": "https://openskimap.org/?obj=acf98e56a3ab6ac1fdc702835ad737ae68622058",
+        "lifts": 5,
+        "downhillKm": 8.7077,
+        "elevationM": [
+          234.4,
+          424.6
+        ],
+        "namedDownhillRuns": 18
+      },
+      "timeZone": "America/Toronto"
     },
     {
       "id": "see",

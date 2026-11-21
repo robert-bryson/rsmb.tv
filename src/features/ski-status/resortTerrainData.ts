@@ -1,6 +1,8 @@
 import manifest from '../../../projects/ski-status/data/resort-terrain.json';
+import { skiAssetUrl, skiTerrainFile } from '../../../shared/skiAssets';
 import type { SkiArea } from './catalog';
 
+export const skiTerrainArchiveUrl = skiAssetUrl(skiTerrainFile(manifest.archiveSha256));
 export const resortTerrainMinZoom = manifest.minZoom;
 const groupsByArea = new Map(Object.entries(manifest.groupsByArea));
 

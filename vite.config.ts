@@ -11,6 +11,9 @@ import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
 import { publicAssetsPlugin } from './scripts/public-assets-plugin.ts'
 import { siteSearchPlugin } from './scripts/site-search-plugin.ts'
 import { skiConditionsDevPlugin } from './scripts/ski-conditions-dev-plugin.ts'
+import { skiAssetsRoot } from './scripts/ski-asset-files.ts'
+import { skiAssetsPlugin } from './scripts/ski-assets-plugin.ts'
+import { skiVisitorDataPlugin } from './scripts/ski-visitor-data-plugin.ts'
 
 const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
@@ -42,6 +45,12 @@ export default defineConfig(({ mode, command }) => {
     tripContentPlugin(),
     siteSearchPlugin(),
     publicAssetsPlugin(),
+    skiAssetsPlugin({
+      root: skiAssetsRoot(process.env.SKI_ASSETS_ROOT ?? localEnv.SKI_ASSETS_ROOT),
+      releaseUrl: process.env.SKI_ASSETS_BASE_URL ?? localEnv.SKI_ASSETS_BASE_URL,
+      includeInBuild: command === 'build' && mode !== 'trip-test' && mode !== 'test',
+    }),
+    skiVisitorDataPlugin(),
     skiConditionsDevPlugin(skiConditionsMode),
     tailwindcss(),
   ],

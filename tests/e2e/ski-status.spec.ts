@@ -1,15 +1,26 @@
 import AxeBuilder from '@axe-core/playwright';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { expect, test, type Locator, type Page, type Response } from '@playwright/test';
+import { expect, test, type JSHandle, type Locator, type Page, type Response, type Route } from '@playwright/test';
 import type { GeoJSONSource, Map as MapLibreMap, MapSourceDataEvent, StyleSpecification } from 'maplibre-gl';
+import sharp from 'sharp';
 import locations from '../../projects/ski-status/data/locations.json' with { type: 'json' };
 import resortBases from '../../projects/ski-status/data/resort-bases.json' with { type: 'json' };
 import { SKI_TERRAIN_ROUTE, skiTerrainArchivePath, verifyRenderedSkiTerrain, verifySkiTerrainResponse } from '../../scripts/release-ski-terrain.ts';
+import { hasSkiAsset, readSkiAsset, skiAssetsRoot, skiTerrainAsset } from '../../scripts/ski-asset-files.ts';
+import { skiArchiveAssetUrl, skiArchiveIndexUrl, type SkiArchiveAsset } from '../../shared/skiArchive.ts';
+import { skiAssetUrl } from '../../shared/skiAssets.ts';
+import { passIconUrls } from '../../src/features/ski-status/passIcons.ts';
 import { readSkiMapCamera } from '../../src/features/ski-status/skiMapArea.ts';
+import { snowDepthTileEndpoint } from '../../src/features/ski-status/skiMapOverlays.ts';
+import { highwayShieldLayer, regionalRoadLayer } from '../../src/features/ski-status/skiMapStyle.ts';
 
 const path = '/projects/ski-status/map';
 const styleUrl = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json*';
+const hasTerrain = hasSkiAsset(skiTerrainAsset);
+const hasIcons = hasSkiAsset('runtime/pass-icons/ikon.png');
+let fixtureIcon: Promise<Buffer> | undefined;
+let fixtureTerrain: Promise<Buffer> | undefined;
 const baseStyle: StyleSpecification = {
     version: 8, sources: {}, layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#171b24' } }],
 };
@@ -18,8 +29,35 @@ type ReviewWindow = Window & {
     skiStatusMap?: MapLibreMap;
 };
 
+async function serveFixtureTerrain(route: Route) {
+    fixtureTerrain ??= readFile(new URL('../fixtures/ski-status/terrain.pmtiles', import.meta.url));
+    const archive = await fixtureTerrain;
+    const contentType = 'application/octet-stream';
+    const range = route.request().headers().range;
+    if (!range) return route.fulfill({ body: archive, contentType });
+    const match = /^bytes=(\d+)-(\d+)$/.exec(range);
+    if (!match || Number(match[1]) >= archive.length || Number(match[1]) > Number(match[2])) {
+        return route.fulfill({ status: 416, headers: { 'content-range': `bytes */${archive.length}` } });
+    }
+    const start = Number(match[1]);
+    const end = Math.min(Number(match[2]), archive.length - 1);
+    return route.fulfill({
+        status: 206, contentType, body: archive.subarray(start, end + 1),
+        headers: { 'content-range': `bytes ${start}-${end}/${archive.length}` },
+    });
+}
+
 async function prepare(page: Page, style: StyleSpecification | null = baseStyle) {
     await page.route('https://**/*', route => route.abort());
+    await page.route(url => url.pathname === skiArchiveIndexUrl, route => route.fulfill({ json: [] }));
+    if (!hasTerrain) await page.route(url => url.pathname === skiAssetUrl(skiTerrainAsset), serveFixtureTerrain);
+    if (!hasIcons) {
+        // Keep the UI tests independent of the NAS in CI.
+        await page.route(/\/data\/ski-status\/assets\/runtime\/(?:resort-icons|pass-icons)\//, async route => {
+            fixtureIcon ??= sharp({ create: { width: 40, height: 40, channels: 4, background: '#88aacc' } }).png().toBuffer();
+            await route.fulfill({ body: await fixtureIcon, contentType: 'image/png' });
+        });
+    }
     if (style) await page.route(styleUrl, route => {
         expect(new URL(route.request().url()).searchParams.get('key')).toBe('browser-test-key');
         return route.fulfill({ json: style, headers: { 'access-control-allow-origin': '*' } });
@@ -77,7 +115,7 @@ function setPass(page: Page, name: string, checked = true) {
 }
 
 function setColor(page: Page, value: string) {
-    return inDialog(page, 'Layers', dialog => dialog.getByLabel('Color by', { exact: true }).selectOption(value));
+    return inDialog(page, 'Layers', dialog => dialog.getByLabel('Map markers', { exact: true }).selectOption(value));
 }
 
 function setLayer(page: Page, name: string, checked: boolean) {
@@ -233,6 +271,10 @@ test('opens map source credits and data downloads from the attribution button', 
         ['Terrain data', 'ski-status-resort-terrain.pmtiles'],
     ]) {
         const link = map.getByRole('link', { name: label, exact: true });
+        await expect(link).toHaveAttribute('download', filename);
+        if (label === 'Terrain data') {
+            await expect(link).toHaveAttribute('href', skiAssetUrl(skiTerrainAsset));
+        }
         const [download] = await Promise.all([page.waitForEvent('download'), link.click()]);
         expect(download.suggestedFilename()).toBe(filename);
         expect(await download.failure()).toBeNull();
@@ -289,6 +331,38 @@ test('shows the union of selected passes in the map, results, and Compare', asyn
     await renderer.dispose();
 });
 
+test('keeps the local map camera when pass filters change', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const camera = { center: [-111.72, 40.7] as [number, number], zoom: 9.5, bearing: -12, pitch: 20 };
+    const liveCamera = () => renderer.evaluate(map => ({
+        center: map.getCenter().toArray(), zoom: map.getZoom(), bearing: map.getBearing(), pitch: map.getPitch(),
+    }));
+    const memberships = () => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+        const ids = data?.type === 'FeatureCollection' ? new Set(data.features.map(feature => feature.id)) : new Set();
+        return { alta: ids.has('alta'), parkCity: ids.has('park-city-mountain') };
+    });
+    await renderer.evaluate((map, camera) => { map.jumpTo(camera); }, camera);
+    await expect.poll(() => mapCamera(page)).toEqual(camera);
+    const start = await liveCamera();
+    const passes = page.getByRole('group', { name: 'Pass filters' });
+    for (const [pass, alta, parkCity] of [['Ikon', true, false], ['Epic', true, true], ['Ikon', false, true], ['Epic', true, true]] as const) {
+        await passes.getByRole('button', { name: pass, exact: true }).click();
+        await expect.poll(memberships).toEqual({ alta, parkCity });
+        expect(await liveCamera()).toEqual(start);
+        await expect.poll(() => mapCamera(page)).toEqual(camera);
+    }
+
+    await setPass(page, 'Epic');
+    await expect.poll(memberships).toEqual({ alta: false, parkCity: true });
+    expect(await liveCamera()).toEqual(start);
+    await page.getByRole('button', { name: 'Fit results', exact: true }).click();
+    await expect.poll(() => mapCamera(page)?.zoom ?? camera.zoom).toBeLessThan(camera.zoom);
+    await renderer.dispose();
+});
+
 test('keeps map controls within the phone viewport and gives the landscape map room', async ({ page }) => {
     const sizes = [{ width: 320, height: 700 }, { width: 390, height: 844 }, { width: 640, height: 360 }];
     await page.setViewportSize(sizes[0]);
@@ -331,6 +405,103 @@ test('keeps map controls within the phone viewport and gives the landscape map r
             expect(zoom.y + zoom.height).toBeLessThanOrEqual(canvas.y + canvas.height);
         }
     }
+});
+
+test('anchors Map layers to the map and keeps panning, zooming, and keyboard focus usable', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    await page.route(`${snowDepthTileEndpoint}**`, route => route.fulfill({
+        contentType: 'image/png', body: tile, headers: { 'access-control-allow-origin': '*' },
+    }));
+    const renderer = await captureMap(page);
+    await findWhaleback(page, renderer);
+    await result(page, 'Whaleback Mountain').click();
+    await expect.poll(() => mapCamera(page)?.zoom).toBeCloseTo(9);
+
+    const mapRegion = page.getByRole('region', { name: 'Map of ski areas' });
+    const button = mapRegion.getByRole('button', { name: 'Layers', exact: true });
+    const panel = mapRegion.getByRole('dialog', { name: 'Map layers', exact: true });
+    await expect(button).toHaveAttribute('aria-expanded', 'false');
+    await button.press('Enter');
+    await expect(button).toHaveAttribute('aria-expanded', 'true');
+    await expect(panel.getByLabel('Map markers')).toBeFocused();
+    await expect(panel).not.toHaveAttribute('aria-modal', 'true');
+    const panelBounds = (await panel.boundingBox())!;
+    const buttonBounds = (await button.boundingBox())!;
+    const mapBounds = (await mapRegion.boundingBox())!;
+    expect(panelBounds.y - (buttonBounds.y + buttonBounds.height)).toBeLessThan(12);
+    expect(panelBounds.y).toBeGreaterThanOrEqual(buttonBounds.y + buttonBounds.height);
+    expect(buttonBounds.x - (panelBounds.x + panelBounds.width)).toBeLessThan(12);
+    expect(panelBounds.x).toBeGreaterThan(mapBounds.x + mapBounds.width / 2);
+
+    const camera = mapCamera(page);
+    await panel.getByRole('checkbox', { name: 'Snow depth', exact: true }).check();
+    await expect.poll(() => renderer.evaluate(map => Boolean(map.getLayer('ski-snow-depth')))).toBe(true);
+    await expect(panel.getByRole('region', { name: 'Estimated snow depth (in)' })).toBeVisible();
+    expect(mapCamera(page)).toEqual(camera);
+    const { violations } = await new AxeBuilder({ page }).include('#ski-map-layers')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    expect(violations).toEqual([]);
+
+    const start = camera!.center;
+    await page.mouse.move(mapBounds.x + 60, mapBounds.y + 180);
+    await page.mouse.down();
+    await page.mouse.move(mapBounds.x + 160, mapBounds.y + 200, { steps: 8 });
+    await page.mouse.up();
+    await expect.poll(() => mapCamera(page)?.center).not.toEqual(start);
+    await expect(panel).toBeVisible();
+    await mapRegion.getByRole('button', { name: 'Zoom in', exact: true }).click();
+    await expect.poll(() => mapCamera(page)?.zoom).toBeGreaterThan(9);
+    await expect(panel).toBeVisible();
+
+    await panel.getByRole('checkbox', { name: 'Snow depth', exact: true }).press('Escape');
+    await expect(panel).toBeHidden();
+    await expect(button).toBeFocused();
+    await expect(button).toHaveAttribute('aria-expanded', 'false');
+    await expect(resort(page, 'Whaleback Mountain')).toBeVisible();
+    await button.click();
+    const search = page.getByRole('searchbox', { name: 'Search areas' });
+    await search.click();
+    await expect(panel).toBeHidden();
+    await expect(search).toBeFocused();
+    await renderer.dispose();
+});
+
+test('keeps Map layers scrollable beside zoom on a phone with resort details open', async ({ page }) => {
+    const sizes = [{ width: 320, height: 700 }, { width: 640, height: 360 }];
+    await page.setViewportSize(sizes[0]);
+    await prepare(page);
+    await page.goto(`${path}?status=all&view=map&area=whaleback&skiTerrain=0&snowDepth=1`);
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    const mapRegion = page.getByRole('region', { name: 'Map of ski areas' });
+    const button = mapRegion.getByRole('button', { name: 'Layers', exact: true });
+    const panel = mapRegion.getByRole('dialog', { name: 'Map layers', exact: true });
+    for (const size of sizes) {
+        await page.setViewportSize(size);
+        await button.click();
+        await expect(panel).toBeInViewport({ ratio: 1 });
+        await expect(panel.getByLabel('Map markers')).toBeInViewport({ ratio: 1 });
+        const map = (await mapRegion.boundingBox())!;
+        const bounds = (await panel.boundingBox())!;
+        expect(bounds.x).toBeGreaterThanOrEqual(map.x);
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(map.x + map.width);
+        expect(bounds.y + bounds.height).toBeLessThanOrEqual(map.y + map.height);
+        expect(await panel.evaluate(element => element.scrollWidth)).toBeLessThanOrEqual(Math.ceil(bounds.width));
+        for (const name of ['Zoom in', 'Zoom out']) {
+            await mapRegion.getByRole('button', { name, exact: true }).click({ trial: true });
+        }
+        const source = panel.getByRole('link', { name: 'NOAA source', exact: true });
+        await source.scrollIntoViewIfNeeded();
+        await expect(source).toBeInViewport({ ratio: 1 });
+        await panel.getByRole('button', { name: 'Close', exact: true }).click();
+        await expect(button).toBeFocused();
+        await expect(resort(page, 'Whaleback Mountain')).toBeVisible();
+    }
+    await button.click();
+    await selectView(page, 'Compare');
+    await expect(panel).toBeHidden();
+    await selectView(page, 'Map');
+    await expect(button).toHaveAttribute('aria-expanded', 'false');
 });
 
 test('pages through the catalog with the keyboard without loading the map renderer', async ({ page }) => {
@@ -575,6 +746,114 @@ test('opens the Sunshine gondola base and shows sourced season dates, snow, and 
     await expect(details).toBeVisible();
     await expect(results(page)).toBeHidden();
     await renderer.dispose();
+});
+
+test('shows batch visitor records in resort details on a narrow screen', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 740 });
+    await prepare(page);
+    await page.goto(`${path}?view=table&status=all&area=banff-sunshine`);
+    const visitor = resort(page, 'Banff Sunshine Village').getByRole('region', { name: 'Visitor information', exact: true });
+    await expect(visitor).toContainText('2026/27 season');
+    await expect(visitor.locator('summary').filter({ hasText: 'Lift tickets' })).toContainText('CA$49');
+
+    await visitor.getByText('Trail maps', { exact: true }).click();
+    await expect(visitor.getByRole('link', { name: 'Goat’s Eye Mountain and the ski-out' })).toHaveAttribute('href', /25_TrailMap_GoatsEye_web\.pdf$/);
+    await expect(visitor.getByRole('link', { name: 'Map source' }).first()).toHaveAttribute('href', /skibanff\.com\/the-mountain\/lifts-terrain\/trail-maps$/);
+    await visitor.getByText('Lift tickets', { exact: true }).click();
+    await expect(visitor.getByText('Adult full-day lift ticket', { exact: true })).toBeVisible();
+    await expect(visitor.getByText(/early-season adult full day at the window/)).toBeVisible();
+    await expect(visitor.getByRole('link', { name: 'Ticket prices and terms' })).toHaveAttribute('href', /skibanff\.com\/the-mountain\/mountain-report/);
+
+    await visitor.getByText('Bases and parking', { exact: true }).click();
+    await expect(visitor.getByRole('link', { name: 'Sunshine Gondola base', exact: true }))
+        .toHaveAttribute('href', /51\.114965%2C-115\.763609/);
+    await expect(visitor.getByRole('link', { name: 'Creekside Lodge', exact: true })).toBeVisible();
+    const parking = visitor.getByRole('region', { name: 'Parking', exact: true });
+    await expect(parking.getByText('Free', { exact: true })).toBeVisible();
+    await expect(parking).toContainText('A valid Parks Canada pass is required.');
+
+    await visitor.getByText('Webcams', { exact: true }).click();
+    await expect(visitor.getByRole('link', { name: 'Village from Wardens Cabin' })).toHaveAttribute('href', 'https://www.skibanff.com/webcams');
+    await expect(visitor.getByRole('link', { name: 'Aurora Cam', exact: true })).toHaveAttribute('href', 'https://cameras.skibanff.com/dynamic/10m');
+    await expect(visitor.locator('iframe, video, img')).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+    const { violations } = await new AxeBuilder({ page }).include('.ski-visitor-info')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    expect(violations).toEqual([]);
+
+    await page.goto(`${path}?view=table&status=all&area=pats-peak`);
+    const patsPeak = resort(page, 'Pats Peak').getByRole('region', { name: 'Visitor information', exact: true });
+    await patsPeak.getByText('Webcams', { exact: true }).click();
+    await expect(patsPeak.getByRole('link', { name: 'Pats Peak Live', exact: true }))
+        .toHaveAttribute('href', 'https://www.youtube.com/watch?v=KFjl8wPJvyg');
+});
+
+test('uses NAS icon previews and trail maps in local resort details', async ({ page }) => {
+    await prepare(page);
+    const fields = {
+        areaId: 'big-moose', checkedOn: '2026-11-21', sha256: 'a'.repeat(64), byteCount: 10,
+        source: 'https://img1.wsimg.com/blobby/go/d9686d90-24b3-48b8-a200-b81ae5e14909/BigMooseMap_web%20(1).pdf',
+    };
+    const trailMap: SkiArchiveAsset = {
+        ...fields, kind: 'trail map', edition: 'undated',
+        relativePath: 'trail-maps/big-moose/undated/Big Moose (1).pdf',
+        coverage: 'Lower lift-served mountain and labeled upper-mountain routes',
+    };
+    const iconDigest = 'b'.repeat(64);
+    const [mapIcon, detailsIcon] = [40, 84].map((size): SkiArchiveAsset => ({
+        ...fields, kind: 'icon variant', source: 'https://example.test/big-moose.png', sourceSha256: iconDigest,
+        relativePath: `resort-icons/big-moose/${iconDigest}/${size === 40 ? 'map' : 'details'}-${size}.png`,
+    }));
+    for (const [asset, size] of [[mapIcon, 40], [detailsIcon, 84]] as const) {
+        const { pathname } = new URL(skiArchiveAssetUrl(asset), 'http://example.test');
+        const body = await sharp({ create: { width: size, height: size, channels: 4, background: '#55a0d0' } }).png().toBuffer();
+        await page.route(url => url.pathname === pathname, route => route.fulfill({ body, contentType: 'image/png' }));
+    }
+    let sendArchive = () => {};
+    const waitForArchive = new Promise<void>(resolve => { sendArchive = resolve; });
+    let online = true;
+    await page.route(url => url.pathname === skiArchiveIndexUrl, async route => {
+        await waitForArchive;
+        return online ? route.fulfill({ json: [trailMap, mapIcon, detailsIcon] }) : route.fulfill({ status: 503 });
+    });
+
+    const renderer = await captureMap(page);
+    sendArchive();
+    await expect.poll(() => renderer.evaluate(map => {
+        if (!map.hasImage('ski-resort-image-big-moose')) return [];
+        const { data, width, height } = map.getImage('ski-resort-image-big-moose').data;
+        const start = (Math.floor(height / 2) * width + Math.floor(width / 2)) * 4;
+        return Array.from(data.slice(start, start + 4));
+    })).toEqual([85, 160, 208, 255]);
+    await page.getByRole('searchbox', { name: 'Search areas' }).fill('Big Moose');
+    await result(page, 'Big Moose').click();
+    const details = resort(page, 'Big Moose');
+    const logo = details.locator('.ski-resort-icon');
+    await expect(logo).toHaveAttribute('src', skiArchiveAssetUrl(detailsIcon));
+    await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(84);
+
+    const visitor = details.getByRole('region', { name: 'Visitor information', exact: true });
+    await visitor.getByText('Trail maps', { exact: true }).click();
+    const map = visitor.getByRole('link', { name: trailMap.coverage, exact: true });
+    await expect(map).toHaveAttribute('href', skiArchiveAssetUrl(trailMap));
+    await expect(visitor.getByText('PDF · Edition undated · NAS copy')).toBeVisible();
+    await expect(visitor.getByRole('link', { name: 'Map source' }).first()).toHaveAttribute('href', 'https://skibigmoose.com/trail-map');
+
+    await renderer.dispose();
+    const detailsUrl = new URL(skiArchiveAssetUrl(detailsIcon), 'http://example.test');
+    await page.route(url => url.pathname === detailsUrl.pathname, route => route.abort());
+    await page.reload();
+    await expect(logo).toHaveAttribute('src', skiArchiveAssetUrl(mapIcon));
+    await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(40);
+    const mapUrl = new URL(skiArchiveAssetUrl(mapIcon), 'http://example.test');
+    await page.route(url => url.pathname === mapUrl.pathname, route => route.abort());
+    await page.reload();
+    await expect(logo).toHaveCount(0);
+
+    online = false;
+    await page.reload();
+    await visitor.getByText('Trail maps', { exact: true }).click();
+    await expect(map).toHaveAttribute('href', trailMap.source);
 });
 
 test('applies the Indy Add-On home area across reloads and clears it when the product changes', async ({ page }) => {
@@ -1377,6 +1656,33 @@ test('draws individual resort icons and changes the marker mode without moving t
     await renderer.dispose();
 });
 
+test('uses contrasting logo backings and explains missing operating reports on hover', async ({ page }) => {
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const backings = () => renderer.evaluate(map => ['stowe', 'alta'].map(id => {
+        const image = map.hasImage(`ski-resort-image-${id}`) && map.getImage(`ski-resort-image-${id}`).data;
+        if (!image) return null;
+        const offset = (2 * image.width + Math.floor(image.width / 2)) * 4;
+        return Array.from(image.data.slice(offset, offset + 4));
+    }));
+    if (hasIcons) await expect.poll(backings).toEqual([[237, 245, 250, 255], [24, 41, 56, 255]]);
+
+    const center = resortPoint('stowe');
+    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 8.6 }); }, center);
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-icons'] })
+        .some(feature => feature.properties.areaId === 'stowe'))).toBe(true);
+    const position = await renderer.evaluate((map, center) => map.project(center), center);
+    await page.getByTestId('ski-status-map').locator('canvas').hover({ position: { x: position.x, y: position.y } });
+    const preview = page.getByRole('group', { name: 'Stowe Mountain Resort map preview' });
+    await expect(preview).toContainText('Skiing status unknown');
+    await expect(preview.getByText('No verified operating report for today.')).toBeVisible();
+    const conditions = preview.getByRole('link', { name: 'Check official conditions' });
+    await expect(conditions).toHaveAttribute('href', 'https://www.stowe.com/the-mountain/mountain-conditions/terrain-and-lift-status');
+    await conditions.hover();
+    await expect(conditions).toBeVisible();
+    await renderer.dispose();
+});
+
 test('draws overlapping pass badges on the globe and highlights a selected resort', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
@@ -1439,8 +1745,9 @@ test('selects a small mountain icon on the globe without changing the zoom', asy
 test('shows a mountain when a resort icon fails and restores the icons after a background retry', async ({ page }) => {
     await prepare(page, null);
     let failedImage = false;
-    await page.route(/\/resort-icons\/whaleback\.png(?:\?|$)/, route => {
-        if (route.request().resourceType() !== 'image') return route.fallback();
+    let unavailable = true;
+    await page.route(/\/runtime\/resort-icons\/[a-f0-9]{64}\/whaleback\.png$/, route => {
+        if (!unavailable || route.request().resourceType() !== 'image') return route.fallback();
         failedImage = true;
         return route.abort();
     });
@@ -1454,16 +1761,18 @@ test('shows a mountain when a resort icon fails and restores the icons after a b
     }));
     await expect.poll(icons).toEqual({ mountain: true, available: true, missing: false, whaleback: true });
     expect(failedImage).toBe(true);
+    unavailable = false;
     await page.route(styleUrl, route => route.fulfill({ json: baseStyle, headers: { 'access-control-allow-origin': '*' } }));
     await page.getByRole('button', { name: 'Retry background', exact: true }).click();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
-    await expect.poll(icons).toEqual({ mountain: true, available: true, missing: false, whaleback: true });
+    await expect.poll(icons).toEqual({ mountain: true, available: true, missing: true, whaleback: true });
     await renderer.dispose();
 });
 
-test('keeps a fallback dot if a pass image fails and restores other badges after a background retry', async ({ page }) => {
+test('keeps a fallback dot if a pass image fails and restores the missing badge after a background retry', async ({ page }) => {
     await prepare(page, null);
-    await page.route(/\/pass-icons\/indy\.png\?no-inline$/, route => route.abort());
+    let unavailable = true;
+    await page.route(url => url.pathname === passIconUrls.indy, route => unavailable ? route.abort() : route.fallback());
     const renderer = await captureMap(page, { state: 'degraded' });
     await setColor(page, 'pass');
     const anotherPassBadge = () => renderer.evaluate(map => map.hasImage('ski-status-pass-badge-ikon-plus'));
@@ -1474,11 +1783,13 @@ test('keeps a fallback dot if a pass image fails and restores other badges after
     await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-points'] })
         .some(feature => feature.properties.areaId === 'whaleback'))).toBe(true);
 
+    unavailable = false;
     await page.route(styleUrl, route => route.fulfill({ json: baseStyle, headers: { 'access-control-allow-origin': '*' } }));
     await page.getByRole('button', { name: 'Retry background', exact: true }).click();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
     expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
     await expect.poll(anotherPassBadge).toBe(true);
+    await expect.poll(() => renderer.evaluate(map => map.hasImage('ski-status-pass-badge-indy'))).toBe(true);
     await renderer.dispose();
 });
 
@@ -1527,7 +1838,7 @@ test('shows the sorted field with the map metric and carries sorting into Compar
     await expect(list.locator('li').first()).toContainText('Park City Mountain');
     await expect(list.locator('li').first().locator('dt')).toHaveText('Skiable area');
     await expect(list.locator('li').first()).toContainText('Summit elevation · 10,026 ft');
-    await expect(list.locator('li').first()).toContainText('No report');
+    await expect(list.locator('li').first()).toContainText('Skiing status unknown');
     await expect(page).toHaveURL(/sort=acres%3Adesc/);
     await page.reload();
     await list.getByRole('combobox', { name: 'Sort results' }).selectOption('liftCount');
@@ -1544,7 +1855,112 @@ test('shows the sorted field with the map metric and carries sorting into Compar
 
 const tile = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==', 'base64');
 
-test('loads terrain at detail zoom and gradually increases hillshade over CARTO', async ({ page }) => {
+function evaluatedPaint(renderer: JSHandle<MapLibreMap>, layer: string, property: string) {
+    return renderer.evaluate((map, { layer, property }) => {
+        const paint = map.getLayer(layer)?.paint as {
+            get: (key: string) => number | { value: { kind: string; value?: number } } | undefined;
+        } | undefined;
+        const value = paint?.get(property);
+        return typeof value === 'number' ? value : value?.value.kind === 'constant' ? value.value.value : undefined;
+    }, { layer, property });
+}
+
+test('fades in only major highways at regional zoom above the snow and relief layers', async ({ page }) => {
+    const roadsUrl = 'https://tiles.example.test/roads/';
+    await prepare(page, {
+        ...baseStyle,
+        sources: { protomaps: { type: 'vector', tiles: [`${roadsUrl}{z}/{x}/{y}.mvt`], minzoom: 6, maxzoom: 6 } },
+        layers: [
+            ...baseStyle.layers,
+            { id: 'road_mot_case_noramp', type: 'line', source: 'protomaps', 'source-layer': 'roads', minzoom: 5, paint: { 'line-color': '#1a1a1a' } },
+            { id: 'road_minor_case', type: 'line', source: 'protomaps', 'source-layer': 'roads', minzoom: 13 },
+            { id: 'place_city_dot_z7', type: 'symbol', source: 'protomaps', 'source-layer': 'places' },
+        ],
+    });
+    // One vector tile with parallel motorway, trunk, primary, residential, and ramp features.
+    const roadsTile = Buffer.from('GrgBCgVyb2FkcxIREgIAABgCIgkJoAbkGQqAMgASERICAAEYAiIJCaAGuBwKgDIAEhESAgACGAIiCQmgBowfCoAy'
+        + 'ABIREgIAAxgCIgkJoAbgIQqAMgASERICAAQYAiIJCaAGtCQKgDIAGgtraW5kX2RldGFpbCIKCghtb3RvcndheSIHCgV0cnVuayIJCgdwcmltYXJ5'
+        + 'Ig0KC3Jlc2lkZW50aWFsIg8KDW1vdG9yd2F5X2xpbmsogCB4Ag==', 'base64');
+    const headers = { 'access-control-allow-origin': '*' };
+    await page.route(`${roadsUrl}**`, route => route.fulfill({ headers, contentType: 'application/vnd.mapbox-vector-tile', body: roadsTile }));
+    await page.route('https://tiles.mapterhorn.com/**', route => route.fulfill({ headers, contentType: 'image/png', body: tile }));
+    await page.route(`${snowDepthTileEndpoint}**`, route => route.fulfill({ headers, contentType: 'image/png', body: tile }));
+    const renderer = await captureMap(page);
+    await setLayer(page, 'Terrain relief', true);
+    await setLayer(page, 'Snow depth', true);
+    const layerOrder = ['ski-terrain-relief', 'ski-snow-depth', regionalRoadLayer, 'place_city_dot_z7', 'ski-area-points'];
+    expect(await renderer.evaluate((map, layerOrder) => map.getStyle().layers.map(layer => layer.id)
+        .filter(id => layerOrder.includes(id)), layerOrder)).toEqual(layerOrder);
+
+    const center: [number, number] = [-120.77839, 47.25];
+    const roadClasses = () => renderer.evaluate((map, layer) => [...new Set(map.queryRenderedFeatures({ layers: [layer] })
+        .map(feature => feature.properties.kind_detail))].sort(), regionalRoadLayer);
+    const opacity = () => evaluatedPaint(renderer, regionalRoadLayer, 'line-opacity');
+    const setZoom = (zoom: number) => renderer.evaluate((map, camera) => { map.jumpTo(camera); }, { center, zoom });
+    await setZoom(6.75);
+    await expect.poll(roadClasses).toEqual(['motorway', 'trunk']);
+    await expect.poll(opacity).toBeCloseTo(0.14, 3);
+
+    await setZoom(9.6);
+    await expect.poll(() => evaluatedPaint(renderer, regionalRoadLayer, 'line-width')).toBeCloseTo(2, 3);
+    for (const [zoom, expected] of [[5.5, 0], [6.25, 0.06], [8.75, 0.38], [9.6, 0.68], [11, 0.4533], [12, 0]]) {
+        await setZoom(zoom);
+        await expect.poll(opacity).toBeCloseTo(expected, 3);
+    }
+    await expect.poll(roadClasses).toEqual([]);
+    expect(await renderer.evaluate(map => map.getPaintProperty('road_mot_case_noramp', 'line-color'))).toBe('#1a1a1a');
+    expect(await renderer.evaluate(map => map.getLayer('road_minor_case')?.minzoom)).toBe(13);
+    await renderer.dispose();
+});
+
+test('shows route shields for numbered highways at the Tahoe zoom', async ({ page }) => {
+    const tileUrl = 'https://ski-shields.test/roads/';
+    const fontUrl = 'https://ski-shields.test/fonts/';
+    await prepare(page, {
+        ...baseStyle, glyphs: `${fontUrl}{fontstack}/{range}.pbf`,
+        sources: { protomaps: { type: 'vector', tiles: [`${tileUrl}{z}/{x}/{y}.mvt`], minzoom: 9, maxzoom: 9 } },
+        layers: [
+            ...baseStyle.layers,
+            { id: 'provider-roads', type: 'line', source: 'protomaps', 'source-layer': 'roads' },
+            { id: 'provider-towns', type: 'symbol', source: 'protomaps', 'source-layer': 'places' },
+        ],
+    });
+    // This tile has three numbered highways, a road without a reference, and a numbered ramp.
+    const roads = Buffer.from('GrECCgVyb2FkcxIWEggAAAEBAgIDAxgCIggJQLQQCoA/ABIWEggABAEFAgYDBxgCIggJQJAXCoA/ABIWEggACAEJAgoDCxgCIggJQOwdC'
+        + 'oA/ABIQEgIABBgCIggJQMgkCoA/ABIWEggADAENAgIDAxgCIggJQKQrCoA/ABoLa2luZF9kZXRhaWwaA3JlZhoHbmV0d29yaxoLc2hpZW'
+        + 'xkX3RleHQiCgoIbW90b3J3YXkiDAoKSSA4MDtDQSA4OSIGCgRVUzpJIgQKAjgwIgcKBXRydW5rIgcKBVVTIDUwIgcKBVVTOlVTIgQKAjU'
+        + 'wIgkKB3ByaW1hcnkiDQoLQ0EgODk7Q0EgMjgiBwoFVVM6Q0EiBAoCODkiDwoNbW90b3J3YXlfbGluayIGCgRJIDgwKIAgeAI=', 'base64');
+    // Supply glyph metrics for 80, 50, and CA 89 so the renderer can place the shields offline.
+    const glyphs = Buffer.from('CscDGj8IIBIxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgBIAEoADACOA4aPwgwEjEAAAAAA'
+        + 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAEgASgAMAI4Dho/CDUSMQAAAAAAAAAAAAAAAAAAAAAAAA'
+        + 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYASABKAAwAjgOGj8IOBIxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+        + 'AAAAAAAAAAAAAAAAAAAAAABgBIAEoADACOA4aPwg5EjEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+        + 'AAAAGAEgASgAMAI4Dho/CEMSMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYASABKAAwAjgOG'
+        + 'j8IQRIxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgBIAEoADACOA4=', 'base64');
+    const headers = { 'access-control-allow-origin': '*' };
+    await page.route(`${tileUrl}**`, route => route.fulfill({ headers, body: roads }));
+    await page.route(`${fontUrl}**`, route => route.fulfill({ headers, body: glyphs }));
+    const renderer = await captureMap(page);
+    const center: [number, number] = [-120.07693, 39.10];
+    const zoomTo = (zoom: number) => renderer.evaluate((map, camera) => { map.jumpTo(camera); }, { center, zoom });
+    const visibleReferences = () => renderer.evaluate((map, layer) => [...new Set(map.queryRenderedFeatures({ layers: [layer] })
+        .map(feature => feature.properties.ref))].sort(), highwayShieldLayer);
+    await zoomTo(8.5);
+    await expect.poll(visibleReferences).toEqual([]);
+    await zoomTo(9.175);
+    await expect.poll(() => evaluatedPaint(renderer, highwayShieldLayer, 'icon-opacity')).toBeCloseTo(0.5, 3);
+    await zoomTo(9.6);
+    await expect.poll(visibleReferences).toEqual(['CA 89;CA 28', 'I 80;CA 89', 'US 50']);
+    await expect.poll(() => evaluatedPaint(renderer, highwayShieldLayer, 'text-opacity')).toBeCloseTo(1, 3);
+    const layers = [regionalRoadLayer, highwayShieldLayer, 'provider-towns', 'ski-area-names'];
+    expect(await renderer.evaluate((map, ids) => map.getStyle().layers.map(layer => layer.id)
+        .filter(id => ids.includes(id)), layers)).toEqual(layers);
+    expect(await renderer.evaluate(map => map.listImages().filter(id => id.startsWith('ski-shield-')).sort()))
+        .toEqual(['ski-shield-interstate', 'ski-shield-route', 'ski-shield-us-highway']);
+    await renderer.dispose();
+});
+
+test('fades hillshade in at regional zoom after the visible tiles finish loading', async ({ page }) => {
     await prepare(page);
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     let terrainRequests = 0;
@@ -1570,7 +1986,7 @@ test('loads terrain at detail zoom and gradually increases hillshade over CARTO'
         await setLayer(page, 'Terrain relief', true);
         await expect.poll(() => renderer.evaluate(map => map.getLayer('ski-terrain-relief')?.type)).toBe('hillshade');
         expect(terrainRequests).toBe(0);
-        await renderer.evaluate(map => { map.jumpTo({ center: [-111.635515, 40.573361], zoom: 13 }); });
+        await renderer.evaluate(map => { map.jumpTo({ center: [-111.635515, 40.573361], zoom: 6 }); });
         await expect.poll(() => terrainRequests).toBeGreaterThan(1);
         await expect.poll(() => firstTile.evaluate(status => status.loaded)).toBe(true);
         expect(await renderer.evaluate(map => map.getPaintProperty('ski-terrain-relief', 'hillshade-exaggeration'))).toBe(0);
@@ -1578,14 +1994,11 @@ test('loads terrain at detail zoom and gradually increases hillshade over CARTO'
         releaseTiles();
     }
 
-    const strength = () => renderer.evaluate(map => {
-        const paint = map.getLayer('ski-terrain-relief')?.paint as { get: (key: string) => number };
-        return paint.get('hillshade-exaggeration');
-    });
-    await expect.poll(strength).toBeCloseTo(0.4, 3);
+    const strength = () => evaluatedPaint(renderer, 'ski-terrain-relief', 'hillshade-exaggeration');
+    await expect.poll(strength).toBeCloseTo(0.15, 3);
     expect(await renderer.evaluate(map => map.getPaintProperty('ski-terrain-relief', 'hillshade-exaggeration-transition')))
         .toEqual({ duration: 280 });
-    for (const [zoom, expected] of [[8, 0], [8.5, 0.02], [9, 0.04], [10.5, 0.15], [11.5, 0.25], [12, 0.3], [13, 0.4]]) {
+    for (const [zoom, expected] of [[4, 0], [4.5, 0.04], [5.5, 0.115], [8, 0.22], [10, 0.29], [13, 0.4]]) {
         await renderer.evaluate((map, zoom) => { map.jumpTo({ zoom }); }, zoom);
         await expect.poll(strength).toBeCloseTo(expected, 3);
     }
@@ -1593,6 +2006,103 @@ test('loads terrain at detail zoom and gradually increases hillshade over CARTO'
     await setLayer(page, 'Terrain relief', false);
     await expect.poll(() => renderer.evaluate(map => Boolean(map.getSource('ski-terrain-dem')))).toBe(false);
     await firstTile.dispose();
+    await renderer.dispose();
+});
+
+test('keeps snow depth optional and fades NOAA tiles over the covered region', async ({ page }) => {
+    await prepare(page);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const requests: URL[] = [];
+    let releaseTiles = () => {};
+    const waitForTiles = new Promise<void>(resolve => { releaseTiles = resolve; });
+    await page.route(`${snowDepthTileEndpoint}**`, async route => {
+        requests.push(new URL(route.request().url()));
+        await waitForTiles;
+        return route.fulfill({ headers: { 'access-control-allow-origin': '*' }, contentType: 'image/png', body: tile });
+    });
+    const renderer = await captureMap(page);
+    const opacity = () => evaluatedPaint(renderer, 'ski-snow-depth', 'raster-opacity');
+    try {
+        await inDialog(page, 'Layers', async dialog => {
+            const toggle = dialog.getByRole('checkbox', { name: 'Snow depth', exact: true });
+            await expect(toggle).not.toBeChecked();
+            await expect(toggle).toHaveAccessibleDescription('Contiguous U.S.');
+            await toggle.check();
+            const key = dialog.getByRole('region', { name: 'Estimated snow depth (in)' });
+            await expect(key.getByRole('listitem')).toHaveCount(11);
+            await expect(key).toContainText('0.39–2');
+            await expect(key.getByRole('link', { name: 'NOAA source' })).toHaveAttribute('href', 'https://www.nohrsc.noaa.gov/nsa/');
+        });
+        await expect(page).toHaveURL(/snowDepth=1/);
+        await expect(page.getByRole('button', { name: 'Layers', exact: true })).toHaveAccessibleDescription('Custom map layers');
+        expect(requests).toHaveLength(0);
+        await renderer.evaluate(map => { map.jumpTo({ center: [138, 36], zoom: 7 }); });
+        await expect.poll(() => renderer.evaluate(map => map.loaded())).toBe(true);
+        expect(requests).toHaveLength(0);
+
+        await renderer.evaluate(map => { map.jumpTo({ center: [-106, 39.5], zoom: 6 }); });
+        await expect.poll(() => requests.length).toBeGreaterThan(0);
+        expect(requests[0].searchParams.get('layers')).toBe('show:3');
+        expect(requests[0].searchParams.get('transparent')).toBe('true');
+        const bounds = requests[0].searchParams.get('bbox')?.split(',').map(Number);
+        expect(bounds).toHaveLength(4);
+        expect(bounds?.every(Number.isFinite)).toBe(true);
+        expect(await opacity()).toBe(0);
+    } finally {
+        releaseTiles();
+    }
+
+    await expect.poll(opacity).toBeCloseTo(0.26, 3);
+    await expect.poll(() => renderer.evaluate(map => map.getPaintProperty('ski-snow-depth', 'raster-opacity-transition')))
+        .toEqual({ duration: 280 });
+    for (const [zoom, expected] of [[4.5, 0.05], [7, 0.39], [10, 0.52], [13, 0.3]]) {
+        await renderer.evaluate((map, zoom) => { map.jumpTo({ zoom }); }, zoom);
+        await expect.poll(opacity).toBeCloseTo(expected, 3);
+    }
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect.poll(() => renderer.evaluate(map => map.getPaintProperty('ski-snow-depth', 'raster-fade-duration'))).toBe(0);
+    await setFilter(page, 'Units', 'metric');
+    await inDialog(page, 'Layers', dialog => expect(dialog.getByRole('region', { name: 'Estimated snow depth (cm)' })).toContainText('1–5.1'));
+    await setLayer(page, 'Snow depth', false);
+    await expect.poll(() => renderer.evaluate(map => Boolean(map.getSource('ski-snow-depth-tiles')))).toBe(false);
+    await expect(page).not.toHaveURL(/snowDepth=1/);
+    await renderer.dispose();
+});
+
+test('keeps the basemap available when snow depth fails and can load it again', async ({ page }) => {
+    await prepare(page);
+    let unavailable = true;
+    await page.route(`${snowDepthTileEndpoint}**`, route => unavailable
+        ? route.fulfill({ status: 503, headers: { 'access-control-allow-origin': '*' }, body: 'Snow depth unavailable' })
+        : route.fulfill({ headers: { 'access-control-allow-origin': '*' }, contentType: 'image/png', body: tile }));
+    const renderer = await captureMap(page);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-106, 39.5], zoom: 6 }); });
+    const error = page.getByText('Snow depth unavailable.', { exact: true });
+    await setLayer(page, 'Snow depth', true);
+    await expect(error).toBeVisible();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    await setLayer(page, 'Snow depth', false);
+    await expect(error).toBeHidden();
+    unavailable = false;
+    await setLayer(page, 'Snow depth', true);
+    await expect.poll(() => evaluatedPaint(renderer, 'ski-snow-depth', 'raster-opacity')).toBeCloseTo(0.26, 3);
+    await expect(error).toBeHidden();
+    await renderer.dispose();
+});
+
+test('fades collision-managed resort names in as users zoom closer', async ({ page }) => {
+    await prepare(page, {
+        ...baseStyle, glyphs: 'https://ski-map.test/font/{fontstack}/{range}.pbf',
+        sources: { carto: { type: 'vector', tiles: ['https://ski-map.test/{z}/{x}/{y}.pbf'] } },
+        layers: [...baseStyle.layers, { id: 'carto-labels', type: 'symbol', source: 'carto', 'source-layer': 'places', minzoom: 18 }],
+    });
+    await page.route('https://ski-map.test/**', route => route.fulfill({ headers: { 'access-control-allow-origin': '*' }, body: Buffer.alloc(0) }));
+    const renderer = await captureMap(page);
+    for (const [zoom, expected] of [[7, 0], [7.5, 0.26], [8, 0.52], [9.5, 1]]) {
+        await renderer.evaluate((map, zoom) => { map.jumpTo({ center: [-111.635515, 40.573361], zoom }); }, zoom);
+        await expect.poll(() => evaluatedPaint(renderer, 'ski-area-names', 'text-opacity')).toBeCloseTo(expected, 3);
+    }
+    expect(await renderer.evaluate(map => map.getLayoutProperty('ski-area-names', 'text-allow-overlap'))).toBeUndefined();
     await renderer.dispose();
 });
 
@@ -1650,6 +2160,9 @@ test('loads and filters resort terrain by zoom and pass using byte ranges', asyn
         const [footprints, ...details] = await counts();
         return footprints > 0 && details.every(count => count === 0);
     }).toBe(true);
+    await expect.poll(() => evaluatedPaint(renderer, 'ski-resort-footprints', 'fill-opacity')).toBeCloseTo(0.04, 3);
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 11.625 }); });
+    await expect.poll(() => evaluatedPaint(renderer, 'ski-resort-lifts', 'line-opacity')).toBeCloseTo(0.59, 3);
     await renderer.evaluate(map => { map.jumpTo({ zoom: 13.05 }); });
     await expect.poll(async () => (await counts()).every(count => count > 0)).toBe(true);
     expect(requests.length).toBeGreaterThan(0);
@@ -1692,9 +2205,11 @@ test('loads and filters resort terrain by zoom and pass using byte ranges', asyn
 });
 
 test('validates the hosted check against real Heavenly terrain', async ({ page }) => {
+    test.skip(!hasTerrain, 'Requires the current ski terrain archive in SKI_ASSETS_ROOT');
     await page.setViewportSize({ width: 1280, height: 900 });
     await prepare(page);
-    const archive = await readFile(new URL('../../projects/ski-status/data/resort-terrain.pmtiles', import.meta.url));
+    const archive = await readSkiAsset(skiAssetsRoot(), skiTerrainAsset);
+    expect(archive).toBeDefined();
     const ranges: Response[] = [];
     page.on('response', response => {
         const url = new URL(response.url());
@@ -1704,7 +2219,7 @@ test('validates the hosted check against real Heavenly terrain', async ({ page }
     await page.goto(SKI_TERRAIN_ROUTE);
     await verifyRenderedSkiTerrain(page, 10_000);
     expect(ranges.length).toBeGreaterThan(1);
-    await Promise.all(ranges.map(response => verifySkiTerrainResponse(response, archive)));
+    await Promise.all(ranges.map(response => verifySkiTerrainResponse(response, archive!)));
 });
 
 test('keeps the basemap and resort dots available if the terrain archive fails', async ({ page }) => {
@@ -1723,7 +2238,7 @@ test('reopens ski terrain after an archive outage when the overlay is toggled', 
     await prepare(page);
     let failArchive = true;
     await page.route('**/resort-terrain.pmtiles', route => failArchive
-        ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.continue());
+        ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.fallback());
     const renderer = await captureMap(page);
     await renderer.evaluate(map => { map.jumpTo({ center: [-119.896153, 38.943699], zoom: 13 }); });
     const error = page.getByText('Ski terrain unavailable.', { exact: true });
@@ -1742,7 +2257,7 @@ test('retries ski terrain on the fallback map and hides its error at overview zo
     await prepare(page, null);
     let failArchive = true;
     await page.route('**/resort-terrain.pmtiles', route => failArchive
-        ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.continue());
+        ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.fallback());
     const renderer = await captureMap(page, { state: 'degraded' });
     await renderer.evaluate(map => { map.jumpTo({ center: [-119.896153, 38.943699], zoom: 13 }); });
     const retrySkiTerrain = page.getByRole('button', { name: 'Retry ski terrain' });

@@ -78,6 +78,9 @@ Set a localhost CARTO Basemaps key as `CARTO_API_KEY` in `.env.local` for local 
 Amplify uses its configured `CARTO_API_KEY`. CI uses content fixtures and requires no production credentials.
 See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attribution, and test behavior.
 
+Release builds also need the ski-status terrain archive and runtime icons.
+Use the mounted asset share or set `SKI_ASSETS_BASE_URL` to the HTTPS build mirror. [Ski-status build assets](projects/ski-status/readme.md#release-assets)
+
 Selected links prepare their destinations after pointer hover or keyboard focus.
 Set `VITE_INTENT_PREFETCH` to `all`, `pages`, or `off` before building.
 The default is `all`. Unknown nonempty values disable preparation.
@@ -95,7 +98,7 @@ See the [prefetch guide](docs/intent-prefetch.md) for allowed resources, limits,
 | `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
-| `npm run test` | Run the Vitest suite and the historical temperature pipeline tests |
+| `npm run test` | Run the Vitest suite, temperature pipeline tests, and ski terrain tests |
 | `npm run test:temperature-records` | Run the historical temperature pipeline tests |
 | `npm run test:temperatures:browser` | Build and test the temperature map with production assets |
 | `npm run test:page-recovery` | Test intent prefetch, page-download recovery, and project layout in a production bundle |

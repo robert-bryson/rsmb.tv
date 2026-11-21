@@ -405,6 +405,32 @@
 .ski-resort-icon { flex: none; object-fit: contain; border-radius: 0.45rem; }
 .ski-resort-links { display: inline-flex; gap: 0.3rem; }
 .ski-resort-links img { object-fit: contain; }
+.ski-visitor-info {
+    border: 1px solid var(--ski-line);
+    border-radius: 0.75rem;
+    background: var(--ski-header);
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+}
+.ski-visitor-header { padding: 0.65rem 0.75rem; }
+.ski-visitor-header h3 { font-size: 1rem; font-weight: 650; }
+.ski-visitor-group { border-top: 1px solid var(--ski-line); }
+.ski-visitor-group > summary { min-height: var(--ski-target); padding: 0.65rem 0.75rem; cursor: pointer; }
+.ski-visitor-group > summary::marker { color: var(--ski-link); }
+.ski-visitor-group > summary:hover { background: var(--ski-hover); }
+.ski-visitor-group > summary:focus-visible { outline: 2px solid var(--ski-link); outline-offset: -2px; }
+.ski-visitor-summary { margin-inline-start: 0.5rem; color: var(--ski-muted); font-size: 0.8125rem; }
+.ski-visitor-body { display: grid; gap: 0.375rem; padding: 0 0.75rem 0.75rem; }
+.ski-visitor-body > section + section { border-top: 1px solid var(--ski-line); padding-top: 0.5rem; }
+.ski-visitor-note { color: var(--ski-muted); font-size: 0.8125rem; }
+.ski-visitor-list > li + li { margin-top: 0.4rem; border-top: 1px solid var(--ski-line); }
+.ski-visitor-body a { display: inline-flex; align-items: center; min-height: var(--ski-target); color: var(--ski-link); text-decoration: underline; text-underline-offset: 0.18em; }
+.ski-visitor-body a:hover { color: white; }
+.ski-visitor-links { display: flex; align-items: center; flex-wrap: wrap; gap: 0 .75rem; color: var(--ski-muted); font-size: 0.8125rem; }
+.ski-visitor-links:empty { display: none; }
+.ski-visitor-prices > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem; padding-block: 0.25rem; }
+.ski-visitor-prices dt { color: var(--ski-muted); }
+.ski-visitor-prices dd { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .ski-season-chart {
     display: grid;
     gap: 0.75rem;
@@ -556,12 +582,20 @@
 .ski-compare-region { max-width: 15rem; white-space: normal; }
 .ski-compare-missing { color: #8d9dab; }
 
-.ski-map { position: relative; height: 100%; min-height: 0; isolation: isolate; container-type: size; }
+.ski-map {
+    --ski-map-inset: 10px;
+    --ski-compact-zoom-bottom: 3.125rem;
+    position: relative;
+    height: 100%;
+    min-height: 0;
+    isolation: isolate;
+    container-type: size;
+}
 .ski-map-actions {
     position: absolute;
     z-index: 3;
-    top: 10px;
-    inset-inline: 10px;
+    top: var(--ski-map-inset);
+    inset-inline: var(--ski-map-inset);
     display: grid;
     grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1fr);
     align-items: center;
@@ -610,6 +644,80 @@
     border-start-start-radius: 0;
     border-end-start-radius: 0;
 }
+.ski-map-utilities .ski-control[aria-expanded="true"] { color: var(--ski-link); }
+.ski-map-utilities .ski-control[aria-expanded="true"]::after { display: none; }
+.ski-layer-panel {
+    --ski-layer-start: calc(var(--ski-target) + 0.5rem);
+    --ski-layer-end: calc(var(--ski-target) + 0.5rem);
+    --ski-layer-bottom: calc(2 * var(--ski-map-inset));
+    position: absolute;
+    inset-block-start: var(--ski-layer-start);
+    inset-inline-end: var(--ski-layer-end);
+    display: flex;
+    flex-direction: column;
+    inline-size: min(20rem, calc(100% - var(--ski-layer-end)));
+    max-block-size: min(32rem, calc(100cqh - var(--ski-layer-start) - var(--ski-layer-bottom)));
+    overflow: hidden;
+    border: 1px solid var(--ski-input-line);
+    border-radius: var(--ski-radius);
+    background: var(--ski-background);
+    box-shadow: 0 5px 18px #02070c99;
+    pointer-events: auto;
+}
+.ski-layer-heading {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 0.75rem 0.125rem;
+    border-block-end: 1px solid var(--ski-line);
+    background: var(--ski-header);
+}
+.ski-layer-heading h2 { font-size: 0.9375rem; font-weight: 650; }
+.ski-layer-content {
+    display: grid;
+    gap: 0.75rem;
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+}
+.ski-layer-markers, .ski-layer-key { display: grid; gap: 0.35rem; }
+.ski-layer-markers .ski-input { inline-size: 100%; font-size: 1rem; }
+.ski-layer-markers > label, .ski-layer-overlays legend, .ski-layer-key h3 { font-weight: 600; }
+.ski-layer-overlays { min-inline-size: 0; }
+.ski-layer-overlays legend { margin-block-end: 0.35rem; }
+.ski-layer-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-block-size: var(--ski-target);
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--ski-line);
+    background: var(--ski-panel);
+    cursor: pointer;
+}
+.ski-layer-toggle:hover { background: var(--ski-hover); }
+.ski-layer-toggle:first-of-type { border-start-start-radius: var(--ski-radius); border-start-end-radius: var(--ski-radius); }
+.ski-layer-toggle:last-of-type { border-end-start-radius: var(--ski-radius); border-end-end-radius: var(--ski-radius); }
+.ski-layer-toggle + .ski-layer-toggle { border-block-start: 0; }
+.ski-layer-toggle input { flex: none; inline-size: 1rem; block-size: 1rem; accent-color: var(--ski-link); }
+.ski-layer-toggle .ski-layer-note { display: block; }
+.ski-layer-key { border-block-start: 1px solid var(--ski-line); padding-block-start: 0.65rem; }
+.ski-layer-note, .ski-layer-key-list { color: var(--ski-muted); font-size: 0.8125rem; }
+.ski-layer-key-list { display: flex; flex-wrap: wrap; gap: 0.35rem 0.65rem; }
+.ski-layer-key-list > li { display: flex; align-items: center; gap: 0.35rem; }
+.ski-layer-key-list > li > span { flex: none; }
+.ski-snow-depth-key {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(4.75rem, 1fr));
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+}
+.ski-layer-key a { color: var(--ski-link); text-decoration: underline; text-underline-offset: 0.15em; }
 .ski-map .maplibregl-ctrl-top-right { top: calc(var(--ski-target) + 0.625rem); }
 .ski-status .maplibregl-ctrl-group button { width: var(--ski-target); height: var(--ski-target); }
 .ski-status .maplibregl-ctrl-group {
@@ -685,8 +793,19 @@
     .ski-map-actions .ski-previous-view { grid-row: 2; }
     .ski-area-search { grid-column: 1; }
     .ski-map-utilities { grid-column: 2; }
-    .ski-map .maplibregl-ctrl-top-right { top: auto; bottom: 3.125rem; }
+    .ski-map .maplibregl-ctrl-top-right { top: auto; bottom: var(--ski-compact-zoom-bottom); }
     .ski-map .maplibregl-ctrl-top-right .maplibregl-ctrl-group { margin-top: 0; }
+}
+
+@container (max-width: 32rem) and (min-height: 28rem) {
+    .ski-layer-panel {
+        --ski-layer-end: 0px;
+        --ski-layer-bottom: calc(2 * var(--ski-map-inset) + var(--ski-compact-zoom-bottom) + 2 * var(--ski-target));
+    }
+}
+
+@container (max-width: 32rem) and (height > 11rem) {
+    .ski-map-actions:has(.ski-previous-view) .ski-layer-panel { --ski-layer-start: calc(2 * (var(--ski-target) + 0.5rem)); }
 }
 
 @container (max-width: 22rem) {
@@ -696,12 +815,25 @@
 }
 
 @container (max-height: 11rem) {
-    .ski-map .maplibregl-ctrl-top-right { top: auto; right: 3.125rem; bottom: 10px; }
+    .ski-layer-panel {
+        --ski-layer-start: 0px;
+        --ski-layer-end: calc(var(--ski-compact-zoom-bottom) + 2 * var(--ski-target));
+    }
+    .ski-map .maplibregl-ctrl-top-right { top: auto; right: var(--ski-compact-zoom-bottom); bottom: var(--ski-map-inset); }
     .ski-map .maplibregl-ctrl-top-right .maplibregl-ctrl-group { display: flex; margin: 0; }
     .ski-map .maplibregl-ctrl-top-right .maplibregl-ctrl-group button + button {
         border-top: 0;
         border-inline-start: 1px solid var(--ski-line);
     }
+}
+
+@container (max-height: 11rem) and (min-width: 28rem) {
+    .ski-layer-markers {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: 0.65rem;
+    }
+    .ski-layer-markers .ski-layer-key-list { grid-column: 1 / -1; }
 }
 
 .ski-dialog {
@@ -797,7 +929,7 @@
     }
     .ski-page-actions { gap: 0.3rem; }
     .ski-pass-button { flex: 1 1 auto; gap: 0.375rem; padding-inline: 0.3rem; }
-    .ski-pass-mark img { width: 1.125rem; height: 1.125rem; }
+    .ski-pass-mark :is(img, .ski-pass-alt) { width: 1.125rem; height: 1.125rem; }
     .ski-toolbar {
         display: flex;
         flex-wrap: wrap;
@@ -817,7 +949,7 @@
 
 @media (36rem < width <= 44rem) and (height < 27rem) {
     .ski-pass-button { padding-inline: 0.3rem; gap: 0.25rem; }
-    .ski-pass-mark img { width: 1rem; height: 1rem; }
+    .ski-pass-mark :is(img, .ski-pass-alt) { width: 1rem; height: 1rem; }
     .ski-context-filters:has(.ski-chips) { flex-wrap: wrap; row-gap: 0; }
     .ski-context-filters:has(.ski-chips) .ski-counts { flex-basis: 100%; }
     .ski-context-filters .ski-chips { max-width: calc(100% - 3rem); }
@@ -837,7 +969,7 @@
 
 @media (max-width: 23.5rem) {
     .ski-pass-button { gap: 0.25rem; padding-inline: 0.225rem; font-size: 0.75rem; }
-    .ski-pass-mark img { width: 1rem; height: 1rem; }
+    .ski-pass-mark :is(img, .ski-pass-alt) { width: 1rem; height: 1rem; }
     .ski-toolbar { column-gap: 0.25rem; }
     .ski-view-switch { gap: 0; padding-inline: 0; }
     .ski-mode-switch { display: inline-flex; }

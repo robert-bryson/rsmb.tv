@@ -1,12 +1,13 @@
-import archive from '../../../projects/ski-status/data/resort-terrain.pmtiles?url';
 import manifest from '../../../projects/ski-status/data/resort-terrain.json';
 import type { CircleLayerSpecification, ExpressionSpecification, FillLayerSpecification, FilterSpecification, LineLayerSpecification, Map as MapLibreMap } from '../../maps/maplibre';
 import { pmtilesSourceUrl } from '../../maps/pmtiles';
 import type { TooltipPoint } from '../../maps/screenGeometry';
-import { resortTerrainMinZoom, terrainColors, type TerrainConvention } from './resortTerrainData';
+import { resortTerrainMinZoom, skiTerrainArchiveUrl, terrainColors, type TerrainConvention } from './resortTerrainData';
 
 export const resortTerrainSource = 'ski-resort-terrain';
 const resortDetailMinZoom = manifest.detailMinZoom;
+const runAreaMinZoom = 12;
+const stationMinZoom = manifest.stationMinZoom;
 export const resortFootprintLayer = 'ski-resort-footprints';
 const liftLayer = 'ski-resort-lifts';
 const runLayer = 'ski-resort-runs';
@@ -23,37 +24,49 @@ const runColor: ExpressionSpecification = ['match', ['get', 'use'],
         ['advanced', 'expert', 'extreme'], terrainColors.advanced, 'freeride', terrainColors.freeride, terrainColors.unknown],
 ];
 const runCasing: ExpressionSpecification = ['case', ['==', runColor, '#18181b'], '#d4d4d8', '#18181b'];
+const detailOpacity: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], resortDetailMinZoom, 0.18, resortDetailMinZoom + 1.25, 1];
+const stationOpacity: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], stationMinZoom, 0.24, stationMinZoom + 1, 1];
 
 const layers: (FillLayerSpecification | LineLayerSpecification | CircleLayerSpecification)[] = [
     {
         id: resortFootprintLayer, type: 'fill', source: resortTerrainSource, 'source-layer': 'footprints', minzoom: resortTerrainMinZoom,
-        paint: { 'fill-color': '#38bdf8', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 9, 0.22, 11, 0.12] },
+        paint: { 'fill-color': '#38bdf8', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], resortTerrainMinZoom, 0.04, 10, 0.2, 11, 0.12] },
     },
     {
         id: 'ski-resort-footprint-outline', type: 'line', source: resortTerrainSource, 'source-layer': 'footprints', minzoom: resortTerrainMinZoom,
-        paint: { 'line-color': '#7dd3fc', 'line-opacity': 0.72, 'line-width': 1.5, 'line-dasharray': [2, 2] },
+        paint: {
+            'line-color': '#7dd3fc', 'line-opacity': ['interpolate', ['linear'], ['zoom'], resortTerrainMinZoom, 0.15, 10, 0.72],
+            'line-width': 1.5, 'line-dasharray': [2, 2],
+        },
     },
     {
-        id: runFillLayer, type: 'fill', source: resortTerrainSource, 'source-layer': 'runs', minzoom: 12,
-        paint: { 'fill-color': runColor, 'fill-opacity': 0.25 },
+        id: runFillLayer, type: 'fill', source: resortTerrainSource, 'source-layer': 'runs', minzoom: runAreaMinZoom,
+        paint: { 'fill-color': runColor, 'fill-opacity': ['interpolate', ['linear'], ['zoom'], runAreaMinZoom, 0.05, 13, 0.25] },
     },
     {
         id: 'ski-resort-run-outline', type: 'line', source: resortTerrainSource, 'source-layer': 'runs', minzoom: resortDetailMinZoom,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': runCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 2.5, 15, 5] },
+        paint: { 'line-color': runCasing, 'line-opacity': detailOpacity, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 2.5, 15, 5] },
     },
     {
         id: runLayer, type: 'line', source: resortTerrainSource, 'source-layer': 'runs', minzoom: resortDetailMinZoom,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': runColor, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 1.25, 15, 3] },
+        paint: { 'line-color': runColor, 'line-opacity': detailOpacity, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 1.25, 15, 3] },
     },
     {
         id: liftLayer, type: 'line', source: resortTerrainSource, 'source-layer': 'lifts', minzoom: resortDetailMinZoom,
-        paint: { 'line-color': terrainColors.lift, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 1.75, 15, 3.5], 'line-dasharray': [2.5, 1.4] },
+        paint: {
+            'line-color': terrainColors.lift, 'line-opacity': detailOpacity,
+            'line-width': ['interpolate', ['linear'], ['zoom'], 11, 1.75, 15, 3.5], 'line-dasharray': [2.5, 1.4],
+        },
     },
     {
-        id: stationLayer, type: 'circle', source: resortTerrainSource, 'source-layer': 'stations', minzoom: manifest.stationMinZoom,
-        paint: { 'circle-color': terrainColors.lift, 'circle-stroke-color': '#18181b', 'circle-stroke-width': 1, 'circle-radius': 3.5 },
+        id: stationLayer, type: 'circle', source: resortTerrainSource, 'source-layer': 'stations', minzoom: stationMinZoom,
+        paint: {
+            'circle-color': terrainColors.lift, 'circle-opacity': stationOpacity, 'circle-stroke-opacity': stationOpacity,
+            'circle-stroke-color': '#18181b', 'circle-stroke-width': 1,
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], stationMinZoom, 2, stationMinZoom + 1, 3.5],
+        },
     },
 ];
 
@@ -81,7 +94,7 @@ export function syncResortTerrain(map: MapLibreMap, before: string, groups: numb
         for (const layer of layers) map.setFilter(layer.id, filter);
     } else if (map.getZoom() >= resortTerrainMinZoom) {
         map.addSource(resortTerrainSource, {
-            type: 'vector', url: pmtilesSourceUrl(archive, reload), minzoom: manifest.minZoom, maxzoom: manifest.maxZoom,
+            type: 'vector', url: pmtilesSourceUrl(skiTerrainArchiveUrl, reload), minzoom: manifest.minZoom, maxzoom: manifest.maxZoom,
             attribution: '<a href="https://www.openskidata.org/">OpenSkiData</a> · <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>',
         });
         for (const layer of layers) map.addLayer({ ...layer, filter }, before);

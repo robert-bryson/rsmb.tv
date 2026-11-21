@@ -23,7 +23,7 @@ Hosted checks require a deployed build. Device checks require the named physical
 | Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
 | Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
 | Content additions | [Project content](#project-content) | Reviewed content and assets |
-| Before the ski-status release | [ski-status release tasks](projects/ski-status/TODO.md#before-release) | Hosted preview, verified pass rules, and report sources |
+| Before the ski-status release | [ski-status release tasks](projects/ski-status/TODO.md#release-checks) | Release asset mirror, hosted preview, and verified sources |
 | Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks

@@ -168,7 +168,7 @@ export function skiDayStatusText(status: ResortStatus, report: ResortReport | un
     if (status === 'open') return 'Open today';
     if (status === 'limited') return 'Limited today';
     if (status !== 'unknown') return statusLabels[status];
-    if (!report) return 'No report';
+    if (!report) return 'Skiing status unknown';
     if (report.status === 'unknown' || reportAgeLabel(report, now) === 'age unknown') return 'Status unverified';
     return 'Stale report';
 }

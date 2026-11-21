@@ -31,7 +31,7 @@ export const statusMarkers: Record<ResortStatus, { color: string; glyph: string 
 export const passBadgeSize = 26;
 export const passBadgeTextColor = '#141414';
 export const multiplePassColor = '#facc15';
-const passColors: Record<PassFamily, string> = {
+export const passColors: Record<PassFamily, string> = {
     ikon: '#c084fc', epic: '#fb7185', indy: '#4ade80', 'mountain-collective': '#60a5fa',
 };
 const discountOnly = { color: '#fb923c', label: 'Discount only' };

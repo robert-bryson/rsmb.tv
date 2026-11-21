@@ -2774,6 +2774,14 @@
       }
     }
   },
+  "searchmont-resort": {
+    "snowfall": {
+      "label": "Searchmont Resort",
+      "source": "https://searchmont.com/about/",
+      "annualCm": 336,
+      "period": "10-year average as published, years unspecified"
+    }
+  },
   "seven-springs-mountain-resort": {
     "snowfall": {
       "label": "NOAA National Centers for Environmental Information",

@@ -1,11 +1,11 @@
 // @vitest-environment node
-import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
 import { PMTiles, TileType, type Source } from 'pmtiles';
+import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 import locations from '../../projects/ski-status/data/locations.json';
 import bases from '../../projects/ski-status/data/resort-bases.json';
 import manifest from '../../projects/ski-status/data/resort-terrain.json';
+import { hasSkiAsset, readSkiAsset, skiAssetsRoot, skiTerrainAsset, verifySkiAsset } from '../ski-asset-files.ts';
 
 describe('ski-status terrain archive', () => {
     it('indexes terrain for catalog areas and keeps it under the location data license', () => {
@@ -27,11 +27,9 @@ describe('ski-status terrain archive', () => {
         expect(manifest.groupsByArea.heavenly.length).toBeGreaterThan(0);
     });
 
-    it('ships the indexed PMTiles archive with tiles for Heavenly', async () => {
-        const bytes = await readFile(new URL('../../projects/ski-status/data/resort-terrain.pmtiles', import.meta.url));
-        expect(createHash('sha256').update(bytes).digest('hex')).toBe(manifest.archiveSha256);
+    async function checkTerrain(bytes: Buffer, key: string) {
         const source: Source = {
-            getKey: () => manifest.archiveSha256,
+            getKey: () => key,
             getBytes: async (offset, length) => ({ data: Uint8Array.from(bytes.subarray(offset, offset + length)).buffer }),
         };
         const tiles = new PMTiles(source);
@@ -39,5 +37,16 @@ describe('ski-status terrain archive', () => {
         expect(header).toMatchObject({ minZoom: manifest.minZoom, maxZoom: manifest.maxZoom, tileType: TileType.Mvt });
         const result = await tiles.getZxy(13, 1367, 3132);
         expect(result?.data.byteLength).toBeGreaterThan(0);
+    }
+
+    it('reads real vector tiles for Heavenly from the checked-in fixture', async () => {
+        const path = new URL('../../tests/fixtures/ski-status/terrain.pmtiles', import.meta.url);
+        await checkTerrain(await readFile(path), path.href);
+    });
+
+    it.runIf(hasSkiAsset(skiTerrainAsset))('verifies the NAS archive by checksum and reads its tiles for Heavenly', async () => {
+        const archive = await readSkiAsset(skiAssetsRoot(), skiTerrainAsset);
+        expect(archive).toBeDefined();
+        await checkTerrain(verifySkiAsset(skiTerrainAsset, archive!, manifest.archiveSha256), manifest.archiveSha256);
     });
 });

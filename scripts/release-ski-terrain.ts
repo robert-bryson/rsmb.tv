@@ -23,7 +23,7 @@ export async function verifySkiTerrainResponse(response: RangeResponse, archive:
     const actual = response.headers()['content-range'];
     if (actual !== expected) throw new Error(`Wrong ski terrain Content-Range: expected ${expected}, received ${actual ?? '(missing)'}.`);
     if (!archive.subarray(start, end + 1).equals(await response.body())) {
-        throw new Error(`Ski terrain bytes differ from the checked-in archive for range ${range}.`);
+        throw new Error(`Ski terrain bytes differ from the verified archive for range ${range}.`);
     }
 }
 

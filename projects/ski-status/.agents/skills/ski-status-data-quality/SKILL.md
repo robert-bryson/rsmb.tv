@@ -36,7 +36,11 @@ Check icon coverage for each resort you review. Include new candidates that qual
 
 Open the official mark. Check the press kit, favicon, Apple touch icon, or web manifest. Confirm that the mark represents the resort or its official group. Verify the terms for bundling it. Use a simple symbol on the map and a readable mark in details. Keep the original for the archive. [Icon sizes and archive](#archive-new-assets-at-the-end-of-the-run)
 
-Save a bundled icon as `src/features/ski-status/resort-icons/<areaId>.png`. Add its direct HTTPS source to `iconSources[areaId]` in `projects/ski-status/data/resort-links.json`. Run `skiStatusResortData.test.ts` to check for one source per icon. Verify the map and details icon from `skiResortIcon(area.id)`. Check the map's fallback symbol and layer cues. [Icon registry](../../../../../src/features/ski-status/resortDetailsData.ts), [Map layers](../../../../../src/features/ski-status/skiMapLayers.ts)
+Save the app icon as `runtime/resort-icons/<areaId>.png` in the NAS asset folder.
+Add its SHA-256 checksum to `data/runtime-icons.json` with the key `resort-icons/<areaId>.png`.
+Add its HTTPS source to `iconSources[areaId]` in `data/resort-links.json`.
+Run `skiStatusResortData.test.ts` to check for one source per icon.
+Check the map icon, the details icon, and the map's fallback symbol. [Asset folder](../../../readme.md#local-assets), [Icon registry](../../../../../src/features/ski-status/resortDetailsData.ts), [Map layers](../../../../../src/features/ski-status/skiMapLayers.ts)
 
 Add an `icon` target for each missing mark you check. When you defer a mark, record its URL and the next check. Count bundled icons before and after the batch. Use only catalog area IDs.
 
@@ -101,7 +105,13 @@ Copy each new or improved asset to `N:\projects\ski-status\assets`. Use the moun
 
 Make transparent square PNGs with lossless compression. Use 40 × 40 pixels for the 20 px map marker. Use 84 × 84 pixels for the 42 px panel icon. Use the best official source for each size. Render vector art at the target size or decode a suitable ICO frame. Center the mark with transparent space around it. Keep its aspect ratio. Convert it to sRGB and remove unnecessary metadata. Check both display sizes against the app background. Record a follow-up if an icon is hard to read. [Map marker sizing](../../../../../src/features/ski-status/skiMapLayers.ts), [Details header sizing](../../../../../src/features/ski-status/SkiAreaDetails.tsx)
 
-In the run manifest, record each file's area ID, source URL, check date, relative path, format, and SHA-256 checksum. For a map, give its edition and coverage. For an icon variant, give its source checksum and dimensions. Reuse files with the same checksum. Keep previous editions. Add a checksum suffix when the same file name has different content. Verify copies against the manifest. Keep the staged files and record a pending copy if the NAS is unavailable.
+Set `version` to `1`. Set `archivedAt` to the archive time in ISO 8601 format.
+List each file in `files`. Record its kind, area ID, source URL, check date, relative path, format, byte count, and SHA-256 checksum.
+For a map, give its edition and coverage. Use the same edition for the folder name. Replace the slash with a hyphen.
+For an icon variant, give its source checksum and dimensions.
+Reuse files with the same checksum. Keep earlier editions.
+Add a checksum suffix when the same file name has different content.
+Verify the copy against the manifest. If the NAS is unavailable, keep the staged files. Record the pending copy.
 
 ## Summarize the run
 

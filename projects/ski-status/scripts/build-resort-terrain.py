@@ -20,6 +20,7 @@ from unicodedata import normalize
 from urllib.parse import urlsplit
 
 DATA = Path(__file__).resolve().parents[1] / 'data'
+NAS_ASSETS = Path('N:/projects/ski-status/assets' if os.name == 'nt' else '/mnt/n/projects/ski-status/assets')
 SOURCE = 'https://tiles.openskimap.org/openskidata.gpkg'
 MIN_ZOOM, DETAIL_MIN_ZOOM, STATION_MIN_ZOOM, MAX_ZOOM = 9, 11, 13, 14
 RUN_USES = ('downhill', 'nordic', 'skitour', 'snow_park', 'connection')
@@ -343,6 +344,23 @@ def sha256(path):
     return checksum.hexdigest()
 
 
+def publish_terrain_archive(archive, assets_root, checksum):
+    """Keep each verified archive at the path for its checksum."""
+    target = assets_root / 'runtime' / 'terrain' / checksum / 'resort-terrain.pmtiles'
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        if sha256(target) != checksum:
+            raise OSError(f'Existing terrain archive does not match its checksum: {target}')
+        return target
+    with TemporaryDirectory(prefix='staging-', dir=target.parent) as directory:
+        staged = Path(directory) / target.name
+        copy2(archive, staged)
+        if sha256(staged) != checksum:
+            raise OSError(f'Copied terrain archive does not match its checksum: {target}')
+        os.replace(staged, target)
+    return target
+
+
 @contextmanager
 def lock_output(directory):
     lock = directory / 'resort-terrain.pid.lock'
@@ -383,7 +401,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('geopackage', type=Path)
     parser.add_argument('metadata', type=Path)
+    parser.add_argument('--assets-root', type=Path, default=Path(os.environ.get('SKI_ASSETS_ROOT') or NAS_ASSETS))
     args = parser.parse_args()
+    if not args.assets_root.is_dir():
+        parser.error(f'Asset folder is unavailable: {args.assets_root}. Mount the NAS or set --assets-root.')
     try:
         metadata = read_json(args.metadata)
         validate_snapshot(args.geopackage, metadata)
@@ -409,21 +430,23 @@ def main():
 
         work = Path(temporary)
         archive, by_area, counts = write_tiles(db, matched, areas, work, attribution)
+        archive_checksum = sha256(archive)
         manifest = {
             'source': SOURCE, 'buildTime': metadata['run']['finishedAt'], 'sourceSha256': sha256(args.geopackage),
-            'archiveSha256': sha256(archive), 'license': locations['license'], 'minZoom': MIN_ZOOM,
+            'archiveSha256': archive_checksum, 'license': locations['license'], 'minZoom': MIN_ZOOM,
             'detailMinZoom': DETAIL_MIN_ZOOM, 'stationMinZoom': STATION_MIN_ZOOM, 'maxZoom': MAX_ZOOM,
             'counts': counts, 'groupsByArea': by_area,
         }
         index = work / 'resort-terrain.json'
         index.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-        outputs = [archive, write_resort_bases(db, matched, areas, locations, manifest['buildTime'], work)]
+        outputs = [write_resort_bases(db, matched, areas, locations, manifest['buildTime'], work)]
         if add_mapped_trail_counts(args.geopackage, locations, manifest['buildTime']):
             location_index = work / 'locations.json'
             location_index.write_text(json.dumps(locations, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
             outputs.append(location_index)
+        published_archive = publish_terrain_archive(archive, args.assets_root, archive_checksum)
         publish_outputs([*outputs, index], DATA)
-    print(f'{len(by_area)} catalog areas, {counts}')
+    print(f'{len(by_area)} catalog areas, {counts}. Archive: {published_archive}')
 
 
 if __name__ == '__main__':

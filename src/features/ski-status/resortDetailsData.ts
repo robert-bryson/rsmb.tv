@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import linksData from '../../../projects/ski-status/data/resort-links.json';
+import runtimeIcons from '../../../projects/ski-status/data/runtime-icons.json';
 import snowData from '../../../projects/ski-status/data/snow-history.json';
+import { skiAssetUrl, skiRuntimeIconFile } from '../../../shared/skiAssets';
 import { formatSkiLocation } from './skiGeography';
 import { skiAreas, type SkiArea, type Skiing } from './catalog';
 import { httpsUrl, skiId } from './schemas';
@@ -44,7 +46,8 @@ const resortLinks = z.strictObject({
     iconSources: z.record(skiId, httpsUrl),
 });
 const serviceIconIds = ['google-maps', 'wikipedia'];
-const iconAssets = import.meta.glob<string>('./resort-icons/*.{png,ico}', { eager: true, query: '?url&no-inline', import: 'default' });
+const iconAssets = Object.fromEntries(Object.entries(runtimeIcons).filter(([file]) => file.startsWith('resort-icons/'))
+    .map(([file, checksum]) => [file, skiAssetUrl(skiRuntimeIconFile(file, checksum))]));
 
 export function readResortDetails(snowInput: unknown, linksInput: unknown, areas: readonly { id: string }[],
     assets: Readonly<Record<string, string>>) {
@@ -91,15 +94,18 @@ function wikiPath(value: string) {
     return encodeURIComponent(value.replaceAll(' ', '_'));
 }
 
+export function skiMapsSearch(query: string) {
+    return `https://www.google.com/maps/search/?${new URLSearchParams({ api: '1', query })}`;
+}
+
 export function skiAreaExternalLinks(area: SkiArea) {
     const destination = mapDestinations.get(area.id);
     const entrance = area.location.base?.kind === 'entrance' ? area.location.base.coordinates : undefined;
     const mapQuery = entrance ? `${entrance[1]},${entrance[0]}`
         : `${area.name}, ${mapSearchCategories[area.skiing]}, ${formatSkiLocation(area)}`;
-    const mapParameters = new URLSearchParams({ api: '1', query: mapQuery });
     const [title, section] = articles.get(area.id)?.split('#') ?? [];
     return {
-        maps: destination?.url ?? `https://www.google.com/maps/search/?${mapParameters}`,
+        maps: destination?.url ?? skiMapsSearch(mapQuery),
         searchesMaps: !destination && !entrance,
         wikipedia: title ? `https://en.wikipedia.org/wiki/${wikiPath(title)}${section ? `#${wikiPath(section)}` : ''}` : undefined,
         article: section ?? title,

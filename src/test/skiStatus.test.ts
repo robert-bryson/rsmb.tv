@@ -432,7 +432,8 @@ describe('2026/27 Indy destination coverage', () => {
         expect(passFilterFamily(passes[0])).toBe('indy');
         expect(filterSkiAreas(skiAreas, { passes }).map(area => area.id))
             .toEqual(['belleayre-mountain', 'gore-mountain', 'mont-ripley-ski-area', 'north-cascade-heli', 'whiteface']);
-        expect(filterSkiAreas(skiAreas, { passes: ['indy'] })).toHaveLength(298);
+        expect(filterSkiAreas(skiAreas, { passes: ['indy'] })).toHaveLength(297);
+        expect(filterSkiAreas(skiAreas, { query: 'eagle point', passes: ['indy'] })).toEqual([]);
         expect(filterSkiAreas(skiAreas, { query: 'gore mountain', passes: ['indy'] }).map(area => area.id)).toEqual(['gore-mountain-nordic-center']);
         expect(filterSkiAreas(skiAreas, { query: 'stoke mountain', passes: ['indy'] })[0]?.skiing).toBe('indoor');
     });

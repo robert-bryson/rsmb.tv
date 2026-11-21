@@ -23,12 +23,14 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
 
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-ci-build-test-'));
     const generatedContent = [path.join(repoRoot, 'src/content/posts.json'), path.join(repoRoot, 'src/content/blog')];
+    const skiResearch = path.join(repoRoot, 'projects/ski-status/research') + path.sep;
     try {
         for (const entry of ['index.html', 'package.json', 'vite.config.ts', 'src', 'shared', 'scripts',
-            'projects/ski-status/data', 'tests/fixtures/trip-content']) {
+            'projects/ski-status/data', 'projects/ski-status/research', 'tests/fixtures/trip-content']) {
             fs.cpSync(path.join(repoRoot, entry), path.join(root, entry), {
                 recursive: true,
-                filter: source => !generatedContent.includes(source),
+                filter: source => !generatedContent.includes(source)
+                    && (!source.startsWith(skiResearch) || /^resort-access-\d{4}(?:-\d{2})?\.json$/.test(path.basename(source))),
             });
         }
         fs.symlinkSync(path.join(repoRoot, 'node_modules'), path.join(root, 'node_modules'), 'junction');
@@ -54,6 +56,7 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
         expect(tripHtml).toContain('rel="canonical" href="https://rsmb.tv/trips/coastal-test"');
         expect(postHtml).toContain('<title>Reading test — rsmb</title>');
         expect(skiHtml).toContain('rel="canonical" href="https://rsmb.tv/projects/ski-status/map"');
+        expect(fs.existsSync(path.join(root, 'dist/data/ski-status/assets'))).toBe(false);
         const htmlFiles = fs.readdirSync(path.join(root, 'dist'), { recursive: true }).filter(filename => filename.endsWith('.html'));
         for (const filename of htmlFiles) {
             expect(fs.readFileSync(path.join(root, 'dist', filename), 'utf8'), filename).not.toContain('noindex');
@@ -65,6 +68,14 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
         expect(scripts.length).toBeGreaterThan(0);
         const bundledCode = scripts.map(filename => fs.readFileSync(path.join(assets, filename), 'utf8')).join('\n');
         expect(bundledCode).toContain('Opening story paragraph.');
+        const visitorChunk = scripts.find(filename => filename.startsWith('SkiVisitorInformation-'));
+        expect(visitorChunk).toBeDefined();
+        expect(fs.readFileSync(path.join(assets, visitorChunk!), 'utf8')).toContain('Adult Niseko United All Mountain one-day pass');
+        for (const file of [visitorChunk!, `${visitorChunk}.map`]) {
+            const output = fs.readFileSync(path.join(assets, file), 'utf8');
+            expect(output).not.toContain('External embedding and rebroadcast permission');
+            expect(output).not.toContain('termsSource');
+        }
         expect(bundledCode).not.toContain('unfinished-draft');
         expect(bundledCode).not.toContain('Unfinished draft must stay private');
         expect(fs.existsSync(path.join(root, 'src/content/posts.json'))).toBe(false);

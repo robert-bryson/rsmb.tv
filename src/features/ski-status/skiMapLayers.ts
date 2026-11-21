@@ -6,6 +6,7 @@ import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBa
 import type { SkiPassSelection } from './browse';
 import { passIconUrls } from './passIcons';
 import { skiResortIcon } from './resortDetailsData';
+import type { SkiArchive } from './useSkiArchive';
 
 export const sourceId = 'ski-areas';
 export const selectionSource = 'ski-area-selection';
@@ -26,7 +27,9 @@ const resortImageSize = 20;
 const showResortIcon: ExpressionSpecification = ['==', ['get', 'markerMode'], 'default'];
 const markerBackground = '#182938';
 export const markerLayers = [selectedLayer, pointLayer, statusLayer, selectedStatusLayer, resortIconLayer, selectedResortIconLayer, passBadgeLayer, selectedPassBadgeLayer];
-const resortIconScale: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 0, 0.16, 3, 0.24, 6, 0.75, 9, 1];
+const resortIconScale: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 0, 0.16, 3, 0.24, 6, 0.5, 9, 0.8, 12, 1];
+const selectedIconScale: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 0, 0.68, 5, 0.8, 9, 0.95, 12, 1];
+const resortNameMinZoom = 7;
 
 export function areaFeatures(areas: readonly SkiArea[], mode: MarkerMode, statuses: ReadonlyMap<string, ResortStatus>, passes?: SkiPassSelection): FeatureCollection<Point> {
     return { type: 'FeatureCollection', features: areas.map(area => {
@@ -43,15 +46,17 @@ export function areaFeatures(areas: readonly SkiArea[], mode: MarkerMode, status
     }) };
 }
 
-function drawImage(map: MapLibreMap, id: string, size: number, draw: (context: CanvasRenderingContext2D) => void) {
+function drawImage(map: MapLibreMap, id: string, size: number, draw: (context: CanvasRenderingContext2D) => void | false, update = false) {
     const pixelRatio = 2;
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = size * pixelRatio;
     const context = canvas.getContext('2d');
     if (!context) return;
     context.scale(pixelRatio, pixelRatio);
-    draw(context);
-    map.addImage(id, context.getImageData(0, 0, canvas.width, canvas.height), { pixelRatio });
+    if (draw(context) === false) return;
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
+    if (update) map.updateImage(id, pixels);
+    else map.addImage(id, pixels, { pixelRatio });
 }
 
 function addMountainImage(map: MapLibreMap) {
@@ -72,44 +77,99 @@ function addMountainImage(map: MapLibreMap) {
     });
 }
 
-export async function loadResortImages() {
+function loadResortImage(url: string) {
+    return new Promise<HTMLImageElement | undefined>(resolve => {
+        // Use the browser decoder for both PNG files and resort favicons.
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => resolve(undefined);
+        image.src = url;
+    });
+}
+
+export async function loadResortImages(archive?: SkiArchive) {
     const images = await Promise.all(skiAreas.flatMap(({ id }) => {
-        const url = skiResortIcon(id);
-        if (!url) return [];
-        return [new Promise<{ id: string; image: HTMLImageElement } | undefined>(resolve => {
-            // Use the browser decoder for both PNG files and resort favicons.
-            const image = new Image();
-            image.onload = () => resolve({ id, image });
-            image.onerror = () => resolve(undefined);
-            image.src = url;
-        })];
+        const local = archive?.get(id);
+        const runtime = skiResortIcon(id);
+        const candidates = [local?.mapIcon, local?.detailsIcon, runtime].filter(url => url !== undefined);
+        if (!candidates.length) return [];
+        return [(async () => {
+            for (const url of new Set(candidates)) {
+                const image = await loadResortImage(url);
+                if (image) return { id, image, archived: url !== runtime };
+            }
+        })()];
     }));
     return images.filter(image => image !== undefined);
 }
 
+function drawResortIcon(context: CanvasRenderingContext2D, image: HTMLImageElement) {
+    const sampleSize = context.canvas.width;
+    const sampleScale = sampleSize / Math.max(image.naturalWidth, image.naturalHeight);
+    context.imageSmoothingQuality = 'high';
+    context.save();
+    context.resetTransform();
+    context.drawImage(image, 0, 0, image.naturalWidth * sampleScale, image.naturalHeight * sampleScale);
+    const { data } = context.getImageData(0, 0, sampleSize, sampleSize);
+    context.clearRect(0, 0, sampleSize, sampleSize);
+    context.restore();
+
+    // Sample the visible artwork at sprite resolution so transparent padding does not affect the fit or backing.
+    let left = sampleSize;
+    let top = sampleSize;
+    let right = 0;
+    let bottom = 0;
+    let dark = 0;
+    let light = 0;
+    for (let y = 0; y < sampleSize; y++) {
+        for (let x = 0; x < sampleSize; x++) {
+            const index = (y * sampleSize + x) * 4;
+            const alpha = data[index + 3];
+            if (alpha < 32) continue;
+            left = Math.min(left, x);
+            top = Math.min(top, y);
+            right = Math.max(right, x + 1);
+            bottom = Math.max(bottom, y + 1);
+            const tone = data[index] * 0.2126 + data[index + 1] * 0.7152 + data[index + 2] * 0.0722;
+            if (tone < 140) dark += alpha;
+            else light += alpha;
+        }
+    }
+    if (!right) return false;
+
+    const sourceX = left / sampleScale;
+    const sourceY = top / sampleScale;
+    const sourceWidth = Math.min(right / sampleScale, image.naturalWidth) - sourceX;
+    const sourceHeight = Math.min(bottom / sampleScale, image.naturalHeight) - sourceY;
+    const scale = (resortImageSize - 3) / Math.max(sourceWidth, sourceHeight);
+    const width = sourceWidth * scale;
+    const height = sourceHeight * scale;
+    const lightBacking = dark >= light;
+    context.beginPath();
+    context.roundRect(0.5, 0.5, resortImageSize - 1, resortImageSize - 1, 3.5);
+    context.fillStyle = lightBacking ? '#edf5fa' : markerBackground;
+    context.fill();
+    context.save();
+    context.clip();
+    context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight,
+        (resortImageSize - width) / 2, (resortImageSize - height) / 2, width, height);
+    context.restore();
+    context.strokeStyle = lightBacking ? markerBackground : '#a2b7c7';
+    context.stroke();
+}
+
 export function addResortImages(map: MapLibreMap, images: Awaited<ReturnType<typeof loadResortImages>>) {
     if (!map.hasImage(mountainImage)) return;
-    for (const { id, image } of images) {
+    for (const { id, image, archived } of images) {
         const name = resortImagePrefix + id;
-        if (map.hasImage(name)) continue;
-        drawImage(map, name, resortImageSize, context => {
-            const scale = (resortImageSize - 3) / Math.max(image.naturalWidth, image.naturalHeight);
-            const width = image.naturalWidth * scale;
-            const height = image.naturalHeight * scale;
-            context.beginPath();
-            context.roundRect(0.5, 0.5, resortImageSize - 1, resortImageSize - 1, 4);
-            context.fillStyle = '#7a8995';
-            context.fill();
-            context.strokeStyle = markerBackground;
-            context.stroke();
-            context.clip();
-            context.drawImage(image, (resortImageSize - width) / 2, (resortImageSize - height) / 2, width, height);
-        });
+        const update = map.hasImage(name);
+        if (update && !archived) continue;
+        drawImage(map, name, resortImageSize, context => drawResortIcon(context, image), update);
     }
     const available = images.filter(({ id }) => map.hasImage(resortImagePrefix + id)).map(({ id }) => id);
-    if (!available.length) return;
-    const icon: ExpressionSpecification = ['image', ['match', ['get', 'areaId'], available,
-        ['concat', resortImagePrefix, ['get', 'areaId']], mountainImage]];
+    const icon: string | ExpressionSpecification = available.length > 0
+        ? ['image', ['match', ['get', 'areaId'], available, ['concat', resortImagePrefix, ['get', 'areaId']], mountainImage]]
+        : mountainImage;
     for (const layer of [resortIconLayer, selectedResortIconLayer]) map.setLayoutProperty(layer, 'icon-image', icon);
 }
 
@@ -155,13 +215,17 @@ export function addAreaLayers(map: MapLibreMap, data: FeatureCollection<Point>, 
     });
     if (labelLayer && map.getGlyphs()) {
         map.addLayer({
-            id: 'ski-area-names', type: 'symbol', source: sourceId, minzoom: 8,
+            id: 'ski-area-names', type: 'symbol', source: sourceId, minzoom: resortNameMinZoom,
             layout: {
-                'text-field': ['get', 'name'], 'text-size': 12, 'text-font': ['Open Sans Regular'],
+                'text-field': ['get', 'name'], 'text-font': ['Open Sans Regular'],
+                'text-size': ['interpolate', ['linear'], ['zoom'], resortNameMinZoom, 10, 9, 12, 12, 13],
                 'text-variable-anchor': ['top', 'bottom', 'left', 'right'], 'text-radial-offset': 1.2,
-                'text-max-width': 12,
+                'text-max-width': 12, 'text-justify': 'auto',
             },
-            paint: { 'text-color': '#e4f2f6', 'text-halo-color': '#182938', 'text-halo-width': 1.5 },
+            paint: {
+                'text-opacity': ['interpolate', ['linear'], ['zoom'], resortNameMinZoom, 0, 8, 0.52, 9.5, 1],
+                'text-color': '#e4f2f6', 'text-halo-color': '#182938', 'text-halo-width': 1.5,
+            },
         });
     }
     addStatusImages(map);
@@ -175,20 +239,24 @@ export function addAreaLayers(map: MapLibreMap, data: FeatureCollection<Point>, 
     map.addLayer({
         id: selectedLayer, type: 'circle', source: selectionSource,
         paint: {
-            'circle-radius': 10, 'circle-color': hasResortIcons ? ['case', showResortIcon, markerBackground, ['get', 'color']] : ['get', 'color'],
-            'circle-stroke-color': '#fbbf24', 'circle-stroke-width': 3,
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 7, 5, 8, 9, 9.5, 12, 10],
+            'circle-color': hasResortIcons ? ['case', showResortIcon, markerBackground, ['get', 'color']] : ['get', 'color'],
+            'circle-stroke-color': '#fbbf24', 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 0, 2, 10, 3],
         },
     });
     map.addLayer({
         id: selectedStatusLayer, type: 'symbol', source: selectionSource,
-        layout: { 'icon-image': ['image', ['get', 'statusIcon']], 'icon-allow-overlap': true, 'icon-rotation-alignment': 'viewport' },
+        layout: {
+            'icon-image': ['image', ['get', 'statusIcon']], 'icon-size': selectedIconScale,
+            'icon-allow-overlap': true, 'icon-rotation-alignment': 'viewport',
+        },
     });
     if (hasResortIcons) {
         for (const [id, source, selected] of [[resortIconLayer, sourceId, false], [selectedResortIconLayer, selectionSource, true]] as const) {
             map.addLayer({
                 id, type: 'symbol', source, filter: showResortIcon,
                 layout: {
-                    'icon-image': mountainImage, 'icon-size': selected ? 1 : resortIconScale,
+                    'icon-image': mountainImage, 'icon-size': selected ? selectedIconScale : resortIconScale,
                     'icon-allow-overlap': true, 'icon-ignore-placement': true, 'icon-padding': 0, 'icon-rotation-alignment': 'viewport',
                 },
             }, selected ? undefined : selectedLayer);
@@ -274,7 +342,7 @@ export function addPassBadges(map: MapLibreMap, images: Awaited<ReturnType<typeo
             id, type: 'symbol', source: selected ? selectionSource : sourceId,
             layout: {
                 'icon-image': ['image', ['concat', prefix, ['get', 'passBadge']]],
-                'icon-size': selected ? ['interpolate', ['linear'], ['zoom'], 2, 0.68, 5, 0.8, 9, 0.95, 12, 1] : resortIconScale,
+                'icon-size': selected ? selectedIconScale : resortIconScale,
                 'icon-allow-overlap': true,
                 'icon-ignore-placement': true,
                 'icon-rotation-alignment': 'viewport',

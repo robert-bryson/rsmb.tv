@@ -22,7 +22,11 @@ If CI fails, the workflow skips the release job. The previous deployment continu
 - Decoding every responsive project-preview image, including AVIF and WebP variants.
 - Temperature schemas and version 2 monthly thresholds, flight route/airport schemas, matching tornado annual summary/index contracts, and requested yearly tornado geometry.
 - Application errors, failed required requests, map worker errors, and usable Flights, temperature, and tornado map startup.
-- Ski terrain at Heavenly. The validator enables **Ski terrain** in **Layers**. It checks for HTTP `206` and the expected `Content-Range`. It compares each response with the same bytes in the checked-in archive. It opens the Heavenly Gondola and Cloud 9 tooltips. The report gives the verified response count in `skiTerrainRanges`.
+- Ski terrain at Heavenly. The validator turns on **Ski terrain** in **Layers**.
+  It downloads the archive from the preview and checks its SHA-256 checksum against the terrain index.
+  Each range must return HTTP `206`, the expected `Content-Range`, and the correct bytes.
+  The validator opens the Heavenly Gondola and Cloud 9 tooltips.
+  It records the verified range count in `skiTerrainRanges`.
 
 The validator disables browser HTTP caching. The header checks inspect network responses.
 Chromium can omit HTTP Strict Transport Security (HSTS) when it reuses a cached worker response.
@@ -46,7 +50,16 @@ The deployment and proof must identify the same revision and preview job. The pr
 A redirect from the deployment record or proof URL stops production.
 Set `RELEASE_VALIDATION_BASE_URL` to override the public proof location. Set `RELEASE_PREVIEW_URL` to override the preview origin.
 
-The preview and production build the same revision with the same production settings. External content can change between builds.
+The preview and production build the same revision with the same production settings.
+The ski asset checksums fix the asset versions for that revision. Other external content can change between builds.
+
+## Ski-status build assets
+
+Set `SKI_ASSETS_BASE_URL` at app level in Amplify before the first ski-status build.
+Use an HTTPS mirror with the versioned runtime files for the candidate revision.
+Amplify uses this mirror when the NAS files are unavailable.
+The build stops if a required file is missing or has a different checksum.
+Use the [ski-status asset procedure](../projects/ski-status/readme.md#release-assets) to prepare the mirror.
 
 ## Activation
 

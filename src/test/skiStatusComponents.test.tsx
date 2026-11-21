@@ -27,7 +27,7 @@ describe('ski-status results and comparison', () => {
         const washington = list.getByRole('button', { name: 'Crystal Mountain', description: /, WA/ });
         fireEvent.click(washington);
         expect(onSelect).toHaveBeenCalledWith(areas.find(area => area.region === 'WA')?.id, washington);
-        expect(list.getAllByText('No report')).toHaveLength(2);
+        expect(list.getAllByText('Skiing status unknown')).toHaveLength(2);
     });
 
     it.each([

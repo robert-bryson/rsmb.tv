@@ -1,9 +1,7 @@
 import { useRef, useState, type ReactNode, type RefObject } from 'react';
 import { passFilterKeys, passFilterOptions, skiingFilterOptions, type SkiUnits } from './browse';
 import { statusFilterLabels } from './conditions';
-import { markerLegend, markerModes, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passProducts, readSkiDate } from './passRules';
-import { skiRunLegend, skiTerrainLegend, type TerrainConvention } from './resortTerrainData';
 import { indyHomeAreas, skiLocationActions, skiLocationGroups, skiLocationLabels, skiLocationModes, toggleSkiPassFilter, writeSkiPassProduct, type SkiFilters } from './skiFilters';
 import type { SkiLocationFilters } from './skiGeography';
 import { seasonMonths } from './seasons';
@@ -152,64 +150,4 @@ export function SkiFilterDialog({ dialog, filters, resultCount, units, onShowRes
                 onChange={event => setParam('night', event.target.checked ? '1' : undefined)} /> Night skiing</label>
         </div>
     </SkiDialog>;
-}
-
-interface LayersProps {
-    dialog: DialogProps['dialog'];
-    colors: MarkerMode;
-    units: SkiUnits;
-    indyDiscounts: boolean;
-    terrain: boolean;
-    resortTerrain: boolean;
-    terrainKey: ReactNode;
-    setParam: FilterProps['setParam'];
-}
-
-export function SkiLayerDialog({ dialog, colors, units, indyDiscounts, terrain, resortTerrain, terrainKey, setParam }: LayersProps) {
-    const legend = markerLegend(colors, units, indyDiscounts);
-    return <SkiDialog dialog={dialog} id="ski-map-layers" title="Map layers">
-        <div className="ski-fields">
-            <div className="col-span-full"><SkiField id="ski-marker-color" label="Color by">
-                <select id="ski-marker-color" className="ski-input" value={colors} onChange={event => setParam('color', event.target.value)}>
-                    {Object.entries(markerModes).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
-                </select>
-            </SkiField></div>
-            <label className="ski-check"><input type="checkbox" checked={terrain}
-                onChange={event => setParam('terrain', event.target.checked ? '1' : '0')} /> Terrain relief</label>
-            <label className="ski-check"><input type="checkbox" checked={resortTerrain}
-                onChange={event => setParam('skiTerrain', event.target.checked ? undefined : '0')} /> Ski terrain</label>
-        </div>
-        {legend.length > 0 && <ul aria-label="Resort map key" className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-200">
-            {legend.map(({ color, label, family, multiple, glyph }) => <li key={label} className="flex items-center gap-1.5">
-                {family ? <SkiPassIcon family={family} size={20} />
-                    : multiple ? <span aria-hidden="true" className="grid size-5 place-items-center rounded-full font-bold"
-                        style={{ backgroundColor: color, color: passBadgeTextColor }}>+</span>
-                    : <span aria-hidden="true" className={glyph ? 'w-4 text-center font-bold' : 'size-2.5 rounded-full'}
-                        style={glyph ? { color } : { backgroundColor: color }}>{glyph}</span>}{label}
-            </li>)}
-        </ul>}
-        {terrainKey}
-    </SkiDialog>;
-}
-
-const conventionLabels: Record<TerrainConvention, string> = { default: 'Green and blue convention', europe: 'European convention', japan: 'Japanese convention' };
-
-function TerrainLines({ entries }: { entries: readonly { label: string; color: string; dashed?: boolean }[] }) {
-    return <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-200">
-        {entries.map(({ label, color, dashed }) => <li key={label} className="flex items-center gap-2">
-            <span aria-hidden="true" className="w-5 border-t-2" style={{ borderColor: color, borderStyle: dashed ? 'dashed' : 'solid',
-                filter: color === '#18181b' ? 'drop-shadow(0 0 1px white)' : undefined }} />{label}
-        </li>)}
-    </ul>;
-}
-
-export function SkiTerrainKey({ conventions }: { conventions: readonly TerrainConvention[] }) {
-    return <section aria-labelledby="ski-terrain-key-title" className="mt-4 space-y-2 border-t border-slate-700 pt-3">
-        <h3 id="ski-terrain-key-title" className="font-semibold">Mapped runs and lifts</h3>
-        {conventions.map(convention => <div key={convention} className="space-y-1">
-            <p className="text-sm text-slate-300">{conventionLabels[convention]}</p>
-            <TerrainLines entries={skiRunLegend(convention)} />
-        </div>)}
-        <TerrainLines entries={skiTerrainLegend} />
-    </section>;
 }

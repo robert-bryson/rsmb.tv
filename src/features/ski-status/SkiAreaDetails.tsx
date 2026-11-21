@@ -1,4 +1,5 @@
-import { useState, type Ref } from 'react';
+import { lazy, Suspense, useState, type Ref } from 'react';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { conditionColumns, mountainColumns, formatElevation, formatSkiStat, formatSnowDepth, formatTemperature, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
 import { areaForecast, isFreshReport, localReportTime, reportAgeHours, reportAgeLabel, skiDayStatus, terrainStatusText, type Conditions, type ResortReport } from './conditions';
@@ -8,13 +9,17 @@ import { skiResortIcon } from './resortDetailsData';
 import { SkiIconButton } from './SkiIcon';
 import { SkiLocation } from './SkiLocation';
 import { SkiPassIcon } from './SkiPassIcon';
+import { SkiAssetIcon } from './SkiAssetIcon';
 import { SkiResortLinks } from './SkiResortLinks';
 import { SkiSeasonDetails } from './SkiSeasonDetails';
 import { SkiStatusLabel } from './SkiStatusLabel';
+import type { SkiArchiveResort } from './useSkiArchive';
 
+const SkiVisitorInformation = lazy(() => import('./SkiVisitorInformation'));
 const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
 const passAccessNotes = { included: '', discount: ' (discount only)', listed: ' (lift access unconfirmed)' };
 const detailColumns = mountainColumns.slice(2);
+
 const seasonLabel = 'Published season window';
 const difficultyLabel = 'Published difficulty';
 const reportDisclosureClass = 'min-h-11 cursor-pointer py-3 text-zinc-200 hover:text-cyan-300 focus-visible:outline-2 focus-visible:outline-cyan-300';
@@ -63,6 +68,7 @@ interface Props {
     onShowTerrain?: () => void;
     onZoomLocation?: (place: string) => void;
     conditions?: Conditions;
+    archive?: SkiArchiveResort;
     product?: PassProduct;
     skiDate?: string;
     homeAreaId?: string;
@@ -151,7 +157,7 @@ function OperatorForecast({ report, area, units, now }: { report: ResortReport; 
     </details>;
 }
 
-export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain, onZoomLocation, conditions, product, skiDate, homeAreaId }: Props) {
+export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain, onZoomLocation, conditions, archive, product, skiDate, homeAreaId }: Props) {
     const stats = detailColumns.flatMap(({ key, label }) => {
         const value = formatSkiStat(area, key, units);
         return value === undefined && key.startsWith('mapped') ? [] : [{ key, label, value }];
@@ -168,11 +174,11 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
     const rule = access?.rule;
     const links = detailSourceLinks(area);
     const officialConditions = links.find(({ url }) => url === area.reportUrl);
-    const icon = skiResortIcon(area.id);
     return <section id="ski-area-details" ref={sectionRef} tabIndex={-1} aria-labelledby="ski-area-name" className="ski-details">
         <div className="ski-details-heading">
             <div className="ski-resort-identity">
-                {icon && <img className="ski-resort-icon" src={icon} width={42} height={42} alt="" />}
+                <SkiAssetIcon key={area.id} urls={[archive?.detailsIcon, archive?.mapIcon, skiResortIcon(area.id)]}
+                    className="ski-resort-icon" size={42} />
                 <div>
                     <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>
                     <p className="text-sm text-zinc-300"><SkiLocation area={area} onZoom={onZoomLocation} /></p>
@@ -221,6 +227,9 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
             {report?.forecastDays && <OperatorForecast report={report} area={area} units={units} now={now} />}
             {report?.terrain && <ReportedTerrain report={report} area={area} now={now} />}
         </section>}
+        <ErrorBoundary key={area.id} fallback={<p className="text-sm text-zinc-300">Visitor information unavailable.</p>}>
+            <Suspense fallback={null}><SkiVisitorInformation areaId={area.id} archivedMaps={archive?.trailMaps} /></Suspense>
+        </ErrorBoundary>
         <SkiSeasonDetails area={area} units={units} conditions={conditions} />
         <div className="flex flex-wrap gap-x-5 text-sm">
             {links.filter(link => link !== officialConditions).map(({ url, label }) => <a key={url} className={linkClass} href={url}>{label}</a>)}

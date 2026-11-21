@@ -39,5 +39,12 @@ export function SkiAreaPopup({ area, mapRef, report, status, now, onZoomLocation
         <p className="text-sm font-semibold">{area.name}</p>
         <p className="text-slate-300"><SkiLocation area={area} onZoom={onZoomLocation} /></p>
         <SkiStatusLabel status={status} report={report} now={now} />
+        {status === 'unknown' && <div className="space-y-1 border-t border-zinc-700 pt-1.5">
+            {!report && <p className="text-slate-300">No verified operating report for today.</p>}
+            <a href={area.reportUrl ?? area.website} target="_blank" rel="noreferrer"
+                className="inline-block text-cyan-200 underline underline-offset-2">
+                {area.reportUrl ? 'Check official conditions' : 'Visit resort website'}
+            </a>
+        </div>}
     </div>, content);
 }

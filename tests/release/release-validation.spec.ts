@@ -1,4 +1,5 @@
 import { expect, test, type Browser, type BrowserContextOptions, type TestInfo } from '@playwright/test';
+import { createHash } from 'node:crypto';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import fs from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
@@ -11,6 +12,7 @@ import { makeAirport, makeFlight } from '../../src/test/helpers/flights';
 import { flightsSchema, visitedAirportsSchema } from '../../shared/flightSchemas';
 import { recentRecordsSchema, stateRecordsSchema, countyRecordsSchema } from '../../shared/temperatureSchemas';
 import { buildTornadoTrendIndex, summarizeTornadoTrends } from '../../shared/tornadoTrends';
+import { skiAssetUrl, skiTerrainFile } from '../../shared/skiAssets';
 
 const revision = 'a'.repeat(40);
 const jobId = '42';
@@ -19,14 +21,16 @@ const previewRegistry = readFileSync(new URL('../../src/content/project-previews
 const previewPaths = new Set(previewRegistry.match(/\/images\/previews\/[^" ,]+/g));
 const corruptPreview = [...previewPaths].find(pathname => pathname.endsWith('.avif'))!;
 const trackURL = 'https://data.rsmb.tv/tornadoes/tracks/2025.geojson';
-const skiTerrainURL = '/assets/resort-terrain-fixture.pmtiles';
-const skiTerrainArchive = readFileSync(new URL('../../projects/ski-status/data/resort-terrain.pmtiles', import.meta.url));
+const skiTerrainArchive = Buffer.from(Array.from({ length: 512 }, (_, index) => index % 251));
+const terrainChecksum = createHash('sha256').update(skiTerrainArchive).digest('hex');
+const skiTerrainURL = skiAssetUrl(skiTerrainFile(terrainChecksum));
+const otherTerrainURL = skiAssetUrl(skiTerrainFile('0'.repeat(64)));
 const routes = ['/', '/about', '/posts', '/projects', '/projects/flights/map?stats=0',
     '/projects/temperature-records/map', '/projects/temperature-records/map?view=state',
     '/projects/temperature-records/map?view=county', '/projects/tornado-tracks/map', SKI_TERRAIN_ROUTE];
 type Failure = 'aborted-css' | 'aborted-worker' | 'track-http' | 'csp' | 'cache' | 'image' | 'about' | 'deployment' | 'map-console'
     | 'deployment-redirect' | 'deployment-job-changed'
-    | 'terrain-full' | 'terrain-range' | 'terrain-bytes' | 'terrain-run' | 'terrain-no-requests';
+    | 'terrain-full' | 'terrain-range' | 'terrain-bytes' | 'terrain-run' | 'terrain-no-requests' | 'terrain-digest' | 'terrain-path';
 
 const flights = flightsSchema.parse({ type: 'FeatureCollection', features: [{ type: 'Feature',
     geometry: { type: 'LineString', coordinates: [[-122.31, 47.45], [-118.41, 33.94]] }, properties: makeFlight(),
@@ -93,12 +97,13 @@ if (location.pathname === '/projects/flights/map') {
     let terrainLoaded = false;
     map.querySelector('button').onclick = () => zoomClicks++;
     const dialog = map.querySelector('dialog');
-    map.querySelectorAll('button')[1].onclick = () => dialog.showModal();
+    map.querySelectorAll('button')[1].onclick = () => dialog.show();
     dialog.querySelector('button').onclick = () => dialog.close();
     map.querySelector('input').onchange = async () => {
         if (main.dataset.failure !== 'terrain-no-requests') {
-            await Promise.all(['bytes=0-127', 'bytes=5200000-5200127'].map(range =>
-                fetch('${skiTerrainURL}', { cache: 'no-store', headers: { Range: range } }).then(response => response.arrayBuffer())));
+            const url = main.dataset.failure === 'terrain-path' ? '${otherTerrainURL}' : '${skiTerrainURL}';
+            await Promise.all(['bytes=0-127', 'bytes=256-383'].map(range =>
+                fetch(url, { cache: 'no-store', headers: { Range: range } }).then(response => response.arrayBuffer())));
         }
         terrainLoaded = true;
     };
@@ -144,9 +149,13 @@ async function startPreview(failure?: Failure, localOnly = false) {
             body = "postMessage('ready');"; contentType = 'application/javascript';
         } else if (pathname === '/assets/site.css') {
             body = 'body { margin: 16px; color: #223344; } [data-map-state] { min-height: 32px; }'; contentType = 'text/css';
-        } else if (pathname === skiTerrainURL) {
+        } else if (pathname === skiTerrainURL || pathname === otherTerrainURL) {
             const range = /^bytes=(\d+)-(\d+)$/.exec(request.headers.range ?? '');
-            if (!range) { response.writeHead(400, headers).end('Range required'); return; }
+            if (!range) {
+                const bytes = failure === 'terrain-digest' ? Buffer.alloc(skiTerrainArchive.length) : skiTerrainArchive;
+                response.writeHead(200, { 'content-type': 'application/octet-stream', ...headers }).end(bytes);
+                return;
+            }
             const start = Number(range[1]);
             const end = Number(range[2]);
             const status = failure === 'terrain-full' ? 200 : 206;
@@ -217,7 +226,7 @@ async function validateFixture(browser: Browser, testInfo: TestInfo, failure?: F
     try {
         const report = await validateReleasePreview({ baseURL: preview.origin, revision,
             jobId: failure === 'deployment-job-changed' ? undefined : jobId, browser: wrappedBrowser,
-            outputPath: testInfo.outputPath('release-validation.json'), timeoutMs: 2_000 });
+            outputPath: testInfo.outputPath('release-validation.json'), timeoutMs: 2_000, terrainChecksum });
         return { report, servedPreviews: preview.servedPreviews, externalRequests, requests: preview.requests };
     } finally {
         await preview.close();
@@ -265,6 +274,8 @@ for (const [description, failure, diagnostic] of [
     ['a full ski terrain archive response to a range request', 'terrain-full', /Ski terrain expected HTTP 206/i],
     ['an incorrect ski terrain Content-Range', 'terrain-range', /Wrong ski terrain Content-Range/i],
     ['incorrect ski terrain payload bytes', 'terrain-bytes', /Ski terrain bytes differ/i],
+    ['a terrain download with the wrong checksum', 'terrain-digest', /SHA-256 mismatch/i],
+    ['ski terrain served at a different checksum path', 'terrain-path', /serves a ski terrain archive for a different checksum/i],
     ['a missing rendered Heavenly run', 'terrain-run', /Heavenly terrain did not render Cloud 9/i],
     ['a ski map without terrain range requests', 'terrain-no-requests', /did not serve any ski terrain byte ranges/i],
 ] as const) {

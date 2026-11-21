@@ -39,6 +39,89 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "bear-valley-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current profile lists no Base blackouts. Check local pickup, capacity, and reservation instructions before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/bear-valley-mountain-resort",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "beaver-mountain",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Redeem at the mountain ticket counter. The issuer posts Base holiday and peak weekend blackouts.",
+      "source": "https://www.skithebeav.com/tickets-and-passes/",
+      "checkedOn": "2026-11-21",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-09",
+          "2027-01-10"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-18"
+        ],
+        [
+          "2027-01-23",
+          "2027-01-24"
+        ],
+        [
+          "2027-01-30",
+          "2027-01-31"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-07"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-15"
+        ],
+        [
+          "2027-02-20",
+          "2027-02-21"
+        ],
+        [
+          "2027-02-27",
+          "2027-02-28"
+        ],
+        [
+          "2027-03-06",
+          "2027-03-07"
+        ]
+      ]
+    },
+    {
+      "areaId": "beaver-mountain",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Redeem at the mountain ticket counter. The issuer posts Base holiday and peak weekend blackouts.",
+      "source": "https://www.skithebeav.com/tickets-and-passes/",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "berkshire-east-ski-resort",
       "products": [
         "indy-base",
@@ -64,6 +147,51 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "big-moose",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy lists two days with no Base dates currently posted for this partner. Check where to redeem at the resort.",
+      "source": "https://www.indyskipass.com/our-resorts/big-moose",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "big-rock-mountain",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy currently lists no Base blackouts. Check current pickup instructions for the new RFID system.",
+      "source": "https://www.indyskipass.com/our-resorts/big-rock-mountain",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "black-mountain-of-maine",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Present the pass at the resort ticket window. The resort confirms redemption without blackout dates.",
+      "source": "https://skiblackmountain.org/indy-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "bolton-valley-resort",
       "products": [
         "indy-base",
@@ -79,6 +207,59 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "brundage-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Reserve in the Brundage store with the Indy customer number. Pick up a Brundage RFID card at Guest Services if needed. A third day is 25% off the window price.",
+      "source": "https://brundage.com/indypassvisitors/",
+      "checkedOn": "2026-11-21",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-13"
+        ]
+      ]
+    },
+    {
+      "areaId": "brundage-mountain-resort",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Reserve in the Brundage store with the Indy customer number. Pick up a Brundage RFID card at Guest Services if needed. A third day is 25% off the window price.",
+      "source": "https://brundage.com/indypassvisitors/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "buffalo-ski-club",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy+ and Indy+ Add-On provide two days without Base blackouts. Verify the club’s visitor redemption instructions.",
+      "source": "https://www.indyskipass.com/our-resorts/buffalo-ski-club",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "burke-mountain-resort",
       "products": [
         "indy-base",
@@ -91,6 +272,36 @@
       "reservation": "required",
       "note": "Book up to the day of your visit, subject to availability. Check in at the ticket window or customer service to activate a Burke card.",
       "source": "https://www.skiburke.com/?id=8&view=category",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "camden-snow-bowl",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "The issuer lists no blackout dates. Check whether Indy guests need a Snow Bowl card at the ticket counter.",
+      "source": "https://www.indyskipass.com/our-resorts/camden-snow-bowl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "camp-fortune",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/camp-fortune",
       "checkedOn": "2026-11-21"
     },
     {
@@ -179,6 +390,189 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "centre-vorlage",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/centre-vorlage",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "cherry-peak",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy currently lists no Base blackouts. Verify on-site redemption instructions.",
+      "source": "https://www.indyskipass.com/our-resorts/cherry-peak",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "dartmouth-skiway",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "No advance reservation is needed. Redeem at the McLane Family Lodge ticket windows.",
+      "source": "https://dartmouthskiway.com/tickets/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "destination-owls-head",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ]
+      ],
+      "note": "Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUXA5uhe2QwuQvCTpaSpIQmNNWIAp4gADGo5DIUeDwMOfgg9a8nEMU2K_4J9_24E2dGaLgbBnplpqg/pub?gid=1360740952&single=true&output=csv",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "destination-owls-head",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/destination-owls-head",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "detroit-mountain",
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "source": "https://detroitmountain.snowcloud.shop/shop/page/29CBD3FD-703B-C053-22BB-473AA9013184",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ]
+    },
+    {
+      "areaId": "dodge-ridge",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current profile lists no Base blackouts. Check local pickup, capacity, and reservation instructions before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/dodge-ridge",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "dry-hill-ski-area",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy currently lists no Base blackouts. Check the operator for walk-up redemption and ticket availability.",
+      "source": "https://www.indyskipass.com/our-resorts/dry-hill-ski-area",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "eagle-point",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "excluded",
+      "source": "https://www.eaglepointresort.com/eagle-point-resort-announces-2026-27-winter-season-closure-following-cottonwood-fire/",
+      "checkedOn": "2026-11-21",
+      "note": "The resort is closed for the 2026/27 winter season after the Cottonwood Fire."
+    },
+    {
+      "areaId": "greek-peak-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Indy lists advance reservations as required. The resort asks for 48 hours’ notice and may accommodate same-day redemption at The Mountain Shop if space remains.",
+      "source": "https://www.indyskipass.com/our-resorts/greek-peak-mountain-resort",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "hyland-hills",
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.indyskipass.com/blackout-dates-reservations",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-18"
+        ]
+      ]
+    },
+    {
+      "areaId": "hyland-hills",
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.indyskipass.com/our-resorts/hyland-hills",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ]
+    },
+    {
       "areaId": "jay-peak-resort",
       "products": [
         "indy-base",
@@ -209,6 +603,21 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "massif-du-sud",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/massif-du-sud",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "middlebury-snowbowl",
       "products": [
         "indy-base",
@@ -224,6 +633,116 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "mont-edouard",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/mont-edouard",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "mont-rigaud",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/mont-rigaud",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "mont-ripley-ski-area",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "discount",
+      "days": 2,
+      "reservation": "check",
+      "checkedOn": "2026-11-21",
+      "source": "https://www.indyskipass.com/terms-conditions"
+    },
+    {
+      "areaId": "mont-sutton",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-27",
+          "2026-12-28"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-07"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ],
+        [
+          "2027-02-20",
+          "2027-02-21"
+        ],
+        [
+          "2027-02-27",
+          "2027-02-28"
+        ],
+        [
+          "2027-03-01",
+          "2027-03-07"
+        ]
+      ],
+      "note": "Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUXA5uhe2QwuQvCTpaSpIQmNNWIAp4gADGo5DIUeDwMOfgg9a8nEMU2K_4J9_24E2dGaLgbBnplpqg/pub?gid=1360740952&single=true&output=csv",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "mont-sutton",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/mont-sutton",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "mount-kato",
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.indyskipass.com/our-resorts/mount-kato",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ]
+    },
+    {
       "areaId": "mt-hood-meadows",
       "products": [
         "indy-plus",
@@ -234,6 +753,34 @@
       "reservation": "check",
       "source": "https://www.skihood.com/explore/indy-pass",
       "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "norway-mountain",
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.indyskipass.com/our-resorts/norway-mountain",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ]
+    },
+    {
+      "areaId": "nutt-hill",
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.indyskipass.com/our-resorts/nutt-hill",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ]
     },
     {
       "areaId": "pats-peak",
@@ -273,6 +820,92 @@
       "reservation": "required",
       "note": "Indy+ can be used during the Base blackout dates. Advance reservations still apply.",
       "source": "https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "paul-bunyan-ski-hill",
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.indyskipass.com/our-resorts/paul-bunyan-ski-hill",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ]
+    },
+    {
+      "areaId": "pebble-creek-ski-area",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Two Indy+ days. Verify pickup with the ticket office.",
+      "source": "https://www.indyskipass.com/our-resorts/pebble-creek-ski-area",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "pomerelle-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Create a Pomerelle account, then check in at the ticket office for a $5 RFID card. No Base blackouts appear in the issuer list.",
+      "source": "https://www.pomerelle.com/indy-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "powder-ridge",
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "source": "https://powderridge.com/indy-pass/",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ]
+    },
+    {
+      "areaId": "powder-ridge-connecticut",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "The issuer currently lists no Base blackouts. Confirm check-in instructions with the resort.",
+      "source": "https://www.indyskipass.com/our-resorts/powder-ridge-0",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "quarry-road-trails",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Two trail-pass days for Nordic skiing only. Purchase lift access for the downhill rope tow separately.",
+      "source": "https://www.indyskipass.com/our-resorts/quarry-road-trails",
       "checkedOn": "2026-11-21"
     },
     {
@@ -371,6 +1004,104 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "silver-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Base has holiday and peak Saturday blackouts. Verify where to redeem at the gondola base.",
+      "source": "https://www.indyskipass.com/our-resorts/silver-mountain",
+      "checkedOn": "2026-11-21",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-09",
+          "2027-01-09"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-18"
+        ],
+        [
+          "2027-01-23",
+          "2027-01-23"
+        ],
+        [
+          "2027-01-30",
+          "2027-01-30"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-06"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-15"
+        ],
+        [
+          "2027-02-20",
+          "2027-02-20"
+        ],
+        [
+          "2027-02-27",
+          "2027-02-27"
+        ],
+        [
+          "2027-03-06",
+          "2027-03-06"
+        ]
+      ]
+    },
+    {
+      "areaId": "silver-mountain-resort",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Base has holiday and peak Saturday blackouts. Verify where to redeem at the gondola base.",
+      "source": "https://www.indyskipass.com/our-resorts/silver-mountain",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "ski-saint-bruno",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/ski-saint-bruno",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "ski-vallee-bleue",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/ski-vallee-bleue",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "smugglers-notch-resort",
       "products": [
         "indy-base",
@@ -386,6 +1117,51 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "soldier-mountain-ski-area",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "The issuer lists no blackout dates. Verify where to pick up the day ticket.",
+      "source": "https://www.indyskipass.com/our-resorts/soldier-mountain",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "spirit-mountain",
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "source": "https://www.indyskipass.com/blackout-dates-reservations",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "blackouts": [
+        [
+          "2027-02-13",
+          "2027-02-15"
+        ]
+      ]
+    },
+    {
+      "areaId": "spirit-mountain",
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "source": "https://spiritmt.com/winter/tickets-rentals/",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ]
+    },
+    {
       "areaId": "st-johann-in-tirol",
       "products": [
         "indy-plus",
@@ -396,6 +1172,65 @@
       "reservation": "check",
       "note": "Show your pass or photo ID when redeeming a ski day at the resort.",
       "source": "https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "tamarack-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy lists no blackout dates. Check the resort’s separate Indy redemption procedure.",
+      "source": "https://www.indyskipass.com/our-resorts/tamarack-mountain-resort",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "trollhaugen-ski-area",
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.indyskipass.com/our-resorts/trollhaugen",
+      "checkedOn": "2026-11-21",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ]
+    },
+    {
+      "areaId": "val-direne",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy’s current resort profile lists no Base blackout dates. Indy’s standard ticket-window process accepts the Indy card or government photo ID. Verify the local capacity rules before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/val-direne",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "white-pine-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy lists no Base blackouts. Verify where and how to redeem.",
+      "source": "https://www.indyskipass.com/our-resorts/white-pine-resort",
       "checkedOn": "2026-11-21"
     }
   ]
