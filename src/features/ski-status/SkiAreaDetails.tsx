@@ -122,7 +122,8 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
             <SkiResortLinks area={area} />
             <SkiStatusLabel status={status} report={report} now={now} />
             {officialConditions && <a className={linkClass} href={officialConditions.url}>{officialConditions.label}</a>}
-            {onShowTerrain && <button type="button" className="ski-control" onClick={onShowTerrain}>Show runs and lifts</button>}
+            {onShowTerrain && <button type="button" className="ski-control" aria-controls="ski-results-map"
+                onClick={onShowTerrain}>Show runs and lifts</button>}
         </div>
         {(report || forecast) && <section aria-label="Conditions summary" className="border-t border-zinc-800 py-2 text-sm">
             {report && <p>

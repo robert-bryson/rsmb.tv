@@ -26,7 +26,7 @@ Select **All resorts** to include all areas that match the other filters.
 
 - Select a marker, result, or table row to open the area details. Open **Official conditions** for the operator's report. Some areas show **Resort website and conditions**. Select **Show runs and lifts** to see the mapped terrain.
 - Open Google Maps for the visitor entrance or resort listing. Open Wikipedia for the resort article or a search by name and location.
-- In **Season and snowfall**, check the recorded, scheduled, or estimated dates. The table shows each month with a measurement. The source list gives the location and period when the source supplies them.
+- Check the dates in **Season and snowfall**. Open **Monthly values** to read the amounts. Select **Snow depth** when that option is available. Open **Snow sources** to check the measurement sites and periods.
 - Select **Close details**. If the control that opened the panel is visible, the app returns focus to it. Press Escape on the map or select empty space to clear the selection. Use skip links to reach search, the map, or results.
 - On a wide screen, the map and results appear side by side. On a phone, switch between **Map** and **Results**. Select **Compare** for the full table.
 - Select a column header to sort. Use **Previous** and **Next** to move through pages of 50 areas. **All resorts** shows mountain statistics first. The status views show report columns first. Select **Columns** to change the fields. **Export CSV** includes all matches and the selected fields with export permission.
@@ -45,7 +45,7 @@ The map ignores a pending group zoom when you move the map or change the results
 The map shows individual markers from zoom level 3. Symbols and colors show each area's operating status. A gold outline marks the selected area.
 
 The map uses a verified visitor entrance when one is available. It can use an inferred lift base when the mapped lifts support that location.
-**Show runs and lifts** centers the map on the terrain point.
+**Show runs and lifts** centers the map on the terrain point and keeps the resort details open. On a phone, the map appears above the details. The map receives keyboard focus when it loads.
 
 Select the **Layers** icon next to **Fit results**. On a phone, **Fit results** uses a frame icon. The Layers panel controls marker colors, the map key, and terrain overlays.
 Color by pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The results show the selected metric and operating status. A gray marker in a metric layer means that the value is unknown.
@@ -83,29 +83,29 @@ The United States had 334 points. Canada had 72. Other countries had 177.
 The country filter also includes Germany through shared areas.
 The catalog had 129 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
 
-All 583 areas have at least one published statistic. The catalog has 525 conventional downhill areas, including areas with Nordic trails. Of these, 288 have all six main comparison fields.
-Mapped terrain values cover 536 areas. [First-release data review](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#catalog-coverage)
+All 583 areas have at least one published statistic. The catalog has 525 conventional downhill areas, including areas with Nordic trails. Of these, 297 have all six main comparison fields.
+Mapped terrain values cover 536 areas. [Catalog coverage review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md)
 
 | Published field | Areas |
 | --- | ---: |
-| Skiable acreage | 377 |
-| Vertical drop | 463 |
-| Lift count | 483 |
+| Skiable acreage | 382 |
+| Vertical drop | 464 |
+| Lift count | 491 |
 | Trail count | 504 |
-| Base elevation | 395 |
-| Summit elevation | 404 |
-| Downhill trail length | 86 |
+| Base elevation | 412 |
+| Summit elevation | 416 |
+| Downhill trail length | 91 |
 | Nordic trail length | 64 |
-| Highest lift terminal | 43 |
-| Lowest lift terminal | 14 |
+| Highest lift terminal | 52 |
+| Lowest lift terminal | 23 |
 | Night skiable acreage | 10 |
 | Difficulty breakdown | 293 |
 | Season window | 65 |
-| Official conditions link | 535 |
-| Planned season dates | 139 |
-| Average annual snowfall | 165 |
-| Average monthly snowfall | 61 |
-| Monthly snow depth series | 80 |
+| Official conditions link | 547 |
+| Planned season dates | 147 |
+| Average annual snowfall | 167 |
+| Average monthly snowfall | 65 |
+| Monthly snow depth series | 81 |
 
 Indy Pass profiles give acreage, elevations, and difficulty figures for individual areas. Use the operator or tourism authority when it gives a more precise area boundary. [Arctic Valley profile](https://www.indyskipass.com/our-resorts/arctic-valley), [Hohsaas area elevations](https://www.valais.ch/book/en/service-providers/saastal-ski-tickets)
 
@@ -141,14 +141,19 @@ Each count uses operating routes of the given activity. Segments with the same n
 
 ### Season and snowfall
 
-The area details use recorded dates first. A current operator report can supply a scheduled opening.
-The details then use the nearest applicable schedule. An estimate uses recent complete seasons or the operator's usual season dates.
-Each date has a **Recorded**, **Scheduled**, or **Estimated** label.
+The area details label dates **Recorded**, **Scheduled**, or **Estimated**.
+If only older records are available, the dates appear under **Last recorded season**.
+The **Typical season** row gives the usual dates and their source.
+The month filter and comparison columns use the same typical season as the details. [Date rules](#opening-and-closing-dates)
 
-The snow table shows every month with a measurement, including months outside the current season dates.
-The table starts the year in July for northern areas and in January for southern areas.
+The chart uses vertical bars that start at zero. Months run from left to right.
+The ski year starts in July in the north and January in the south. The chart shows the range of months with measurements.
+The line below the month labels marks the typical ski season. The typical dates also appear in text.
+Open **Monthly values** for the amounts in the selected units. The app rounds amounts for display. A dash in the chart marks a month with no data.
+Use **Snowfall** and **Snow depth** to change the measure. Each measure uses its own scale. [ONS axes and gridlines guide](https://service-manual.ons.gov.uk/data-visualisation/guidance/axes-and-gridlines), [W3C table headers guide](https://www.w3.org/WAI/tutorials/tables/two-headers/)
+
 Monthly snowfall is the average of the monthly totals. Snow depth measures settled snow at the given location.
-Each series shows its source. The app shows separate citations when the annual and monthly values use different sources.
+Open **Snow sources** for the source of each measure. Citations with the same provider, site, and period share an entry.
 
 1. Use the same area ID in the snow history and the catalog.
 2. Record snow measurements in centimeters. Use month numbers `1` to `12`.
@@ -164,7 +169,7 @@ Use `survey` for snow depth surveys. Use `station` for averages of daily station
 - The 28 USDA station series use at least five consecutive winters between 2015/16 and 2024/25. Each month from November through April uses at least 90% of its daily depth readings. Each winter has equal weight. The Sunshine Village snow course uses early-month measurements. [USDA Snow Survey station index](https://wcc.sc.egov.usda.gov/nwcc/yearcount?counttype=statelist), [Alberta snow survey](https://rivers.alberta.ca/Contents/SnowPack/2016/4/aprmsc.pdf)
 - The NOAA daily series use 35 U.S. stations and one station near Beito, Norway. The stations are within 4.8 km of each area. Each series uses at least five consecutive winters from November through April. Use only readings that pass NOAA quality checks. Monthly snowfall needs all daily readings. Monthly depth needs at least 90% of daily readings. Each winter has equal weight. [NOAA daily data](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily)
 - U.S. snowfall normals use the 1991–2020 period. Each month shown uses at least 20 years of readings. Match stations within 7.5 km and 200 m of the resort base or mapped low point. [U.S. Climate Normals](https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals)
-- The Canadian series use 1991–2020 normals for the Banff and Whitehorse composite weather stations. [Canadian Climate Normals](https://climate.weather.gc.ca/climate_normals/index_e.html)
+- The Canadian series use 1991–2020 normals from federal and Québec weather stations. New matches use a distance of up to 7.5 km and an elevation difference of up to 200 m. [Canadian Climate Normals](https://climate.weather.gc.ca/climate_normals/index_e.html), [Québec monthly normals](https://www.donneesquebec.ca/recherche/dataset/normales-climatiques-mensuelles)
 - The Japan Meteorological Agency series use 1991–2020 normals for monthly snowfall totals and maximum snow depth. Each depth value is the average of that month's maxima. [Hakuba climate normals](https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=)
 
 ### Runs and lifts at resort zoom
@@ -382,15 +387,18 @@ Each checked report expires at the end of its local ski day. Alberta uses UTC−
 
 ### Opening and closing dates
 
-The season file has 164 records of actual dates across 30 areas and plans for 139 areas. Fifteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
+The season file has 164 records of actual dates across 30 areas and plans for 147 areas. Fifteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
-The app calculates the median from up to five complete seasons. It uses the five years before the check date. With fewer than three complete seasons, it uses the operator's usual season window when available.
+The app calculates the median from up to five complete seasons. It uses the five years before the check date.
+With fewer than three complete seasons, the app uses the operator's usual season window when available.
+The window can come from the season calendar or from the operator's month range in the catalog.
 The month filter includes the first and last months of that window. Those months can include limited or weekend-only skiing.
 
 The app shows remaining planned dates in the area's time zone. A recorded opening clears the opening plan for that season. A recorded closing removes its remaining plan.
-A current operator report can give a new planned opening date. CSV export includes this date only when the operator permits export.
+A current operator report can give a new planned opening date. The app pairs it with a planned closing only if both dates fit the same season.
+The details and comparison table use the same plan. CSV export includes the reported opening only when the operator permits export.
 
 Opening-day figures apply to the day in the record. Use daily records to compare how much terrain usually opens later in the season. [Season calendar design](#season-conditions-calendar)
 

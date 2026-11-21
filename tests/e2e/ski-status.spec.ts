@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Locator, type Page, type Response } from '@playwright/test';
@@ -470,7 +471,7 @@ test('labels past terrain counts and removes an elapsed opening date', async ({ 
     await expect(seasons.locator('time[datetime="2026-12-05"]')).toHaveCount(0);
 });
 
-test('shows pre-opening snowfall and source details on a phone', async ({ page }) => {
+test('plots vertical snow bars and exposes monthly values on a phone', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 780 });
     await prepare(page);
     await page.clock.setFixedTime(new Date('2026-11-21T18:00:00Z'));
@@ -478,13 +479,31 @@ test('shows pre-opening snowfall and source details on a phone', async ({ page }
     await result(page, 'Aspen Highlands').click();
     const season = resort(page, 'Aspen Highlands').getByRole('region', { name: 'Season dates' });
     await expect(season.getByText('Dec 12', { exact: true })).toHaveAttribute('datetime', '2026-12-12');
-    const snow = season.getByRole('table', { name: 'Typical monthly snow' });
+    const november = season.getByTitle('November · 20.1 in').locator('.ski-snow-bar');
+    const december = season.getByTitle(/^December · /).locator('.ski-snow-bar');
+    await expect(november).toBeVisible();
+    const [novemberBar, decemberBar] = await Promise.all([november.boundingBox(), december.boundingBox()]);
+    expect(decemberBar!.x).toBeGreaterThan(novemberBar!.x);
+    expect(decemberBar!.height).toBeGreaterThan(novemberBar!.height);
+    expect(novemberBar!.height).toBeGreaterThan(novemberBar!.width);
+    expect(decemberBar!.y + decemberBar!.height).toBeCloseTo(novemberBar!.y + novemberBar!.height);
+
+    await season.getByText('Monthly values', { exact: true }).press('Enter');
+    const snow = season.getByRole('table', { name: 'Average monthly snowfall (in)' });
     await expect(snow.getByRole('row', { name: /November/ })).toContainText('20.1 in');
+    const depthButton = season.getByRole('button', { name: 'Snow depth' });
+    await depthButton.press('Enter');
+    await expect(depthButton).toHaveAttribute('aria-pressed', 'true');
+    await expect(season.getByRole('table', { name: 'Average station depth (in)' }).getByRole('row', { name: /November/ })).toContainText('3 in');
+    await season.getByText('Snow sources', { exact: true }).press('Enter');
     const sources = season.getByRole('list', { name: 'Historical snow sources' });
-    await expect(sources.getByRole('link', { name: 'Colorado Ski Country USA' }))
+    await expect(sources.getByRole('link', { name: 'Annual snowfall' }))
         .toHaveAttribute('href', 'https://www.coloradoski.com/resorts/aspen-highlands/');
-    await expect(sources.getByText(/Monthly snowfall totals/)).toContainText('Aspen 1SW, CO weather station');
+    await expect(sources.getByRole('listitem').filter({ hasText: 'Monthly snowfall totals' })).toContainText('Aspen 1SW, CO weather station');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+    const { violations } = await new AxeBuilder({ page }).include('.ski-season-chart')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    expect(violations).toEqual([]);
 });
 
 test('opens the Sunshine gondola base and shows sourced season dates, snow, and resort links', async ({ page }) => {
@@ -504,12 +523,17 @@ test('opens the Sunshine gondola base and shows sourced season dates, snow, and 
     await expect(season.getByText('Nov 7', { exact: true })).toHaveAttribute('datetime', '2026-11-07');
     await expect(season.getByText('May 24', { exact: true })).toHaveAttribute('datetime', '2027-05-24');
     await expect(season.getByText('Scheduled', { exact: true })).toBeVisible();
-    const snow = season.getByRole('table', { name: 'Typical monthly snow' });
+    await season.getByText('Monthly values', { exact: true }).click();
+    const snow = season.getByRole('table', { name: 'Average monthly snowfall (in)' });
     await expect(snow.getByRole('row', { name: /November/ })).toContainText('53.9 in');
-    await expect(snow.getByRole('row', { name: /February/ })).toContainText('55.1 in');
+    await expect(snow.getByRole('row', { name: /February/ })).toContainText('37.8 in');
+    await season.getByRole('button', { name: 'Snow depth' }).click();
+    await expect(season.getByRole('table', { name: 'Survey snow depth (in)' }).getByRole('row', { name: /February/ })).toContainText('55.1 in');
 
     await details.getByRole('button', { name: 'Show runs and lifts', exact: true }).click();
     await expect.poll(() => mapCamera(page)).toMatchObject({ center: terrainPoint('banff-sunshine'), zoom: 13 });
+    await expect(details).toBeVisible();
+    await expect(results(page)).toBeHidden();
     await renderer.dispose();
 });
 
@@ -607,17 +631,20 @@ test('opens on the phone globe with current reports, clusters, and a usable reso
     await renderer.dispose();
 });
 
-test('opens resort terrain and its local difficulty key from phone details', async ({ page }) => {
+test('opens resort terrain while keeping the phone details docked', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await prepare(page);
     await page.goto(`${path}?view=results&status=all&q=lake%20louise&skiTerrain=0`);
     await result(page, 'Lake Louise Ski Resort').click();
     const range = page.waitForResponse(response => skiTerrainArchivePath.test(new URL(response.url()).pathname) && response.status() === 206);
-    await resort(page, 'Lake Louise Ski Resort').getByRole('button', { name: 'Show runs and lifts' }).click();
+    const details = resort(page, 'Lake Louise Ski Resort');
+    await details.getByRole('button', { name: 'Show runs and lifts' }).press('Enter');
     expect((await range).headers()['content-range']).toMatch(/^bytes \d+-\d+\/\d+$/);
-    await expect(resort(page, 'Lake Louise Ski Resort')).toBeHidden();
-    await expect(page.getByRole('button', { name: 'Resort details', exact: true })).toBeVisible();
-    await expect(page).toHaveURL(/details=0/);
+    await expect(details).toBeVisible();
+    await expect(page).toHaveURL(url => url.searchParams.get('view') === 'map' && url.searchParams.get('area') === 'lake-louise');
+    const map = page.getByRole('region', { name: 'Map of ski areas' });
+    await expect(map).toBeVisible();
+    await expect(map.locator('canvas.maplibregl-canvas')).toBeFocused();
     await expect.poll(() => mapCamera(page)?.zoom).toBeGreaterThanOrEqual(13);
     await inDialog(page, 'Layers', async dialog => {
         await expect(dialog.getByRole('region', { name: 'Mapped runs and lifts' })).toBeVisible();
@@ -625,7 +652,7 @@ test('opens resort terrain and its local difficulty key from phone details', asy
     });
     await page.reload();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
-    await expect(page.getByRole('button', { name: 'Resort details', exact: true })).toBeVisible();
+    await expect(details).toBeVisible();
     await expect.poll(() => mapCamera(page)?.zoom).toBeGreaterThanOrEqual(13);
 });
 

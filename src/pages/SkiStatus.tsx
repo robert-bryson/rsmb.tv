@@ -134,7 +134,7 @@ export default function SkiStatus() {
             (mapSection.current?.querySelector<HTMLCanvasElement>('canvas') ?? mapSection.current)?.focus({ preventScroll: true });
         } else return;
         nextFocus.current = undefined;
-    }, [selected, detailsOpen, showMap]);
+    }, [selected, detailsOpen, showMap, terrainRequest]);
 
     function updateSkiParams(update: (params: URLSearchParams) => void, replace = false) {
         updateParams(params => {
@@ -193,7 +193,7 @@ export default function SkiStatus() {
         nextFocus.current = 'map';
         updateSkiParams(params => {
             params.set('view', 'map');
-            params.set('details', '0');
+            params.delete('details');
             params.delete('skiTerrain');
         });
     }
@@ -378,9 +378,9 @@ export default function SkiStatus() {
                             terrain={terrain} resortTerrain={resortTerrain} visible={showMap} searchedArea={searchedArea}
                             layersModified={colors !== defaultColors || terrain || !resortTerrain}
                             searchedAreaKey={searchedArea ? mapAreaParam : null} initializeArea={legacyArea}
-                            terrainRequest={detailsOpen ? undefined : terrainRequest}
+                            terrainRequest={terrainRequest}
                             camera={camera} navigationKey={location.key} restoreHistoryCamera={restoreHistoryCamera}
-                            cameraReader={cameraReader} onCameraChange={commitMapCamera}
+                            cameraReader={cameraReader} mapRegion={mapSection} onCameraChange={commitMapCamera}
                             onSearchArea={commitMapArea} onSelect={selectArea} onTerrainKey={setTerrainConventions}
                             onOpenLayers={() => layersDialog.current?.showModal()} />
                     </Suspense></ErrorBoundary>}

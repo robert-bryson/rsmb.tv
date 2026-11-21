@@ -64,6 +64,7 @@ interface Props {
     navigationKey: string;
     restoreHistoryCamera: boolean;
     cameraReader: RefObject<(() => string | undefined) | null>;
+    mapRegion: RefObject<HTMLElement | null>;
     onCameraChange: (value: string) => void;
     onSearchArea: (value: string) => void;
     onSelect: (id?: string, control?: HTMLElement) => void;
@@ -170,8 +171,8 @@ function expandCluster(map: maplibre.Map, point: TooltipPoint, duration: number,
 }
 
 export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected, colors, passSelection, statuses, conditions, terrain, resortTerrain,
-    visible, layersModified, searchedArea, searchedAreaKey, initializeArea, terrainRequest, camera, navigationKey, restoreHistoryCamera, cameraReader, onCameraChange,
-    onSearchArea, onSelect, onTerrainKey, onOpenLayers }: Props) {
+    visible, layersModified, searchedArea, searchedAreaKey, initializeArea, terrainRequest, camera, navigationKey, restoreHistoryCamera, cameraReader,
+    mapRegion, onCameraChange, onSearchArea, onSelect, onTerrainKey, onOpenLayers }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
@@ -334,7 +335,8 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             cameraReader.current = () => instance.getLayer(pointLayer) ? mapCameraValue(instance) : undefined;
             const canvas = instance.getCanvas();
             canvas.setAttribute('aria-describedby', 'ski-map-instructions');
-            if (document.activeElement === instance.getContainer()) canvas.focus({ preventScroll: true });
+            const focused = document.activeElement;
+            if (focused && (focused === instance.getContainer() || focused === mapRegion.current)) canvas.focus({ preventScroll: true });
             const terrainPopup = new maplibre.Popup({
                 closeButton: false, closeOnClick: false, closeOnMove: true, focusAfterOpen: false, offset: 9,
                 className: 'ski-area-popup ski-area-popup-hover', maxWidth: '15rem',
@@ -460,7 +462,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             passLayers.current = false;
             appliedCamera.current = undefined;
         };
-    }, [attempt, cameraReader]);
+    }, [attempt, cameraReader, mapRegion]);
 
     useEffect(() => {
         mapRef.current?.getSource<maplibre.GeoJSONSource>(sourceId)?.setData(points);

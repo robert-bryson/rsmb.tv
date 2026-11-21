@@ -150,7 +150,7 @@ export function seasonViewDate(area: SkiArea, now?: number) {
     return now === undefined ? seasonCalendar.checkedOn : localSkiDate(now, area.location.timeZone ?? 'UTC');
 }
 
-export function upcomingSeasonPlan(entry: AreaSeasons | undefined, date: string, season?: string) {
+export function upcomingSeasonPlan(entry: AreaSeasons | undefined, date: string, season?: string, reportedOpening?: string) {
     if (!entry) return;
     for (const plan of entry.planned) {
         if (season && plan.season !== season) continue;
@@ -158,6 +158,7 @@ export function upcomingSeasonPlan(entry: AreaSeasons | undefined, date: string,
         if (actual?.closesOn) continue;
         const opensOn = plan.opensOn && plan.opensOn >= date && !actual?.opensOn ? plan.opensOn : undefined;
         const closesOn = plan.closesOn && plan.closesOn >= date ? plan.closesOn : undefined;
+        if (reportedOpening && !datesFitSeason({ season: plan.season, opensOn: reportedOpening, closesOn })) continue;
         if (opensOn || closesOn) return { ...plan, opensOn, closesOn };
     }
 }
@@ -184,6 +185,18 @@ function publishedSeasonWindow(area: SkiArea): SeasonWindow | undefined {
     };
 }
 
+export function typicalSkiSeason(area: SkiArea, calendar = seasonCalendar) {
+    const typical = calendar.byArea.get(area.id)?.typical;
+    if (typical) {
+        const { evidence } = typical;
+        return { ...typical, source: 'source' in evidence ? calendar.sources[evidence.source] : undefined };
+    }
+    const published = publishedSeasonWindow(area);
+    if (!published) return;
+    const source = area.statSources?.find(group => group.fields.includes('seasonWindow'))?.source ?? area.statsUrl ?? area.website;
+    return { ...published, evidence: undefined, source };
+}
+
 function seasonForDate(typical: SeasonWindow, date: string, actual: readonly ActualSeason[]) {
     const [year, month, day] = date.split('-').map(Number);
     const seasonEnded = (month - 1) * 32 + day > typical.closingRank;
@@ -197,20 +210,25 @@ function datedBoundary(date: string, basis: SeasonBoundary['basis'], source: str
     return { month: Number(date.slice(5, 7)), label: monthDay.format(Date.parse(`${date}T00:00:00Z`)), date, basis, source };
 }
 
-export function skiSeasonOutlook(area: SkiArea, date: string, conditions?: Conditions, calendar = seasonCalendar) {
+export function skiSeasonSchedule(area: SkiArea, date: string, conditions?: Conditions, calendar = seasonCalendar) {
     const entry = calendar.byArea.get(area.id);
     const actual = entry?.actual ?? [];
-    const typical = entry?.typical ?? publishedSeasonWindow(area);
+    const typical = typicalSkiSeason(area, calendar);
     const expectedSeason = typical && seasonForDate(typical, date, actual);
     const active = actual.find(row => row.opensOn && row.opensOn <= date && (row.closesOn ? row.closesOn >= date : row.season === expectedSeason));
-    const upcoming = upcomingSeasonPlan(entry, date);
-    const season = active?.season ?? upcoming?.season ?? expectedSeason ?? actual[0]?.season;
-    const recorded = actual.find(row => row.season === season);
-    const scheduled = upcoming?.season === season ? upcoming : upcomingSeasonPlan(entry, date, season);
-    const reportedOpen = reportedOpeningPlan(conditions?.reports.get(area.id), date, conditions?.now);
-    const evidence = entry?.typical?.evidence;
-    const estimatedSource = evidence && 'source' in evidence ? calendar.sources[evidence.source]
-        : typical && !evidence ? area.statSources?.find(group => group.fields.includes('seasonWindow'))?.source ?? area.statsUrl ?? area.website : undefined;
+    const announcement = active ? undefined : reportedOpeningPlan(conditions?.reports.get(area.id), date, conditions?.now);
+    const scheduled = upcomingSeasonPlan(entry, date, active?.season, announcement?.date);
+    const estimatedSeason = announcement && typical ? seasonForDate(typical, announcement.date, actual) : expectedSeason;
+    const outlookSeason = active?.season ?? scheduled?.season ?? estimatedSeason;
+    const lastRecorded = outlookSeason || announcement ? undefined : actual[0];
+    const season = outlookSeason ?? lastRecorded?.season;
+    const recorded = lastRecorded ?? actual.find(row => row.season === season);
+    const reportedOpen = recorded?.opensOn ? undefined : announcement;
+    return { season, typical, recorded, scheduled, reportedOpen, historical: lastRecorded !== undefined };
+}
+
+export function skiSeasonOutlook(area: SkiArea, date: string, conditions?: Conditions, calendar = seasonCalendar) {
+    const { season, typical, recorded, scheduled, reportedOpen, historical } = skiSeasonSchedule(area, date, conditions, calendar);
     function boundary(edge: 'opening' | 'closing'): SeasonBoundary | undefined {
         const opening = edge === 'opening';
         const key = opening ? 'opensOn' : 'closesOn';
@@ -223,14 +241,14 @@ export function skiSeasonOutlook(area: SkiArea, date: string, conditions?: Condi
         if (scheduled && plannedDay) {
             return datedBoundary(plannedDay, 'Scheduled', calendar.sources[opening ? scheduled.source : scheduled.closingSource ?? scheduled.source]);
         }
-        if (typical) return { month: opening ? typical.opensIn : typical.closesIn, label: typical[edge], basis: 'Estimated', source: estimatedSource };
+        if (typical) return { month: opening ? typical.opensIn : typical.closesIn, label: typical[edge], basis: 'Estimated', source: typical.source };
     }
     const opening = boundary('opening');
     const closing = boundary('closing');
-    return { season, opening, closing, note: scheduled?.note };
+    return { season, opening, closing, note: scheduled?.note, historical, typical };
 }
 
-export function includesSeasonMonth(typical: TypicalSeason | undefined, month: number) {
+export function includesSeasonMonth(typical: Pick<SeasonWindow, 'opensIn' | 'closesIn'> | undefined, month: number) {
     if (!typical) return false;
     const offset = (month - typical.opensIn + 12) % 12;
     return offset <= (typical.closesIn - typical.opensIn + 12) % 12;

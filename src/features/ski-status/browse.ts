@@ -5,7 +5,7 @@ import {
     type Conditions, type ResortReport, type StatusFilter,
 } from './conditions';
 import { evaluatePass, matchesPassProduct, type PassProduct } from './passRules';
-import { includesSeasonMonth, reportedOpeningPlan, seasonCalendar, seasonViewDate, upcomingSeasonPlan } from './seasons';
+import { includesSeasonMonth, seasonViewDate, skiSeasonSchedule, typicalSkiSeason } from './seasons';
 
 export type SkiUnits = 'imperial' | 'metric';
 export type PassFilter = PassFamily | 'indy-discounts';
@@ -208,7 +208,7 @@ export function filterSkiAreas(areas: readonly SkiArea[], {
             const status = skiDayStatus(operations.reports.get(area.id), operations.now, area.location.timeZone);
             if (!matchesOperatingStatus(status, operations.filter)) return false;
         }
-        if (seasonMonth && !includesSeasonMonth(seasonCalendar.byArea.get(area.id)?.typical, seasonMonth)) return false;
+        if (seasonMonth && !includesSeasonMonth(typicalSkiSeason(area), seasonMonth)) return false;
         if (!words.length) return true;
         const countries = areaCountries(area);
         const searchable = normalizeSearch([
@@ -240,14 +240,10 @@ export function skiAreaBounds(areas: readonly SkiArea[]): [number, number, numbe
 const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
 
 export function plannedOpening(area: SkiArea, conditions?: Conditions) {
-    const report = conditions?.reports.get(area.id);
-    const seasons = seasonCalendar.byArea.get(area.id);
-    if (!report?.opensOn && !seasons?.planned.length) return;
     const date = seasonViewDate(area, conditions?.now);
-    const reported = reportedOpeningPlan(report, date, conditions?.now);
-    if (reported) return reported;
-    const planned = upcomingSeasonPlan(seasons, date)?.opensOn;
-    if (planned) return { date: planned, source: undefined };
+    const { scheduled, reportedOpen } = skiSeasonSchedule(area, date, conditions);
+    if (reportedOpen) return reportedOpen;
+    if (scheduled?.opensOn) return { date: scheduled.opensOn, source: undefined };
 }
 
 function skiStat(area: SkiArea, key: ColumnKey, conditions?: Conditions) {
@@ -279,12 +275,10 @@ function skiStat(area: SkiArea, key: ColumnKey, conditions?: Conditions) {
     if (key === 'measuredSnow') return Array.isArray(report?.snowfallCm) ? report.snowfallCm[0] : report?.snowfallCm;
     if (key === 'opensOn') return plannedOpening(area, conditions)?.date;
     if (key === 'plannedClosing') {
-        const seasons = seasonCalendar.byArea.get(area.id);
-        if (seasons?.planned.length) return upcomingSeasonPlan(seasons, seasonViewDate(area, conditions?.now))?.closesOn;
-        return;
+        return skiSeasonSchedule(area, seasonViewDate(area, conditions?.now), conditions).scheduled?.closesOn;
     }
     if (key === 'typicalOpening' || key === 'typicalClosing') {
-        const typical = seasonCalendar.byArea.get(area.id)?.typical;
+        const typical = typicalSkiSeason(area);
         return key === 'typicalOpening' ? typical?.openingRank : typical?.closingRank;
     }
     return area[key];
@@ -316,8 +310,12 @@ export function formatElevation(feet: number, units: SkiUnits) {
     return units === 'metric' ? `${integer.format(feet * metersPerFoot)} m` : `${integer.format(feet)} ft`;
 }
 
+export function snowDepthValue(cm: number, units: SkiUnits) {
+    return units === 'metric' ? cm : cm / 2.54;
+}
+
 export function formatSnowDepth(cm: number | [number, number], units: SkiUnits) {
-    const format = (value: number) => decimal.format(units === 'metric' ? value : value / 2.54);
+    const format = (value: number) => decimal.format(snowDepthValue(value, units));
     const value = Array.isArray(cm) ? cm.map(format).join('–') : format(cm);
     return `${value} ${units === 'metric' ? 'cm' : 'in'}`;
 }
@@ -335,7 +333,7 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, co
     const report = conditions?.reports.get(area.id);
     if (key === 'operatingStatus') return reportStatusText(report, conditions?.now ?? 0, area.location.timeZone);
     if (key === 'typicalOpening' || key === 'typicalClosing') {
-        const typical = seasonCalendar.byArea.get(area.id)?.typical;
+        const typical = typicalSkiSeason(area);
         return key === 'typicalOpening' ? typical?.opening : typical?.closing;
     }
     if (key === 'baseSnow' && report?.baseCm !== undefined) return formatSnowDepth(report.baseCm, units);

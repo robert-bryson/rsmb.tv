@@ -4,29 +4,17 @@ import type { Conditions } from './conditions';
 import { seasonCalendar, seasonViewDate } from './seasons';
 import { SkiSeasonChart } from './SkiSeasonChart';
 
-const sourceClass = 'text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
+const sourceClass = 'ski-season-source';
 
 function DateValue({ date }: { date?: string }) {
     return date ? <time dateTime={date}>{date}</time> : <>Unknown</>;
 }
 
 export function SkiSeasonDetails({ area, units, conditions }: { area: SkiArea; units: SkiUnits; conditions?: Conditions }) {
-    const entry = seasonCalendar.byArea.get(area.id);
-    const typical = entry?.typical;
-    const actual = entry?.actual ?? [];
+    const actual = seasonCalendar.byArea.get(area.id)?.actual ?? [];
 
     return <section aria-label="Season dates" className="border-t border-zinc-800 py-2 text-sm">
         <SkiSeasonChart area={area} date={seasonViewDate(area, conditions?.now)} units={units} conditions={conditions} />
-        {typical && <p className="mt-2">
-            <strong>Typical season</strong>{' · '}
-            {'count' in typical.evidence ? <>
-                {typical.opening} to {typical.closing}{' · '}
-                Median of {typical.evidence.count} seasons through {typical.evidence.latest}
-            </> : <>
-                {typical.evidence.note ?? `${typical.opening} to ${typical.closing}`}{' · '}
-                <a className={sourceClass} href={seasonCalendar.sources[typical.evidence.source]}>Season source</a>
-            </>}
-        </p>}
         {actual.length > 0 && <details className="py-1">
             <summary className="min-h-10 cursor-pointer py-2.5 text-zinc-200 hover:text-cyan-300">Opening and closing history</summary>
             <div className="overflow-x-auto">

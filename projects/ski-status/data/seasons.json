@@ -10,6 +10,7 @@
     "alta-2024": "https://www.alta.com/stories/2024-25-season-recap",
     "alta-2025": "https://www.alta.com/stories/best-worst-season",
     "alta-opening-2026": "https://www.alta.com/events",
+    "amihari-onsen-ski-resort-2026-schedule": "https://www.qkamura.or.jp/mail/magazine/iwate.asp",
     "andermatt-sedrun": "https://www.andermatt-sedrun-disentis.ch/andermatt/en/stories/operating-hours",
     "aomori-spring-ski-resort-2026-schedule": "https://aomorispring.com/ski/lift-passes/",
     "appi-resort": "https://www.appi.co.jp/snow-mountain-resort/course/",
@@ -31,6 +32,7 @@
     "bruson": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437",
     "buttermilk-2026-schedule": "https://www.aspensnowmass.com/four-mountains/buttermilk/lift-status",
     "camden-snow-bowl-2026-schedule": "https://camdensnowbowl.com/current-conditions/",
+    "canmore-ski-village-2026-schedule": "https://www.canmore-ski.jp/",
     "cervino-ski-paradise": "https://www.cervinia.it/impianti",
     "christie-mountain-2026-schedule": "https://www.christiemountain.com/trail-map",
     "cooper-2026-schedule": "https://www.skicooper.com/mountain-stats-map/",
@@ -46,6 +48,7 @@
     "dynaland-2026-schedule": "https://www.dynaland.co.jp/condition/",
     "engstligenalp-2026-schedule": "https://engstligenalp.ch/en/winter/operating-info-2/",
     "fernie-alpine-resort": "https://skifernie.com/discover-fernie/mountain-stats/",
+    "folgarida-marilleva-2026-schedule": "https://www.ski.it/en/info-live/slopes",
     "galtuer-2026-schedule": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/silvapark-galtuer",
     "granby-ranch-2026-schedule": "https://www.coloradoski.com/snow-report/",
     "grands-montets-2026-schedule": "https://domaineschamonix.montblancnaturalresort.com/en/area/grands-montets",
@@ -90,7 +93,9 @@
     "mt-t": "https://tanigawadake-joch.com/en/information/20261116/",
     "myoko-suginohara-ski-resort": "https://www.princehotels.co.jp/ski/myoko/",
     "nakiska-ski-area": "https://skinakiska.com/discover-nakiska/mountain-stats/",
+    "nekoma-mountain-2026-schedule": "https://www.nekoma.co.jp/liftguide/",
     "nendaz": "https://www.nendaz.ch/en/Z13927/winter-lifts-schedule",
+    "ninox-snow-park-2026-schedule": "https://www.ninox.co.jp/lift/",
     "norquay-2024-opening": "https://www.skibig3.com/blog/mt-norquay-ski-resort-opens-for-the-24-25/",
     "norquay-2025-opening": "https://www.skibig3.com/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/",
     "norquay-2026-opening": "https://www.skibig3.com/blog/mt-norquay-welcomes-skiers-back-for-the-2627-season/",
@@ -101,14 +106,17 @@
     "oppdal-2026-schedule": "https://www.alpinco.com/en/oppdal/opening-hours",
     "paganella-ski-2026-schedule": "https://www.paganella.net/it",
     "pajarito-mountain-2026-schedule": "https://www.pajarito.ski/mountain-stats/",
+    "palcall-tsumagoi-resort-2026-schedule": "https://palcallresort.com/",
     "palisades-tahoe": "https://www.palisadestahoe.com/footer/mountain-statistics",
     "panorama-mountain-resort": "https://www.panoramaresort.com/public/while-you-are-here/mountain-stats",
     "pats-peak-2026-schedule": "https://www.skinh.com/resorts/pats-peak",
     "peak-resorts-2016": "https://www.sec.gov/Archives/edgar/data/1517401/000155837016000072/skis-20160430x10k.htm",
     "peak-resorts-2019": "https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm",
+    "pinzolo-2026-schedule": "https://www.ski.it/en/info-live/slopes",
     "powder-king-mountain-resort-2026-schedule": "https://www.powderking.com/mountain/ski-report",
     "quebec-ski-areas-2026-opening-plans": "https://maneige.ski/en/stations-et-conditions/",
     "rauriser-hochalmbahnen-2026-schedule": "https://www.hochalmbahnen.at/en/winter/ski-area/operating-times",
+    "shimokura-2026-schedule": "https://www.hachimantai.co.jp/",
     "ski-santa-fe": "https://www.skisantafe.com/our-story/about",
     "ski-utah-opening-dates": "https://www.skiutah.com/blog/authors/yeti/utah-ski-resort-opening-dates",
     "ski-vermont-opening-dates": "https://skivermont.com/opening-dates",
@@ -276,6 +284,17 @@
           "opensOn": "2026-12-04",
           "closesOn": "2027-04-04",
           "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "amihari-onsen-ski-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "closesOn": "2027-03-28",
+          "source": "amihari-onsen-ski-resort-2026-schedule"
         }
       ]
     },
@@ -887,6 +906,16 @@
       ]
     },
     {
+      "areaId": "canmore-ski-village",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "source": "canmore-ski-village-2026-schedule"
+        }
+      ]
+    },
+    {
       "areaId": "centre-vorlage",
       "planned": [
         {
@@ -1152,6 +1181,16 @@
         "source": "fernie-alpine-resort",
         "note": "Early December to mid-April"
       }
+    },
+    {
+      "areaId": "folgarida-marilleva",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-03",
+          "source": "folgarida-marilleva-2026-schedule"
+        }
+      ]
     },
     {
       "areaId": "galtuer",
@@ -2174,6 +2213,18 @@
       }
     },
     {
+      "areaId": "nekoma-mountain",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-05-09",
+          "source": "nekoma-mountain-2026-schedule",
+          "note": "The north sector opens first. The south sector runs December 12 to April 4."
+        }
+      ]
+    },
+    {
       "areaId": "nendaz",
       "planned": [
         {
@@ -2182,6 +2233,17 @@
           "closesOn": "2027-04-11",
           "source": "nendaz",
           "note": "Tracouet sector."
+        }
+      ]
+    },
+    {
+      "areaId": "ninox-snow-park",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-17",
+          "closesOn": "2027-03-22",
+          "source": "ninox-snow-park-2026-schedule"
         }
       ]
     },
@@ -2263,6 +2325,16 @@
           "opensOn": "2026-12-04",
           "source": "pajarito-mountain-2026-schedule",
           "note": "Opening depends on weather and conditions."
+        }
+      ]
+    },
+    {
+      "areaId": "palcall-tsumagoi-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-05",
+          "source": "palcall-tsumagoi-resort-2026-schedule"
         }
       ]
     },
@@ -2362,6 +2434,16 @@
       ]
     },
     {
+      "areaId": "pinzolo",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-03",
+          "source": "pinzolo-2026-schedule"
+        }
+      ]
+    },
+    {
       "areaId": "powder-king-mountain-resort",
       "planned": [
         {
@@ -2434,6 +2516,16 @@
           "opensOn": "2026-11-28",
           "closesOn": "2027-04-04",
           "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "shimokura",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "source": "shimokura-2026-schedule"
         }
       ]
     },

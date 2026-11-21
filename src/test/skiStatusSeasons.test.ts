@@ -47,6 +47,18 @@ describe('ski season dates', () => {
         expect(readSeasonMonth('13')).toBeUndefined();
     });
 
+    it('uses the same published season for details, month filters, and comparison', () => {
+        const cannon = area('cannon-mountain');
+        const killington = area('killington');
+        expect(skiSeasonOutlook(cannon, '2026-11-20').typical).toMatchObject({ opensIn: 11, closesIn: 4 });
+        expect(filterSkiAreas([cannon], { seasonMonth: 11 })).toEqual([cannon]);
+        expect(filterSkiAreas([cannon], { seasonMonth: 4 })).toEqual([cannon]);
+        expect(filterSkiAreas([cannon], { seasonMonth: 5 })).toEqual([]);
+        expect(formatSkiStat(cannon, 'typicalOpening', 'imperial')).toBe('November');
+        expect(formatSkiStat(cannon, 'typicalClosing', 'imperial')).toBe('April');
+        expect(sortSkiAreas([killington, cannon], { key: 'typicalClosing', direction: 'asc' })).toEqual([cannon, killington]);
+    });
+
     it('uses local season boundaries and advances to typical dates after the current schedule', () => {
         const sunshine = area('banff-sunshine');
         expect(skiSeasonOutlook(sunshine, '2027-01-20')).toMatchObject({
@@ -69,6 +81,63 @@ describe('ski season dates', () => {
         season: '2025/26', source: 'operator', opensOn: '2025-12-31', closesOn: '2026-04-10',
     };
     const calendar = (actual: unknown) => ({ version: 1, checkedOn: '2026-11-20', sources, areas: [{ areaId: 'alta', actual }] });
+
+    it('identifies the last recorded season and keeps a current opening separate', () => {
+        const resort = { ...area('alta'), seasonWindow: undefined };
+        const fixture = readSeasonCalendar(calendar([candidate]), skiAreas);
+        expect(skiSeasonOutlook(resort, '2026-11-20', undefined, fixture)).toMatchObject({
+            season: '2025/26', historical: true, typical: undefined,
+            opening: { date: '2025-12-31', basis: 'Recorded' },
+            closing: { date: '2026-04-10', basis: 'Recorded' },
+        });
+
+        const report: ResortReport = {
+            areaId: resort.id, status: 'season-closed', opensOn: '2026-11-28',
+            reportedAt: '2026-11-20T17:30:00Z', retrievedAt: '2026-11-20T17:40:00Z',
+            source: { name: 'Operator', url: sources.operator, exportable: false },
+        };
+        const conditions = { reports: new Map([[resort.id, report]]), forecasts: new Map(), now };
+        expect(skiSeasonOutlook(resort, '2026-11-20', conditions, fixture)).toMatchObject({
+            season: undefined, historical: false, closing: undefined,
+            opening: { date: '2026-11-28', basis: 'Scheduled', source: sources.operator },
+        });
+    });
+
+    it.each([
+        { name: 'uses a compatible closing plan', plan: { season: '2026/27', closesOn: '2027-04-08' },
+            season: '2026/27', closing: { date: '2027-04-08', basis: 'Scheduled' } },
+        { name: 'ignores a closing plan before the reported opening', plan: { season: '2026/27', closesOn: '2026-11-26' } },
+        { name: 'ignores a closing plan for a later season', plan: { season: '2027/28', closesOn: '2028-04-08' } },
+    ])('$name for a reported opening', ({ plan, season, closing }) => {
+        const resort = { ...area('alta'), seasonWindow: undefined };
+        const fixture = readSeasonCalendar({
+            ...calendar([]), areas: [{ areaId: resort.id, planned: [{ ...plan, source: 'operator' }] }],
+        }, skiAreas);
+        const report: ResortReport = {
+            areaId: resort.id, status: 'season-closed', opensOn: '2026-11-28',
+            reportedAt: '2026-11-20T17:30:00Z', retrievedAt: '2026-11-20T17:40:00Z',
+            source: { name: 'Operator', url: sources.operator, exportable: false },
+        };
+        const conditions = { reports: new Map([[resort.id, report]]), forecasts: new Map(), now };
+        expect(skiSeasonOutlook(resort, '2026-11-20', conditions, fixture)).toMatchObject({
+            season, historical: false, closing,
+            opening: { date: '2026-11-28', basis: 'Scheduled' },
+        });
+    });
+
+    it('clears an opening announcement from the comparison once the season has opened', () => {
+        const sunshine = area('banff-sunshine');
+        const report: ResortReport = {
+            areaId: sunshine.id, status: 'limited', opensOn: '2026-11-28',
+            reportedAt: '2026-11-20T17:30:00Z', retrievedAt: '2026-11-20T17:40:00Z',
+            source: { name: 'Operator', url: sources.operator, exportable: true, license: 'https://example.test/license' },
+        };
+        const conditions = { reports: new Map([[sunshine.id, report]]), forecasts: new Map(), now };
+        expect(skiSeasonOutlook(sunshine, '2026-11-20', conditions).opening).toMatchObject({ date: '2026-11-07', basis: 'Recorded' });
+        expect(formatSkiStat(sunshine, 'opensOn', 'imperial', conditions)).toBeUndefined();
+        expect(formatSkiStat(sunshine, 'plannedClosing', 'imperial', conditions)).toBe('2027-05-24');
+        expect(skiAreaCsv([sunshine], ['name', 'opensOn'], 'imperial', conditions)).not.toContain('2026-11-28');
+    });
 
     it('orders December and January within their ski season before taking a median', () => {
         const result = readSeasonCalendar(calendar([

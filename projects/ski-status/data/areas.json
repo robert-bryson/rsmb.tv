@@ -29,10 +29,26 @@
         "fields": ["baseFt", "summitFt"],
         "note": "Published ski area altitude bounds of 1154 to 2200 m.",
         "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:7_542",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of Hasenkoepfl. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:7_536",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Helmissimo Vierschach. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
     ],
     "baseFt": 3786,
-    "summitFt": 7218
+    "summitFt": 7218,
+    "highestLiftTerminalFt": 7293,
+    "lowestLiftTerminalFt": 3707
   },
   {
     "id": "49-north-mountain-resort",
@@ -151,7 +167,32 @@
     "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts/alpe-lusia-and-san-pellegrino",
     "liftCount": 23,
     "trailCount": 84,
-    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)"
+    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)",
+    "downhillKm": 100,
+    "statSources": [
+      {
+        "source": "https://www.dolomitisuperski.com/dam/jcr%3A77000754-7ee0-495f-b94a-eb15c5370a04/skimap_web_ALSP1.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"],
+        "note": "Combined region in the operator's ski map."
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:11_655",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of Lago Cavia - Col Margherita. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:11_661",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Molino - Le Buse. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      }
+    ],
+    "highestLiftTerminalFt": 8258,
+    "lowestLiftTerminalFt": 3934
   },
   {
     "id": "alpental",
@@ -261,8 +302,24 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm", "baseFt", "summitFt", "verticalFt"],
         "note": "Vertical is calculated from the published 1,300–2,800 m ski area range."
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:3_304",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of Vallon. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:3_347",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Baby La Crusc. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
-    ]
+    ],
+    "highestLiftTerminalFt": 8284,
+    "lowestLiftTerminalFt": 4364
   },
   {
     "id": "alyeska-resort",
@@ -370,8 +427,15 @@
         "checkedOn": "2026-11-19",
         "fields": ["verticalFt"],
         "note": "Published specifically for Gemsstock."
+      },
+      {
+        "source": "https://www.andermatt-sedrun-disentis.ch/en/service-providers/bergbahn-andermattsedrun-sport-ag-gemsstock",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "Gemsstock summit. The lift terminal has its own field."
       }
-    ]
+    ],
+    "summitFt": 9718
   },
   {
     "id": "andermatt-sedrun",
@@ -654,11 +718,19 @@
         "checkedOn": "2026-11-20",
         "fields": ["baseFt", "summitFt", "highestLiftTerminalFt"],
         "note": "The winter map identifies the Malga Ciapèla base and the Punta Rocca lift-served high point."
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:6_530",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Malga - Serauta. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
     ],
     "baseFt": 4744,
     "summitFt": 10725,
-    "highestLiftTerminalFt": 10725
+    "highestLiftTerminalFt": 10725,
+    "lowestLiftTerminalFt": 4829
   },
   {
     "id": "arai-mountain-resort",
@@ -1049,8 +1121,15 @@
         "source": "https://www.indyskipass.com/our-resorts/baqueiraberet",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt", "grades"]
+      },
+      {
+        "source": "https://www.visitvaldaran.com/wp-content/uploads/2025/03/Dossier-de-Premsa-2025-CAT.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"],
+        "note": "The Val d'Aran tourism board gives the marked downhill length."
       }
-    ]
+    ],
+    "downhillKm": 171
   },
   {
     "id": "bear-basin-nordic-center",
@@ -1268,6 +1347,17 @@
     "verticalFt": 2854,
     "additionalSources": [
       "https://en.beidahu.com/about/7.html"
+    ],
+    "downhillKm": 80,
+    "reportUrl": "https://www.beidahu.com/",
+    "reportCheckedOn": "2026-11-21",
+    "statSources": [
+      {
+        "source": "https://www.beidahu.com/",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"],
+        "note": "The operator lists 80 km of runs across Beidahu."
+      }
     ]
   },
   {
@@ -1544,8 +1634,15 @@
         "source": "https://www.indyskipass.com/our-resorts/big-powderhorn",
         "checkedOn": "2026-11-21",
         "fields": ["acres", "baseFt", "grades"]
+      },
+      {
+        "source": "https://bigpowderhorn.net/trail-map/",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "The operator's trail map gives the summit elevation."
       }
-    ]
+    ],
+    "summitFt": 1631
   },
   {
     "id": "big-rock-mountain",
@@ -1943,9 +2040,17 @@
         "source": "https://bogusbasin.org/your-mountain/maps-statistics/",
         "checkedOn": "2026-11-19",
         "fields": ["nightAcres"]
+      },
+      {
+        "source": "https://media.bogusbasin.org/uploads/2025/11/24191019/RGB_2025-26Winter_NightMap_Web.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"],
+        "note": "Bogus Creek Lodge base and Shafer Butte summit from the winter map."
       }
     ],
-    "reportUrl": "https://bogusbasin.org/your-mountain/conditions-webcams/"
+    "reportUrl": "https://bogusbasin.org/your-mountain/conditions-webcams/",
+    "baseFt": 6100,
+    "summitFt": 7590
   },
   {
     "id": "bolton-valley-resort",
@@ -2571,7 +2676,16 @@
     "website": "https://www.verbier.ch/destination/bruson/",
     "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter",
     "seasonWindow": "From Dec 12, 2026 (planned)",
-    "statsUrl": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437"
+    "statsUrl": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437",
+    "summitFt": 7106,
+    "statSources": [
+      {
+        "source": "https://verbier4vallees.ch/en/ski-resort/bruson",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "The operator identifies La Pasay as the summit of the Bruson ski area."
+      }
+    ]
   },
   {
     "id": "bryce-resort",
@@ -2629,9 +2743,16 @@
         "source": "https://www.exploreminnesota.com/sites/default/files/2021-11/22_SkiGridNEW.pdf",
         "checkedOn": "2026-11-21",
         "fields": ["verticalFt"]
+      },
+      {
+        "source": "https://buckhill.com/skiing-snowboarding/winter-trail-map/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Counts the nine ski-area lifts in the operator's status table. The tenth lift serves tubing."
       }
     ],
-    "verticalFt": 310
+    "verticalFt": 310,
+    "liftCount": 9
   },
   {
     "id": "buffalo-ski-club",
@@ -3028,7 +3149,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.canmore-ski.jp/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "cannon-mountain",
@@ -3498,9 +3621,25 @@
         "checkedOn": "2026-11-21",
         "fields": ["nightSkiing"],
         "note": "Le Foppe and Cristelin on scheduled evenings."
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:12_709",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of Fertazza. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:12_685",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Alleghe/Piani di Pezzè. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
     ],
-    "nightSkiing": true
+    "nightSkiing": true,
+    "highestLiftTerminalFt": 6841,
+    "lowestLiftTerminalFt": 3225
   },
   {
     "id": "coffee-mill-ski-area",
@@ -3718,8 +3857,18 @@
         "source": "https://www.indyskipass.com/our-resorts/corralco-resort-de-montana",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "grades"]
+      },
+      {
+        "source": "https://corralco.com/montana/",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "acresQualifier"],
+        "note": "The operator's skiable domain includes terrain outside the groomed runs."
       }
-    ]
+    ],
+    "acres": 4447.8,
+    "acresQualifier": "lower-bound",
+    "reportUrl": "https://mountain.live/report/7d088178-39c3-4439-bd72-664bcb16bc7b?locale=es_ES",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "cortina-d-ampezzo",
@@ -4505,9 +4654,17 @@
         "checkedOn": "2026-11-20",
         "fields": ["acres", "trailCount", "verticalFt", "summitFt"],
         "note": "In-bounds area. The operator reports 67 trails and 2,388 feet of vertical."
+      },
+      {
+        "source": "https://www.skidiscovery.com/the-mountain/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "The operator lists five triple chairs, two double chairs, and one surface lift."
       }
     ],
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "liftCount": 8,
+    "statsUrl": "https://www.skidiscovery.com/the-mountain/"
   },
   {
     "id": "disentis",
@@ -5095,7 +5252,16 @@
     "statsUrl": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx",
     "reportUrl": "https://www.ski.it/en/info-live/lift-status",
     "liftCount": 25,
-    "trailCount": 36
+    "trailCount": 36,
+    "nightSkiing": true,
+    "statSources": [
+      {
+        "source": "https://www.ski.it/en/skiarea/folgarida-marilleva",
+        "checkedOn": "2026-11-21",
+        "fields": ["nightSkiing"],
+        "note": "The operator documents night skiing on the Biancaneve run."
+      }
+    ]
   },
   {
     "id": "fort-kent-outdoor-center",
@@ -5663,10 +5829,17 @@
         "source": "https://www.skigd.com/mountain-stats",
         "checkedOn": "2026-11-19",
         "fields": ["trailCount", "baseFt", "summitFt", "verticalFt"]
+      },
+      {
+        "source": "https://www.skigd.com/mountain-stats",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Five chairs and the Backyard Rope Tow in the operator's inventory."
       }
     ],
     "reportUrl": "https://www.skigd.com/weather-and-conditions",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "liftCount": 6
   },
   {
     "id": "great-glen-trails-outdoor-center",
@@ -6362,7 +6535,9 @@
         "Intermediate": 20,
         "Advanced": 20
       }
-    }
+    },
+    "reportUrl": "https://www.hilltopskiarea.org/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "hintertux-glacier",
@@ -7794,7 +7969,7 @@
     "locality": "Kaprun",
     "website": "https://www.kitzsteinhorn.at/en",
     "reportUrl": "https://www.kitzsteinhorn.at/en/service/information/hours-of-operation",
-    "downhillKm": 41,
+    "downhillKm": 62.5,
     "highestLiftTerminalFt": 9938,
     "terrainParks": true,
     "statsUrl": "https://www.kitzsteinhorn.at/en/service/backstage/press/winter-2025-26-pr15634",
@@ -7802,10 +7977,17 @@
       {
         "source": "https://www.kitzsteinhorn.at/en/service/backstage/press/winter-2025-26-pr15634",
         "checkedOn": "2026-11-19",
-        "fields": ["downhillKm", "highestLiftTerminalFt", "terrainParks"],
+        "fields": ["highestLiftTerminalFt", "terrainParks"],
         "note": "Length covers Kitzsteinhorn's glacier slopes. The operator lists 62.5 km for the larger Kaprun area."
+      },
+      {
+        "source": "https://www.kitzsteinhorn.at/de/service/backstage/presse/winter-2026-27-pr15634",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount", "downhillKm"],
+        "note": "The resort's 2026/27 summary covers Kitzsteinhorn and Maiskogel. The former 41 km figure covered Kitzsteinhorn."
       }
-    ]
+    ],
+    "liftCount": 24
   },
   {
     "id": "kronplatz",
@@ -7836,10 +8018,26 @@
         "fields": ["baseFt", "summitFt"],
         "note": "Published elevation range for Kronplatz / Plan de Corones.",
         "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:2_266",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of Sonne. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:2_292",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Ried. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
     ],
     "baseFt": 3068,
-    "summitFt": 7464
+    "summitFt": 7464,
+    "highestLiftTerminalFt": 7457,
+    "lowestLiftTerminalFt": 3068
   },
   {
     "id": "krvavec-ski-resort",
@@ -7931,7 +8129,17 @@
     "downhillKm": 156,
     "trailCount": 83,
     "liftCount": 37,
-    "statsUrl": "https://www.lathuile.it/en/the-area"
+    "statsUrl": "https://www.lathuile.it/en/the-area",
+    "baseFt": 4728,
+    "summitFt": 9186,
+    "statSources": [
+      {
+        "source": "https://www.lathuile.it/en/the-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"],
+        "note": "La Thuile base and Mont Valaisan summit in the cross-border ski area."
+      }
+    ]
   },
   {
     "id": "la-tzoumaz",
@@ -8046,6 +8254,15 @@
     "verticalFt": 2526,
     "additionalSources": [
       "https://www.lemassif.com/en"
+    ],
+    "baseFt": 125,
+    "statSources": [
+      {
+        "source": "https://www.lemassif.com/sites/default/files/2023-01/Carte-44x35.5-Janvier2023%20copie.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Lower ski base at the Chalet de la Base."
+      }
     ]
   },
   {
@@ -8138,7 +8355,16 @@
     "website": "https://www.skiarlberg.at/en",
     "reportUrl": "https://www.skiarlberg.at/en/live-info",
     "seasonWindow": "From Dec 2, 2026 (planned)",
-    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start"
+    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start",
+    "baseFt": 4738,
+    "statSources": [
+      {
+        "source": "https://www.lechzuers.com/media/36604/download/DE_Lech%20Z%C3%BCrs%20in%20Zahlen_2026.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Published elevation of the Lech ski village."
+      }
+    ]
   },
   {
     "id": "les-7-laux",
@@ -8172,6 +8398,12 @@
         "source": "https://www.indyskipass.com/our-resorts/les-7-laux",
         "checkedOn": "2026-11-21",
         "fields": ["grades"]
+      },
+      {
+        "source": "https://www.les7laux.com/winter/website-search/what-to-see/trail-map/",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"],
+        "note": "Full skiable area. The operator identifies 30 hectares as groomed."
       }
     ],
     "reportUrl": "https://usca.les7laux.com/fr/infos-usca",
@@ -8184,7 +8416,8 @@
         "Intermediate": 38,
         "Advanced": 13
       }
-    }
+    },
+    "acres": 3706.6
   },
   {
     "id": "les-houches",
@@ -8229,7 +8462,16 @@
     "website": "https://www.les3vallees.com/en/resort/les-menuires",
     "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
     "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/les-menuires",
-    "seasonWindow": "Dec 5, 2026 – Apr 18, 2027 (planned)"
+    "seasonWindow": "Dec 5, 2026 – Apr 18, 2027 (planned)",
+    "baseFt": 6070,
+    "statSources": [
+      {
+        "source": "https://www.valthorens.com/en/la-vallee-des-belleville-trois-stations-une-vallee/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Published elevation of the Les Menuires ski village."
+      }
+    ]
   },
   {
     "id": "leukerbad-torrent-ski-resort-gemmi-resort",
@@ -8753,7 +8995,16 @@
     "statsUrl": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx",
     "reportUrl": "https://www.ski.it/en/info-live/lift-status",
     "liftCount": 20,
-    "trailCount": 41
+    "trailCount": 41,
+    "baseFt": 5085,
+    "statSources": [
+      {
+        "source": "https://www.visittrentino.info/it/trentino/destinazioni/madonna-di-campiglio_md_100",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Published elevation of the Madonna di Campiglio ski village."
+      }
+    ]
   },
   {
     "id": "magic-mountain-idaho",
@@ -9698,7 +9949,16 @@
     "additionalSources": [
       "https://mont-sainte-anne.com/en/xc-skiing-trail-map/"
     ],
-    "reportUrl": "https://mont-sainte-anne.com/en/alpine-skiing-snow-conditions/"
+    "reportUrl": "https://mont-sainte-anne.com/en/alpine-skiing-snow-conditions/",
+    "baseFt": 574,
+    "statSources": [
+      {
+        "source": "https://mont-sainte-anne.com/en/mont-sainte-anne-mountain-statistics/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Calculated from the operator's 800 m summit and 625 m skiable vertical."
+      }
+    ]
   },
   {
     "id": "mont-sutton",
@@ -9843,8 +10103,29 @@
         "source": "https://www.skimontebondone.it/sciare-sul-monte-bondone-stato-piste-campi-scuola-e-snowpark/",
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "downhillKm", "terrainParks"]
+      },
+      {
+        "source": "https://www.visittrentino.info/en-us/trentino/ski-areas/alpine-skiing/monte-bondone_md_2202",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "Maximum elevation in the regional ski area description."
+      },
+      {
+        "source": "https://www.visittrentino.info/en-us/trentino/ski-areas/alpine-skiing/monte-bondone_md_2202",
+        "checkedOn": "2026-11-21",
+        "fields": ["nightSkiing"],
+        "note": "The regional tourism authority documents floodlit downhill slopes."
+      },
+      {
+        "source": "https://www.skimontebondone.it/apertura-gran-pista-rocce-rosse-e-snowpark-monte-bondone/",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"],
+        "note": "The operator gives an approximately 800 m drop for the Gran Pista Rocce Rosse run."
       }
-    ]
+    ],
+    "summitFt": 6883,
+    "nightSkiing": true,
+    "verticalFt": 2625
   },
   {
     "id": "monterosa-ski",
@@ -10592,8 +10873,15 @@
         "source": "https://mtlacrosse.com/trail-map-conditions/",
         "checkedOn": "2026-11-21",
         "fields": ["acres", "summitFt"]
+      },
+      {
+        "source": "https://mtlacrosse.com/trail-map-conditions/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Calculated from the operator's 1,110 ft summit and 516 ft vertical drop."
       }
-    ]
+    ],
+    "baseFt": 594
   },
   {
     "id": "mt-norquay",
@@ -11040,8 +11328,20 @@
         "source": "https://www.nekoma.co.jp/feature/welcome/",
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "trailCount"]
+      },
+      {
+        "source": "https://www.nekoma.co.jp/liftguide/",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "nightSkiing"],
+        "note": "Combined north and south ski area. The operator reports 189 hectares."
       }
-    ]
+    ],
+    "acres": 467,
+    "baseFt": 2297,
+    "summitFt": 4390,
+    "nightSkiing": true,
+    "reportUrl": "https://www.nekoma.co.jp/liftguide/#status",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "nelson-nordic-ski-club",
@@ -11142,8 +11442,17 @@
         "source": "https://www.indyskipass.com/our-resorts/ninox-snow-park",
         "checkedOn": "2026-11-21",
         "fields": ["acres", "baseFt", "grades"]
+      },
+      {
+        "source": "https://www.ninox.co.jp/course/",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "Published top of the Joyful course and ski area."
       }
-    ]
+    ],
+    "summitFt": 1749,
+    "reportUrl": "https://www.ninox.co.jp/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "niseko-united",
@@ -11300,7 +11609,9 @@
     "terrainParks": false,
     "additionalSources": [
       "https://www.nmctrails.org/visit"
-    ]
+    ],
+    "reportUrl": "https://www.nmctrails.org/visit#trailconditions",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "northstar-california-resort",
@@ -11801,7 +12112,16 @@
     "website": "https://www.les3vallees.com/en/resort/orelle",
     "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
     "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/orelle",
-    "seasonWindow": "Nov 21, 2026 – May 2, 2027 (planned)"
+    "seasonWindow": "Nov 21, 2026 – May 2, 2027 (planned)",
+    "baseFt": 7710,
+    "statSources": [
+      {
+        "source": "https://orelle.net/?_locale=fr",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Ski base at the upper end of the access gondola from Orelle."
+      }
+    ]
   },
   {
     "id": "osceola-tug-hill-xc-ski-center",
@@ -11865,6 +12185,12 @@
         "checkedOn": "2026-11-20",
         "fields": ["summitFt", "grades"],
         "note": "The operator gives the upper piste elevation and grade counts for marked trails. The ski school areas are listed separately."
+      },
+      {
+        "source": "https://www.visittrentino.info/en/trentino/ski-areas/ski-area-andalo-and-fai-della-paganella_md_2228",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "The tourism authority gives 1,000 m as the lower reach of the ski terrain."
       }
     ],
     "verticalFt": 3642,
@@ -11882,7 +12208,8 @@
       }
     },
     "reportUrl": "https://www.paganella.net/en/live/ski-slopes",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 3281
   },
   {
     "id": "pajarito-mountain",
@@ -11994,7 +12321,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://palcallresort.com/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "palisades-tahoe",
@@ -12528,8 +12857,14 @@
         "source": "https://www.indyskipass.com/our-resorts/pila",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt"]
+      },
+      {
+        "source": "https://pila.it/en/ski-area/",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"]
       }
-    ]
+    ],
+    "downhillKm": 70
   },
   {
     "id": "pine-mountain",
@@ -12589,8 +12924,15 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "downhillKm"],
         "note": "Local Pinzolo totals from Trentino's resort profile."
+      },
+      {
+        "source": "https://www.visittrentino.info/it/trentino/aree-sciistiche/sci-alpino/pinzolo_md_2205",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of the Prà Rodont–Doss del Sabion gondola."
       }
-    ]
+    ],
+    "highestLiftTerminalFt": 6890
   },
   {
     "id": "pippu-ski-resort",
@@ -12805,8 +13147,31 @@
         "source": "https://www.pontedilegnotonale.com/it/ponte-di-legno-tonale-sci/skimap",
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "trailCount"]
+      },
+      {
+        "source": "https://www.pontedilegnotonale.com/en/ski-area/lifts/",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt", "highestLiftTerminalFt"],
+        "note": "Extremes of the operator's lift inventory. The lower station is at Temù and the upper station is at Presena."
+      },
+      {
+        "source": "https://www.pontedilegnotonale.com/en/ski-area/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"],
+        "note": "Published ski terrain altitude from the valley to the Presena Glacier."
+      },
+      {
+        "source": "https://www.pontedilegnotonale.com/media/weab4fjl/bilancio-sostenibilit%C3%A0_def.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"],
+        "note": "The operator's winter ski area length covers four connected sectors."
       }
-    ]
+    ],
+    "lowestLiftTerminalFt": 3678,
+    "highestLiftTerminalFt": 9843,
+    "baseFt": 3678,
+    "summitFt": 9843,
+    "downhillKm": 100
   },
   {
     "id": "portes-du-soleil",
@@ -13399,7 +13764,25 @@
     "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts/gitschberg-jochtal-brixen",
     "liftCount": 26,
     "trailCount": 100,
-    "seasonWindow": "Dec 4, 2026 – Apr 4, 2027 (planned)"
+    "seasonWindow": "Dec 4, 2026 – Apr 4, 2027 (planned)",
+    "highestLiftTerminalFt": 8232,
+    "statSources": [
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:10_719",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of Rossalm. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:10_725",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Lüsen. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      }
+    ],
+    "lowestLiftTerminalFt": 3189
   },
   {
     "id": "roundtop-mountain-resort",
@@ -13503,8 +13886,15 @@
         "checkedOn": "2026-11-20",
         "fields": ["downhillKm", "grades"],
         "note": "The trail map gives aggregate downhill length across the three mountains."
+      },
+      {
+        "source": "https://rusutsu.com/en/blog/032/",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "The operator identifies Mt. Isola as the highest summit of its three mountains."
       }
-    ]
+    ],
+    "summitFt": 3261
   },
   {
     "id": "saddleback",
@@ -14066,7 +14456,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.hachimantai.co.jp/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "showdown-montana",
@@ -14447,10 +14839,17 @@
         "source": "https://skibutternut.com/the-mountain/mountain-info/mountain-stats",
         "checkedOn": "2026-11-19",
         "fields": ["acres", "trailCount", "summitFt", "verticalFt"]
+      },
+      {
+        "source": "https://skibutternut.com/the-mountain/mountain-info/mountain-stats",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "The operator lists five quad chairs and four learning carpets. The tubing carpet appears separately."
       }
     ],
     "reportUrl": "https://skibutternut.com/the-mountain/trails-conditions/condition-report/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "liftCount": 9
   },
   {
     "id": "ski-land",
@@ -14483,7 +14882,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["acres", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://skilandfairbanks.com/trailconditions/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "ski-saint-bruno",
@@ -15098,9 +15499,16 @@
         "checkedOn": "2026-11-19",
         "fields": ["trailCount", "grades"],
         "note": "Black River Basin subarea. The source lists eight gladed runs separately."
+      },
+      {
+        "source": "https://www.snowriver.com/mountain-info/mountain-report",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Four lifts listed for Black River Basin's Frontside and Westside."
       }
     ],
-    "reportUrl": "https://www.snowriver.com/mountain-info/mountain-report"
+    "reportUrl": "https://www.snowriver.com/mountain-info/mountain-report",
+    "liftCount": 4
   },
   {
     "id": "snowriver-mountain-resort-jackson-creek-summit",
@@ -15131,9 +15539,16 @@
         "checkedOn": "2026-11-19",
         "fields": ["trailCount", "grades"],
         "note": "Jackson Creek Summit subarea. The source lists 11 gladed runs separately."
+      },
+      {
+        "source": "https://www.snowriver.com/mountain-info/mountain-report",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Six ski lifts listed for Jackson Creek Summit. The count includes tows and conveyors."
       }
     ],
-    "reportUrl": "https://www.snowriver.com/mountain-info/mountain-report"
+    "reportUrl": "https://www.snowriver.com/mountain-info/mountain-report",
+    "liftCount": 6
   },
   {
     "id": "snowshoe-mountain",
@@ -15864,10 +16279,17 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "liftCount", "trailCount", "downhillKm", "summitFt", "verticalFt", "grades"],
         "note": "Lift inventory includes four magic carpets."
+      },
+      {
+        "source": "https://www.stratton.com/the-mountain/mountain-statistics",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Calculated from the operator's 3,875 ft summit and 2,003 ft vertical."
       }
     ],
     "reportUrl": "https://www.stratton.com/the-mountain/mountain-report",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 1872
   },
   {
     "id": "stuben-am-arlberg",
@@ -16177,10 +16599,18 @@
         "checkedOn": "2026-11-20",
         "fields": ["acres", "trailCount", "verticalFt"],
         "note": "Approximate skiable area as published by the operator."
+      },
+      {
+        "source": "https://www.sundanceresort.com/site/assets/files/7710/sundance_resort_25_26_winter_trail_map.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "The operator's winter map labels Red's Summit at 8,250 ft."
       }
     ],
     "reportUrl": "https://www.sundanceresort.com/mountain-report/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "summitFt": 8250,
+    "statsUrl": "https://www.sundanceresort.com/site/assets/files/7710/sundance_resort_25_26_winter_trail_map.pdf"
   },
   {
     "id": "sunday-river",
@@ -16734,7 +17164,19 @@
     "terrainParks": true,
     "skiing": "both",
     "statsUrl": "https://www.summitatsnoqualmie.com/mountain-report",
-    "reportUrl": "https://www.summitatsnoqualmie.com/mountain-report"
+    "reportUrl": "https://www.summitatsnoqualmie.com/mountain-report",
+    "acres": 1169,
+    "statSources": [
+      {
+        "source": "https://www.summitatsnoqualmie.com/",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"],
+        "note": "The operator reports 1,994 acres across the resort. Subtract Alpental's 825 acres to get the area of the three Summit sectors."
+      }
+    ],
+    "additionalSources": [
+      "https://www.summitatsnoqualmie.com/alpental"
+    ]
   },
   {
     "id": "thredbo",
@@ -17037,7 +17479,16 @@
         "Difficult": 31,
         "Very difficult and extreme": 49
       }
-    }
+    },
+    "baseFt": 755,
+    "statSources": [
+      {
+        "source": "https://www.tremblant.ca/mountain-village/mountain-info/tremblant-statistics",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Calculated for the South Side from the 875 m summit and 645 m vertical."
+      }
+    ]
   },
   {
     "id": "trollhaugen-ski-area",
@@ -17330,7 +17781,25 @@
     "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
     "liftCount": 46,
     "trailCount": 100,
-    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)"
+    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)",
+    "highestLiftTerminalFt": 7877,
+    "statSources": [
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:8_584",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt"],
+        "note": "Upper terminal of Plateau. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "source": "https://tourism.api.opendatahub.com/v1/ODHActivityPoi/urn:odhactivitypoi:dss:lift:8_573",
+        "checkedOn": "2026-11-21",
+        "fields": ["lowestLiftTerminalFt"],
+        "note": "Lower terminal of Cavalese - Fondovalle. The public Dolomiti Superski lift inventory gives its elevation.",
+        "exportLicense": "https://creativecommons.org/publicdomain/zero/1.0/"
+      }
+    ],
+    "lowestLiftTerminalFt": 2789
   },
   {
     "id": "val-direne",
@@ -17420,7 +17889,23 @@
     "website": "https://www.les3vallees.com/en/resort/val-thorens",
     "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
     "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/val-thorens",
-    "seasonWindow": "Nov 21, 2026 – May 2, 2027 (planned)"
+    "seasonWindow": "Nov 21, 2026 – May 2, 2027 (planned)",
+    "summitFt": 10499,
+    "statSources": [
+      {
+        "source": "https://www.valthorens.com/en/ski/domaine-skiable/",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "The local operator identifies Cime Caron as the highest point."
+      },
+      {
+        "source": "https://www.valthorens.com/en/la-vallee-des-belleville-trois-stations-une-vallee/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Published elevation of the Val Thorens ski village."
+      }
+    ],
+    "baseFt": 7546
   },
   {
     "id": "valle-nevado",
@@ -17443,8 +17928,15 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "trailCount"],
         "note": "The operator lists 13 lifts plus the gondola."
+      },
+      {
+        "source": "https://www.vallenevado.com/en/about-valle-nevado/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "The operator gives the resort base altitude as 9,924 ft."
       }
-    ]
+    ],
+    "baseFt": 9924
   },
   {
     "id": "verbier",
@@ -17494,7 +17986,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["acres", "baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.skithevets.org/skiing-and-snowboarding",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "veysonnaz",
@@ -18089,10 +18583,17 @@
         "source": "https://www.exploreminnesota.com/sites/default/files/2021-11/22_SkiGridNEW.pdf",
         "checkedOn": "2026-11-21",
         "fields": ["verticalFt"]
+      },
+      {
+        "source": "https://wildmountain.com/mountain-info/snow-report",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "The ski report lists four chairs, four rope tows, and one conveyor."
       }
     ],
     "reportUrl": "https://wildmountain.com/mountain-info/snow-report",
-    "verticalFt": 300
+    "verticalFt": 300,
+    "liftCount": 9
   },
   {
     "id": "wildcat-mountain",
@@ -18172,7 +18673,9 @@
         "fields": ["nordicKm"],
         "note": "Bull Mountain's groomed cross-country trails. The club publishes 3.5 km of illuminated trails."
       }
-    ]
+    ],
+    "reportUrl": "https://wlnordic.ca/weather",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "wilmot-mountain",
@@ -18444,8 +18947,16 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "trailCount", "terrainParks"],
         "note": "Beijing's official event venue profile lists five high-speed lifts, 35 rated trails and six ungroomed routes."
+      },
+      {
+        "source": "https://www.secretgardenresorts.com/cp/?lang=zh-cn",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "acresQualifier"],
+        "note": "The operator reports more than 800,000 square metres of ski terrain."
       }
-    ]
+    ],
+    "acres": 197.6,
+    "acresQualifier": "lower-bound"
   },
   {
     "id": "yuzawa-nakazato-snow-resort",
@@ -18588,6 +19099,15 @@
     "website": "https://www.skiarlberg.at/en",
     "reportUrl": "https://www.skiarlberg.at/en/live-info",
     "seasonWindow": "From Dec 2, 2026 (planned)",
-    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start"
+    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start",
+    "baseFt": 5633,
+    "statSources": [
+      {
+        "source": "https://www.lechzuers.com/media/36604/download/DE_Lech%20Z%C3%BCrs%20in%20Zahlen_2026.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Published elevation of the Zürs ski village."
+      }
+    ]
   }
 ]

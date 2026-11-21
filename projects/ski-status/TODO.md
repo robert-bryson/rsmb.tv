@@ -16,17 +16,17 @@ Use the guide for procedures and acceptance checks. Find completed work in Git h
 
 ## Catalog gaps
 
-- [ ] Fill gaps in the six main comparison fields for 237 downhill areas. Start with base elevation, summit elevation, and skiable acres. Record each value's units, scope, source, and date. Update the field counts. [Measurement rules](readme.md#comparable-mountain-statistics)
-- [ ] Verify the endpoints of a lift-served descent at Amihari Onsen before restoring its vertical figure. [Measurement rules](readme.md#comparable-mountain-statistics)
-- [ ] Add official conditions links for 48 areas. Open each link. Confirm that its report covers the area. [Catalog](readme.md#catalog)
+- [ ] Fill gaps in the six main comparison fields for 228 downhill areas. Start with base elevation, summit elevation, and skiable acres. Record each value's units, scope, source, and date. Update the field counts. [Measurement rules](readme.md#comparable-mountain-statistics)
+- [ ] Add official conditions links for 36 areas. Open each link. Confirm that its report covers the area. [Catalog](readme.md#catalog)
+- [ ] Verify the endpoints of a lift-served descent at Amihari Onsen. Restore the vertical drop after verification. [Measurement rules](readme.md#comparable-mountain-statistics)
 - [ ] Review the 485 open North American candidates by region. Record each decision and its source. Update the regional counts. [Candidate log](research/north-america-2026-11-16.csv)
 - [ ] Use operator directions to check visitor entrances for the 16 areas without a reliable inferred base. [Terrain and base review](../../docs/reviews/2026-11-20-ski-status-map-and-resort-data-review.md#terrain-and-base-points)
 - [ ] Add more verified resort icons and Wikipedia articles. Give each icon a source. [Catalog](readme.md#catalog)
 
 ## Report and season data
 
-- [ ] Record actual opening and closing dates for areas with plans. Add opening-day terrain and breaks in operation when the operator reports them. [Season date rules](readme.md#opening-and-closing-dates)
-- [ ] Add snowfall and snow depth for areas with gaps in the snow table. Record the measurement location, period, and source for each series. [Snow history](readme.md#season-and-snowfall)
+- [ ] Record actual opening and closing dates for areas with plans. Use operator reports for opening-day terrain and breaks in operation. [Season date rules](readme.md#opening-and-closing-dates)
+- [ ] Add missing snowfall and snow depth series. Record the measurement location, period, and source for each series. [Snow history](readme.md#season-and-snowfall)
 
 ## Recurring checks
 
@@ -39,7 +39,8 @@ Use the guide for procedures and acceptance checks. Find completed work in Git h
 - [ ] Build a season calendar from verified daily reports. Remove duplicate observations. Check coverage before adding terrain, snow, and temperature to the calendar. [Calendar design](readme.md#season-conditions-calendar)
 - [ ] Add current weather and a five-day forecast. Test local dates, units, and missing values. [Forecast design](readme.md#resort-conditions-and-5-day-forecast)
 - [ ] Link to operator trail maps. Show access, run length, maximum slope, and grooming status when the source gives these values. [Terrain guide](readme.md#runs-and-lifts-at-resort-zoom)
-- [ ] Match resort bases to access roads. Show road restrictions. Link to agency and resort cameras. Record parking locations, prices, and shuttle service. [Access routes](readme.md#access-routes-and-webcams)
+- [ ] Match resort bases to access roads. Show road restrictions. Record parking locations, prices, and shuttle service. [Access routes](readme.md#access-routes-and-webcams)
+- [ ] Link to agency and resort cameras. Check if a map layer helps users find nearby cameras. [Access routes and webcams](readme.md#access-routes-and-webcams)
 - [ ] Store visited areas on the device. Add a filter and a backup format. [Visited areas](readme.md#visited-areas)
 
 ## Research
@@ -47,4 +48,6 @@ Use the guide for procedures and acceptance checks. Find completed work in Git h
 - [ ] Find operator policies for uphill travel. Record a source link for each area.
 - [ ] Compare lift ticket and rental prices. Link to dining price lists.
 - [ ] Measure the time needed to compare acreage, vertical drop, and lift count with the current column order. [Interface review](../../docs/reviews/2026-11-20-ski-status-interface-review.md)
-- [ ] Compare terrain maps and statistics side by side. Use the same zoom for both maps.
+- [ ] Evaluate a side-by-side view of terrain and mountain statistics. Use the same zoom for both maps. [Map display](readme.md#map-display)
+- [ ] Evaluate map layers for forecast snowfall, snow depth, slope angle, and freezing level. Check data coverage and reuse terms. [Report rules](readme.md#report-and-forecast-rules)
+- [ ] Find sources for avalanche forecasts and avalanche terrain. Check coverage and reuse terms for use in map layers. [Map display](readme.md#map-display)
