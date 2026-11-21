@@ -34,8 +34,14 @@ The existing IAM user and secrets remain available during the transition.
 9. Verify the generated data, uploads, and invalidations. Verify both recent and full temperature sync modes.
 10. Remove legacy authentication and credentials only after those checks pass.
 
-Set `AWS_SKI_STATUS_SYNC_ROLE_ARN` to the `ski-status` ARN to enable the ski-status workflow on `main`.
-Check the first manifest, both snapshot files, and the history entry in the data bucket. Check the archived manifest on a later run. [Ski-status publication](../projects/ski-status/readme.md#conditions-publication)
+### Enable ski-status sync
+
+1. Set `AWS_SKI_STATUS_SYNC_ROLE_ARN` to the `ski-status` ARN from the Terraform output.
+2. Run **Sync Ski Status** from `main`.
+3. Check `manifest.json`, its linked report and forecast files, and the history entry in the data bucket.
+4. Run the workflow again. Check the archived manifest in `previousManifest`.
+
+[Ski-status publication](../projects/ski-status/readme.md#conditions-publication)
 
 Activate the production release role separately through the [release guide](release-validation.md#activation).
 Set `AWS_RELEASE_ROLE_ARN` from `github_release_role_arn` and set `AMPLIFY_APP_ID` in repository Actions variables.

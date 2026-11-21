@@ -17,7 +17,7 @@ import { captureSkiMapArea, encodeSkiMapArea, encodeSkiMapCamera, skiMapMaxZoom,
 import { addAreaLayers, addCountImage, addPassBadges, areaFeatures, clusterLayer, filterPassBadges, loadPassImages, markerLayers,
     pointLayer, selectionSource, sourceId, updateClusterStyle } from './skiMapLayers';
 import { SkiAreaPopup } from './SkiAreaPopup';
-import { SkiIcon } from './SkiIcon';
+import { SkiIcon, SkiIconButton } from './SkiIcon';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './skiAreaPopup.css';
 
@@ -195,6 +195,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const [hovered, setHovered] = useState<SkiArea>();
     const [viewport, setViewport] = useState<string>();
     const [moving, setMoving] = useState(false);
+    const [searchSuggested, setSearchSuggested] = useState(false);
     const reducedMotion = useReducedMotion();
     const duration = reducedMotion ? 0 : 280;
     const areasById = useMemo(() => {
@@ -385,7 +386,11 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 syncCamera(instance);
                 queueViewport();
             });
-            instance.on('movestart', () => { setMoving(true); clearHover(); });
+            instance.on('movestart', event => {
+                setMoving(true);
+                if ('originalEvent' in event && event.originalEvent) setSearchSuggested(true);
+                clearHover();
+            });
             instance.on('moveend', settleViewport);
             instance.on('projectiontransition', queueViewport);
             instance.on('idle', () => syncTerrainKey(instance));
@@ -423,7 +428,9 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 if (area) {
                     if (area.id !== data.selected?.id) pinSelection.current = area.id;
                     selectArea(area.id, canvas);
-                } else if (!expandCluster(instance, event.point, data.duration)) {
+                } else if (expandCluster(instance, event.point, data.duration)) {
+                    setSearchSuggested(true);
+                } else {
                     selectArea();
                     showTerrainLabel(event);
                 }
@@ -509,6 +516,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const showSkiTerrainError = interactive && showResortTerrain && resortTerrainUnavailable && mapZoom >= resortTerrainMinZoom;
     const areaApplied = Boolean(searchedAreaKey && searchedAreaKey === viewport);
     const canSearch = interactive && !moving && Boolean(viewport) && !areaApplied;
+    const promoteAreaSearch = canSearch && (searchSuggested || Boolean(searchedAreaKey));
     return <div className="ski-map" onKeyDown={event => {
         if (event.key !== 'Escape' || (!selected && !hovered && !terrainPopupRef.current?.isOpen())) return;
         event.preventDefault();
@@ -520,20 +528,24 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         }
     }}>
         <div className="ski-map-actions">
-            <button type="button" className="ski-control ski-primary ski-area-search" aria-disabled={!canSearch}
-                data-applied={areaApplied || undefined} title={areaApplied ? 'This area is already searched' : undefined}
-                onClick={() => { if (canSearch && viewport) onSearchArea(viewport); }}>
-                <SkiIcon name={areaApplied ? 'check' : 'search'} />Search this area
+            <button type="button" className={`ski-control ski-area-search${promoteAreaSearch ? ' ski-primary' : ''}`}
+                aria-disabled={!canSearch} data-applied={areaApplied || undefined}
+                onClick={() => {
+                    if (!canSearch || !viewport) return;
+                    setSearchSuggested(false);
+                    onSearchArea(viewport);
+                }}>
+                <SkiIcon name={areaApplied ? 'check' : 'search'} />{areaApplied ? 'Area searched' : 'Search this area'}
             </button>
-            <div className="ski-map-utilities">
-                <button type="button" disabled={!interactive || !fitResults.length} className="ski-control ski-fit-button"
-                    aria-label="Fit results" title="Fit results" onClick={() => {
+            <div className="ski-map-utilities" role="group" aria-label="Map controls">
+                <SkiIconButton icon="fit" label="Fit results" showLabel className="ski-fit-button"
+                    disabled={!interactive || !fitResults.length} onClick={() => {
                         if (mapRef.current) fitAreas(mapRef.current, fitResults, duration);
-                    }}><SkiIcon name="fit" /><span>Fit results</span></button>
-                <button type="button" className="ski-control ski-icon-button" aria-label="Layers" title="Map layers"
+                    }} />
+                <SkiIconButton icon="layers" label="Layers" hint="Map layers"
                     aria-haspopup="dialog" aria-controls="ski-map-layers" data-active={layersModified || undefined}
                     aria-description={layersModified ? 'Custom map layers' : undefined}
-                    onClick={onOpenLayers}><SkiIcon name="layers" /></button>
+                    onClick={onOpenLayers} />
             </div>
         </div>
         <p id="ski-map-instructions" className="sr-only">Use the arrow keys to move the map. Use the zoom buttons or plus and minus keys to zoom. Browse Results to select areas by name.</p>

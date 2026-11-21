@@ -54,7 +54,7 @@ An axe scan reported zero violations in the phone map, Filters dialog, and detai
 
 ## Follow-up review
 
-The follow-up started at `ae78812`, with independent pass toggles and icon buttons already in place. The review walked through finding Utah resorts for an Ikon and Epic group, searching a new map area, comparing mountain statistics, and opening and closing resort details by keyboard and touch.
+The follow-up started at `ae78812`. That revision had independent pass toggles and icon buttons. The review found Utah resorts for an Ikon and Epic group. It tested map search, mountain comparisons, and resort details with a keyboard and touch input.
 
 ### Passes and search
 
@@ -89,3 +89,69 @@ Measured in local Chromium with a fixture basemap. All resorts was selected in e
 All 49 ski-status Chromium tests passed using local fixtures. They cover combined passes, map scope and camera history, touch and keyboard focus, share links, and comparison. Axe found zero violations across the phone map, landscape map, Filters, Layers, resort details, and phone Compare. [Browser checks](../../tests/e2e/ski-status.spec.ts)
 
 The open usability question is how quickly first-time visitors can find and compare mountains or discover the fit icon on a phone. [ski-status task list](../../TODO.md#ski-status)
+
+## November 21 control review
+
+I reviewed the local interface at 320 × 700, 390 × 844, 640 × 360, and 1440 × 900 in Chromium. I found areas for a group with different passes. I searched a map area and shared that view. I compared areas before I opened resort details. The browser used the project catalog and a local Natural Earth basemap fixture.
+
+### What changed
+
+| Task | Observed friction | Change |
+| --- | --- | --- |
+| Combine passes | At 320 pixels the logos disappeared. On portrait phones the Share button occupied part of the pass row. | A full-width row holds the four pass names, logos, and independent selection checks on portrait phones. On wide screens the group has a visible Passes label. |
+| Refine a search | The icon opened Filters, which gave no result count inside the dialog. On a 1440-pixel display the text field used 694 pixels. | Search and the filter icon sit together. The field has a desktop width limit. The filter dialog has a sticky action that shows the current result count. |
+| Switch tasks | Map and Compare shared an understated view indicator with little visual weight on a phone. | The current view has a tinted background and underline. Ski today and All resorts sit together in a separate segmented switch. |
+| Search the globe | Search this area dominated the map before any movement. Its label stayed the same after applying an area. At 390 pixels the Fit results label was hidden. | The geographic search gains emphasis after moving the map and reads Area searched after applying the visible area. Fit results keeps its label at 390 pixels and shares a frame with Layers. |
+| Share or dismiss | Share sat beside pass choices. Browser tooltips gave mouse users a label for the icons. | Share sits beside the result count and applied filters. Filters, Share, and close actions use named icons with visible keyboard hints. Close details stays in the sticky resort heading. |
+
+### Interaction decisions
+
+Passes match any selected family. Search text, region, and operating status then narrow those matches. A product and local date still qualify their own family. In the Utah check, combining Ikon and Epic includes Alta and Park City, and a resort qualifying through two selected passes appears once. The browser checks the union in map markers, Results, Compare, and the URL. Baymard's filtering studies found that people expect to combine options within a single facet. [Baymard research on combining filter values](https://baymard.com/research-articles/allow-applying-of-multiple-filter-values)
+
+Ski today and All resorts change the operating-status scope. Map, Results, and Compare switch workspaces. Search this area narrows the results to the visible map. Fit results frames the existing matches, and Layers changes the map display. Labelling these actions where space allows makes their effects easier to distinguish in context. [Nielsen Norman Group on icon interpretation](https://www.nngroup.com/articles/how-to-test-digital-icons/) · [Esri Calcite actions](https://developers.arcgis.com/calcite-design-system/components/action/)
+
+The browser checked accessible names, pressed states, touch target geometry, and keyboard focus. Icon labels are available on hover and keyboard focus. Escape dismisses a keyboard hint, and activating the filter result action returns focus to Filters. The main page and map controls have 44 CSS pixel targets. [Carbon button accessibility](https://www.carbondesignsystem.com/building-blocks/core/components/button/accessibility) · [W3C button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/) · [W3C target size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html)
+
+### Viewport measurements
+
+The browser measured the map with All resorts, United States, Ikon, and Epic selected. Heights are in CSS pixels.
+
+| Viewport | Before | After |
+| --- | ---: | ---: |
+| 1440 × 900 | 790 | 790 |
+| 390 × 844 | 648 | 636 |
+| 320 × 700 | 504 | 493 |
+| 640 × 360 | 250 | 249 |
+
+The desktop search field measures 446 pixels in the revised layout. The portrait layout allocates 11–12 more pixels to the header so Share has a full-size target beside the applied filters.
+
+### Verification
+
+All 50 ski-status Chromium tests and four focused WebKit tests passed. The browser exercised pass combinations, keyboard hints and focus return, the share fallback, camera history, and overflow at phone widths. On the 390-pixel map, applying the zoomed area reduced the fixture results from 99 to 67 and showed the Area searched confirmation. [Browser tests](../../tests/e2e/ski-status.spec.ts)
+
+Axe reported zero violations in the phone map, landscape map, Filters, Layers, phone Compare, and resort details.
+
+## November 21 engineering review
+
+The review compared the ski-status branch with `origin/main`. It included the pending controls and catalog changes.
+
+| Finding | Correction |
+| --- | --- |
+| An undated poll could replace a dated report after the resort's local midnight. It removed earlier measurements. | Prefer the dated report and mark it stale. Accept separately timed terrain records. [Report selection](../../src/features/ski-status/conditions.ts) |
+| JSON downloads used an unbounded reader. The collector also followed redirects from its configured provider URLs. | Read responses within size limits. Cancel a stream that exceeds its limit. Reject redirects and invalid UTF-8. Apply the client limits before publication. [Response reader](../../src/features/ski-status/conditions-response.ts) |
+| Two URL writes before the next render used the same old search parameters. A camera write could discard a filter. | Use the latest search draft for each edit. Reconcile the draft when an external navigation commits. [Search hook](../../src/hooks/useSearchQuery.ts) |
+| **Show results** closed Filters and left the phone on the map. | Open **Results** from the phone map. Keep **Compare** open when the user applies filters there. [Page tests](../../src/test/skiStatusPage.test.tsx) |
+| The details panel rendered each named lift and trail while its disclosure was closed. | Render the table rows when the user opens **Reported lifts and trails**. Remove the rows when the user closes it. [Details tests](../../src/test/skiStatusComponents.test.tsx) |
+
+The focused V8 run covered ski-status, its collector scripts, and the shared search hook. The run increased from 300 to 309 tests.
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Lines | 72.17% | 72.61% |
+| Branches | 69.17% | 69.42% |
+| Functions | 75.00% | 75.35% |
+| Statements | 71.15% | 71.55% |
+
+Chromium passed 51 ski-status tests and 20 release-validator fixture tests. WebKit passed five checks on filters, sharing, and report details.
+The local collector wrote 13 reports and 13 forecasts. The report snapshot was 376,853 bytes. The npm production audit reported zero advisories.
+The project task list records the remaining hosted checks. [ski-status tasks](../../projects/ski-status/TODO.md)

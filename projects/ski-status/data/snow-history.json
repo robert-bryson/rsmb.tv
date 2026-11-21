@@ -34,6 +34,23 @@
       }
     }
   },
+  "alyeska-resort": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=1103&state=AK",
+      "period": "2015/16–2024/25",
+      "location": "Mt. Alyeska SNOTEL station, 1,500 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 118.2,
+        "2": 152.0,
+        "3": 168.9,
+        "4": 162.0,
+        "11": 33.6,
+        "12": 74.8
+      }
+    }
+  },
   "angel-fire-resort": {
     "snowfall": {
       "label": "Angel Fire Resort",
@@ -53,6 +70,21 @@
       "label": "Colorado Ski Country USA",
       "source": "https://www.coloradoski.com/resorts/arapahoe-basin/",
       "annualCm": 889
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=505&state=CO",
+      "period": "2015/16–2024/25",
+      "location": "Grizzly Peak SNOTEL station, 11,110 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 104.5,
+        "2": 127.2,
+        "3": 143.2,
+        "4": 135.9,
+        "11": 35.0,
+        "12": 68.3
+      }
     }
   },
   "banff-sunshine": {
@@ -94,6 +126,40 @@
       }
     }
   },
+  "bear-basin-nordic-center": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=319&state=ID",
+      "period": "2016/17–2024/25",
+      "location": "Bear Basin SNOTEL station, 5,350 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 82.6,
+        "2": 114.7,
+        "3": 130.7,
+        "4": 111.3,
+        "11": 11.7,
+        "12": 44.8
+      }
+    }
+  },
+  "beaver-creek-resort": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=1041&state=CO",
+      "period": "2015/16–2024/25",
+      "location": "Beaver Ck Village SNOTEL station, 8,530 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 65.1,
+        "2": 84.3,
+        "3": 93.7,
+        "4": 63.4,
+        "11": 16.0,
+        "12": 42.2
+      }
+    }
+  },
   "beaver-mountain": {
     "snowfall": {
       "label": "Ski Utah",
@@ -108,11 +174,45 @@
       "annualCm": 279.4
     }
   },
+  "big-sky-resort": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=590&state=MT",
+      "period": "2015/16–2024/25",
+      "location": "Lone Mountain SNOTEL station, 8,820 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 92.6,
+        "2": 122.7,
+        "3": 138.9,
+        "4": 145.4,
+        "11": 32.5,
+        "12": 61.1
+      }
+    }
+  },
   "big-white-ski-resort": {
     "snowfall": {
       "label": "Big White Ski Resort",
       "source": "https://www.bigwhite.com/explore/mountain-info/mountain-statistics",
       "annualCm": 750
+    }
+  },
+  "bogus-basin": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=978&state=ID",
+      "period": "2015/16–2024/25",
+      "location": "Bogus Basin SNOTEL station, 6,370 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 119.6,
+        "2": 156.9,
+        "3": 176.2,
+        "4": 142.6,
+        "11": 18.0,
+        "12": 66.0
+      }
     }
   },
   "bolton-valley-resort": {
@@ -134,6 +234,21 @@
       "label": "Ski Utah",
       "source": "https://www.skiutah.com/members/brian-head/",
       "annualCm": 914.4
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=1154&state=UT",
+      "period": "2015/16–2024/25",
+      "location": "Brian Head SNOTEL station, 10,040 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 87.9,
+        "2": 115.9,
+        "3": 140.1,
+        "4": 122.9,
+        "11": 23.3,
+        "12": 54.2
+      }
     }
   },
   "bridger-bowl": {
@@ -148,6 +263,21 @@
       "label": "Brighton Resort",
       "source": "https://www.brightonresort.com/",
       "annualCm": 1270
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=366&state=UT",
+      "period": "2015/16–2024/25",
+      "location": "Brighton SNOTEL station, 8,790 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 106.8,
+        "2": 135.1,
+        "3": 152.8,
+        "4": 129.9,
+        "11": 20.2,
+        "12": 58.7
+      }
     }
   },
   "brundage-mountain-resort": {
@@ -216,6 +346,21 @@
         "11": 96.14,
         "12": 123.95
       }
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=415&state=CO",
+      "period": "2015/16–2024/25",
+      "location": "Copper Mountain SNOTEL station, 10,500 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 83.5,
+        "2": 109.7,
+        "3": 122.5,
+        "4": 113.1,
+        "11": 25.2,
+        "12": 53.4
+      }
     }
   },
   "coronet-peak": {
@@ -230,6 +375,23 @@
       "label": "Cranmore Mountain Resort",
       "source": "https://cranmore.com/trail-map",
       "annualCm": 203.2
+    }
+  },
+  "crested-butte-mountain-resort": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=380&state=CO",
+      "period": "2015/16–2024/25",
+      "location": "Butte SNOTEL station, 10,190 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 88.3,
+        "2": 107.7,
+        "3": 123.7,
+        "4": 91.8,
+        "11": 18.9,
+        "12": 52.3
+      }
     }
   },
   "cuchara": {
@@ -265,6 +427,21 @@
       "label": "Colorado Ski Country USA",
       "source": "https://www.coloradoski.com/resorts/eldora/",
       "annualCm": 762
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=564&state=CO",
+      "period": "2015/16–2024/25",
+      "location": "Lake Eldora SNOTEL station, 9,700 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 71.4,
+        "2": 90.8,
+        "3": 102.1,
+        "4": 77.5,
+        "11": 20.7,
+        "12": 43.8
+      }
     }
   },
   "fernie-alpine-resort": {
@@ -281,6 +458,23 @@
       "annualCm": 304.8
     }
   },
+  "grand-targhee-resort": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=1082&state=WY",
+      "period": "2017/18–2024/25",
+      "location": "Grand Targhee SNOTEL station, 9,260 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 192.8,
+        "2": 237.2,
+        "3": 264.7,
+        "4": 276.0,
+        "11": 85.2,
+        "12": 137.6
+      }
+    }
+  },
   "granite-peak": {
     "snowfall": {
       "label": "Granite Peak",
@@ -293,6 +487,13 @@
       "label": "Great Divide Ski Area",
       "source": "https://www.skigd.com/mountain-stats",
       "annualCm": 381
+    }
+  },
+  "gunstock-mountain-resort": {
+    "snowfall": {
+      "label": "Gunstock Mountain Resort",
+      "source": "https://www.gunstock.com/about-us/resort-stats/",
+      "annualCm": 304.8
     }
   },
   "heavenly": {
@@ -424,11 +625,79 @@
       "annualCm": 545
     }
   },
+  "lookout-pass": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=594&state=ID",
+      "period": "2015/16–2024/25",
+      "location": "Lookout SNOTEL station, 5,180 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 115.0,
+        "2": 147.3,
+        "3": 164.3,
+        "4": 140.1,
+        "11": 21.0,
+        "12": 63.8
+      }
+    }
+  },
+  "lost-trail": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=727&state=MT",
+      "period": "2015/16–2024/25",
+      "location": "Saddle Mtn. SNOTEL station, 7,890 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 115.9,
+        "2": 152.7,
+        "3": 170.5,
+        "4": 168.1,
+        "11": 35.5,
+        "12": 76.7
+      }
+    }
+  },
+  "loveland-ski-area": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=602&state=CO",
+      "period": "2015/16–2024/25",
+      "location": "Loveland Basin SNOTEL station, 11,410 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 105.4,
+        "2": 131.2,
+        "3": 154.6,
+        "4": 160.6,
+        "11": 41.7,
+        "12": 71.9
+      }
+    }
+  },
   "lutsen-mountains": {
     "snowfall": {
       "label": "Lutsen Mountains",
       "source": "https://www.lutsen.com/mountain-info/trail-map-mountain-stats",
       "annualCm": 304.8
+    }
+  },
+  "magic-mountain-idaho": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=610&state=ID",
+      "period": "2015/16–2024/25",
+      "location": "Magic Mountain SNOTEL station, 6,940 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 104.6,
+        "2": 130.7,
+        "3": 140.5,
+        "4": 109.8,
+        "11": 15.5,
+        "12": 58.9
+      }
     }
   },
   "magic-mountain-ski-area": {
@@ -500,11 +769,35 @@
       "annualCm": 1747.52
     }
   },
+  "mt-la-crosse": {
+    "snowfall": {
+      "label": "Mt La Crosse",
+      "source": "https://mtlacrosse.com/trail-map-conditions/",
+      "annualCm": 104.14
+    }
+  },
   "mt-norquay": {
     "snowfall": {
       "label": "Mt. Norquay",
       "source": "https://banffnorquay.com/trail-map/",
       "annualCm": 300
+    }
+  },
+  "mt-rose-ski-tahoe": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=652&state=NV",
+      "period": "2015/16–2024/25",
+      "location": "Mt Rose Ski Area SNOTEL station, 8,810 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 183.6,
+        "2": 246.0,
+        "3": 298.6,
+        "4": 262.2,
+        "11": 28.2,
+        "12": 103.0
+      }
     }
   },
   "mt-shasta-ski-park": {
@@ -550,6 +843,21 @@
         "11": 88.9,
         "12": 203.2
       }
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=784&state=CA",
+      "period": "2015/16–2024/25",
+      "location": "Palisades Tahoe SNOTEL station, 8,010 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 139.5,
+        "2": 183.7,
+        "3": 221.4,
+        "4": 193.4,
+        "11": 26.0,
+        "12": 84.8
+      }
     }
   },
   "panorama-mountain-resort": {
@@ -580,6 +888,35 @@
       "annualCm": 635
     }
   },
+  "pomerelle-mountain-resort": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=534&state=ID",
+      "period": "2015/16–2024/25",
+      "location": "Howell Canyon SNOTEL station, 8,010 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 131.8,
+        "2": 166.6,
+        "3": 184.5,
+        "4": 161.9,
+        "11": 22.0,
+        "12": 75.0
+      }
+    },
+    "snowfall": {
+      "label": "Pomerelle Mountain Resort",
+      "source": "https://www.pomerelle.com/the-mountain",
+      "annualCm": 1270
+    }
+  },
+  "powder-king-mountain-resort": {
+    "snowfall": {
+      "label": "Powder King Mountain Resort",
+      "source": "https://www.powderking.com/contact/about-us",
+      "annualCm": 1250
+    }
+  },
   "powder-mountain": {
     "snowfall": {
       "label": "Ski Utah",
@@ -606,6 +943,21 @@
       "label": "Red Lodge Mountain",
       "source": "https://www.redlodgemountain.com/mountain/the-mountain/",
       "annualCm": 635
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=407&state=MT",
+      "period": "2015/16–2022/23",
+      "location": "Cole Creek SNOTEL station, 7,910 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 62.6,
+        "2": 90.2,
+        "3": 104.4,
+        "4": 133.4,
+        "11": 28.0,
+        "12": 49.4
+      }
     }
   },
   "red-mountain-resort": {
@@ -627,6 +979,21 @@
       "label": "Schweitzer Mountain Resort",
       "source": "https://www.schweitzer.com/discover-schweitzer/stats-and-info",
       "annualCm": 762
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=738&state=ID",
+      "period": "2015/16–2024/25",
+      "location": "Schweitzer Basin SNOTEL station, 6,090 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 197.7,
+        "2": 248.7,
+        "3": 296.9,
+        "4": 293.6,
+        "11": 44.0,
+        "12": 113.1
+      }
     }
   },
   "shawnee-mountain-ski-area": {
@@ -657,11 +1024,43 @@
       "annualCm": 700
     }
   },
+  "ski-apache": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=1034&state=NM",
+      "period": "2015/16–2024/25",
+      "location": "Sierra Blanca SNOTEL station, 10,250 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 29.6,
+        "2": 36.9,
+        "3": 19.7,
+        "4": 1.9,
+        "11": 3.5,
+        "12": 13.3
+      }
+    }
+  },
   "ski-santa-fe": {
     "snowfall": {
       "label": "Ski Santa Fe",
       "source": "https://www.skisantafe.com/our-story/about",
       "annualCm": 571.5
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=922&state=NM",
+      "period": "2015/16–2024/25",
+      "location": "Santa Fe SNOTEL station, 11,480 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 73.1,
+        "2": 92.1,
+        "3": 104.2,
+        "4": 84.6,
+        "11": 18.2,
+        "12": 39.6
+      }
     }
   },
   "snow-ridge": {
@@ -708,6 +1107,23 @@
       "annualCm": 635
     }
   },
+  "soldier-mountain-ski-area": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=769&state=ID",
+      "period": "2015/16–2022/23",
+      "location": "Soldier R.S. SNOTEL station, 5,780 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 74.5,
+        "2": 85.1,
+        "3": 80.0,
+        "4": 23.7,
+        "11": 6.9,
+        "12": 40.1
+      }
+    }
+  },
   "solitude-mountain-resort": {
     "snowfall": {
       "label": "Ski Utah",
@@ -720,6 +1136,23 @@
       "label": "Colorado Ski Country USA",
       "source": "https://www.coloradoski.com/resorts/steamboat/",
       "annualCm": 853.44
+    }
+  },
+  "stevens-pass": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=791&state=WA",
+      "period": "2015/16–2020/21",
+      "location": "Stevens Pass SNOTEL station, 3,940 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 175.9,
+        "2": 227.4,
+        "3": 251.3,
+        "4": 214.2,
+        "11": 20.1,
+        "12": 94.0
+      }
     }
   },
   "sugar-mountain-resort": {
@@ -780,6 +1213,23 @@
       "annualCm": 690.88
     }
   },
+  "taos-ski-valley": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=1168&state=NM",
+      "period": "2015/16–2024/25",
+      "location": "Taos Powderhorn SNOTEL station, 11,020 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 81.2,
+        "2": 106.8,
+        "3": 138.6,
+        "4": 145.0,
+        "11": 25.2,
+        "12": 51.9
+      }
+    }
+  },
   "telluride-ski-resort": {
     "snowfall": {
       "label": "Colorado Ski Country USA",
@@ -801,11 +1251,50 @@
       "annualCm": 355.6
     }
   },
+  "timberline-lodge-ski-area": {
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=651&state=OR",
+      "period": "2015/16–2024/25",
+      "location": "Mt Hood Test Site SNOTEL station, 5,380 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 191.0,
+        "2": 247.9,
+        "3": 311.9,
+        "4": 319.1,
+        "11": 34.2,
+        "12": 110.3
+      }
+    }
+  },
+  "trollhaugen-ski-area": {
+    "snowfall": {
+      "label": "Trollhaugen Ski Area",
+      "source": "https://trollhaugen.com/snow-report/",
+      "annualCm": 127
+    }
+  },
   "vail-mountain": {
     "snowfall": {
       "label": "Vail Mountain",
       "source": "https://www.vail.com/the-mountain/mountain-conditions/snow-and-weather-report",
       "annualCm": 899.16
+    },
+    "depth": {
+      "label": "USDA Natural Resources Conservation Service",
+      "source": "https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=842&state=CO",
+      "period": "2015/16–2024/25",
+      "location": "Vail Mountain SNOTEL station, 10,290 ft",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 91.3,
+        "2": 116.2,
+        "3": 128.8,
+        "4": 108.0,
+        "11": 25.1,
+        "12": 56.3
+      }
     }
   },
   "welch-village": {

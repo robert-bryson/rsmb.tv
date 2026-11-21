@@ -32,14 +32,15 @@ export function useSearchQuery() {
     const location = useLocation();
     const navigation = useNavigationType();
     const [urlParams, setSearchParams] = useSearchParams();
+    const urlSearch = urlParams.toString();
     const owner = useId();
     const writeRevision = useRef(0);
     const pendingQuery = useRef<PendingQuery | null>(null);
+    const latestSearch = useRef(urlSearch);
     const [draft, setDraft] = useState<SearchDraft>({
-        search: urlParams.toString(), locationKey: location.key,
+        search: urlSearch, locationKey: location.key,
         pendingRevisions: [],
     });
-    const urlSearch = urlParams.toString();
     useLayoutEffect(() => {
         if (draft.locationKey === location.key) return;
         const write = navigationState(navigationState(location.state)[OWNER_STATE_KEY]);
@@ -47,7 +48,10 @@ export function useSearchQuery() {
         const ownWrite = navigation !== 'POP' && write.navigation === navigation && write.owner === owner
             && write.search === urlSearch && typeof revision === 'number'
             && draft.pendingRevisions.includes(revision);
-        if (!ownWrite) cancelPendingQuery(pendingQuery);
+        if (!ownWrite) {
+            cancelPendingQuery(pendingQuery);
+            latestSearch.current = urlSearch;
+        }
         // Router renders can be abandoned. Reconcile only committed locations, before paint.
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setDraft(current => ({
@@ -67,6 +71,7 @@ export function useSearchQuery() {
     function writeParams(params: URLSearchParams, replace: boolean) {
         const revision = ++writeRevision.current;
         const nextSearch = params.toString();
+        latestSearch.current = nextSearch;
         setDraft(previous => ({ ...previous, search: nextSearch, pendingRevisions: [...previous.pendingRevisions, revision] }));
         const state = navigationState(withoutSiteSearchQuery(location.state));
         // Editing starts a new list view. Preserve context, but end return-scroll correction.
@@ -76,10 +81,12 @@ export function useSearchQuery() {
     }
 
     function updateQuery(value: string, update?: (params: URLSearchParams) => void) {
-        const params = withSearchQuery(searchParams, value);
+        const params = withSearchQuery(new URLSearchParams(latestSearch.current), value);
         update?.(params);
         cancelPendingQuery(pendingQuery);
-        setDraft(current => ({ ...current, search: params.toString() }));
+        const nextSearch = params.toString();
+        latestSearch.current = nextSearch;
+        setDraft(current => ({ ...current, search: nextSearch }));
         pendingQuery.current = { params, timer: window.setTimeout(commitQuery, QUERY_COMMIT_DELAY_MS) };
     }
 
@@ -91,9 +98,9 @@ export function useSearchQuery() {
     }
 
     function updateParams(update: (params: URLSearchParams) => void, { replace = false } = {}) {
-        const params = new URLSearchParams(searchParams);
+        const params = new URLSearchParams(latestSearch.current);
         update(params);
-        if (params.toString() === searchParams.toString()) return;
+        if (params.toString() === latestSearch.current) return;
         cancelPendingQuery(pendingQuery);
         writeParams(params, replace);
     }

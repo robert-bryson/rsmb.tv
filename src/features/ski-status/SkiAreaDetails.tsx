@@ -1,10 +1,10 @@
-import type { Ref } from 'react';
+import { useState, type Ref } from 'react';
 import { conditionColumns, mountainColumns, formatElevation, formatSkiLocation, formatSkiStat, formatTemperature, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
 import { areaForecast, localReportTime, reportAgeHours, reportAgeLabel, skiDayStatus, terrainStatusText, type Conditions, type ResortReport } from './conditions';
 import { accessLabels, evaluatePass, type PassProduct } from './passRules';
 import { skiResortIcon } from './resortDetailsData';
-import { SkiIcon } from './SkiIcon';
+import { SkiIconButton } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 import { SkiResortLinks } from './SkiResortLinks';
 import { SkiSeasonDetails } from './SkiSeasonDetails';
@@ -59,30 +59,33 @@ interface Props {
 }
 
 function ReportedTerrain({ report, area, now }: { report: ResortReport; area: SkiArea; now: number }) {
+    const [expanded, setExpanded] = useState(false);
     if (!report.terrain) return null;
     const { items, source } = report.terrain;
-    const sortedItems = [...items].sort((a, b) => Number(b.status === 'open') - Number(a.status === 'open'));
-    return <details className="mt-2 border-t border-zinc-800">
+    const sortedItems = expanded ? [...items].sort((a, b) => Number(b.status === 'open') - Number(a.status === 'open')) : [];
+    return <details className="mt-2 border-t border-zinc-800" onToggle={event => setExpanded(event.currentTarget.open)}>
         <summary className="min-h-11 cursor-pointer py-3 text-zinc-200 hover:text-cyan-300">Reported lifts and trails ({items.length})</summary>
-        {source && <a href={source.url} className={linkClass}>{source.name} terrain records</a>}
-        <div className="max-h-52 overflow-auto">
-            <table className="w-full text-left text-xs">
-                <caption className="sr-only">Reported lift and trail status</caption>
-                <thead className="sticky top-0 bg-zinc-950 text-zinc-400"><tr>
-                    <th scope="col" className="py-1 font-medium">Name</th>
-                    <th scope="col" className="py-1 font-medium">Type</th>
-                    <th scope="col" className="py-1 font-medium">Status</th>
-                    {source && <th scope="col" className="py-1 font-medium">Record time</th>}
-                </tr></thead>
-                <tbody>{sortedItems.map(item => <tr key={item.id} className="border-t border-zinc-800">
-                    <th className="py-1 pr-2 font-medium" scope="row">{item.name}</th>
-                    <td className="py-1 pr-2">{item.kind === 'lift' ? 'Lift' : 'Trail'}</td>
-                    <td className="py-1 pr-2">{terrainStatusText(item, report, now)}</td>
-                    {source && <td className="py-1">{item.updatedAt
-                        ? <time dateTime={item.updatedAt}>{localReportTime(item.updatedAt, area)}</time> : 'Unknown'}</td>}
-                </tr>)}</tbody>
-            </table>
-        </div>
+        {expanded && <>
+            {source && <a href={source.url} className={linkClass}>{source.name} terrain records</a>}
+            <div className="max-h-52 overflow-auto">
+                <table className="w-full text-left text-xs">
+                    <caption className="sr-only">Reported lift and trail status</caption>
+                    <thead className="sticky top-0 bg-zinc-950 text-zinc-400"><tr>
+                        <th scope="col" className="py-1 font-medium">Name</th>
+                        <th scope="col" className="py-1 font-medium">Type</th>
+                        <th scope="col" className="py-1 font-medium">Status</th>
+                        {source && <th scope="col" className="py-1 font-medium">Record time</th>}
+                    </tr></thead>
+                    <tbody>{sortedItems.map(item => <tr key={item.id} className="border-t border-zinc-800">
+                        <th className="py-1 pr-2 font-medium" scope="row">{item.name}</th>
+                        <td className="py-1 pr-2">{item.kind === 'lift' ? 'Lift' : 'Trail'}</td>
+                        <td className="py-1 pr-2">{terrainStatusText(item, report, now)}</td>
+                        {source && <td className="py-1">{item.updatedAt
+                            ? <time dateTime={item.updatedAt}>{localReportTime(item.updatedAt, area)}</time> : 'Unknown'}</td>}
+                    </tr>)}</tbody>
+                </table>
+            </div>
+        </>}
     </details>;
 }
 
@@ -113,9 +116,7 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
                     <p className="text-sm text-zinc-300">{formatSkiLocation(area)}</p>
                 </div>
             </div>
-            <button type="button" onClick={onClose} className="ski-control ski-icon-button" aria-label="Close details" title="Close details">
-                <SkiIcon name="close" />
-            </button>
+            <SkiIconButton className="ski-quiet-button" icon="close" label="Close details" onClick={onClose} />
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
             <SkiResortLinks area={area} />

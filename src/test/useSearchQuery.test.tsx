@@ -31,6 +31,10 @@ function Harness() {
         <button onClick={clearFilters}>Clear filters</button>
         <button onClick={commitQuery}>Commit search</button>
         <button onClick={() => updateParams(params => params.set('region', 'VT'))}>Filter Vermont</button>
+        <button onClick={() => {
+            updateParams(params => params.set('region', 'VT'));
+            updateParams(params => params.set('camera', 'saved'), { replace: true });
+        }}>Filter and save camera</button>
         <button onClick={() => navigate('/projects?q=external', { replace: true, state: location.state })}>Replace with context</button>
         <button onClick={() => navigate('/projects?q=external', { state: location.state })}>Push with context</button>
         <button onClick={() => setSaved({ url: location.pathname + location.search, state: location.state })}>Save entry</button>
@@ -65,6 +69,17 @@ describe('search write ownership review regressions', () => {
         commitNextWrite();
         expect(deferredWrites).toHaveLength(0);
         expect(screen.getByTestId('url')).toHaveTextContent('/projects?category=maps&q=pico&region=VT');
+    });
+
+    it('keeps a filter and a camera update issued before the router renders again', () => {
+        openSearch();
+        fireEvent.change(screen.getByRole('textbox', { name: 'Search' }), { target: { value: 'pico' } });
+        fireEvent.click(screen.getByRole('button', { name: 'Filter and save camera' }));
+        expect(screen.getByTestId('return')).toHaveTextContent('/projects?category=maps&q=pico&region=VT&camera=saved');
+        commitNextWrite();
+        commitNextWrite();
+        expect(screen.getByTestId('url')).toHaveTextContent('/projects?category=maps&q=pico&region=VT&camera=saved');
+        expect(deferredWrites).toHaveLength(0);
     });
 
     it('keeps urgent input and return links ahead of delayed router commits', () => {

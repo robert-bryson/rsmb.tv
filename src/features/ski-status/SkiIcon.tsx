@@ -1,3 +1,5 @@
+import { useState, type ComponentPropsWithRef } from 'react';
+
 const paths = {
     back: 'm15 5-7 7 7 7',
     search: 'M10.5 18a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Zm5.5-2 5 5',
@@ -18,9 +20,30 @@ const paths = {
     descending: 'M12 5v14m-5-5 5 5 5-5',
 } as const;
 
-export function SkiIcon({ name }: { name: keyof typeof paths }) {
-    return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
+type IconName = keyof typeof paths;
+
+export function SkiIcon({ name }: { name: IconName }) {
+    return <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
         strokeLinecap="round" strokeLinejoin="round" className="ski-icon">
         <path d={paths[name]} />
     </svg>;
+}
+
+interface IconButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'children' | 'type' | 'aria-label' | 'title' | 'onKeyDown' | 'onBlur'> {
+    icon: IconName;
+    label: string;
+    hint?: string;
+    showLabel?: boolean;
+    count?: number;
+}
+
+export function SkiIconButton({ icon, label, hint = label, className = '', showLabel, count, ...props }: IconButtonProps) {
+    const [hideHint, setHideHint] = useState(false);
+    return <button {...props} type="button" className={`ski-control ski-icon-button ${className}`} aria-label={label} title={hint}
+        data-ski-hint={hideHint ? undefined : hint} onBlur={() => setHideHint(false)}
+        onKeyDown={event => { if (event.key === 'Escape') setHideHint(true); }}>
+        <SkiIcon name={icon} />
+        {showLabel && <span className="ski-icon-button-label">{label}</span>}
+        {count ? <span className="ski-filter-count" aria-hidden="true">{count}</span> : null}
+    </button>;
 }

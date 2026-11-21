@@ -2,6 +2,7 @@ import {
     conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, reportSnapshotSchema,
     type ConditionsManifest, type ForecastSnapshot, type ReportSnapshot,
 } from './conditions';
+import { decodeConditionsJson, maxConditionsManifestBytes, maxConditionsSnapshotBytes, readConditionsBytes } from './conditions-response';
 
 const localFeed = import.meta.env.DEV && import.meta.env.VITE_SKI_CONDITIONS_LOCAL;
 const baseUrl = localFeed === '1' || localFeed === 'rockies'
@@ -15,14 +16,13 @@ export type ConditionsFeed = {
     forecasts?: Snapshot<ForecastSnapshot>;
 };
 
-async function getFile(file: string, signal: AbortSignal) {
+async function getFile(file: string, signal: AbortSignal, limit: number) {
     const response = await fetch(new URL(file, baseUrl), {
         signal: AbortSignal.any([signal, AbortSignal.timeout(12_000)]),
         credentials: 'omit',
         redirect: 'error',
     });
-    if (!response.ok) throw Error(`Ski conditions request failed with HTTP ${response.status}`);
-    return response;
+    return readConditionsBytes(response, limit, 'Ski conditions');
 }
 
 async function loadSnapshot<T extends { generatedAt: string }>(
@@ -30,18 +30,17 @@ async function loadSnapshot<T extends { generatedAt: string }>(
 ) {
     if (!file) return undefined;
     if (file === previous?.file) return previous;
-    const response = await getFile(file, signal);
-    const bytes = await response.arrayBuffer();
+    const bytes = await getFile(file, signal, maxConditionsSnapshotBytes);
     const digest = await crypto.subtle.digest('SHA-256', bytes);
     const hex = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
     if (hex !== conditionsFileDigest(file)) throw Error(`Invalid checksum for ${file}`);
-    const data = parse(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)));
+    const data = parse(decodeConditionsJson(bytes));
     if (Date.parse(data.generatedAt) > updatedAt) throw Error(`Snapshot is newer than its manifest for ${file}`);
     return { file, data };
 }
 
 export async function loadConditionsFeed(previous: ConditionsFeed, signal: AbortSignal): Promise<ConditionsFeed> {
-    const manifest = conditionsManifestSchema.parse(await (await getFile('manifest.json', signal)).json());
+    const manifest = conditionsManifestSchema.parse(decodeConditionsJson(await getFile('manifest.json', signal, maxConditionsManifestBytes)));
     const updatedAt = Date.parse(manifest.updatedAt);
     const lastUpdate = previous.manifest ? Date.parse(previous.manifest.updatedAt) : -Infinity;
     if (updatedAt < lastUpdate || (updatedAt === lastUpdate &&

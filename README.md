@@ -11,6 +11,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 - **Flights** — A 3D globe with flight routes, recorded travel time, airport and country statistics, shared views, and saved keyboard-shortcut preferences.
 - **Temperature Records** — Filter recent station records by state, scope, and margin. Check snapshot freshness and coverage, compare county and state extremes, and explore standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
+- **ski-status** maps ski areas and pass access. Compare mountain statistics and check operator reports. [Project guide](projects/ski-status/readme.md)
 - **Projects** — Search names, descriptions, and technologies. Filter by category and share the selected view. Open maps, demos, and source repositories from the cards.
 - **Site search** — A compact header field searches articles, projects, technologies, captions, and other pages. Results highlight matching words.
 - **Posts** — Writing and trip reports from Google documents. Browse by type, topic, and location. Includes RSS and social images.

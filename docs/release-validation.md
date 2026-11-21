@@ -22,7 +22,7 @@ If CI fails, the workflow skips the release job. The previous deployment continu
 - Decoding every responsive project-preview image, including AVIF and WebP variants.
 - Temperature schemas and version 2 monthly thresholds, flight route/airport schemas, matching tornado annual summary/index contracts, and requested yearly tornado geometry.
 - Application errors, failed required requests, map worker errors, and usable Flights, temperature, and tornado map startup.
-- Ski terrain delivery and rendering at Heavenly. The validator enables **Ski terrain** in **Layers**. It checks `206` and `Content-Range` on archive requests. It compares each response with the matching bytes in the checked-in archive. It opens tooltips for Heavenly Gondola and Cloud 9. The report records the number of verified responses in `skiTerrainRanges`.
+- Ski terrain at Heavenly. The validator enables **Ski terrain** in **Layers**. It checks for HTTP `206` and the expected `Content-Range`. It compares each response with the same bytes in the checked-in archive. It opens the Heavenly Gondola and Cloud 9 tooltips. The report gives the verified response count in `skiTerrainRanges`.
 
 The validator disables browser HTTP caching. The header checks inspect network responses.
 Chromium can omit HTTP Strict Transport Security (HSTS) when it reuses a cached worker response.

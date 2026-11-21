@@ -13,7 +13,7 @@ Use no more than 25 words in a description.
 Use one term for each concept. Define technical terms before their first use.
 Keep commands, identifiers, product names, and source quotations exact.
 Keep dated findings and measurements as evidence. Add a new report when findings change.
-Record each incomplete task once in [TODO.md](../TODO.md). Link to its acceptance conditions.
+Record each incomplete task once. Use the [repository task list](../TODO.md) to find project task lists. Link each task to its acceptance conditions.
 Keep an alt description separate from a photo caption.
 An alt description states the visible content. A caption can supply other information.
 
@@ -49,6 +49,7 @@ An alt description states the visible content. A caption can supply other inform
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Generate global and U.S. pins, validate location details, and check publication |
 | [ski-status guide](../projects/ski-status/readme.md) | Use the map and table. Maintain the catalog and verify releases. |
+| [ski-status tasks](../projects/ski-status/TODO.md) | Track release checks, data gaps, and planned work. |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
 ## Reviews

@@ -6,7 +6,7 @@ import { passProducts, readSkiDate } from './passRules';
 import { skiRunLegend, skiTerrainLegend, type TerrainConvention } from './resortTerrainData';
 import { countries, indyHomeAreas, regions, toggleSkiPassFilter, writeSkiPassProduct, type SkiFilters } from './skiFilters';
 import { seasonMonths } from './seasons';
-import { SkiIcon } from './SkiIcon';
+import { SkiIconButton } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 
 interface DialogProps {
@@ -14,17 +14,18 @@ interface DialogProps {
     id: string;
     title: string;
     children: ReactNode;
+    footer?: ReactNode;
     onClose?: () => void;
 }
 
-export function SkiDialog({ dialog, id, title, children, onClose }: DialogProps) {
+export function SkiDialog({ dialog, id, title, children, footer, onClose }: DialogProps) {
     return <dialog ref={dialog} id={id} aria-labelledby={`${id}-title`} className="ski-dialog" onClose={onClose}>
         <div className="ski-dialog-heading">
             <h2 id={`${id}-title`} className="text-lg font-semibold">{title}</h2>
-            <button type="button" className="ski-control ski-icon-button ski-quiet-button" aria-label="Close" title="Close"
-                onClick={() => dialog.current?.close()}><SkiIcon name="close" /></button>
+            <SkiIconButton className="ski-quiet-button" icon="close" label="Close" onClick={() => dialog.current?.close()} />
         </div>
         <div className="ski-dialog-content">{children}</div>
+        {footer && <div className="ski-dialog-footer">{footer}</div>}
     </dialog>;
 }
 
@@ -35,18 +36,27 @@ function SkiField({ id, label, children }: { id: string; label: ReactNode; child
 interface FilterProps {
     dialog: DialogProps['dialog'];
     filters: SkiFilters;
+    resultCount: number;
     units: SkiUnits;
+    onShowResults: () => void;
     onUnitsChange: (units: SkiUnits) => void;
     setParam: (key: string, value?: string) => void;
     updateParams: (update: (params: URLSearchParams) => void) => void;
 }
 
-export function SkiFilterDialog({ dialog, filters, units, onUnitsChange, setParam, updateParams }: FilterProps) {
+export function SkiFilterDialog({ dialog, filters, resultCount, units, onShowResults, onUnitsChange, setParam, updateParams }: FilterProps) {
     const { region, passes, product, skiDate, homeArea, skiing, night, seasonMonth, status } = filters;
     const products = [...passProducts.values()].filter(option => !passes.length || passes.includes(option.family));
     const productFamilyHint = product && passes.length > 1 && `Product and ski date apply to ${passFilterOptions[product.family]}.`;
 
-    return <SkiDialog dialog={dialog} id="ski-filters" title="Filters">
+    return <SkiDialog dialog={dialog} id="ski-filters" title="Filters" footer={
+        <button type="button" className="ski-control ski-primary" onClick={() => {
+            dialog.current?.close();
+            onShowResults();
+        }}>
+            Show {resultCount.toLocaleString()} {resultCount === 1 ? 'result' : 'results'}
+        </button>
+    }>
         <div className="ski-fields">
             <fieldset className="ski-pass-options" aria-describedby="ski-pass-help">
                 <legend className="font-semibold">Passes</legend>

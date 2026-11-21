@@ -53,9 +53,7 @@ CARTO maintains the style's tile, font, and icon URLs.
 Do not copy those dependent URLs into application code.
 See the [CARTO basemap guide](https://docs.carto.com/faqs/carto-basemaps).
 
-The ski-status **Terrain relief** option adds Mapterhorn elevation shading from zoom level 8.
-CARTO still provides the basemap and labels.
-See the [Mapterhorn tile guide](https://mapterhorn.com/data-access/).
+In ski-status, open **Layers** and select **Terrain relief**. The map adds Mapterhorn elevation shading from zoom level 8. The basemap and labels come from CARTO. [Mapterhorn tile guide](https://mapterhorn.com/data-access/)
 
 Trip styles are **Muted**, **Street**, and **Light**.
 The legacy `terrain` identifier remains internal for compatibility; its label now describes the CARTO light style.

@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaList } from '../features/ski-status/SkiAreaList';
@@ -168,7 +168,7 @@ describe('ski-status area details', () => {
         expect(january.getByRole('link', { name: '102 cm' })).toHaveAttribute('href', expect.stringContaining('janmsc.pdf'));
     });
 
-    it('marks counts, named terrain and night operations from the previous local day as stale', () => {
+    it('shows stale report details and renders named terrain only while open', async () => {
         const area = skiAreas.find(area => area.id === 'alta')!;
         const report: ResortReport = {
             areaId: area.id, status: 'limited', reportedAt: '2026-11-21T06:30:00Z', retrievedAt: '2026-11-21T06:35:00Z',
@@ -186,10 +186,15 @@ describe('ski-status area details', () => {
         expect(screen.getByText('2 / 5 (stale)')).toBeVisible();
         expect(screen.getByText('Night operations open (stale)')).toBeVisible();
         expect(screen.getByText('9 AM to 4 PM (stale)')).toBeVisible();
-        fireEvent.click(screen.getByText('Reported lifts and trails (2)'));
-        const table = within(screen.getByRole('table', { name: 'Reported lift and trail status' }));
+        const summary = screen.getByText('Reported lifts and trails (2)');
+        const disclosure = summary.closest('details')!;
+        expect(disclosure.querySelector('table')).toBeNull();
+        fireEvent.click(summary);
+        const table = within(await screen.findByRole('table', { name: 'Reported lift and trail status' }));
         expect(table.getByRole('row', { name: 'First chair Lift Open (stale)' })).toBeVisible();
         expect(table.getByRole('row', { name: 'First trail Trail Open (record stale)' })).toBeVisible();
+        fireEvent.click(summary);
+        await waitFor(() => expect(disclosure.querySelector('table')).toBeNull());
     });
 
     it('shows each source once and retains its pass label', () => {

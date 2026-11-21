@@ -16,7 +16,7 @@ import { SkiAreaList } from '../features/ski-status/SkiAreaList';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
 import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
 import { SkiDialog, SkiFilterDialog, SkiLayerDialog, SkiTerrainKey } from '../features/ski-status/SkiControls';
-import { SkiIcon } from '../features/ski-status/SkiIcon';
+import { SkiIcon, SkiIconButton } from '../features/ski-status/SkiIcon';
 import { SkiPassIcon } from '../features/ski-status/SkiPassIcon';
 import { SkiShareButton } from '../features/ski-status/SkiShareButton';
 import { readSkiFilters, regionLabels, toggleSkiPassFilter, writeSkiPassProduct, type SkiStatusFilter } from '../features/ski-status/skiFilters';
@@ -266,7 +266,7 @@ export default function SkiStatus() {
         { label: seasonMonth && seasonMonths.find(({ month }) => month === seasonMonth)?.label, key: 'seasonMonth' },
         { label: night && 'Night skiing', key: 'night' },
         { label: status !== 'all' && status !== 'today' && statusFilterLabels[status], key: 'status' },
-        { label: searchedArea && 'Searched map area', key: 'mapArea' },
+        { label: searchedArea && 'Map area', key: 'mapArea' },
     ].filter(chip => Boolean(chip.label));
     const additionalFilters = chips.filter(({ key }) => key !== 'mapArea').length;
     const coverageText = `${currentReports} of ${scoped.length} areas have current reports`;
@@ -293,36 +293,38 @@ export default function SkiStatus() {
                     </IntentLink>
                     <h1>ski-status</h1>
                 </div>
-                <div className="ski-search">
-                    <label htmlFor="ski-area-search" className="sr-only">Search areas</label>
-                    <SkiIcon name="search" />
-                    <input ref={searchInput} className="ski-input" type="search" id="ski-area-search" value={query}
-                        onChange={event => updateQuery(event.target.value, params => params.set('status', status))}
-                        onBlur={commitQuery} onKeyDown={event => { if (event.key === 'Enter') commitQuery(); }} placeholder="Search areas" />
-                    {query && <button type="button" className="ski-search-clear ski-icon-button ski-quiet-button" aria-label="Clear search" title="Clear search" onClick={() => {
-                        searchInput.current?.focus({ preventScroll: true });
-                        setParam('q');
-                    }}><SkiIcon name="close" /></button>}
-                </div>
-                <div className="ski-filter">
-                    <button type="button" ref={filterButton} className="ski-control ski-icon-button" aria-label="Filters" title="Filters"
+                <div className="ski-page-actions">
+                    <div className="ski-search">
+                        <label htmlFor="ski-area-search" className="sr-only">Search areas</label>
+                        <SkiIcon name="search" />
+                        <input ref={searchInput} className="ski-input" type="search" id="ski-area-search" value={query}
+                            onChange={event => updateQuery(event.target.value, params => params.set('status', status))}
+                            onBlur={commitQuery} onKeyDown={event => { if (event.key === 'Enter') commitQuery(); }} placeholder="Search areas" />
+                        {query && <SkiIconButton className="ski-search-clear ski-quiet-button" icon="close" label="Clear search" onClick={() => {
+                            searchInput.current?.focus({ preventScroll: true });
+                            setParam('q');
+                        }} />}
+                    </div>
+                    <SkiIconButton ref={filterButton} icon="filter" label="Filters" count={additionalFilters}
                         aria-haspopup="dialog" aria-controls="ski-filters" data-active={additionalFilters > 0 || undefined}
                         aria-description={additionalFilters > 0 ? `${additionalFilters} additional ${additionalFilters === 1 ? 'filter' : 'filters'} active` : undefined}
-                        onClick={() => filterDialog.current?.showModal()}><SkiIcon name="filter" /></button>
-                    {additionalFilters > 0 && <span className="ski-filter-count" aria-hidden="true">{additionalFilters}</span>}
+                        onClick={() => filterDialog.current?.showModal()} />
                 </div>
-                <div className="ski-pass-shortcuts" role="group" aria-label="Pass filters">
-                    {passFamilySchema.options.map(family => <button key={family} type="button" className="ski-control ski-pass-button"
-                        aria-label={passNames[family]} title={passNames[family]} aria-pressed={passes.includes(family)}
-                        onClick={() => updateSkiParams(params => toggleSkiPassFilter(params, family))}>
-                        <span className="ski-pass-mark">
-                            <SkiPassIcon family={family} size={20} />
-                            {passes.includes(family) && <span className="ski-pass-check"><SkiIcon name="check" /></span>}
-                        </span>
-                        <span className="ski-pass-name">{passNames[family]}</span>
-                    </button>)}
+                <div className="ski-pass-shortcuts" role="group" aria-label="Pass filters" aria-describedby="ski-pass-shortcuts-help">
+                    <span className="ski-pass-caption" aria-hidden="true">Passes</span>
+                    <span id="ski-pass-shortcuts-help" className="sr-only">Match any selected pass.</span>
+                    <div className="ski-pass-buttons">
+                        {passFamilySchema.options.map(family => <button key={family} type="button" className="ski-control ski-pass-button"
+                            aria-pressed={passes.includes(family)} title={passNames[family]}
+                            onClick={() => updateSkiParams(params => toggleSkiPassFilter(params, family))}>
+                            <span className="ski-pass-mark">
+                                <SkiPassIcon family={family} size={20} />
+                                {passes.includes(family) && <span className="ski-pass-check"><SkiIcon name="check" /></span>}
+                            </span>
+                            <span className="ski-pass-name">{passNames[family]}</span>
+                        </button>)}
+                    </div>
                 </div>
-                <SkiShareButton getUrl={getShareUrl} />
             </div>
             <div className="ski-toolbar">
                 <div className="ski-segments ski-mode-switch" role="group" aria-label="Operating status shortcuts">
@@ -337,20 +339,23 @@ export default function SkiStatus() {
                     <button type="button" aria-pressed={compare} onClick={() => setView('table')}><SkiIcon name="compare" />Compare</button>
                 </nav>
                 <div className="ski-context">
-                    <div className="ski-counts" aria-live="polite" aria-atomic="true">
-                        <span>{resultText}</span>
-                        {status !== 'all' && <span className="ski-coverage">{coverageText}</span>}
+                    <div className="ski-context-filters">
+                        <div className="ski-counts" aria-live="polite" aria-atomic="true">
+                            <span>{resultText}</span>
+                            {status !== 'all' && <span className="ski-coverage">{coverageText}</span>}
+                        </div>
+                        {chips.length > 0 && <div aria-label="Applied filters" role="group" className="ski-chips">
+                            {chips.map(({ label, key }) => <button type="button" key={key} className="ski-chip"
+                                aria-label={`Remove ${label}`} title={`Remove ${label}`} onClick={() => removeFilter(key)}>
+                                <span>{label}</span><SkiIcon name="close" />
+                            </button>)}
+                        </div>}
+                        {(chips.length > 0 || passes.length > 0) &&
+                            <button type="button" className="ski-clear-filters" aria-label="Clear filters" onClick={clearFilters}>
+                                Clear<span> filters</span>
+                            </button>}
                     </div>
-                    {chips.length > 0 && <div aria-label="Applied filters" role="group" className="ski-chips">
-                        {chips.map(({ label, key }) => <button type="button" key={key} className="ski-chip"
-                            aria-label={`Remove ${label}`} title={`Remove ${label}`} onClick={() => removeFilter(key)}>
-                            <span>{label}</span><SkiIcon name="close" />
-                        </button>)}
-                    </div>}
-                    {(chips.length > 0 || passes.length > 0) &&
-                        <button type="button" className="ski-clear-filters" aria-label="Clear filters" onClick={clearFilters}>
-                            Clear<span> filters</span>
-                        </button>}
+                    <SkiShareButton getUrl={getShareUrl} />
                 </div>
             </div>
             {legacyArea && !showMap && <p className="text-sm text-slate-300">Open Map to set the area for this link.</p>}
@@ -405,7 +410,9 @@ export default function SkiStatus() {
                     product={product} skiDate={skiDate} homeAreaId={homeAreaId} onShowTerrain={canShowTerrain ? showTerrain : undefined} />
             </aside>}
         </div>
-        <SkiFilterDialog dialog={filterDialog} filters={filters} units={units} onUnitsChange={setUnits} setParam={setParam} updateParams={updateSkiParams} />
+        <SkiFilterDialog dialog={filterDialog} filters={filters} resultCount={matching.length} units={units}
+            onShowResults={() => { if (!wide && view === 'map') setView('results'); }}
+            onUnitsChange={setUnits} setParam={setParam} updateParams={updateSkiParams} />
         <SkiLayerDialog dialog={layersDialog} colors={colors} units={units} indyDiscounts={passes.length === 1 && passes.includes('indy-discounts')} terrain={terrain}
             resortTerrain={resortTerrain} setParam={setParam} terrainKey={terrainConventions.length > 0 && <SkiTerrainKey conventions={terrainConventions} />} />
         <SkiDialog dialog={columnsDialog} id="ski-columns" title="Columns">

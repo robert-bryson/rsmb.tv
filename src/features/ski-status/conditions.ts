@@ -172,11 +172,10 @@ function selectOperations(previous: ResortReport, next: ResortReport, now: numbe
     const wasCurrent = skiDayStatus(previous, now) !== 'unknown';
     const isCurrent = skiDayStatus(next, now) !== 'unknown';
     if (wasCurrent !== isCurrent) return isCurrent ? next : previous;
-    const previousTime = operationsTime(previous);
-    const nextTime = operationsTime(next);
-    if (previousTime !== undefined && nextTime !== undefined && previousTime !== nextTime) {
-        return nextTime > previousTime ? next : previous;
-    }
+    // Give the operation time priority over the time of a fetch.
+    const previousTime = operationsTime(previous) ?? -Infinity;
+    const nextTime = operationsTime(next) ?? -Infinity;
+    if (previousTime !== nextTime) return nextTime > previousTime ? next : previous;
     return Date.parse(next.retrievedAt) >= Date.parse(previous.retrievedAt) ? next : previous;
 }
 

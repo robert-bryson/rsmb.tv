@@ -32,7 +32,7 @@ function manifest(fields: Omit<ConditionsManifest, 'version' | 'catalogRevision'
 }
 
 describe('ski-status client feed', () => {
-    let files: Map<string, string>;
+    let files: Map<string, BodyInit>;
     const signal = new AbortController().signal;
     const read = vi.fn((url: URL) => {
         const body = files.get(url.pathname.split('/').at(-1) ?? '');
@@ -102,6 +102,43 @@ describe('ski-status client feed', () => {
             expect(read).toHaveBeenCalledTimes(1);
         },
     );
+
+    it('rejects an oversized manifest before reading its snapshot', async () => {
+        const reports = reportFile(retrievedAt);
+        const body = JSON.stringify(manifest({ updatedAt: retrievedAt, reports: reports.file }));
+        files.set(manifestName, ' '.repeat(64 * 1024) + body);
+        files.set(reports.file, reports.body);
+        await expect(loadConditionsFeed({}, signal)).rejects.toThrow('exceeds the size limit');
+        expect(read).toHaveBeenCalledTimes(1);
+    });
+
+    it('reports an empty manifest response before reading a snapshot', async () => {
+        read.mockResolvedValueOnce(new Response(null));
+        await expect(loadConditionsFeed({}, signal)).rejects.toThrow('Ski conditions response is empty');
+        expect(read).toHaveBeenCalledTimes(1);
+    });
+
+    it('cancels an oversized snapshot stream and keeps the previous verified report', async () => {
+        const previousFile = reportFile(retrievedAt);
+        files.set(previousFile.file, previousFile.body);
+        files.set(manifestName, JSON.stringify(manifest({ updatedAt: retrievedAt, reports: previousFile.file })));
+        const previous = await loadConditionsFeed({}, signal);
+
+        const file = `reports-${'f'.repeat(64)}.json`;
+        const updatedAt = '2026-12-25T13:00:00Z';
+        files.set(manifestName, JSON.stringify(manifest({ updatedAt, reports: file })));
+        const cancel = vi.fn();
+        const chunk = new Uint8Array(1024 * 1024);
+        files.set(file, new ReadableStream({
+            start(controller) {
+                for (let index = 0; index < 10; index++) controller.enqueue(chunk);
+                controller.close();
+            },
+            cancel,
+        }));
+        expect((await loadConditionsFeed(previous, signal)).reports).toBe(previous.reports);
+        expect(cancel).toHaveBeenCalledOnce();
+    });
 });
 
 describe('ski-status publication', () => {
@@ -160,7 +197,10 @@ describe('ski-status publication', () => {
         });
     });
 
-    it('keeps verified operations and their observations when a later poll cannot confirm the ski day', async () => {
+    it.each([
+        { nextTime: '2026-12-25T14:00:00Z', recentReports: 2 },
+        { nextTime: '2026-12-26T08:15:00Z', recentReports: 0 },
+    ])('keeps verified operations when the $nextTime poll omits the ski day', async ({ nextTime, recentReports }) => {
         const initial = options();
         const temperature = { valueC: -11, location: 'Upper mountain', measuredAt: retrievedAt };
         initial.fetchReport.mockImplementation(async ({ areaId }) => ({ ...report, areaId, temperature }));
@@ -168,20 +208,19 @@ describe('ski-status publication', () => {
         expect(first.coverage.reportFields.temperature).toBe(2);
 
         const next = options();
-        const nextTime = '2026-12-25T14:00:00Z';
         next.now = () => Date.parse(nextTime);
         next.refreshForecasts = false;
         next.fetchReport.mockImplementation(async ({ areaId }) => ({
             ...report, areaId, retrievedAt: nextTime, reportedAt: undefined, status: 'unknown',
         }));
         const second = await publish(next);
-        const history = join(directory, 'history', '2026-12-25');
+        const history = join(directory, 'history', nextTime.slice(0, 10));
         const name = (await readdir(history)).sort().at(-1)!;
         const archived = await readFile(join(history, name));
-        expect(name).toBe(`2026-12-25T14-00-00.000Z-${digest(archived)}.json`);
+        expect(name).toBe(`${new Date(nextTime).toISOString().replaceAll(':', '-')}-${digest(archived)}.json`);
         const entry = JSON.parse(archived.toString());
         const snapshot = JSON.parse(await readFile(join(directory, entry.reports), 'utf8'));
-        expect(second.coverage.recentReports).toBe(2);
+        expect(second.coverage.recentReports).toBe(recentReports);
         expect(snapshot.reports).toEqual([areaId, 'snowbird'].map(areaId => ({ ...report, areaId, temperature })));
     });
 
@@ -239,6 +278,19 @@ describe('ski-status publication', () => {
         failed.fetchForecast.mockImplementation(offline);
         await expect(publish(failed)).rejects.toThrow('No valid ski conditions updates');
         expect(await readFile(join(directory, manifestName))).toEqual(previous);
+        expect(await readdir(join(directory, 'history', '2026-12-25'))).toHaveLength(1);
+    });
+
+    it('preserves the published files when a new snapshot exceeds the client limit', async () => {
+        await publish();
+        const oldFiles = (await readdir(directory)).sort();
+        const previous = await readFile(join(directory, manifestName));
+        const next = options();
+        const largeSource = { ...source, name: 'A'.repeat(8 * 1024 * 1024) };
+        next.fetchReport.mockImplementation(async ({ areaId }) => ({ ...report, areaId, source: largeSource }));
+        await expect(publish(next)).rejects.toThrow('publication exceeds the size limit');
+        expect(await readFile(join(directory, manifestName))).toEqual(previous);
+        expect((await readdir(directory)).sort()).toEqual(oldFiles);
         expect(await readdir(join(directory, 'history', '2026-12-25'))).toHaveLength(1);
     });
 
@@ -361,5 +413,35 @@ describe('Open Data Hub source failures', () => {
         expect(warn).toHaveBeenCalledWith(expect.stringContaining('Terrain source for alta-badia'));
         respond(null, null);
         await expect(fetchOpenDataHubReport(area)).rejects.toThrow('Open Data Hub reports failed');
+    });
+
+    it('requests only the named inventory when a region has no matching summary feed', async () => {
+        const civetta = pilotAreas.find(candidate => candidate.areaId === 'civetta')!;
+        const item = {
+            ...terrain.Items[0], Id: 'urn:odhactivitypoi:dss:lift:12_1', Shortname: 'Alleghe/Piani di Pezzè',
+            'Mapping.dss.regionId': civetta.dssRegionId,
+        };
+        const fetch = vi.fn(async () => Response.json({ ...terrain, TotalResults: 2, Items: [
+            item, { ...item, Id: 'urn:odhactivitypoi:dss:lift:12_2', Shortname: 'Alleghe–Malga Ciapela', TagIds: ['lifts', 'skibus'] },
+        ] }));
+        vi.stubGlobal('fetch', fetch);
+        const result = await fetchOpenDataHubReport(civetta);
+        expect(result).toMatchObject({ areaId: civetta.areaId, status: 'unknown', terrain: {
+            items: [{ name: 'Alleghe/Piani di Pezzè', status: 'open', updatedAt: changedAt }],
+        } });
+        expect(result.terrain?.items).toHaveLength(1);
+        expect(result.lifts).toBeUndefined();
+        expect(fetch).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ pathname: '/v1/ODHActivityPoi' }), expect.objectContaining({
+            headers: expect.objectContaining({ referer: 'https://rsmb.tv/projects/ski-status/map' }), redirect: 'error',
+        }));
+    });
+
+    it('rejects an oversized provider response and keeps the independent terrain records', async () => {
+        respond({ ...summary, padding: ' '.repeat(4 * 1024 * 1024) }, terrain);
+        const warn = vi.fn();
+        const result = await fetchOpenDataHubReport(area, undefined, warn);
+        expect(result).toMatchObject({ status: 'unknown', terrain: { items: [{ name: 'Col Alto' }] } });
+        expect(result.lifts).toBeUndefined();
+        expect(warn).toHaveBeenCalledWith(expect.stringContaining('exceeds the size limit'));
     });
 });

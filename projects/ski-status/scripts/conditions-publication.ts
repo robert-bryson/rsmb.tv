@@ -3,6 +3,7 @@ import {
     conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, mergeResortReports, reportAgeHours, reportSnapshotSchema, skiDayStatus,
     type BaseForecast, type ResortReport,
 } from '../../../src/features/ski-status/conditions.ts';
+import { decodeConditionsJson, maxConditionsManifestBytes, maxConditionsSnapshotBytes } from '../../../src/features/ski-status/conditions-response.ts';
 import { manifestName, type ConditionsStore } from './conditions-store.ts';
 
 type PilotArea = { areaId: string };
@@ -16,9 +17,12 @@ type PublicationOptions<T extends PilotArea> = {
     now?: () => number;
 };
 
-const serialize = (data: unknown) => Buffer.from(`${JSON.stringify(data, null, 2)}\n`);
+function serialize(data: unknown, limit = Infinity) {
+    const body = Buffer.from(`${JSON.stringify(data, null, 2)}\n`);
+    if (body.length > limit) throw Error('Ski conditions publication exceeds the size limit');
+    return body;
+}
 export const digest = (body: Buffer) => createHash('sha256').update(body).digest('hex');
-const decode = (body: Buffer): unknown => JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(body));
 
 async function readSnapshot<T extends { generatedAt: string }>(
     store: ConditionsStore, file: string | undefined, updatedAt: string | undefined, parse: (value: unknown) => T, warn: (message: string) => void,
@@ -26,8 +30,9 @@ async function readSnapshot<T extends { generatedAt: string }>(
     if (!file || !updatedAt) return;
     const object = await store.read(file);
     try {
+        if (object && object.body.length > maxConditionsSnapshotBytes) throw Error('Snapshot exceeds the size limit');
         if (!object || digest(object.body) !== conditionsFileDigest(file)) throw Error('Invalid checksum or missing snapshot');
-        const data = parse(decode(object.body));
+        const data = parse(decodeConditionsJson(object.body));
         if (Date.parse(data.generatedAt) > Date.parse(updatedAt)) throw Error('Snapshot is newer than its manifest');
         return { file, data };
     } catch (error) {
@@ -70,7 +75,7 @@ export async function publishConditions<T extends PilotArea>(store: ConditionsSt
     areas, catalogRevision, refreshForecasts, fetchReport, fetchForecast, warn, now = Date.now,
 }: PublicationOptions<T>) {
     const previousObject = await store.read(manifestName);
-    const previous = previousObject && conditionsManifestSchema.parse(decode(previousObject.body));
+    const previous = previousObject && conditionsManifestSchema.parse(decodeConditionsJson(previousObject.body));
     const [oldReports, oldForecasts] = await Promise.all([
         readSnapshot(store, previous?.reports, previous?.updatedAt, reportSnapshotSchema.parse, warn),
         readSnapshot(store, previous?.forecasts, previous?.updatedAt, forecastSnapshotSchema.parse, warn),
@@ -111,15 +116,18 @@ export async function publishConditions<T extends PilotArea>(store: ConditionsSt
     const forecastsData = forecastSnapshotSchema.parse({ version: 1, generatedAt: updatedAt, forecasts: forecasts.rows });
     const reportsChanged = reports.received > 0 || reportRows.length !== previousReports.length;
     const forecastsChanged = forecasts.received > 0 || forecasts.rows.length !== previousForecasts.length;
+    const reportsBody = reportsChanged ? serialize(reportsData, maxConditionsSnapshotBytes) : undefined;
+    const forecastsBody = forecastsChanged ? serialize(forecastsData, maxConditionsSnapshotBytes) : undefined;
     const manifest = conditionsManifestSchema.parse({
         version: 1, updatedAt, catalogRevision, coverage,
-        reports: reportsChanged ? await writeVersion(store, 'reports', serialize(reportsData)) : oldReports?.file,
-        forecasts: forecastsChanged ? await writeVersion(store, 'forecasts', serialize(forecastsData)) : oldForecasts?.file,
+        reports: reportsBody ? await writeVersion(store, 'reports', reportsBody) : oldReports?.file,
+        forecasts: forecastsBody ? await writeVersion(store, 'forecasts', forecastsBody) : oldForecasts?.file,
         previousManifest: previousObject && await writeVersion(store, 'manifest', previousObject.body),
     });
     const received = { reports: reports.received, forecasts: forecasts.received };
+    const manifestBody = serialize(manifest, maxConditionsManifestBytes);
     const historyPrefix = `history/${updatedAt.slice(0, 10)}/${updatedAt.replaceAll(':', '-')}`;
     await writeVersion(store, historyPrefix, serialize({ ...manifest, received }));
-    await store.commit(serialize(manifest), previousObject);
+    await store.commit(manifestBody, previousObject);
     return { manifest, coverage, received };
 }

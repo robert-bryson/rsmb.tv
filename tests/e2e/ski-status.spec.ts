@@ -112,13 +112,16 @@ test('combines top-bar passes while retaining the selected product and search', 
     await expect(ikon).toHaveAttribute('aria-pressed', 'true');
     await expect(epic).toHaveAttribute('aria-pressed', 'true');
     await expect(comparison(page).getByRole('button', { name: 'Snowbird', exact: true })).toBeVisible();
-    await inDialog(page, 'Filters', async dialog => {
-        await expect(dialog.getByRole('checkbox', { name: 'Ikon', exact: true })).toBeChecked();
-        await expect(dialog.getByRole('checkbox', { name: 'Epic', exact: true })).toBeChecked();
-        const product = dialog.getByLabel('Pass product', { exact: true });
-        await expect(product).toHaveValue('ikon-base');
-        await expect(product).toHaveAccessibleDescription('Product and ski date apply to Ikon.');
-    });
+    const filters = page.getByRole('button', { name: 'Filters', exact: true });
+    await filters.press('Enter');
+    const dialog = page.getByRole('dialog', { name: 'Filters' });
+    await expect(dialog.getByRole('checkbox', { name: 'Ikon', exact: true })).toBeChecked();
+    await expect(dialog.getByRole('checkbox', { name: 'Epic', exact: true })).toBeChecked();
+    const product = dialog.getByLabel('Pass product', { exact: true });
+    await expect(product).toHaveValue('ikon-base');
+    await expect(product).toHaveAccessibleDescription('Product and ski date apply to Ikon.');
+    await dialog.getByRole('button', { name: 'Show 1 result', exact: true }).press('Enter');
+    await expect(filters).toBeFocused();
     await search.fill('vail mountain');
     await search.press('Enter');
     await expect(page).toHaveURL(/q=vail\+mountain/);
@@ -140,7 +143,28 @@ test('combines top-bar passes while retaining the selected product and search', 
     const narrowSearch = (await search.boundingBox())!;
     expect(narrowHeading.y).toBeLessThan(narrowSearch.y + narrowSearch.height);
     await expect(page.getByRole('button', { name: 'Share current view' })).toBeVisible();
+    for (const label of ['Ikon', 'Epic', 'Indy', 'Mountain Collective']) {
+        const pass = passes.getByRole('button', { name: label, exact: true });
+        await expect(pass).toBeInViewport({ ratio: 1 });
+        await expect(pass.locator('img')).toBeVisible();
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+});
+
+test('opens the filtered results from the map on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await prepare(page);
+    await page.goto(`${path}?view=map&status=all&q=whaleback`);
+    const filters = page.getByRole('button', { name: 'Filters', exact: true });
+    await filters.click();
+    const dialog = page.getByRole('dialog', { name: 'Filters', exact: true });
+    await dialog.getByRole('checkbox', { name: 'Indy', exact: true }).check();
+    await dialog.getByRole('button', { name: 'Show 1 result', exact: true }).click();
+    await expect(dialog).toBeHidden();
+    await expect(page).toHaveURL(/view=results/);
+    await expect(page).toHaveURL(/pass=indy/);
+    await expect(result(page, 'Whaleback Mountain')).toBeVisible();
+    await expect(filters).toBeFocused();
 });
 
 test('shows a selectable share link when the browser cannot copy it', async ({ page }) => {
@@ -265,6 +289,10 @@ test('keeps map controls within the phone viewport and gives the landscape map r
     const filters = page.getByRole('button', { name: 'Filters', exact: true });
     await expect(filters).toBeFocused();
     await expect(filters).toHaveAccessibleDescription('1 additional filter active');
+    const focusHint = () => filters.evaluate(button => getComputedStyle(button, '::after').content);
+    await expect.poll(focusHint).toBe('"Filters"');
+    await page.keyboard.press('Escape');
+    await expect.poll(focusHint).toBe('none');
     await page.keyboard.press('Tab');
     await expect(page.getByRole('button', { name: 'Ikon', exact: true })).toBeFocused();
 
@@ -280,8 +308,11 @@ test('keeps map controls within the phone viewport and gives the landscape map r
         for (const name of ['Filters', 'Share current view', 'Search this area', 'Fit results', 'Layers']) {
             const button = (await page.getByRole('button', { name, exact: true }).boundingBox())!;
             expect(button.height).toBeGreaterThanOrEqual(44);
+            expect(button.width).toBeGreaterThanOrEqual(44);
             expect(button.x + button.width).toBeLessThanOrEqual(size.width);
         }
+        const fitLabel = page.getByRole('button', { name: 'Fit results', exact: true }).getByText('Fit results');
+        await expect(fitLabel).toBeVisible({ visible: size.width > 352 });
         for (const name of ['Zoom in', 'Zoom out']) {
             const zoom = (await page.getByRole('button', { name, exact: true }).boundingBox())!;
             expect(zoom.y).toBeGreaterThanOrEqual(canvas.y);
@@ -746,9 +777,10 @@ test('changes results only when someone searches the new area and restores each 
     await prepare(page);
     const renderer = await captureMap(page);
     await renderer.evaluate(map => { map.jumpTo({ center: [-111.64, 40.6], zoom: 10 }); });
-    await searchArea(page).click();
-    await expect(searchArea(page)).toBeDisabled();
-    await expect(searchArea(page)).toHaveAttribute('title', 'This area is already searched');
+    await searchArea(page).press('Enter');
+    const appliedArea = page.getByRole('button', { name: 'Area searched', exact: true });
+    await expect(appliedArea).toBeDisabled();
+    await expect(appliedArea).toBeFocused();
     await expect(result(page, 'Alta Ski Area')).toBeVisible();
     await expect(result(page, 'Snowbird')).toBeVisible();
     await expect(result(page, 'Whaleback Mountain')).toHaveCount(0);
@@ -851,7 +883,7 @@ test('keeps legacy in-view links usable and commits their first map area', async
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
     await expect(page).toHaveURL(/mapArea=/);
     await expect(page).not.toHaveURL(/inView=/);
-    await expect(page.getByRole('button', { name: 'Remove Searched map area' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Remove Map area' })).toBeVisible();
     await expect(page.getByText('1 ski area', { exact: true })).toBeVisible();
 });
 

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { reportSnapshotSchema, forecastSnapshotSchema, type ResortReport } from '../../../src/features/ski-status/conditions.ts';
+import { decodeConditionsJson, readConditionsBytes } from '../../../src/features/ski-status/conditions-response.ts';
 import { localSkiDate } from '../../../src/features/ski-status/localSkiDate.ts';
 import { isoTime } from '../../../src/features/ski-status/schemas.ts';
 
@@ -7,13 +8,25 @@ export const pilotAreas = [
     { areaId: 'alta-badia', sourceId: 'SKI04EBE61F5AA0473F871AF0297887D6C2', dssRegionId: '3', location: 'Corvara base', latitude: 46.5547, longitude: 11.8724 },
     { areaId: 'val-gardena-alpe-di-siusi', sourceId: 'SKI2C99CEA3DF2F458FB75E45CA39222E9D', dssRegionId: '4', location: 'Ortisei base', latitude: 46.5751, longitude: 11.6718 },
     { areaId: '3-zinnen-dolomites', sourceId: 'SKI04A713E6479A4BE4BD158019A6DA546C', dssRegionId: '7', location: 'Versciaco base', latitude: 46.7313, longitude: 12.3282 },
+    { areaId: 'kronplatz', sourceId: 'SKI8660FA0AAEF54865A7109BAB46AE6C23', dssRegionId: '2', location: 'Costa lift base', latitude: 46.722993, longitude: 11.963306 },
+    // These regions have a named terrain inventory and no verified region-wide snow report.
+    { areaId: 'cortina-d-ampezzo', sourceId: null, dssRegionId: '1', location: 'Lacedel lift base', latitude: 46.535193, longitude: 12.120962 },
+    { areaId: 'val-di-fassa-carezza', sourceId: null, dssRegionId: '5', location: 'Pala del Gheiger lift base', latitude: 46.439832, longitude: 11.733992 },
+    { areaId: 'arabba-marmolada', sourceId: null, dssRegionId: '6', location: 'Portados lift base', latitude: 46.495386, longitude: 11.873486 },
+    { areaId: 'val-di-fiemme-obereggen', sourceId: null, dssRegionId: '8', location: 'Campanil lift base', latitude: 46.349427, longitude: 11.543301 },
+    { areaId: 'san-martino-rolle-pass', sourceId: null, dssRegionId: '9', location: 'San Martino lift base', latitude: 46.268215, longitude: 11.77864 },
+    { areaId: 'rio-pusteria-bressanone', sourceId: null, dssRegionId: '10', location: 'Gaisjoch lift base', latitude: 46.834927, longitude: 11.669231 },
+    { areaId: 'alpe-lusia-san-pellegrino', sourceId: null, dssRegionId: '11', location: 'Piavac lift base', latitude: 46.35609, longitude: 11.68515 },
+    { areaId: 'civetta', sourceId: null, dssRegionId: '12', location: 'Civetta terrain point', latitude: 46.407545, longitude: 12.075271 },
 ] as const;
 
 type PilotArea = typeof pilotAreas[number];
 type ForecastPoint = { areaId: string; location: string; latitude: number; longitude: number };
 const openDataHubLicense = 'https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068';
+const openDataHubHeaders = { referer: 'https://rsmb.tv/projects/ski-status/map' };
 const publicDomain = 'https://creativecommons.org/publicdomain/zero/1.0/';
 const openMeteoLicense = 'https://creativecommons.org/licenses/by/4.0/';
+const maxJsonBytes = 4 * 1024 * 1024;
 const isoDate = z.iso.date();
 const sourceTime = z.iso.datetime({ local: true, offset: true });
 const amount = z.number().nonnegative();
@@ -48,10 +61,11 @@ const meteoForecast = z.object({
     'Open-Meteo hourly values must match the time series'),
 });
 
-async function fetchJson(url: URL) {
-    const result = await fetch(url, { signal: AbortSignal.timeout(30_000), headers: { accept: 'application/json' } });
-    if (!result.ok) throw Error(`${url.hostname} returned HTTP ${result.status}`);
-    return result.json() as Promise<unknown>;
+async function fetchJson(url: URL, headers: Record<string, string> = {}) {
+    const response = await fetch(url, {
+        signal: AbortSignal.timeout(30_000), headers: { accept: 'application/json', ...headers }, redirect: 'error',
+    });
+    return decodeConditionsJson(await readConditionsBytes(response, maxJsonBytes, url.hostname));
 }
 
 function numberOrUnknown(value?: string | null) {
@@ -120,6 +134,7 @@ export function dolomitiTerrainReport(payload: unknown, regionId: string, url: s
             throw Error(`Invalid or duplicate Dolomiti Superski record ${Id}`);
         }
         ids.add(Id);
+        if (TagIds.includes('skibus') || TagIds.includes('train')) continue;
         const kind = Id.startsWith('urn:odhactivitypoi:dss:lift:') ? 'lift'
             : Id.startsWith('urn:odhactivitypoi:dss:slope:') && TagIds.includes('alpine skiing') ? 'trail' : undefined;
         const name = title?.trim() || Shortname?.trim();
@@ -136,25 +151,26 @@ export function dolomitiTerrainReport(payload: unknown, regionId: string, url: s
 
 export async function fetchOpenDataHubReport(area: PilotArea, previous?: ResortReport, warn = console.warn): Promise<ResortReport> {
     const url = new URL('https://tourism.api.opendatahub.com/v1/Weather/SnowReport');
-    url.search = new URLSearchParams({ lang: 'de', skiareaid: area.sourceId, pagesize: '5' }).toString();
+    if (area.sourceId) url.search = new URLSearchParams({ lang: 'de', skiareaid: area.sourceId, pagesize: '5' }).toString();
     const details = new URL('https://tourism.api.opendatahub.com/v1/ODHActivityPoi');
     details.search = new URLSearchParams({
         source: 'dss', pagesize: '500', rawfilter: `eq(Mapping.dss.regionId,'${area.dssRegionId}')`,
         fields: 'Id,Source,Shortname,Detail.en.Title,Mapping.dss.regionId,LastChange,IsOpen,LicenseInfo,TagIds',
     }).toString();
     const [summary, inventory] = await Promise.allSettled([
-        fetchJson(url).then(payload => openDataHubReport(payload, area, url.href, new Date().toISOString())),
-        fetchJson(details).then(payload => dolomitiTerrainReport(payload, area.dssRegionId, details.href, new Date().toISOString())),
+        area.sourceId ? fetchJson(url, openDataHubHeaders).then(payload => openDataHubReport(payload, area, url.href, new Date().toISOString())) : undefined,
+        fetchJson(details, openDataHubHeaders).then(payload => dolomitiTerrainReport(payload, area.dssRegionId, details.href, new Date().toISOString())),
     ]);
-    if (summary.status === 'fulfilled') {
+    if (summary.status === 'fulfilled' && summary.value) {
         if (inventory.status === 'fulfilled') return { ...summary.value, terrain: inventory.value };
         warn(`Terrain source for ${area.areaId}: ${String(inventory.reason)}`);
         return summary.value;
     }
     if (inventory.status === 'rejected') {
+        if (summary.status === 'fulfilled') throw inventory.reason;
         throw Error(`Open Data Hub reports failed: ${String(summary.reason)}; ${String(inventory.reason)}`);
     }
-    warn(`Resort report for ${area.areaId}: ${String(summary.reason)}`);
+    if (summary.status === 'rejected') warn(`Resort report for ${area.areaId}: ${String(summary.reason)}`);
     const { source, retrievedAt } = inventory.value;
     return {
         ...previous ?? { areaId: area.areaId, source, retrievedAt, status: 'unknown' },

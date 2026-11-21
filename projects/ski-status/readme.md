@@ -1,30 +1,40 @@
 # ski-status guide
 
 ski-status maps North American ski areas and worldwide pass destinations.
-Use the table to compare mountain statistics. Use the operator links to check current conditions. [Project tasks](TODO.md)
+Use the comparison table for mountain statistics. Open an operator link to check current conditions.
+
+[Find an area](#use-ski-status) · [Maintain the catalog](#catalog) · [Run tests](#local-checks) · [Publish conditions](#conditions-publication) · [Project tasks](TODO.md)
 
 ## Use ski-status
 
 Open `/projects/ski-status/map`. The globe opens in **Ski today** on desktop and phones.
-Use **Ski today** to find areas with a current report of open or limited skiing. The results count includes these areas. The coverage count also includes known closures for the local ski day. Use **All resorts** to see all areas that match the other filters.
+Use **Ski today** to find areas with current reports of open or limited skiing. Report coverage also includes closures for the local ski day.
+Select **All resorts** to include all areas that match the other filters.
 
-- On a wide screen, the map and results sit side by side. On a phone, switch between **Map** and **Results**. Open **Compare** for the full-width table.
-- Search in the top bar by area name, alternative name, town, country, or skiing type. Use **Clear search** inside the field to remove the query.
-- Select one or more pass buttons for included access. An area matches if any selected pass gives access. Results shows the matching passes when several are selected. Select a pass again to remove it. Open the **Filters** icon for regions and other criteria. Its count shows the additional filters in use. Use **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer. Remove other applied filters from the header.
-- Select a **Pass product** to check access on a **Ski date**. The product and date apply to that pass. A blank date uses today at each ski area. For an Indy Add-On, select your **Home ski area** to exclude it from the results for that product.
-- Select a month under **Typical season in** to find areas with a usual ski season in that month. Open a resort for the recorded dates and sources.
-- Select **Conventional downhill** for outdoor lift-served areas. This filter includes areas that also have Nordic trails. Select **Cross-country only** for Nordic centers. Use **Specialty skiing** for Nordic-only areas and other types such as indoor skiing.
-- Select a marker, a result, or a table row to open resort details. Use **Official conditions** or **Resort website and conditions** to read the operator's report. Select **Show runs and lifts** to zoom to mapped resort terrain.
-- The resort header shows its icon when available. Open Google Maps for the visitor entrance or resort listing. Open Wikipedia for the resort article or a name and location search.
-- In **Season and snowfall**, check the recorded, scheduled, or estimated opening and closing dates. The snow chart shows historical monthly snowfall and depth where available, with sources and measurement locations.
-- Use the close icon in the resort panel. Focus returns to the control that opened the panel if it is visible. Press Escape in the map or select empty map space to clear the selection. Use the keyboard skip links for search, the map, and results.
-- In **Compare**, select a column header to sort. Use **Previous** and **Next** to browse pages of 50 areas. All resorts shows mountain statistics first. Operating-status views show report columns first. Use **Columns** for additional fields. **Export CSV** includes all matches across the pages and the selected fields with export permission.
+### Find an area
 
-Select the **Share** icon in the top bar to share the current view. Use the system share menu when it opens. The app can also copy the URL or show it in a dialog. The link saves the search text, filters, sort order, selected resort, view, map position, and layer settings. The browser saves unit and column preferences.
+- Search by name, alternative name, town, country, or skiing type. Select **Clear search** to remove the search text.
+- Select one or more pass buttons. An area matches if any selected pass gives included access. When several passes are active, **Results** shows the matching passes. Select an active pass again to remove it.
+- Open **Filters** to select a region or other criteria. The icon shows the number of additional filters. Select **Show results** to close the dialog. On a phone, this action opens **Results** from the map.
+- Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer. Remove other active filters from the header.
+- Select a **Pass product** to check access on a **Ski date**. This date applies to the product's pass family. A blank date uses the local date at each area. For Indy Add-On, select your **Home ski area** to exclude it.
+- Select a month under **Typical season in**. Open an area to see its season dates and sources.
+- Select **Conventional downhill** for outdoor areas with ski lifts. This filter also includes areas that have Nordic trails. Select **Cross-country only** for Nordic centers. Select **Specialty skiing** for Nordic-only and indoor areas, among other types.
+
+### Inspect and compare areas
+
+- Select a marker, result, or table row to open the area details. Open **Official conditions** for the operator's report. Some areas show **Resort website and conditions**. Select **Show runs and lifts** to see the mapped terrain.
+- Open Google Maps for the visitor entrance or resort listing. Open Wikipedia for the resort article or a search by name and location.
+- In **Season and snowfall**, check the recorded, planned, or usual dates. The snow chart gives monthly snowfall or depth with its source and measurement location.
+- Select **Close details**. The app returns focus to the control that opened the panel when it is visible. Press Escape on the map or select empty space to clear the selection. Use skip links to reach search, the map, or results.
+- On a wide screen, the map and results appear side by side. On a phone, switch between **Map** and **Results**. Select **Compare** for the full table.
+- Select a column header to sort. Use **Previous** and **Next** to move through pages of 50 areas. **All resorts** shows mountain statistics first. The status views show report columns first. Select **Columns** to change the fields. **Export CSV** includes all matches and the selected fields with export permission.
+
+Select **Share current view** beside the result count. Use the system share menu when it opens. The app can also copy the link or show it in a dialog. The link saves the search, filters, sort order, selected area, view, map position, and layers. The browser saves units and columns.
 
 ### Map display
 
-Drag or zoom the globe to explore. The URL updates when the map settles. Select **Search this area** to apply the visible geography. Panning, zooming, resizing, and **Fit results** leave the applied area in place. Remove **Searched map area** from the header to clear it. A shared link restores the map position and searched geography across screen sizes.
+Pan or zoom the globe to explore. The URL updates when the map stops. Select **Search this area** to set the map area. Remove the **Map area** filter to clear it. Open a shared link to restore the map position and search area at any screen width.
 
 At globe scale, markers group nearby resorts. In operating status mode, a group number counts resorts reporting skiing today. The map uses muted groups where no resort reports skiing. Select a group to zoom in. From zoom level 3, small individual resort markers replace the groups. Operating status markers distinguish open, limited, closed, and unknown statuses with symbols and colors. A gold outline marks the selected area.
 
@@ -62,35 +72,38 @@ If the ski terrain fails, select **Retry ski terrain** at resort zoom. This retr
 
 ## Catalog
 
-On November 20, 2026, the catalog had 583 map points in 21 countries.
+On November 21, 2026, the catalog had 583 map points in 21 countries.
 The United States had 334 points. Canada had 72. Other countries had 177.
 The country filter also includes Germany through shared areas.
 The catalog had 126 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
 
-All 583 areas have at least one published statistic. Of the 525 downhill areas, 171 have values for all six main comparison fields, up from 132.
+All 583 areas have at least one published statistic. Of the 525 downhill areas, 178 have values for all six main comparison fields.
 Mapped terrain values cover 536 areas. [First-release data review](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#catalog-coverage)
 
 | Published field | Areas |
 | --- | ---: |
-| Skiable acreage | 262 |
+| Skiable acreage | 267 |
 | Vertical drop | 457 |
-| Lift count | 474 |
+| Lift count | 475 |
 | Trail count | 501 |
-| Base elevation | 220 |
-| Summit elevation | 252 |
-| Downhill trail length | 67 |
-| Nordic trail length | 61 |
-| Highest lift terminal | 36 |
-| Lowest lift terminal | 11 |
+| Base elevation | 226 |
+| Summit elevation | 265 |
+| Downhill trail length | 80 |
+| Nordic trail length | 63 |
+| Highest lift terminal | 42 |
+| Lowest lift terminal | 13 |
 | Night skiable acreage | 10 |
-| Difficulty breakdown | 111 |
+| Difficulty breakdown | 115 |
 | Season window | 65 |
-| Official conditions link | 431 |
-| Planned season dates | 77 |
-| Average annual snowfall | 100 |
+| Official conditions link | 496 |
+| Planned season dates | 107 |
+| Average annual snowfall | 105 |
 | Average monthly snowfall | 7 |
+| Average monthly snow depth | 32 |
 
 Copper Mountain’s monthly averages use the operator’s October through April measurements from the 2005/06 through 2024/25 seasons. [Copper Mountain snowfall history](https://www.coppercolorado.com/the-mountain/mountain-safety-stats/winter-mountain-stats/)
+
+The 28 USDA station series show November through April snow depth at named sites near the ski areas. Each series uses at least five consecutive winters between 2015/16 and 2024/25. Each month needed at least 90% of its daily readings, and each winter contributes equally to the averages. The chart gives the station elevation and record period. [USDA Snow Survey station index](https://wcc.sc.egov.usda.gov/nwcc/yearcount?counttype=statelist)
 
 | File | Use |
 | --- | --- |
@@ -194,6 +207,7 @@ The Python tests check the importer and candidate review. They require no GDAL o
 
 ```bash
 npx vitest run src/test/skiStatus*.test.* src/test/skiMapArea.test.ts src/test/skiResortTerrainMap.test.ts \
+  src/test/useSearchQuery.test.tsx \
   scripts/__tests__/skiResortTerrain.test.ts scripts/__tests__/releaseSkiTerrain.test.ts \
   scripts/__tests__/syncSkiStatus.test.ts scripts/__tests__/lakeLouiseConditions.test.ts \
   scripts/__tests__/skiBig3Conditions.test.ts
@@ -313,16 +327,16 @@ Use **Open for skiing** to find areas with a current open or limited report. **C
 Some operators report the day's operations before the lifts start. Use the operator's link to check hours and changes.
 The table uses totals from the same report as the open counts. It labels stale counts and percentages. It also labels values with an unknown age. Opening hours and night operations use the same age labels.
 
-Open **Reported lifts and trails** in the area details. The list starts with the items that the source reports as open.
-The collector reads public CC0 records from Dolomiti Superski. It covers Alta Badia, Val Gardena / Alpe di Siusi, and 3 Zinnen Dolomites.
-These records have their own dates and times. A named record becomes stale at the end of its local ski day or after 24 hours. Untimed records use the age of the resort report. The full area counts keep their own source and scope. [Open Data Hub lift dataset](https://databrowser.opendatahub.com/dataset-overview/ad42b408-e5eb-412b-8b0a-f7e8e9dab2b7), [Content API metadata](https://docs.opendatahub.com/use-data/content-api/reference/)
+Open **Reported lifts and trails** in the area details to see the rows. The list starts with the items that the source reports as open.
+The collector reads public CC0 lift and trail records for all 12 Dolomiti Superski regions. Alta Badia, Val Gardena / Alpe di Siusi, 3 Zinnen Dolomites, and Kronplatz also have matching regional summary feeds.
+These records have their own dates and times. A named record becomes stale at the end of its local ski day or after 24 hours. Untimed records use the age of the resort report. The full area counts keep their own source and scope. Regions with only named records show an unknown overall status. [Open Data Hub lift dataset](https://databrowser.opendatahub.com/dataset-overview/ad42b408-e5eb-412b-8b0a-f7e8e9dab2b7), [Content API metadata](https://docs.opendatahub.com/use-data/content-api/reference/)
 
 On November 20, 2026, five of the six checked areas reported limited skiing. Telluride reported zero open runs before its December 5 planned opening.
 Each checked report expires at the end of its local ski day. Alberta uses UTC−06:00 from November 1, 2026. [Checked reports and sources](data/conditions/operator-reports.json), [Alberta Time](https://www.alberta.ca/albertas-new-time-system-abt), [Telluride schedule](https://tellurideskiresort.com/ski/)
 
 ### Opening and closing dates
 
-The season file has 159 records of actual dates across 25 areas. It has plans for 54 areas. The app has typical dates or months for 23 areas. Thirteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
+The season file has 161 records of actual dates across 27 areas and plans for 107 areas. Thirteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
@@ -345,13 +359,13 @@ Opening-day figures apply to the day in the record. Use daily records to compare
 
 On November 19, the SnoCountry demo returned Bolton Valley, Bromley, and Burke. Each report had a time and an opening status. Base depth, recent snowfall, and open lift, trail, and acre counts were empty. Measure field coverage and report age during winter operation. [SnoCountry public example and field definitions](https://feeds.snocountry.net/)
 
-The pilot covers Lake Louise and the three Dolomiti Superski areas above. Open-Meteo supplies forecasts for one base location per area. [Lake Louise base coordinates](https://publications.gc.ca/collections/collection_2025/pc/R64-571-2024-eng.pdf), [Open-Meteo forecast API](https://open-meteo.com/en/docs)
+The collector covers Lake Louise and all 12 Dolomiti Superski regions. Open-Meteo supplies one named forecast point per area. The Open Data Hub requests use the ski-status URL as their referrer. [Lake Louise base coordinates](https://publications.gc.ca/collections/collection_2025/pc/R64-571-2024-eng.pdf), [Open-Meteo forecast API](https://open-meteo.com/en/docs), [Open Data Hub request quotas](https://docs.opendatahub.com/use-data/authentication-and-access/quotas-and-tools/)
 
 The Lake Louise XML lists daily operations and named terrain. The collector compares the open counts with the named records. It uses the verified local ski day for the operations report. Snow and temperature keep their measurement dates. The XML generation time changes on each request. The report has a ski date with no exact report age. The app marks Lake Louise data as display-only. [Lake Louise feed](https://api.skilouise.com/docs/MTN-XML.php), [Snow report method](https://www.skilouise.com/things-to-do/how-we-report-snowfall-mountain-conditions/)
 
 The local Rockies pilot covers Lake Louise, Banff Sunshine, and Mt. Norquay. On November 20, the Sunshine XML matched the operator's terrain report. It recorded 3 of 12 open lifts and 4 of 139 open trails. The Norquay XML endpoint returned HTTP 500. Use the Norquay conditions page for manual checks. The pilot stores numeric counts and the report time. Alberta uses UTC−06 year-round from November 2026. [SkiBig3 API](https://www.skibig3.com/api/), [Sunshine terrain report](https://www.skibanff.com/the-mountain/mountain-report/lifts-trails-report), [Mt. Norquay conditions](https://banffnorquay.com/conditions/), [Alberta Time](https://www.alberta.ca/albertas-new-time-system-abt)
 
-The XML reader accepts up to 256 KiB from the configured URL. It rejects document types and redirects. The SkiBig3 reader requires one value for each required count. It rejects local times that do not identify one instant.
+The collector accepts up to 4 MiB per JSON response and 256 KiB per XML response. It rejects redirects and invalid UTF-8. The XML reader also rejects document types. The SkiBig3 reader requires one value for each count and an exact report time.
 
 Open Data Hub and LTS supply the Dolomiti Superski resort counts and snow data. The collector can update named terrain during a failure of the resort report. The app uses gray markers when the resort report has no verified time or ski day. [Open Data Hub dataset](https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068), [Pilot measurements](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#conditions-pilot)
 
@@ -419,9 +433,9 @@ The workflow runs on `main` when `AWS_SKI_STATUS_SYNC_ROLE_ARN` is set. It colle
 The collector saves the snapshots and history entry before it attempts to replace `manifest.json`. If the archive write fails, the active manifest stays in use.
 The collector uses the S3 ETag to check for a concurrent update. If the ETag changes, retry with the current manifest. [S3 conditional writes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html)
 
-The manifest identifies snapshot files by SHA-256 checksum. The app checks the manifest every five minutes. It reads each changed file. It verifies the checksum before it uses the file. If a check fails, the app keeps the last valid snapshot. The app uses the packaged data until it has a live snapshot.
+The manifest identifies snapshot files by SHA-256 checksum. The app checks the manifest every five minutes. It verifies each changed file before use. The app and collector allow manifests up to 64 KiB and snapshots up to 8 MiB. If a check fails, the app keeps its last valid snapshot. The app uses packaged data until it gets a valid snapshot.
 
-The collector keeps the previous data when a provider request fails. It can keep a verified resort status and update a separate terrain report. The `recentReports` count includes reports with a known status for the area's current ski day. The `reports` count includes earlier and unverified reports. The manifest also gives report ages and field counts.
+The collector keeps the previous data when a provider request fails. It keeps a dated operations report when a later response gives no report date. The app marks the dated report stale after the local ski day. Named terrain can update separately. `recentReports` counts reports with a known status for the area's current ski day. `reports` also counts earlier or unverified reports.
 
 Find archive entries under `history/YYYY-MM-DD/`. The new entry names contain a UTC timestamp and the SHA-256 checksum. Older entries have timestamp-only names. Each entry lists the snapshots from one collection. A concurrent update can leave a valid archive entry while the active manifest points to a different collection.
 
@@ -448,7 +462,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 | Ski terrain | Run the release validator on the hosted preview for the candidate revision. It checks for `206`, the expected `Content-Range`, and the original bytes. It opens a lift and run tooltip at Heavenly. Check the revision and `previewJobId` in the report. Confirm that `skiTerrainRanges` is greater than zero. [Release validator](../../docs/release-validation.md), [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
 | Pass products | Test shared days, reservations, access requirements, excluded products, blackout dates, and discounts. Match each included partner. Record exceptions. |
 | Discovery | Open a resort's report from **Results** on a phone. Pan the map. Check the results before and after **Search this area**. Test Back and Forward. Open a shared view at a different width. Check keyboard focus. Check the map position after a retry. |
-| Conditions pilot | Compare the Rockies snapshots with the operator pages for a week. Check the local ski-day cutoff in the app and `recentReports`. Check failed updates, missing reports, closures, and partial openings. [Pilot](#conditions-publication) |
+| Rockies publication | Before you enable the Rockies feed, compare its snapshots with the operator pages for seven ski days. Check the local ski-day cutoff, missing reports, closures, and partial openings. [Pilot](#conditions-publication) |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
 
 ## Version 2

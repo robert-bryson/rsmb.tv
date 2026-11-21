@@ -4,7 +4,7 @@ import { columns, formatSkiLocation, formatSkiStat, matchesSkiPass, passFilterOp
 import type { SkiArea } from './catalog';
 import type { Conditions, ResortReport, ResortStatus } from './conditions';
 import { markerModes, passAccessAppearance, type MarkerMode } from './mapAppearance';
-import { SkiIcon } from './SkiIcon';
+import { SkiIconButton } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 import { SkiStatusLabel } from './SkiStatusLabel';
 
@@ -52,8 +52,8 @@ export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, p
                     onChange={event => onSort(sortOptions.find(({ key }) => key === event.target.value)?.key ?? 'name')}>
                     {sortOptions.map(({ key, label }) => <option key={key} value={key}>{label}</option>)}
                 </select>
-                <button type="button" className="ski-control ski-icon-button" aria-label={sortAction} title={sortAction}
-                    onClick={() => onSort(sort.key)}><SkiIcon name={sort.direction === 'asc' ? 'sortAscending' : 'sortDescending'} /></button>
+                <SkiIconButton icon={sort.direction === 'asc' ? 'sortAscending' : 'sortDescending'} label={sortAction}
+                    onClick={() => onSort(sort.key)} />
             </div>
         </div>
         <div className="min-h-0 flex-1 overflow-auto">

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { shareLink } from '../../utils/shareLink';
 import { SkiDialog } from './SkiControls';
-import { SkiIcon } from './SkiIcon';
+import { SkiIconButton } from './SkiIcon';
 
 export function SkiShareButton({ getUrl }: { getUrl: () => string }) {
     const [copied, setCopied] = useState(false);
@@ -37,8 +37,7 @@ export function SkiShareButton({ getUrl }: { getUrl: () => string }) {
     }
 
     return <div className="ski-share">
-        <button type="button" className="ski-control ski-icon-button" aria-label="Share current view" title="Share current view"
-            onClick={() => { void share(); }}><SkiIcon name="share" /></button>
+        <SkiIconButton icon="share" label="Share current view" onClick={() => { void share(); }} />
         <span className={copied ? 'ski-share-feedback' : 'sr-only'} role="status">{copied ? 'Link copied' : ''}</span>
         <SkiDialog dialog={dialog} id="ski-share" title="Share current view" onClose={() => setManualLink('')}>
             <label htmlFor="ski-share-link" className="block text-sm">Copy this link</label>
