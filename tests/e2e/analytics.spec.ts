@@ -3,6 +3,10 @@ import { readFile } from 'node:fs/promises';
 
 test.skip(process.env.PAGE_RECOVERY !== '1', 'Uses the production bundle and a local tracker substitute.');
 
+test.afterEach(async ({ page }) => {
+    await page.unrouteAll({ behavior: 'wait' });
+});
+
 type AnalyticsPayload = { name: string; url: string; data: Record<string, string> };
 
 async function productionOrigin(page: Page, baseURL: string) {
