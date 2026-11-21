@@ -37,6 +37,15 @@ describe('ski-status visitor records', () => {
             .toContainEqual(expect.objectContaining({ amount: 129, kind: 'maximum' }));
     });
 
+    it('loads single-year visitor records with their published map edition', () => {
+        const corralco = skiResortAccess.get('corralco-resort-de-montana');
+        expect(corralco).toMatchObject({
+            season: '2026',
+            parking: expect.arrayContaining([expect.objectContaining({ name: 'Base 1600 parking' })]),
+            trailMaps: expect.arrayContaining([expect.objectContaining({ season: '2026' })]),
+        });
+    });
+
     it('matches each checked base point to the point in the map catalog', () => {
         const areas = new Map(skiAreas.map(area => [area.id, area]));
         const entrances = [...skiResortAccess].filter(([, { mapPin }]) => mapPin);

@@ -365,6 +365,20 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "castle-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "note": "Two included days with no published Indy blackout dates. The operator reports 25% off additional visits in the same season.",
+      "source": "https://www.indyskipass.com/our-resorts/castle-mountain-resort",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "catamount-mountain-resort",
       "products": [
         "indy-base",
@@ -585,6 +599,20 @@
       "reservation": "check",
       "note": "The issuer lists no blackout dates. Check the resort for current ticket redemption instructions.",
       "source": "https://www.indyskipass.com/our-resorts/jay-peak-resort",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "les-7-laux",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "note": "Two included days. Indy lists the resort for 2026/27 and publishes no blackout dates. Confirm local ticket-window details before travel.",
+      "source": "https://www.indyskipass.com/our-resorts/les-7-laux",
       "checkedOn": "2026-11-21"
     },
     {

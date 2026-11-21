@@ -40,6 +40,7 @@ const mountainStats = {
     trailCountQualifier: z.literal('lower-bound').optional(),
     downhillKm: z.number().positive().optional(),
     nordicKm: z.number().positive().optional(),
+    nordicKmQualifier: z.literal('lower-bound').optional(),
     baseFt: z.number().optional(),
     summitFt: z.number().optional(),
     verticalFt: amount.optional(),
@@ -190,6 +191,7 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
             throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres, an official pass listing, or a specialty source`);
         }
         if ((area.acresQualifier && area.acres === undefined) || (area.trailCountQualifier && area.trailCount === undefined)
+            || (area.nordicKmQualifier && area.nordicKm === undefined)
             || (area.nightAcresQualifier && area.nightAcres === undefined)) {
             throw new Error(`Lower bound for ${area.id} requires a reported value`);
         }

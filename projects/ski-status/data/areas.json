@@ -1733,7 +1733,16 @@
       }
     },
     "statsUrl": "https://www.bigskyresort.com/mountain-info",
-    "reportUrl": "https://www.bigskyresort.com/current-conditions"
+    "reportUrl": "https://www.bigskyresort.com/current-conditions",
+    "statSources": [
+      {
+        "source": "https://www.bigskyresort.com/mountain-info",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator inventory reports combined trail and lift totals. Base is Madison Base Area. Resort publishes skiable vertical separately from village elevation."
+      }
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "big-snow-american-dream",
@@ -3299,7 +3308,7 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/castle-mountain-resort",
     "reportUrl": "https://www.skicastle.ca/snowreport/",
     "liftCount": 7,
-    "trailCount": 95,
+    "trailCount": 115,
     "verticalFt": 2845,
     "nightSkiing": false,
     "terrainParks": true,
@@ -3310,17 +3319,19 @@
     "summitFt": 7529,
     "statSources": [
       {
-        "source": "https://www.skicastle.ca/stats/",
-        "checkedOn": "2026-11-19",
-        "fields": ["baseFt", "summitFt"]
-      },
-      {
         "source": "https://www.skicastle.ca/wintermaps/",
         "checkedOn": "2026-11-19",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.skicastle.ca/stats/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator lists seven lifts including the carpet, and at least 115 trails across its two mountains. Elevation and vertical are published in meters and feet."
       }
     ],
-    "acres": 3592
+    "acres": 3592,
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "cat-ski-mount-bailey",
@@ -3515,6 +3526,29 @@
     "reportUrl": "https://cervinia.it/impianti/",
     "seasonWindow": "Oct 24, 2026 – May 2, 2027 (planned)",
     "statsUrl": "https://www.cervinia.it/impianti"
+  },
+  {
+    "id": "chapleau-ski-club-nordic",
+    "name": "Chapleau Ski Club Nordic Trails",
+    "aliases": [
+      "Chapleau Cross-Country Ski Trails"
+    ],
+    "country": "CA",
+    "region": "ON",
+    "locality": "Chapleau",
+    "skiing": "cross-country",
+    "website": "https://skiontario.ca/resorts/resort/36/",
+    "statsUrl": "https://skiontario.ca/resorts/resort/36/",
+    "nordicKm": 11,
+    "nordicKmQualifier": "lower-bound",
+    "statSources": [
+      {
+        "source": "https://skiontario.ca/resorts/resort/36/",
+        "checkedOn": "2026-11-21",
+        "fields": ["nordicKm", "nordicKmQualifier"],
+        "note": "Ski Ontario reports more than 11 km of groomed Nordic trails."
+      }
+    ]
   },
   {
     "id": "cherry-peak",
@@ -3890,7 +3924,7 @@
     "website": "https://corralco.com/montana/",
     "statsUrl": "https://resort-de-montana.corralco.com/preventa-invierno/",
     "liftCount": 8,
-    "trailCount": 34,
+    "trailCount": 32,
     "verticalFt": 2854,
     "nightSkiing": false,
     "terrainParks": true,
@@ -3915,8 +3949,8 @@
       {
         "source": "https://corralco.com/montana/",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "acresQualifier"],
-        "note": "The operator's skiable domain includes terrain outside the groomed runs."
+        "fields": ["acres", "acresQualifier", "liftCount", "trailCount"],
+        "note": "The operator gives more than 1,800 hectares of skiable terrain and eight lifts. 1,800 ha is 4,447.9 acres. The resort overview lists 32 trails, and the map lists route labels by activity."
       }
     ],
     "acres": 4447.8,
@@ -4567,7 +4601,7 @@
     "verticalFt": 3120,
     "statsUrl": "https://www.skiutah.com/members/deer-valley/",
     "reportUrl": "https://www.deervalley.com/explore-the-mountain/mountain-report",
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-21",
     "statSources": [
       {
         "source": "https://www.deervalley.com/media-room/110926-ikon-base-pass",
@@ -4930,6 +4964,29 @@
       }
     ],
     "reportCheckedOn": "2026-11-21"
+  },
+  {
+    "id": "dryden-ski-club-nordic",
+    "name": "Dryden Ski Club Nordic Trails",
+    "aliases": [
+      "Dryden XC Trails",
+      "Dryden Ski Club Cross-Country"
+    ],
+    "country": "CA",
+    "region": "ON",
+    "locality": "Dryden",
+    "skiing": "cross-country",
+    "website": "https://www.skidryden.com/cross-country-skiing",
+    "statsUrl": "https://www.skidryden.com/cross-country-skiing",
+    "nordicKm": 20,
+    "statSources": [
+      {
+        "source": "https://www.skidryden.com/cross-country-skiing",
+        "checkedOn": "2026-11-21",
+        "fields": ["nordicKm"],
+        "note": "Club’s approximate 20 km of Nordic trails groomed for classic and skate skiing."
+      }
+    ]
   },
   {
     "id": "dutch-hill-recreation-area",
@@ -6140,9 +6197,9 @@
     "locality": "Hakuba",
     "website": "https://hakuba47.co.jp/en/",
     "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_hakuba47_en",
-    "reportUrl": "https://www.hakubavalley.com/en/weather_en/detail_hakuba47_en/",
+    "reportUrl": "https://hakuba47.co.jp/en/mountain-report/",
     "acres": 79.07372206949292,
-    "liftCount": 7,
+    "liftCount": 6,
     "trailCount": 8,
     "baseFt": 2690,
     "summitFt": 5295,
@@ -6162,6 +6219,12 @@
         "checkedOn": "2026-11-21",
         "fields": ["downhillKm"],
         "note": "Sum of the resort’s listed course lengths and reported course-level mix."
+      },
+      {
+        "source": "https://hakuba47.co.jp/en/mountain-report/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Operating inventory names Line-8 gondola and chairs A, B, C, D and E. The page combines A and B in one row. The count covers Hakuba47 only."
       }
     ],
     "reportCheckedOn": "2026-11-21"
@@ -6257,7 +6320,7 @@
     "locality": "Hakuba",
     "website": "https://www.happo-one.jp/en/",
     "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_happo_en",
-    "reportUrl": "https://www.hakubavalley.com/en/weather_en/detail_happo_en/",
+    "reportUrl": "https://www.happo-one.jp/gelande/condition/",
     "acres": 543.6318392277637,
     "liftCount": 23,
     "trailCount": 16,
@@ -6295,7 +6358,7 @@
     "locality": "Hakuba",
     "website": "https://iwatake-mountain-resort.com/",
     "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_iwatake_en",
-    "reportUrl": "https://www.hakubavalley.com/en/weather_en/detail_iwatake_en/",
+    "reportUrl": "https://iwatake-mountain-resort.com/winter/course_lift",
     "acres": 308.8817268339567,
     "liftCount": 9,
     "trailCount": 13,
@@ -6522,7 +6585,15 @@
       "https://www.skiheavenly.com/the-mountain/about-the-mountain/mountain-info.aspx"
     ],
     "terrainParks": true,
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "statSources": [
+      {
+        "source": "https://www.skiheavenly.com/the-mountain/about-the-mountain/mountain-info",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "acres", "liftCount", "trailCount"],
+        "note": "Operator values apply to the combined California and Nevada ski area."
+      }
+    ]
   },
   {
     "id": "hidden-valley-resort",
@@ -7784,6 +7855,41 @@
     },
     "reportUrl": "https://www.skikendall.com/",
     "reportCheckedOn": "2026-11-21"
+  },
+  {
+    "id": "kenora-nordic-biathlon-club",
+    "name": "Kenora Nordic & Biathlon Club",
+    "aliases": [
+      "Kenora Nordic Trails",
+      "Mount Evergreen Cross-Country"
+    ],
+    "country": "CA",
+    "region": "ON",
+    "locality": "Kenora",
+    "skiing": "cross-country",
+    "website": "https://www.skikenora.ca/cross-country/",
+    "statsUrl": "https://www.skikenora.ca/cross-country/",
+    "nordicKm": 20,
+    "nordicKmQualifier": "lower-bound",
+    "nightSkiing": true,
+    "seasonWindow": "December–March",
+    "statSources": [
+      {
+        "source": "https://www.skikenora.ca/cross-country/about-kenora-nordic-biathlon-club/",
+        "checkedOn": "2026-11-21",
+        "fields": ["nordicKm", "nordicKmQualifier"],
+        "note": "The club reports more than 20 km of Nordic trails."
+      },
+      {
+        "source": "https://www.skikenora.ca/cross-country/",
+        "checkedOn": "2026-11-21",
+        "fields": ["nightSkiing", "seasonWindow"],
+        "note": "The club lights 6 km of trails and gives December through March as its usual ski season."
+      }
+    ],
+    "additionalSources": [
+      "https://www.skikenora.ca/about/"
+    ]
   },
   {
     "id": "keystone-resort",
@@ -10820,7 +10926,7 @@
       }
     ],
     "reportUrl": "https://www.mtbachelor.com/the-mountain/mountain-report/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "mt-baker-ski-area",
@@ -12660,7 +12766,15 @@
         "Expert": 9
       }
     },
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "statSources": [
+      {
+        "source": "https://www.palisadestahoe.com/footer/mountain-statistics",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator combines both sides for acreage, trail and lift counts. The published Olympic Valley elevation and vertical are 6,200 ft, 9,050 ft and 2,850 ft."
+      }
+    ]
   },
   {
     "id": "panorama-mountain-resort",
@@ -12700,7 +12814,8 @@
         "note": "Summit is on Taynton Bowl's Goldie Plateau. The Summit Quad and Village Gondola provide the highest and lowest published terminals."
       }
     ],
-    "reportUrl": "https://www.panoramaresort.com/panorama-today/daily-snow-report"
+    "reportUrl": "https://www.panoramaresort.com/public/panorama-today/daily-snow-report",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "paoli-peaks",
@@ -12744,9 +12859,9 @@
     "locality": "Park City",
     "website": "https://www.parkcitymountain.com/",
     "statsUrl": "https://www.parkcitymountain.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.parkcitymountain.com/the-mountain/mountain-conditions/weather-report.aspx",
+    "reportUrl": "https://www.parkcitymountain.com/the-mountain/mountain-conditions/terrain-and-lift-status",
     "acres": 7300,
-    "liftCount": 41,
+    "liftCount": 42,
     "trailCount": 330,
     "trailCountQualifier": "lower-bound",
     "baseFt": 6800,
@@ -12763,7 +12878,17 @@
     "additionalSources": [
       "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
     ],
-    "terrainParks": true
+    "terrainParks": true,
+    "acresQualifier": "lower-bound",
+    "statSources": [
+      {
+        "source": "https://news.vailresorts.com/the-2026-27-guide-to-a-larger-than-life-winter-at-park-city-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "acresQualifier", "liftCount", "trailCount", "trailCountQualifier"],
+        "note": "The operator gives 42 lifts, more than 7,300 skiable acres, and more than 330 trails for both villages."
+      }
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "pass-powderkeg",
@@ -13042,8 +13167,16 @@
         "checkedOn": "2026-11-21",
         "fields": ["summitFt", "terrainParks"],
         "note": "2054 m is the mountain summit. The highest and lowest lift termini are recorded separately."
+      },
+      {
+        "source": "https://www.perisher.com.au/resort-info/mountain-operations/resort-stats",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Guthega is the lowest documented public ski village at 1,640 m (5,381 ft). Perisher Valley is the main village at 1,720 m."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 5381
   },
   {
     "id": "petzen",
@@ -13585,7 +13718,7 @@
         "note": "Ski Utah's published base elevation. The operator's separate maximum vertical figure extends to the DMI base terminal."
       }
     ],
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-21",
     "baseFt": 6903,
     "statsUrl": "https://www.skiutah.com/members/powder-mountain"
   },
@@ -13957,8 +14090,8 @@
         "note": "Published count of marked runs on the 2023/24 operator trail map."
       }
     ],
-    "reportUrl": "https://www.redresort.com/",
-    "reportCheckedOn": "2026-11-20",
+    "reportUrl": "https://www.redresort.com/report/",
+    "reportCheckedOn": "2026-11-21",
     "trailCount": 119
   },
   {
@@ -14027,7 +14160,8 @@
     },
     "additionalSources": [
       "https://www.revelstokemountainresort.com/site/assets/files/2840/revelstoke-mountain-resort-map-winter-25-26.pdf"
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "rikert-nordic-center",
@@ -15005,11 +15139,18 @@
         "checkedOn": "2026-11-20",
         "fields": ["baseFt"],
         "note": "Village base is 1,609 m."
+      },
+      {
+        "source": "https://www.pgri.us/resorts/silverstar-resort/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Pacific Group Resorts publishes ten lifts for the SilverStar area, with 133 trails."
       }
     ],
     "baseFt": 5279,
     "reportUrl": "https://www.skisilverstar.com/the-mountain/weather-conditions/snow-report-forecast/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "liftCount": 10
   },
   {
     "id": "silverton-mountain",
@@ -15846,8 +15987,8 @@
     "summitFt": 9570,
     "verticalFt": 3254,
     "statsUrl": "https://www.skiutah.com/members/snowbasin/",
-    "reportUrl": "https://www.snowbasin.com/the-mountain/mountain-report/",
-    "reportCheckedOn": "2026-11-20"
+    "reportUrl": "https://www.snowbasin.com/the-mountain/mountain-report",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "snowbird",
@@ -15893,7 +16034,8 @@
     "verticalFt": 4440,
     "statsUrl": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
     "reportUrl": "https://www.aspensnowmass.com/four-mountains/snowmass/lift-status",
-    "seasonWindow": "Nov 26, 2026 – Apr 11, 2027 (planned)"
+    "seasonWindow": "Nov 26, 2026 – Apr 11, 2027 (planned)",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "snowriver-mountain-resort-black-river-basin",
@@ -18186,7 +18328,15 @@
         "Advanced": 53
       }
     },
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "statSources": [
+      {
+        "source": "https://www.vail.com/the-mountain/about-the-mountain/mountain-info.aspx",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "acres", "liftCount", "trailCount"],
+        "note": "Operator statistics cover Vail Front Side, Back Bowls and Blue Sky Basin."
+      }
+    ]
   },
   {
     "id": "val-di-fassa-carezza",
@@ -18648,7 +18798,7 @@
     "locality": "Whistler",
     "website": "https://www.whistlerblackcomb.com/",
     "statsUrl": "https://www.whistlerblackcomb.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.whistlerblackcomb.com/the-mountain/mountain-conditions/snow-and-weather-report.aspx",
+    "reportUrl": "https://www.whistlerblackcomb.com/the-mountain/mountain-conditions/terrain-and-lift-status",
     "acres": 8171,
     "liftCount": 34,
     "trailCount": 200,
@@ -18670,7 +18820,22 @@
       "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2025-2026/20251023_WB_winter-trail_map_001.pdf"
     ],
     "highestLiftTerminalFt": 7497,
-    "terrainParks": true
+    "terrainParks": true,
+    "statSources": [
+      {
+        "source": "https://www.whistlerblackcomb.com/the-mountain/about-the-mountain/mountain-info.aspx",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "acres", "liftCount", "trailCount"],
+        "note": "The operator gives 8,171 acres and 34 lifts for both mountains. Runs are published as 200+."
+      },
+      {
+        "source": "https://trade.whistler.com/about/stats/",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"],
+        "note": "Tourism Whistler publishes 1,609 m (5,280 ft) vertical. Blackcomb Peak elevation describes the physical summit. The operator gives 2,284 m for the highest lift-accessed terrain."
+      }
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "white-grass-ski-touring",
@@ -18893,7 +19058,7 @@
         "note": "Resort event guide includes both T-bars and both conveyors in the lift count."
       }
     ],
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "whitehorse-nordic-centre",
@@ -19008,9 +19173,17 @@
         "checkedOn": "2026-11-20",
         "fields": ["acres", "verticalFt", "baseFt", "summitFt", "highestLiftTerminalFt"],
         "note": "Total skiable terrain. The listed summit is the Summit Chair area; the Raven Chair terminal is higher."
+      },
+      {
+        "source": "https://whitewatermountainresort.com/faq/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount", "trailCount"],
+        "note": "Operator inventory lists four chairs and one handle tow, and 119 runs. The total skiable area includes terrain beyond the in-bounds footprint."
       }
     ],
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-21",
+    "liftCount": 5,
+    "trailCount": 119
   },
   {
     "id": "wild-mountain",

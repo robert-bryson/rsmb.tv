@@ -354,7 +354,17 @@
     column-gap: 0.65rem;
 }
 .ski-result[data-selected] { background: var(--ski-selected); box-shadow: inset 3px 0 var(--ski-link); }
-.ski-result-select { grid-column: 1; justify-self: start; text-align: start; font-weight: 600; overflow-wrap: anywhere; }
+.ski-result-select {
+    grid-column: 1;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    max-inline-size: 100%;
+    text-align: start;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
 .ski-result-select::after { content: ''; position: absolute; inset: 0; }
 .ski-result-sort-stat { grid-area: 1 / 2 / span 2; align-self: start; text-align: end; overflow-wrap: anywhere; }
 .ski-result-sort-stat dt { color: var(--ski-muted); font-size: 0.75rem; }

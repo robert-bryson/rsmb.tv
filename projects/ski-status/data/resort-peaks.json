@@ -1,0 +1,320 @@
+[
+  {
+    "id": "bald-mountain-deer-valley",
+    "name": "Bald Mountain",
+    "coordinates": [
+      -111.480814,
+      40.608874
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1425258",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "deer-valley-resort",
+        "source": "https://www.deervalley.com/-/media/deer-valley/skier-services/maps/DeerValleyWinterTrailMap2627"
+      }
+    ]
+  },
+  {
+    "id": "blackcomb-peak",
+    "name": "Blackcomb Peak",
+    "coordinates": [
+      -122.870833,
+      50.081111
+    ],
+    "locationSource": "https://apps.gov.bc.ca/pub/bcgnws/names/5163.html",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "whistler-blackcomb",
+        "source": "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2025-2026/20251023_WB_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "de-moisy-peak",
+    "name": "De Moisy Peak",
+    "coordinates": [
+      -111.872888,
+      41.187789
+    ],
+    "elevationFt": 9370,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1440295",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "snowbasin-resort",
+        "source": "https://www.snowbasin.com/getmedia/969afd05-b39b-4ecd-b123-6c0669d41d77/Winter-Trail-Map-2025-26-(22-5in-x-12in)-for-Ikon-reduced.pdf"
+      }
+    ]
+  },
+  {
+    "id": "granite-chief-peak",
+    "name": "Granite Chief Peak",
+    "coordinates": [
+      -120.2871,
+      39.198189
+    ],
+    "elevationFt": 9006,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/260740",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "palisades-tahoe",
+        "source": "https://www.palisadestahoe.com/-/media/squaw-alpine/pdfs/trail-maps/2122-palisades-tahoe-winter-trail-maps.pdf"
+      }
+    ]
+  },
+  {
+    "id": "james-peak-powder-mountain",
+    "name": "James Peak",
+    "coordinates": [
+      -111.792781,
+      41.391344
+    ],
+    "elevationFt": 9422,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1442103",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "powder-mountain",
+        "source": "https://images.prismic.io/powdermountain/aTneDXNYClf9oCZT_PM_2526_WinterTrailMap.jpg"
+      }
+    ]
+  },
+  {
+    "id": "jupiter-peak",
+    "name": "Jupiter Peak",
+    "coordinates": [
+      -111.540069,
+      40.613252
+    ],
+    "elevationFt": 10026,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1442256",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "park-city-mountain",
+        "source": "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "kt-22",
+    "name": "KT-22",
+    "coordinates": [
+      -120.241565,
+      39.182929
+    ],
+    "elevationFt": 8070,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/226407",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "palisades-tahoe",
+        "source": "https://www.palisadestahoe.com/-/media/squaw-alpine/pdfs/trail-maps/2122-palisades-tahoe-winter-trail-maps.pdf"
+      }
+    ]
+  },
+  {
+    "id": "lone-mountain-big-sky",
+    "name": "Lone Mountain",
+    "coordinates": [
+      -111.450433,
+      45.278014
+    ],
+    "elevationFt": 11166,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/786481",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "big-sky-resort",
+        "source": "https://cdn.sanity.io/files/8ts88bij/big-sky/b60b44b9f074e91b58345e424f3237dd7f5d60e7.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mammoth-mountain-summit",
+    "name": "Mammoth Mountain",
+    "coordinates": [
+      -119.032634,
+      37.630633
+    ],
+    "elevationFt": 11053,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/263144",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "mammoth-mountain",
+        "source": "https://sc.mammothmountain.com/-/media/project/mammoth/library/pdfs/maps/26-27_mmsa_trailmap_brochure_web.pdf?rev=e44cbca1bfb94399b96059f2901e4b6a"
+      }
+    ]
+  },
+  {
+    "id": "monument-peak-heavenly",
+    "name": "Monument Peak",
+    "coordinates": [
+      -119.897636,
+      38.922835
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/228994",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "heavenly",
+        "source": "https://scene7.vailresorts.com/is/image/vailresorts/20241105_HV_winter-trail_map_001?wid=2927&hei=4000&fit=constrain,1&resMode=sharp2"
+      }
+    ]
+  },
+  {
+    "id": "mount-bachelor",
+    "name": "Mount Bachelor",
+    "coordinates": [
+      -121.688795,
+      43.979374
+    ],
+    "elevationFt": 9065,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1137377",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "mt-bachelor",
+        "source": "https://cms.mtbachelor.com/sites/default/files/2025-11/Winter%20Trail%20Map%20-%2025%3A26.jpg"
+      }
+    ]
+  },
+  {
+    "id": "mount-ogden",
+    "name": "Mount Ogden",
+    "coordinates": [
+      -111.882118,
+      41.199846
+    ],
+    "elevationFt": 9570,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1444058",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "snowbasin-resort",
+        "source": "https://www.snowbasin.com/getmedia/969afd05-b39b-4ecd-b123-6c0669d41d77/Winter-Trail-Map-2025-26-(22-5in-x-12in)-for-Ikon-reduced.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mount-tod",
+    "name": "Mount Tod",
+    "coordinates": [
+      -119.940833,
+      50.916389
+    ],
+    "locationSource": "https://apps.gov.bc.ca/pub/bcgnws/names/20917.html",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "sun-peaks-resort",
+        "source": "https://www.sunpeaksresort.com/sites/default/files/2026-10/SPR-Alpine-Map-2026-27-Web.pdf"
+      }
+    ]
+  },
+  {
+    "id": "murdock-peak",
+    "name": "Murdock Peak",
+    "coordinates": [
+      -111.605033,
+      40.693381
+    ],
+    "elevationFt": 9602,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1443741",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "park-city-mountain",
+        "source": "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "sargents-brundage",
+    "name": "Sargents",
+    "coordinates": [
+      -116.128373,
+      45.021299
+    ],
+    "elevationFt": 7803,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/378314",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "brundage-mountain-resort",
+        "source": "https://brundage.com/content/uploads/2026/11/2025-26_FrontsideMap-2.jpg"
+      }
+    ]
+  },
+  {
+    "id": "scott-peak-alpine",
+    "name": "Scott Peak",
+    "coordinates": [
+      -120.222953,
+      39.157763
+    ],
+    "elevationFt": 8289,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/232731",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "palisades-tahoe",
+        "source": "https://www.palisadestahoe.com/-/media/palisades-tahoe/pdfs/trail-maps/alpine-front-side-trail.pdf?rev=d16a1e2f47a24af8991e4924d5f4f7d2"
+      }
+    ]
+  },
+  {
+    "id": "snowmass-mountain",
+    "name": "Snowmass Mountain",
+    "coordinates": [
+      -107.066414,
+      39.11866
+    ],
+    "elevationFt": 14092,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/175555",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "snowmass",
+        "source": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/2026-2027/2627-trail-maps/2627snowmass-map-layeredfinalweb.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ward-peak",
+    "name": "Ward Peak",
+    "coordinates": [
+      -120.24573,
+      39.147812
+    ],
+    "elevationFt": 8637,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/237232",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "palisades-tahoe",
+        "source": "https://www.palisadestahoe.com/-/media/palisades-tahoe/pdfs/trail-maps/alpine-front-side-trail.pdf?rev=d16a1e2f47a24af8991e4924d5f4f7d2"
+      }
+    ]
+  },
+  {
+    "id": "whistler-mountain",
+    "name": "Whistler Mountain",
+    "coordinates": [
+      -122.956944,
+      50.058889
+    ],
+    "locationSource": "https://apps.gov.bc.ca/pub/bcgnws/names/21096.html",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "whistler-blackcomb",
+        "source": "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2025-2026/20251023_WB_winter-trail_map_001.pdf"
+      }
+    ]
+  }
+]

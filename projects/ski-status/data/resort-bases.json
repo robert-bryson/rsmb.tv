@@ -238,12 +238,12 @@
     },
     "big-sky-resort": {
       "coordinates": [
-        -111.433633,
-        45.278821
+        -111.401163,
+        45.285606
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=d4086b2e9d44022ca27bde811816b5a4fc859c87"
+      "name": "Mountain Village public destination",
+      "source": "https://www.bigskyresort.com/getting-here/parking",
+      "kind": "entrance"
     },
     "big-white-ski-resort": {
       "coordinates": [
@@ -895,21 +895,21 @@
     },
     "hakuba-47": {
       "coordinates": [
-        137.822828,
-        36.679485
+        137.8293073,
+        36.6850518
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=6d8c8a9a4114428e603d1c434b147d1217879f85"
+      "name": "Hakuba47 mountain base shuttle stop",
+      "source": "https://hakuba47.co.jp/en/getting-here",
+      "kind": "entrance"
     },
     "hakuba-cortina": {
       "coordinates": [
-        137.888317,
-        36.777212
+        137.8876045,
+        36.7755471
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=b602362c1e045f1cdc1c5aa731c1ee2224205518"
+      "name": "Hotel Green Plaza Hakuba ski base",
+      "source": "https://www.hgp.co.jp/cortina/ski/",
+      "kind": "entrance"
     },
     "hakuba-goryu": {
       "coordinates": [
@@ -949,12 +949,12 @@
     },
     "hakuba-sanosaka": {
       "coordinates": [
-        137.841805,
-        36.628197
+        137.841677,
+        36.629392
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=ece5006c66d60ddde5df1f6ccf9d2f6a3e8bcb52"
+      "name": "Castor Plaza ski-area entrance",
+      "source": "https://sanosaka.jp/access/",
+      "kind": "entrance"
     },
     "heavenly": {
       "coordinates": [
@@ -1402,8 +1402,8 @@
         -119.037773,
         37.651061
       ],
-      "name": "Main Lodge",
-      "source": "https://www.mammothmountain.com/on-the-mountain/base-lodges",
+      "name": "Mammoth Main Lodge public entrance",
+      "source": "https://www.mammothmountain.com/discover-mammoth/getting-around/parking",
       "kind": "entrance"
     },
     "marble-mountain": {
@@ -1907,7 +1907,7 @@
         40.650824
       ],
       "name": "Mountain Village base",
-      "source": "https://www.parkcitymountain.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
+      "source": "https://www.parkcitymountain.com/explore-the-resort/about-the-resort/getting-here",
       "kind": "entrance"
     },
     "pats-peak": {
@@ -2011,12 +2011,12 @@
     },
     "powder-mountain": {
       "coordinates": [
-        -111.776847,
-        41.383358
+        -111.780685,
+        41.378963
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=e15b214ba75941c2a0150d22cd5e75584bf9c068"
+      "name": "Timberline Lodge public destination",
+      "source": "https://powdermountain.com/getting-to-powder",
+      "kind": "entrance"
     },
     "powder-ridge": {
       "coordinates": [
@@ -2798,7 +2798,7 @@
         50.112753
       ],
       "name": "Whistler Village gondola base",
-      "source": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/getting-here.aspx",
+      "source": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/getting-here",
       "kind": "entrance"
     },
     "white-pine-resort": {

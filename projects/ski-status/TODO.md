@@ -1,13 +1,12 @@
 # ski-status tasks
 
-Use the project guide for procedures and acceptance checks. Find completed work in Git history and dated reviews. [Project guide](readme.md), [Review index](../../docs/README.md#reviews)
+Use the guide for procedures and checks. Find completed work in Git history and dated reviews. [Project guide](readme.md), [Review index](../../docs/README.md#reviews)
 
 ## Release checks
 
 - [ ] Copy the versioned runtime files to the HTTPS mirror. Set `SKI_ASSETS_BASE_URL` in Amplify. Build the candidate revision. [Release assets](readme.md#release-assets)
 - [ ] Run the validator on the hosted preview. Check the terrain checksum, byte ranges, and Heavenly tooltips. Match the report to the candidate revision and Amplify job. [Release checks](readme.md#release-checks)
 - [ ] Run **Sync Ski Status** on `main` with its scoped role. Check the active manifest and its archived predecessor. [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
-- [ ] Verify Indy product rules for the remaining areas. As of November 21, 2026, 59 areas have product rules and 53 cover all four cataloged products. Record exceptions, blackout dates, and reservation rules. [Pass rules](readme.md#pass-access-by-product-and-date), [Batch log](research/data-quality-log.md)
 
 ## Rockies report pilot
 
@@ -15,18 +14,20 @@ Use the project guide for procedures and acceptance checks. Find completed work 
 - [ ] Recheck the Mt. Norquay XML feed. If it responds, compare its counts with the operator's report. [Report sources](readme.md#sources-and-pilot)
 - [ ] Compare **Ski today** with the three operator reports for seven ski days. Verify at least 19 of 21 area days. Record local dates, times, and differences in terrain counts. [Pilot checks](readme.md#conditions-publication)
 
-## Catalog and report gaps
+## Catalog and visitor data
 
-- [ ] Fill the six main comparison fields for the remaining 214 of 527 downhill areas as of November 21, 2026. Start with base elevation, summit elevation, and skiable acres. Record units, scope, source, and check date. [Catalog coverage](readme.md#catalog), [Measurement rules](readme.md#comparable-mountain-statistics)
+- [ ] Complete the largest downhill areas first. Fill the six comparison fields. Record units, scope, source, and check date. [Batch order](.agents/skills/ski-status-data-quality/SKILL.md#choose-a-batch), [Catalog coverage](readme.md#catalog)
 - [ ] Verify official conditions links for areas without a report. Check that each link covers the area. [Catalog](readme.md#catalog)
+- [ ] Verify the remaining Indy product rules. Record exceptions, blackout dates, and reservation rules. [Pass rules](readme.md#pass-access-by-product-and-date), [Batch log](research/data-quality-log.md)
 - [ ] Verify the endpoints of a lift-served descent at Amihari Onsen. Use them to record vertical. [Measurement rules](readme.md#comparable-mountain-statistics)
-- [ ] Review the remaining 462 unresolved North American candidates by region, including 28 in Ontario as of November 21, 2026. Record each decision and source. Update the regional counts. [Candidate log](research/north-america-2026-11-16.csv), [Regional counts](research/north-america-2026-11-16-summary.csv)
-- [ ] Check visitor entrances for areas with no reliable base point. Use operator directions. [Terrain and base review](../../docs/reviews/2026-11-20-ski-status-map-and-resort-data-review.md#terrain-and-base-points)
-- [ ] Find missing resort icons and verify their reuse terms. Check each icon at map and panel sizes. [Resort icon workflow](.agents/skills/ski-status-data-quality/SKILL.md#resort-icons)
-- [ ] Verify more Wikipedia articles or sections for the exact ski area. [Catalog](readme.md#catalog)
-- [ ] Record actual opening and closing dates. Use operator reports to confirm opening-day terrain and breaks in operation. [Season date rules](readme.md#opening-and-closing-dates)
-- [ ] Add current season-to-date totals and past season totals from operator reports. Fill gaps in monthly snowfall and snow depth. Record the measurement site, period, and source for each series. [Snow history](readme.md#season-and-snowfall)
-- [ ] Add missing visitor records for the 2026/27 season. Verify all public lodges, the services at each lodge, and visitor entrances. Check trail maps, parking, shuttles, day tickets, and camera links. [Coverage and sources](readme.md#recurring-data-batches)
+- [ ] Review North American candidates by region. Record each decision and source. Update the regional counts. [Candidate log](research/north-america-2026-11-16.csv), [Regional counts](research/north-america-2026-11-16-summary.csv)
+- [ ] Verify Wikipedia articles for the exact ski area. [Catalog](readme.md#catalog)
+- [ ] Record actual opening and closing dates. Check at least three recent seasons when operators give both dates. Verify opening-day terrain and breaks in operation. [Season date rules](readme.md#opening-and-closing-dates)
+- [ ] Record current and past snowfall totals from operators. Fill gaps in monthly snowfall and snow depth. Give the measurement site, period, and source for each series. [Snow history](readme.md#season-and-snowfall)
+- [ ] Verify visitor entrances and public lodges. Check their services, trail maps, parking, shuttles, day tickets, and cameras. [Visitor data](readme.md#recurring-data-batches), [Base points](../../docs/reviews/2026-11-20-ski-status-map-and-resort-data-review.md#terrain-and-base-points)
+- [ ] Verify roads from the main highways to each public base. Add spur roads, named passes, and official road status links. [Road data](readme.md#access-routes-and-webcams)
+- [ ] Check official trail maps for named summits. Verify the summit locations before you add markers. [Peak records](readme.md#mountain-peaks)
+- [ ] Find missing resort icons. Check permission to use each file. Test the icon on the map, in Results, and in details. [Icon procedure](.agents/skills/ski-status-data-quality/SKILL.md#resort-icons)
 
 ## Planned features
 
@@ -36,7 +37,7 @@ Use the project guide for procedures and acceptance checks. Find completed work 
 - [ ] Show straight-line distance, driving distance, and drive time from a selected origin. [Access routes](readme.md#access-routes-and-webcams)
 - [ ] Add verified lodge locations to the map. Show the services at each location. [Visitor information](readme.md#inspect-and-compare-areas)
 - [ ] Show published run access, length, maximum slope, and grooming status. [Terrain guide](readme.md#runs-and-lifts-at-resort-zoom)
-- [ ] Match resort entrances to access roads. Show official winter closures and restrictions. [Access routes](readme.md#access-routes-and-webcams)
+- [ ] Show verified winter approaches in resort details and on the map. Show each named pass once. Link to official road status and winter restrictions. [Access routes](readme.md#access-routes-and-webcams)
 - [ ] Link to agency cameras. Test a map layer for nearby cameras. [Webcams](readme.md#access-routes-and-webcams)
 - [ ] Store visited areas on the device. Add a filter and a backup format. [Visited areas](readme.md#visited-areas)
 
@@ -57,3 +58,5 @@ Use the project guide for procedures and acceptance checks. Find completed work 
 - [ ] Check sources for official weather warnings, avalanche forecasts, and avalanche terrain. Verify their coverage and reuse terms.
 - [ ] Evaluate fitness app imports for ski tracks, trip totals, and records of runs and resorts visited. Review StatsHunters as a reference.
 - [ ] Check if ski-day GPS tracks can identify runs and lifts. Measure the accuracy of estimates for lift queues and ride times.
+- [ ] Verify ski-area boundaries and marked backcountry gates with operators or land managers. Record the source and check date. [Terrain audit](readme.md#openskidata-audit)
+- [ ] Trace terrain errors to their source. Submit verified OpenStreetMap corrections when the source permits use. Check each correction in the next OpenSkiData build. [Terrain audit](readme.md#openskidata-audit)

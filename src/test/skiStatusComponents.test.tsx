@@ -9,7 +9,7 @@ import { SkiShareButton } from '../features/ski-status/SkiShareButton';
 import { defaultSkiColumns } from '../features/ski-status/browse';
 import { skiAreas } from '../features/ski-status/catalog';
 import type { ResortReport } from '../features/ski-status/conditions';
-import { skiSnowHistory } from '../features/ski-status/resortDetailsData';
+import { skiResortIcon, skiSnowHistory } from '../features/ski-status/resortDetailsData';
 
 const listDefaults = {
     conditions: { reports: new Map(), forecasts: new Map(), now: 0 }, statuses: new Map(),
@@ -28,6 +28,32 @@ describe('ski-status results and comparison', () => {
         fireEvent.click(washington);
         expect(onSelect).toHaveBeenCalledWith(areas.find(area => area.region === 'WA')?.id, washington);
         expect(list.getAllByText('Skiing status unknown')).toHaveLength(2);
+    });
+
+    it('shows resort icons in sorted results and falls back through the available files', () => {
+        const alta = skiAreas.find(area => area.id === 'alta')!;
+        const hurricane = skiAreas.find(area => area.id === 'hurricane-ridge')!;
+        const mapIcon = '/archive/alta/map-40.png';
+        const detailsIcon = '/archive/alta/details-84.png';
+        const archive = new Map([[alta.id, { mapIcon, detailsIcon }]]);
+        render(<SkiAreaList {...listDefaults} areas={[hurricane, alta]} archive={archive} colors="pass"
+            sort={{ key: 'typicalClosing', direction: 'asc' }} />);
+
+        const button = screen.getByRole('button', { name: alta.name });
+        const icon = () => button.querySelector('img');
+        expect(icon()).toHaveAttribute('src', mapIcon);
+        expect(icon()).toHaveAttribute('alt', '');
+        expect(icon()).toHaveAttribute('loading', 'lazy');
+        expect(screen.getByRole('button', { name: hurricane.name }).querySelector('img')).toBeNull();
+
+        fireEvent.error(icon()!);
+        expect(icon()).toHaveAttribute('src', detailsIcon);
+        fireEvent.error(icon()!);
+        expect(icon()).toHaveAttribute('src', skiResortIcon(alta.id));
+        fireEvent.error(icon()!);
+        expect(icon()).toBeNull();
+        expect(button).toHaveAccessibleName(alta.name);
+        expect(button).toHaveAccessibleDescription(/Typical closing Apr 23/);
     });
 
     it.each([
@@ -215,6 +241,7 @@ describe('ski-status area details', () => {
         expect(season.getByText('May 24')).toHaveAttribute('datetime', '2027-05-24');
         expect(season.getByText('Season 2026/27')).toBeVisible();
         expect(season.getByText('Typical season').parentElement).toHaveTextContent('Nov 8 – May 19');
+        expect(season.getByText('Typical season length').parentElement).toHaveTextContent('193 days');
         fireEvent.click(season.getByText('Monthly values', { exact: true }));
         const snowfall = within(season.getByRole('table', { name: 'Average monthly snowfall (cm)' }));
         expect(snowfall.getByRole('row', { name: /November, typical season/ })).toHaveTextContent('137 cm');

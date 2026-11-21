@@ -5,7 +5,7 @@ import { passNames, passSeason, type SkiArea } from './catalog';
 import { areaForecast, isFreshReport, localReportTime, reportAgeHours, reportAgeLabel, skiDayStatus, terrainStatusText, type Conditions, type ResortReport } from './conditions';
 import { localSkiDate } from './localSkiDate';
 import { accessLabels, evaluatePass, type PassProduct } from './passRules';
-import { skiResortIcon } from './resortDetailsData';
+import { skiResortIconCandidates } from './resortDetailsData';
 import { SkiIconButton } from './SkiIcon';
 import { SkiLocation } from './SkiLocation';
 import { SkiPassIcon } from './SkiPassIcon';
@@ -33,7 +33,7 @@ const statisticLabels = new Map<string, string>([
     ...detailColumns.map(({ key, label }) => [key, label] as const),
     ['seasonWindow', seasonLabel], ['grades', difficultyLabel],
     ['acresQualifier', 'Skiable area lower bound'], ['trailCountQualifier', 'Trail count lower bound'],
-    ['nightAcresQualifier', 'Night area lower bound'],
+    ['nightAcresQualifier', 'Night area lower bound'], ['nordicKmQualifier', 'Nordic trail length lower bound'],
 ]);
 
 function detailSourceLinks(area: SkiArea) {
@@ -177,7 +177,7 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
     return <section id="ski-area-details" ref={sectionRef} tabIndex={-1} aria-labelledby="ski-area-name" className="ski-details">
         <div className="ski-details-heading">
             <div className="ski-resort-identity">
-                <SkiAssetIcon key={area.id} urls={[archive?.detailsIcon, archive?.mapIcon, skiResortIcon(area.id)]}
+                <SkiAssetIcon key={area.id} urls={skiResortIconCandidates(area.id, archive, 'detailsIcon').urls}
                     className="ski-resort-icon" size={42} />
                 <div>
                     <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>

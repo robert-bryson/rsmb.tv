@@ -70,20 +70,25 @@ type CompletedSeason = { season: string; opensOn: string; closesOn: string };
 type SeasonWindow = {
     opensIn: number; closesIn: number; opening: string; closing: string; openingRank: number; closingRank: number;
     spansYears: boolean; closingYearOffset: number;
+    lengthDays?: number;
 };
 type TypicalSeason = SeasonWindow & {
     evidence: { count: number; latest: string } | { source: string; note?: string };
 };
 type AreaSeasons = { actual: ActualSeason[]; planned: PlannedSeason[]; typical?: TypicalSeason };
 
+function roundedMedian(values: number[]) {
+    values.sort((first, second) => first - second);
+    const middle = Math.floor(values.length / 2);
+    return values.length % 2 ? values[middle] : Math.round((values[middle - 1] + values[middle]) / 2);
+}
+
 function medianDate(rows: readonly CompletedSeason[], key: 'opensOn' | 'closesOn') {
-    const ordinals = rows.map(row => {
+    const median = roundedMedian(rows.map(row => {
         const [year, month, date] = row[key].split('-').map(Number);
         const ordinal = (Date.UTC(2000, month - 1, date) - referenceYear) / day;
         return (year - Number(row.season.slice(0, 4))) * daysInReferenceYear + ordinal;
-    }).sort((first, second) => first - second);
-    const middle = Math.floor(ordinals.length / 2);
-    const median = ordinals.length % 2 ? ordinals[middle] : Math.round((ordinals[middle - 1] + ordinals[middle]) / 2);
+    }));
     const date = new Date(referenceYear + (median % daysInReferenceYear) * day);
     return { month: date.getUTCMonth() + 1, label: monthDay.format(date), rank: date.getUTCMonth() * 32 + date.getUTCDate(),
         yearOffset: Math.floor(median / daysInReferenceYear) };
@@ -98,10 +103,13 @@ function typicalSeason(actual: readonly ActualSeason[], recurring: RecurringSeas
     if (recent.length >= 3) {
         const opening = medianDate(recent, 'opensOn');
         const closing = medianDate(recent, 'closesOn');
+        const lengthDays = roundedMedian(recent.map(({ opensOn, closesOn }) =>
+            (Date.parse(`${closesOn}T00:00:00Z`) - Date.parse(`${opensOn}T00:00:00Z`)) / day + 1));
         return {
             opensIn: opening.month, opening: opening.label, openingRank: opening.rank,
             closesIn: closing.month, closing: closing.label, closingRank: closing.rank,
             closingYearOffset: closing.yearOffset, spansYears: recent[0].season.includes('/'),
+            lengthDays,
             evidence: { count: recent.length, latest: recent[0].season },
         };
     }

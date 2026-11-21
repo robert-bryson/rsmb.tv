@@ -105,6 +105,7 @@ export const conditionColumns = [
 const seasonColumns = [
     { key: 'typicalOpening', label: 'Typical opening' },
     { key: 'typicalClosing', label: 'Typical closing' },
+    { key: 'typicalSeasonLengthDays', label: 'Typical season length' },
     { key: 'opensOn', label: 'Planned opening' },
     { key: 'plannedClosing', label: 'Planned closing' },
     { key: 'seasonWindow', label: 'Published season window' },
@@ -263,6 +264,7 @@ function skiStat(area: SkiArea, key: ColumnKey, conditions?: Conditions) {
         const typical = typicalSkiSeason(area);
         return key === 'typicalOpening' ? typical?.openingRank : typical?.closingRank;
     }
+    if (key === 'typicalSeasonLengthDays') return typicalSkiSeason(area)?.lengthDays;
     return area[key];
 }
 
@@ -282,10 +284,14 @@ const integer = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 const decimal = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
 const metersPerFoot = 0.3048;
 
+function formatDecimal(value: number, lowerBound: boolean) {
+    const shown = lowerBound ? Math.floor(value * 10) / 10 : value;
+    return `${decimal.format(shown)}${lowerBound ? '+' : ''}`;
+}
+
 export function formatArea(acres: number, units: SkiUnits, lowerBound = false) {
     const value = units === 'metric' ? acres * 0.40468564224 : acres;
-    const shown = lowerBound ? Math.floor(value * 10) / 10 : value;
-    return `${decimal.format(shown)}${lowerBound ? '+' : ''} ${units === 'metric' ? 'ha' : 'ac'}`;
+    return `${formatDecimal(value, lowerBound)} ${units === 'metric' ? 'ha' : 'ac'}`;
 }
 
 export function formatElevation(feet: number, units: SkiUnits) {
@@ -304,6 +310,10 @@ export function formatSnowDepth(cm: number | [number, number], units: SkiUnits) 
 
 export function formatTemperature(celsius: number, units: SkiUnits) {
     return units === 'metric' ? `${integer.format(celsius)} °C` : `${integer.format(celsius * 1.8 + 32)} °F`;
+}
+
+export function formatSeasonLength(days: number) {
+    return `${integer.format(days)} ${days === 1 ? 'day' : 'days'}`;
 }
 
 function formatReportedTerrain(value: string, report: ResortReport | undefined, now: number, timeZone?: string) {
@@ -334,6 +344,7 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, co
     if (value === undefined) return;
     if (typeof value === 'string') return value;
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+    if (key === 'typicalSeasonLengthDays') return formatSeasonLength(value);
     if (key === 'acres') return formatArea(value, units, area.acresQualifier === 'lower-bound');
     if (key === 'nightAcres') return formatArea(value, units, area.nightAcresQualifier === 'lower-bound');
     if (key === 'guidedTerrainAcres') return formatArea(value, units);
@@ -346,7 +357,9 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, co
     if (key.endsWith('Ft')) return formatElevation(value, units);
     if (key.endsWith('M')) return formatElevation(value / metersPerFoot, units);
     if (key.endsWith('Km')) {
-        return units === 'metric' ? `${decimal.format(value)} km` : `${decimal.format(value / 1.609344)} mi`;
+        const distance = units === 'metric' ? value : value / 1.609344;
+        const lowerBound = key === 'nordicKm' && area.nordicKmQualifier === 'lower-bound';
+        return `${formatDecimal(distance, lowerBound)} ${units === 'metric' ? 'km' : 'mi'}`;
     }
     return `${integer.format(value)}${key === 'trailCount' && area.trailCountQualifier ? '+' : ''}`;
 }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { skiAreas } from '../features/ski-status/catalog';
-import { readResortDetails, skiAreaExternalLinks, skiResortIcon, skiSnowHistory } from '../features/ski-status/resortDetailsData';
+import { readResortDetails, skiAreaExternalLinks, skiResortIcon, skiResortIconCandidates, skiSnowHistory } from '../features/ski-status/resortDetailsData';
+import { readResortPeaks, resortPeaks } from '../features/ski-status/resortPeaks';
 
 const source = 'https://example.test/measurements';
 const iconSources = { 'google-maps': source, wikipedia: source };
@@ -8,8 +9,39 @@ const assets = { './resort-icons/google-maps.png': '/maps.png', './resort-icons/
 const areas = [{ id: 'resort' }];
 const links = { wikipediaTitles: {}, iconSources };
 const measurement = { label: 'Snow course', source };
+const peak = {
+    id: 'example-peak', name: 'Example Peak', coordinates: [-111, 45], elevationFt: 7000,
+    locationSource: source, checkedOn: '2026-11-21', trailMaps: [{ areaId: 'resort', source }],
+};
 
 describe('ski-status resort data', () => {
+    it('uses each resort icon URL once and prefers the requested size', () => {
+        const runtime = skiResortIcon('alta')!;
+        const detailsIcon = '/archive/alta/details-84.png';
+        const archive = { mapIcon: runtime, detailsIcon };
+        expect(skiResortIconCandidates('alta', archive)).toEqual({ urls: [runtime, detailsIcon], runtime });
+        expect(skiResortIconCandidates('alta', archive, 'detailsIcon')).toEqual({ urls: [detailsIcon, runtime], runtime });
+        expect(skiResortIconCandidates('hurricane-ridge')).toEqual({ urls: [], runtime: undefined });
+    });
+
+    it('keeps one summit for multiple resorts with their own maps', () => {
+        const shared = { ...peak, trailMaps: [...peak.trailMaps, { areaId: 'other-resort', source }] };
+        expect(readResortPeaks([shared], [...areas, { id: 'other-resort' }])).toEqual([shared]);
+        expect(() => readResortPeaks([shared], areas)).toThrow('Peak example-peak has no ski area other-resort');
+        expect(() => readResortPeaks([peak, peak], areas)).toThrow('Duplicate peak example-peak');
+        expect(() => readResortPeaks([{ ...peak, trailMaps: [...peak.trailMaps, ...peak.trailMaps] }], areas))
+            .toThrow('Duplicate trail map for example-peak and resort');
+    });
+
+    it('validates the summit point and the map and location sources', () => {
+        expect(() => readResortPeaks([{ ...peak, coordinates: [45, -111] }], areas)).toThrow();
+        expect(() => readResortPeaks([{ ...peak, locationSource: 'http://example.test' }], areas)).toThrow();
+        expect(() => readResortPeaks([{ ...peak, trailMaps: [] }], areas)).toThrow();
+        expect(resortPeaks.find(({ id }) => id === 'sargents-brundage')).toMatchObject({
+            name: 'Sargents', elevationFt: 7803, trailMaps: [{ areaId: 'brundage-mountain-resort' }],
+        });
+    });
+
     it('uses the published skiable vertical at Mt. Norquay', () => {
         const norquay = skiAreas.find(area => area.id === 'mt-norquay');
         expect(norquay?.verticalFt).toBe(1650);

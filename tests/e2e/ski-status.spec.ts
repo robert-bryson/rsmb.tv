@@ -6,6 +6,7 @@ import type { GeoJSONSource, Map as MapLibreMap, MapSourceDataEvent, StyleSpecif
 import sharp from 'sharp';
 import locations from '../../projects/ski-status/data/locations.json' with { type: 'json' };
 import resortBases from '../../projects/ski-status/data/resort-bases.json' with { type: 'json' };
+import resortPeaks from '../../projects/ski-status/data/resort-peaks.json' with { type: 'json' };
 import { SKI_TERRAIN_ROUTE, skiTerrainArchivePath, verifyRenderedSkiTerrain, verifySkiTerrainResponse } from '../../scripts/release-ski-terrain.ts';
 import { hasSkiAsset, readSkiAsset, skiAssetsRoot, skiTerrainAsset } from '../../scripts/ski-asset-files.ts';
 import { skiArchiveAssetUrl, skiArchiveIndexUrl, type SkiArchiveAsset } from '../../shared/skiArchive.ts';
@@ -19,6 +20,8 @@ const path = '/projects/ski-status/map';
 const styleUrl = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json*';
 const hasTerrain = hasSkiAsset(skiTerrainAsset);
 const hasIcons = hasSkiAsset('runtime/pass-icons/ikon.png');
+const trailMapPeakLayer = 'ski-trail-map-peaks';
+const nearbyPeakLayer = 'ski-nearby-peaks';
 let fixtureIcon: Promise<Buffer> | undefined;
 let fixtureTerrain: Promise<Buffer> | undefined;
 const baseStyle: StyleSpecification = {
@@ -644,10 +647,17 @@ test('shows historical season evidence and filters a typical season by month', a
     await page.goto(`${path}?view=table&q=killington&seasonMonth=11`);
     const table = page.getByRole('region', { name: 'Ski area comparison table' });
     const killington = table.getByRole('button', { name: 'Killington Resort', exact: true });
-    await inDialog(page, 'Columns', dialog => dialog.getByRole('checkbox', { name: 'Show Typical opening column', exact: true }).check());
+    await inDialog(page, 'Columns', async dialog => {
+        await dialog.getByRole('checkbox', { name: 'Show Typical opening column', exact: true }).check();
+        await dialog.getByRole('checkbox', { name: 'Show Typical season length column', exact: true }).check();
+    });
     await expect(table.getByRole('cell', { name: 'Nov 12', exact: true })).toBeVisible();
+    await expect(table.getByRole('cell', { name: '197 days', exact: true })).toBeVisible();
+    await table.getByRole('button', { name: 'Typical season length', exact: true }).click();
+    await expect(table.getByRole('columnheader', { name: 'Typical season length', exact: true })).toHaveAttribute('aria-sort', 'descending');
     await killington.click();
     const seasons = page.getByRole('region', { name: 'Season dates' });
+    await expect(seasons).toContainText('Typical season length 197 days');
     await expect(seasons).toContainText('Median of 5 seasons through 2025/26');
     await seasons.getByText('Opening and closing history', { exact: true }).click();
     await expect(seasons.getByRole('row', { name: /2025\/26/ })).toContainText('2026-05-25');
@@ -788,7 +798,7 @@ test('shows batch visitor records in resort details on a narrow screen', async (
         .toHaveAttribute('href', 'https://www.youtube.com/watch?v=KFjl8wPJvyg');
 });
 
-test('uses NAS icon previews and trail maps in local resort details', async ({ page }) => {
+test('uses NAS icon previews in results and details and opens archived trail maps', async ({ page }) => {
     await prepare(page);
     const fields = {
         areaId: 'big-moose', checkedOn: '2026-11-21', sha256: 'a'.repeat(64), byteCount: 10,
@@ -826,7 +836,10 @@ test('uses NAS icon previews and trail maps in local resort details', async ({ p
         return Array.from(data.slice(start, start + 4));
     })).toEqual([85, 160, 208, 255]);
     await page.getByRole('searchbox', { name: 'Search areas' }).fill('Big Moose');
-    await result(page, 'Big Moose').click();
+    const resultIcon = result(page, 'Big Moose').locator('img');
+    await expect(resultIcon).toHaveAttribute('src', skiArchiveAssetUrl(mapIcon));
+    await expect.poll(() => resultIcon.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(40);
+    await resultIcon.click();
     const details = resort(page, 'Big Moose');
     const logo = details.locator('.ski-resort-icon');
     await expect(logo).toHaveAttribute('src', skiArchiveAssetUrl(detailsIcon));
@@ -1843,7 +1856,7 @@ test('shows the sorted field with the map metric and carries sorting into Compar
     await page.reload();
     await list.getByRole('combobox', { name: 'Sort results' }).selectOption('liftCount');
     await expect(list.locator('li').first()).toContainText('Park City Mountain');
-    await expect(list.locator('li').first().locator('dd')).toHaveText('41');
+    await expect(list.locator('li').first().locator('dd')).toHaveText('42');
     await list.getByRole('combobox', { name: 'Sort results' }).selectOption('summitFt');
     await expect(list.locator('li').first()).toContainText('Alta Ski Area');
     await expect(list.locator('li').first().locator('dd')).toHaveText('11,068 ft');
@@ -2009,7 +2022,7 @@ test('fades hillshade in at regional zoom after the visible tiles finish loading
     await renderer.dispose();
 });
 
-test('keeps snow depth optional and fades NOAA tiles over the covered region', async ({ page }) => {
+test('fades optional snow depth tiles out as the resort terrain appears', async ({ page }) => {
     await prepare(page);
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     const requests: URL[] = [];
@@ -2055,7 +2068,7 @@ test('keeps snow depth optional and fades NOAA tiles over the covered region', a
     await expect.poll(opacity).toBeCloseTo(0.26, 3);
     await expect.poll(() => renderer.evaluate(map => map.getPaintProperty('ski-snow-depth', 'raster-opacity-transition')))
         .toEqual({ duration: 280 });
-    for (const [zoom, expected] of [[4.5, 0.05], [7, 0.39], [10, 0.52], [13, 0.3]]) {
+    for (const [zoom, expected] of [[4.5, 0.05], [7, 0.39], [9, 0.52], [10, 0.34], [11, 0.16], [13, 0.02], [14, 0], [8, 0.52]]) {
         await renderer.evaluate((map, zoom) => { map.jumpTo({ zoom }); }, zoom);
         await expect.poll(opacity).toBeCloseTo(expected, 3);
     }
@@ -2081,6 +2094,10 @@ test('keeps the basemap available when snow depth fails and can load it again', 
     await setLayer(page, 'Snow depth', true);
     await expect(error).toBeVisible();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 14 }); });
+    await expect(error).toBeHidden();
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 6 }); });
+    await expect(error).toBeVisible();
     await setLayer(page, 'Snow depth', false);
     await expect(error).toBeHidden();
     unavailable = false;
@@ -2103,6 +2120,109 @@ test('fades collision-managed resort names in as users zoom closer', async ({ pa
         await expect.poll(() => evaluatedPaint(renderer, 'ski-area-names', 'text-opacity')).toBeCloseTo(expected, 3);
     }
     expect(await renderer.evaluate(map => map.getLayoutProperty('ski-area-names', 'text-allow-overlap'))).toBeUndefined();
+    await renderer.dispose();
+});
+
+test('fades peak icons in before their labels and prioritizes trail-map peaks', async ({ page }) => {
+    const tileUrl = 'https://ski-peaks.test/tiles/';
+    await prepare(page, {
+        ...baseStyle,
+        sources: { protomaps: { type: 'vector', tiles: [`${tileUrl}{z}/{x}/{y}.mvt`], minzoom: 8, maxzoom: 8 } },
+        layers: [...baseStyle.layers, { id: 'provider-roads', type: 'line', source: 'protomaps', 'source-layer': 'roads' }],
+    });
+    // This tile contains a nearby peak, a distant peak, a duplicate of Sargents, an unnamed peak, and a saddle.
+    const tile = Buffer.from('GrwBeAIKBHBvaXMogCAaBGtpbmQaBG5hbWUiBgoEcGVhayIICgZzYWRkbGUiCgoIRmFyIFBlYWsiDQoLTmVhcmJ5IFBlYWsiDwoN'
+        + 'TmVhcmJ5IFNhZGRsZSISChBTYXJnZW50IE1vdW50YWluEg8YARIEAAABAyIFCfgZzgMSDxgBEgQAAAEFIgUJ8BqiBBINGAESAgAAIgUJyBq+BRIP'
+        + 'GAESBAABAQQiBQnsG4gEEg8YARIEAAABAiIFCa4klAM=', 'base64');
+    await page.route(`${tileUrl}**`, route => route.fulfill({
+        headers: { 'access-control-allow-origin': '*' },
+        body: new URL(route.request().url()).pathname === '/tiles/8/45/92.mvt' ? tile : Buffer.alloc(0),
+    }));
+    const renderer = await captureMap(page);
+    const center = resortPeaks.find(({ id }) => id === 'sargents-brundage')!.coordinates as [number, number];
+    const zoomTo = (zoom: number) => renderer.evaluate((map, camera) => { map.jumpTo(camera); }, { center, zoom });
+    const peakNames = (layer: string) => renderer.evaluate((map, layer) => [...new Set(map.queryRenderedFeatures({ layers: [layer] })
+        .map(feature => feature.properties.name))].sort(), layer);
+    const peakIconSize = (layer: string) => renderer.evaluate((map, layer) => {
+        const layout = map.getLayer(layer)?.layout as { get: (key: string) => { constantOr: (fallback: number) => number } } | undefined;
+        return layout?.get('icon-size').constantOr(0);
+    }, layer);
+    const peakHasLabel = (layer: string, coordinates: [number, number], name: string) => renderer.evaluate((map, { layer, coordinates, name }) => {
+        const { x, y } = map.project(coordinates);
+        // The label sits below the triangle. Query past the icon's hit area.
+        return map.queryRenderedFeatures([[x - 18, y + 12], [x + 18, y + 32]], { layers: [layer] })
+            .some(feature => feature.properties.name === name);
+    }, { layer, coordinates, name });
+
+    await zoomTo(7.5);
+    expect(await peakNames(trailMapPeakLayer)).toEqual([]);
+    for (const peak of [
+        { layer: trailMapPeakLayer, coordinates: center, name: 'Sargents', labelZoom: 10, size: 1 },
+        { layer: nearbyPeakLayer, coordinates: [-116.149, 45.033] as [number, number], name: 'Nearby Peak', labelZoom: 12, size: 0.78 },
+    ]) {
+        for (const [offset, scale, opacity] of [[-2, 0.55, 0.28], [-1, 0.78, 0.65], [0, 1, 0.85]]) {
+            await zoomTo(peak.labelZoom + offset);
+            await expect.poll(() => peakNames(peak.layer)).toContain(peak.name);
+            await expect.poll(() => peakIconSize(peak.layer)).toBeCloseTo(scale * peak.size, 3);
+            await expect.poll(() => evaluatedPaint(renderer, peak.layer, 'icon-opacity')).toBeCloseTo(opacity, 3);
+            await expect.poll(() => peakHasLabel(peak.layer, peak.coordinates, peak.name)).toBe(offset === 0);
+        }
+    }
+    await zoomTo(13);
+    await expect.poll(() => peakNames(nearbyPeakLayer)).toEqual(['Nearby Peak']);
+    const position = await renderer.evaluate((map, point) => map.project(point), center);
+    const canvas = page.getByTestId('ski-status-map').locator('canvas');
+    await canvas.hover({ position });
+    await expect(page.getByText('Sargents · 7,803 ft · Trail map', { exact: true })).toBeVisible();
+
+    await setLayer(page, 'Mountain peaks', false);
+    await expect(page).toHaveURL(/(?:\?|&)peaks=0(?:&|$)/);
+    expect(await renderer.evaluate(map => Boolean(map.getSource('ski-resort-peaks')))).toBe(false);
+    await expect(page.getByText('Sargents · 7,803 ft · Trail map', { exact: true })).toBeHidden();
+    await setLayer(page, 'Mountain peaks', true);
+    await expect.poll(() => peakNames(trailMapPeakLayer)).toEqual(['Sargents']);
+    await expect.poll(() => peakNames(nearbyPeakLayer)).toEqual(['Nearby Peak']);
+
+    await renderer.evaluate(map => { map.jumpTo({ center: [-115.92, 45.04] }); });
+    await expect.poll(() => renderer.evaluate(map => map.querySourceFeatures('protomaps', { sourceLayer: 'pois' })
+        .some(feature => feature.properties.name === 'Far Peak') && map.loaded())).toBe(true);
+    expect(await peakNames(nearbyPeakLayer)).toEqual([]);
+    await renderer.dispose();
+});
+
+test('keeps trail-map peaks on the fallback background and after a retry', async ({ page }) => {
+    await prepare(page, null);
+    const renderer = await captureMap(page, { state: 'degraded' });
+    await renderer.evaluate(map => { map.jumpTo({ center: [-111.54, 40.613], zoom: 13 }); });
+    const showsJupiter = () => renderer.evaluate((map, layer) => map.queryRenderedFeatures({ layers: [layer] })
+        .some(feature => feature.properties.name === 'Jupiter Peak'), trailMapPeakLayer);
+    await expect.poll(showsJupiter).toBe(true);
+    expect(await renderer.evaluate(map => map.getGlyphs())).toBeNull();
+    await page.route(styleUrl, route => route.fulfill({ json: baseStyle, headers: { 'access-control-allow-origin': '*' } }));
+    await page.getByRole('button', { name: 'Retry background', exact: true }).click();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    await expect.poll(showsJupiter).toBe(true);
+    await renderer.dispose();
+});
+
+test('keeps the basemap and trail-map peaks when the provider only supplies roads', async ({ page }) => {
+    const tileUrl = 'https://ski-roads-only.test/';
+    await prepare(page, {
+        ...baseStyle,
+        sources: { provider: { type: 'vector', url: `${tileUrl}tiles.json` } },
+        layers: [...baseStyle.layers, { id: 'provider-roads', type: 'line', source: 'provider', 'source-layer': 'roads' }],
+    });
+    const headers = { 'access-control-allow-origin': '*' };
+    await page.route(`${tileUrl}tiles/**`, route => route.fulfill({ headers, body: Buffer.alloc(0) }));
+    await page.route(`${tileUrl}tiles.json`, route => route.fulfill({ headers, json: {
+        tilejson: '3.0.0', tiles: [`${tileUrl}tiles/{z}/{x}/{y}.mvt`],
+        vector_layers: [{ id: 'roads', fields: {} }],
+    } }));
+    const renderer = await captureMap(page);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-111.54, 40.613], zoom: 12 }); });
+    await expect.poll(() => renderer.evaluate((map, layer) => map.queryRenderedFeatures({ layers: [layer] })
+        .some(feature => feature.properties.name === 'Jupiter Peak'), trailMapPeakLayer)).toBe(true);
+    expect(await renderer.evaluate((map, layer) => Boolean(map.getLayer(layer)), nearbyPeakLayer)).toBe(false);
     await renderer.dispose();
 });
 

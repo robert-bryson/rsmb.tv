@@ -6,6 +6,7 @@ import { skiAssetUrl, skiRuntimeIconFile } from '../../../shared/skiAssets';
 import { formatSkiLocation } from './skiGeography';
 import { skiAreas, type SkiArea, type Skiing } from './catalog';
 import { httpsUrl, skiId } from './schemas';
+import type { SkiArchiveResort } from './useSkiArchive';
 
 const label = z.string().trim().min(1);
 const month = z.string().regex(/^(?:[1-9]|1[0-2])$/);
@@ -82,6 +83,13 @@ export const skiSnowHistory: ReadonlyMap<string, z.infer<typeof snowProfiles>[st
 
 export function skiResortIcon(id: string) {
     return icons.get(id);
+}
+
+export function skiResortIconCandidates(id: string, archive?: SkiArchiveResort, preferred: 'mapIcon' | 'detailsIcon' = 'mapIcon') {
+    const runtime = skiResortIcon(id);
+    const alternate = preferred === 'mapIcon' ? 'detailsIcon' : 'mapIcon';
+    const urls = [archive?.[preferred], archive?.[alternate], runtime].filter(url => url !== undefined);
+    return { urls: [...new Set(urls)], runtime };
 }
 
 const mapSearchCategories: Record<Skiing, string> = {

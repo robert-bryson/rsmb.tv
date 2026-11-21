@@ -5,12 +5,13 @@ import type { ResortStatus } from './conditions';
 import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, resortMarkerColor, statusMarkers, type MarkerMode } from './mapAppearance';
 import type { SkiPassSelection } from './browse';
 import { passIconUrls } from './passIcons';
-import { skiResortIcon } from './resortDetailsData';
+import { skiResortIconCandidates } from './resortDetailsData';
 import type { SkiArchive } from './useSkiArchive';
 
 export const sourceId = 'ski-areas';
 export const selectionSource = 'ski-area-selection';
 export const pointLayer = 'ski-area-points';
+export const resortNameLayer = 'ski-area-names';
 export const selectedLayer = 'ski-area-selected';
 const statusLayer = 'ski-area-status';
 const selectedStatusLayer = 'ski-area-selected-status';
@@ -46,7 +47,7 @@ export function areaFeatures(areas: readonly SkiArea[], mode: MarkerMode, status
     }) };
 }
 
-function drawImage(map: MapLibreMap, id: string, size: number, draw: (context: CanvasRenderingContext2D) => void | false, update = false) {
+export function drawImage(map: MapLibreMap, id: string, size: number, draw: (context: CanvasRenderingContext2D) => void | false, update = false) {
     const pixelRatio = 2;
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = size * pixelRatio;
@@ -89,12 +90,10 @@ function loadResortImage(url: string) {
 
 export async function loadResortImages(archive?: SkiArchive) {
     const images = await Promise.all(skiAreas.flatMap(({ id }) => {
-        const local = archive?.get(id);
-        const runtime = skiResortIcon(id);
-        const candidates = [local?.mapIcon, local?.detailsIcon, runtime].filter(url => url !== undefined);
-        if (!candidates.length) return [];
+        const { urls, runtime } = skiResortIconCandidates(id, archive?.get(id));
+        if (!urls.length) return [];
         return [(async () => {
-            for (const url of new Set(candidates)) {
+            for (const url of urls) {
                 const image = await loadResortImage(url);
                 if (image) return { id, image, archived: url !== runtime };
             }
@@ -215,7 +214,7 @@ export function addAreaLayers(map: MapLibreMap, data: FeatureCollection<Point>, 
     });
     if (labelLayer && map.getGlyphs()) {
         map.addLayer({
-            id: 'ski-area-names', type: 'symbol', source: sourceId, minzoom: resortNameMinZoom,
+            id: resortNameLayer, type: 'symbol', source: sourceId, minzoom: resortNameMinZoom,
             layout: {
                 'text-field': ['get', 'name'], 'text-font': ['Open Sans Regular'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], resortNameMinZoom, 10, 9, 12, 12, 13],

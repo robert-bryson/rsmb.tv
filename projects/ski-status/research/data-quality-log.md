@@ -457,3 +457,166 @@ Reviewed 10 resorts. Added five confirmed first ski days and confirmed Heavenly�
 The next batch reviews Hakuba Valley resort statistics and winter schedules.
 
 Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-17-2026-11-21T203637Z`.
+
+## Batch 18 · 2026-11-21
+
+Seasonal visitor coverage rose from 101 to 111 resorts, confirmed visitor pins from 55 to 58, and adult day prices from 61 to 71. Parking coverage rose from 90 to 100, official trail maps from 95 to 105, and operator camera pages from 71 to 76. Three first ski days raised 2026/27 coverage from 25 to 28. Seven additional opening schedules and two closing-only schedules raised planned date coverage from 165 to 173 after the Goryu opening became actual. The ten Epic sites now carry the ticket-window redemption instructions. The diff check and 193 focused tests passed.
+
+| Case | Result | Remaining check |
+| --- | --- | --- |
+| Hakuba47 | Line E opened on Nov 21 for upper Route 8 via Goryu. Corrected the lift count to six and pinned the public base stop. | Confirm Line-8 base opening and an active winter webcam. |
+| Hakuba Goryu | Nov 21 skiing confirmed at Toomi and Alps Daira. Added both public bases, parking, five cameras and adult ticket prices. | Verify the two entrance coordinates and permanent operator lift status page. |
+| Happo-One | Public Nov 21 preview confirmed with three lifts and two Panorama routes. Added parking, camera views and day prices. | Verify the gondola base coordinates, direct camera feeds and a 2026/27 map. |
+| Cortina | Dec 12 planned. Added the ski base hotel pin, free parking, shared map and joint ticket. | Recheck the camera and current map after site maintenance. |
+| Iwatake | Dec 18–Mar 28 planned. Added White Plaza, free lots, Panomax and the current advance and regular fares. | Verify the winter entrance pin and latest print map. |
+| Norikura Onsen | Dec 12–Apr 4 planned. Added two bases, Wakaguri parking, the joint winter map and shared prices. | Confirm the visitor pin, live camera and in-bounds statistics below the backcountry lift. |
+| Sanosaka | Dec 18–Mar 22 planned. Added Castor Plaza pin, four lots, print map and window and online fares. | Confirm parking prices and a live camera. |
+| Jigatake | Dec 11 tourism schedule confirmed. Added the center house, shuttle, day prices and the published 2025/26 map. | Verify first-day operation, visitor entrance, parking rates and a current map. |
+| Kashimayari | Dec 12–Mar 22 planned. Added Central Plaza 1130, three parking areas, two camera players and a day price. | Check entrance and camera positions and resolve conflicting summit figures. |
+| Tsugaike | Dec 1 planned. Added the village ticket center, winter parking, day prices and four camera views. | Check the new T3 lift and updated print map, and verify the village pin. |
+
+Icon previews were prepared for all ten. Bundling and independent camera reuse require separate permission checks. Full-size maps were staged with their published editions or as undated where applicable.
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-18-2026-11-21T204909Z`.
+
+## Batch 19 · 2026-11-21
+
+Reviewed ten physical Ontario ski sites. Adanac and Candy Mountain were excluded. Adanac had two upstream rows, so unresolved candidates fell from 28 to 25 in Ontario and from 462 to 459 overall. Chapleau, Dryden and Kenora gained Nordic catalog entries with 11 km, approximately 20 km and more than 20 km of published cross-country trails, respectively. The catalog rose from 585 to 588 map points. The pinned upstream records for these facilities cover downhill activity. The related alpine candidates still need skiable acreage evidence.
+
+Seasonal visitor coverage rose from 111 to 114, parking from 100 to 102 and official maps from 105 to 107. The new road file records the Dryden winter approach. It crosses no named mountain pass. The diff check, 193 focused tests and 19 candidate and terrain tests passed.
+
+| Case | Result | Remaining check |
+| --- | --- | --- |
+| Adanac Ski Hill | Excluded both the full hill and overlapping beginner-area row. The Canadian Ski Council gives 25 skiable acres. | Recheck after published acreage expansion or a qualifying pass listing. |
+| Big Ben | Cornwall confirms a public cable tow and chalet at the ski centre. | Find the size of the lift-served footprint. |
+| Candy Mountain | Excluded. The reported shutdown moved snowmaking equipment to Loch Lomond. | Recheck on an operator or agency reopening notice. |
+| Chapleau | Added the Nordic venue and chalet. Ski Ontario documents more than 11 km of groomed trails. | Confirm downhill acreage and day access. Find the current Nordic map, trailhead point and signed winter approach. |
+| Dryden | Added the Nordic venue, club map, two parking locations and the winter route from Highway 17. | Find downhill acreage and verify the Nordic parking points and grooming report. |
+| Larder Lake | The township documents six trails and a T-bar. | Check a dated 2026/27 opening notice and published skiable acres. |
+| Lively | Greater Sudbury lists winter passes and Council continued operations. | Find a published lift-served footprint in the capital plans or operator material. |
+| Mount Evergreen | Verified current downhill ticketing. Added the independently operated Kenora Nordic venue, chalet, official map and parking. | Confirm alpine acreage and the Nordic entrance and signed winter driving directions. |
+| Mount Martin | Verified the public 2026/27 operating schedule for 12 T-bar-served runs. | Find published skiable acreage. |
+| Tri Town | The operator sells lift tickets, and the municipality confirms two surface lifts and more than 15 runs. | Find published downhill acreage and a dated 2026/27 opening notice. |
+
+The run reached 30 distinct cases. The NAS asset archive check follows.
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-19-2026-11-21T205923Z`.
+
+## Run summary · November 21, 2026 · Batches 17–19
+
+Completed 30 distinct cases in three batches of 10. The Sierra and Hakuba Valley reviews added eight first ski days. The Ontario review excluded two physical ski sites across three upstream rows and added the Nordic venues at Chapleau, Dryden and Mount Evergreen. The new catalog entries cover the verified Nordic activity at those sites. Their alpine candidate decisions still need acreage, and the pinned upstream data lacks matching Nordic geometry. [Machine-readable checkpoints](data-quality-log.jsonl), [Seasonal visitor records](resort-access-2026-27.json), [Candidate decisions](north-america-2026-11-16.csv), [Winter road approaches](road-approaches.json)
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Catalog map points | 585 | 588 |
+| Downhill areas with all six comparison fields | 313 | 313 |
+| Checked conditions links | 251 | 257 |
+| 2026/27 areas with a recorded first ski day | 20 | 28 |
+| 2026/27 areas with a scheduled date | 163 | 173 |
+| Resorts with seasonal access records | 91 | 114 |
+| Verified visitor map pins | 53 | 58 |
+| Resorts with parking locations | 80 | 102 |
+| Resorts with parking prices | 32 | 46 |
+| Resorts with official trail maps | 85 | 107 |
+| Resorts with adult full-day prices or price bounds | 57 | 71 |
+| Resorts with operator camera pages | 61 | 76 |
+| Published operator camera endpoints | 127 | 145 |
+| Areas with Indy product rules | 57 | 59 |
+| Areas with rules for all four Indy products | 51 | 53 |
+| Areas with checked winter road approaches | 0 | 1 |
+| Verified mountain passes in road approaches | 0 | 0 |
+| Unresolved North American candidate rows | 462 | 459 |
+| Unresolved Ontario candidate rows | 28 | 25 |
+
+Each batch passed the diff check and 193 focused tests in five files. The Ontario batch also passed 19 candidate and terrain tests. All 28 files across the three NAS snapshots matched their local SHA-256 checksums.
+
+- Batch 17 · `N:\projects\ski-status\data-quality\batch-17-2026-11-21T203637Z`
+- Batch 18 · `N:\projects\ski-status\data-quality\batch-18-2026-11-21T204909Z`
+- Batch 19 · `N:\projects\ski-status\data-quality\batch-19-2026-11-21T205923Z`
+
+The NAS copy contains 29 trail maps, 20 original marks and 40 transparent icon previews. All 89 assets and the manifest matched their staged SHA-256 checksums. The manifest is `N:\projects\ski-status\assets\manifests\2026-11-21T202218Z.json`.
+
+- Dodge Ridge’s first day still needs a dated operating report. The schedule listed November 21. [Dodge Ridge snow report](https://dodgeridge.com/snow-report/)
+- Hakuba’s remaining checks include exact visitor entrance coordinates, updated full-size maps, Cortina’s camera page, and conflicting in-bounds summit and vertical figures for Norikura and Kashimayari. [Hakuba Valley statistics](https://www.hakubavalley.com/en/ski_resort_info_en/), [Cortina operator notice](https://www.hgp.co.jp/cortina/ski/)
+- Eight Ontario downhill cases remain open for published skiable acreage, and Larder Lake and Tri Town also need dated winter operating notices. The two uncovered Nordic road approaches need a signed route from the provincial highway. [Ontario candidate decisions](north-america-2026-11-16.csv), [Batch 19 checkpoint](data-quality-log.jsonl)
+- Runtime icon permission and independent webcam reuse terms remain open. The batch records identify low-contrast marks and previews that are hard to read at marker size. [Asset and access checks](data-quality-log.jsonl)
+
+## Batch 20 · 2026-11-21
+
+### Coverage
+
+The table includes the 2026 Corralco record. The batch 20 and 21 JSONL counts use the 2026/27 access file.
+
+| Measure | Before | After |
+| --- | ---: | ---: |
+| checked conditions links | 257 | 260 |
+| seasonal access records | 114 | 120 |
+| verified 2026/27 map points | 58 | 62 |
+| resorts with parking | 102 | 108 |
+| resorts with official map links | 107 | 113 |
+| resorts with adult price records | 71 | 73 |
+| resorts with operator cameras | 76 | 81 |
+| 2026/27 planned dates | 173 | 175 |
+| areas with road approaches | 1 | 11 |
+| winter approaches | 1 | 37 |
+| named passes | 0 | 5 |
+| peak records | 10 | 14 |
+
+The whitespace check passed. 197 focused tests passed. 19 terrain and candidate tests passed. Road validation passed for 37 approaches and 5 referenced crossings.
+
+| Case | Result | Remaining check |
+| --- | --- | --- |
+| Whistler Blackcomb | Confirmed Blackcomb’s Nov 20 opening, village access, three winter road approaches, parking and eight operator camera views. | Retrieve the village map original and the 2026/27 edition. Verify a dated adult rate and camera playback. |
+| Park City Mountain | Updated to 42 lifts and added both village access routes across Parleys Summit, parking terms and April 19 as the planned closing. | Confirm the opening day, Canyons garage and current map and retail prices. |
+| Palisades Tahoe | Added the $99 opening offer and six documented routes to Olympic Valley and Alpine. I-80 from Sacramento crosses Donner Summit. | Check a standard adult fare and the Alpine Lodge entrance point. |
+| Big Sky | Added the resort’s base, parking, camera and trail map records and the US 191/MT 64 approaches. Confirmed Nov 25 is planned. | Check the Madison spur and Montage parking and sample a dated adult rate. |
+| Vail | Confirmed resort statistics and added I-70 approaches to both parking structures, including Vail Pass from Denver. | Check the adult booking calendar and resolve named summit labels. |
+| Powder Mountain | Added three lodge approaches, a Timberline visitor pin, the operator’s price range and James Peak. | Check the current print map, lot policy and the December 11 first ski day. |
+| Heavenly | Added winter roads to all four public bases, including Echo Summit and Daggett Pass. Checked the map and existing opening record. | Confirm additional entrance points, the adult day rate and the East Peak summit match. |
+| Deer Valley | Confirmed 40 total lifts, added the Dec 5 opening plan and the Hail Peak map, and verified three skier approaches. | Check upper-lodge roads, parking fees, entrance coordinates and an adult quote. |
+| Corralco | Added the 2026 operator map and day facilities, and documented access from Curacautín and Lonquimay via CH-181 and R-89. | Resolve the skiable summit, winter season dates, final road status, and adult ticket quote. |
+| Sun Peaks | Verified the Kamloops approaches to both parking areas and mapped Mount Tod. Confirmed the rescheduled opening target. | Check the Coquihalla crossing, remaining summits and the dated adult fare. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-20-2026-11-21T214135Z`.
+
+Batch 21 starts with Mt. Bachelor, Lake Louise and RED Mountain, then continues in descending acreage.
+
+## Batch 21 · 2026-11-21
+
+### Coverage
+
+| Measure | Before | After |
+| --- | ---: | ---: |
+| checked conditions links | 260 | 262 |
+| seasonal access records | 120 | 126 |
+| verified 2026/27 map points | 62 | 63 |
+| resorts with parking | 108 | 114 |
+| resorts with official map links | 113 | 119 |
+| resorts with adult price records | 73 | 76 |
+| resorts with operator cameras | 81 | 87 |
+| areas with annual snowfall | 171 | 172 |
+| 2026/27 planned dates | 175 | 178 |
+| pass product rules | 815 | 817 |
+| areas with road approaches | 11 | 21 |
+| winter approaches | 37 | 66 |
+| named passes | 5 | 7 |
+| peak records | 14 | 17 |
+
+The whitespace check passed. 200 focused tests passed. 19 terrain and candidate tests passed. Road validation passed for 66 approaches and 7 referenced crossings.
+
+| Case | Result | Remaining check |
+| --- | --- | --- |
+| Mt. Bachelor | Verified OR 372 winter access to both bases and added the lodge, parking, map and camera records. Added Mount Bachelor summit. | Check new print artwork, the Dec 4 first ski day and a dated adult fare. |
+| Lake Louise | Confirmed first skiing on Nov 1 and added Highway 1 approaches from Banff and Field. Field crosses Kicking Horse Pass. | Find a current printable map and match the named summits. |
+| RED Mountain | Added the December 12 plan, posted peak-season fares, current report link and winter approaches from Rossland, Creston and Spokane. | Verify the named passes, Topping Creek spur, and separately published camera endpoints. |
+| Steamboat | Added four winter routes from Kremmling and Hayden, including Rabbit Ears Pass. Reviewed the new parking program. | Match the named summits and quote a dated adult fare. |
+| Les 7 Laux | Added the operator’s December-to-March schedule, combined piste map, three base approaches and €42–45 adult fares. | Verify branch roads on the current department map and resolve the named summits. |
+| Castle Mountain | Updated the trail count to the published 115+ and added the Dec 4 plan, CAD 172.95 day rate, maps, cameras and two approaches. | Verify the entrance point, named summits and reservation terms. |
+| Mammoth Mountain | Added five base routes, a 2026/27 map, Mammoth Mountain summit, and parking, shuttle and camera records. | Verify the longer US 395 approaches, Lincoln Mountain and a dated adult fare. |
+| Kicking Horse | Added three Golden approaches, including Kicking Horse Pass from Banff, and the published 750 cm summit snowfall average. | Verify Rogers Pass from Revelstoke, named map summits and a dated adult fare. |
+| Banff Sunshine | Added two Highway 1 approaches to the gondola base and reviewed parking and existing visitor records. | Resolve a continuous skiable vertical, named summits and XML reuse terms. |
+| Snowmass | Added three approaches, current downhill and uphill print map records, village access and a named Snowmass Mountain peak. | Check the dated fare, winter parking dates and public entrance point. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-21-2026-11-21T215136Z`.
+
+Batch 22 starts with SilverStar, Whitewater and Northstar, then continues in descending acreage.

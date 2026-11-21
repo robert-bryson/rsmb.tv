@@ -12,7 +12,7 @@ describe('ski-status map layers', () => {
         const onChange = vi.fn();
         const onClose = vi.fn();
         render(<SkiLayerPanel colors="pass" units="metric" indyDiscounts={false} terrain={false} snowDepth
-            resortTerrain conventions={['europe']} onChange={onChange} onClose={onClose} />);
+            resortTerrain peaks conventions={['europe']} onChange={onChange} onClose={onClose} />);
         const markers = screen.getByLabelText('Map markers');
         expect(markers).toHaveFocus();
         expect(screen.getByRole('list', { name: 'Resort map key' })).toHaveTextContent('Multiple passes');
@@ -22,8 +22,9 @@ describe('ski-status map layers', () => {
         fireEvent.click(screen.getByRole('checkbox', { name: 'Terrain relief' }));
         fireEvent.click(screen.getByRole('checkbox', { name: 'Snow depth' }));
         fireEvent.click(screen.getByRole('checkbox', { name: 'Ski terrain' }));
+        fireEvent.click(screen.getByRole('checkbox', { name: 'Mountain peaks' }));
         fireEvent.click(screen.getByRole('button', { name: 'Close' }));
-        expect(onChange.mock.calls).toEqual([['color', 'operatingStatus'], ['terrain', '1'], ['snowDepth', undefined], ['skiTerrain', '0']]);
+        expect(onChange.mock.calls).toEqual([['color', 'operatingStatus'], ['terrain', '1'], ['snowDepth', undefined], ['skiTerrain', '0'], ['peaks', '0']]);
         expect(onClose).toHaveBeenCalledOnce();
     });
 

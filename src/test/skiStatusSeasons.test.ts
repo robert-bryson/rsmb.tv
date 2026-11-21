@@ -16,7 +16,7 @@ const now = Date.parse('2026-11-20T18:00:00Z');
 describe('ski season dates', () => {
     it('uses recent completed seasons and keeps archived dates available', () => {
         const alta = seasonCalendar.byArea.get('alta')!;
-        expect(alta.typical).toMatchObject({ opening: 'Nov 25', closing: 'Apr 23', evidence: { count: 5, latest: '2025/26' } });
+        expect(alta.typical).toMatchObject({ opening: 'Nov 25', closing: 'Apr 23', lengthDays: 149, evidence: { count: 5, latest: '2025/26' } });
         expect(alta.actual.find(row => row.season === '2024/25')?.openingTerrain).toMatchObject({ lifts: 2, baseCm: 58.42 });
         const historyOnly = seasonCalendar.byArea.get('mount-snow')!;
         expect(historyOnly.typical).toBeUndefined();
@@ -81,6 +81,37 @@ describe('ski season dates', () => {
         season: '2025/26', source: 'operator', opensOn: '2025-12-31', closesOn: '2026-04-10',
     };
     const calendar = (actual: unknown) => ({ version: 1, checkedOn: '2026-11-20', sources, areas: [{ areaId: 'alta', actual }] });
+
+    it('takes the rounded median of inclusive season lengths, including leap days', () => {
+        const records = [
+            { ...candidate, opensOn: '2025-11-24', closesOn: '2026-03-03' },
+            { ...candidate, season: '2024/25', opensOn: '2024-12-01', closesOn: '2025-02-25' },
+            { ...candidate, season: '2023/24', opensOn: '2023-11-28', closesOn: '2024-03-01' },
+            { ...candidate, season: '2022/23', opensOn: '2022-12-07', closesOn: '2023-04-05' },
+            { ...candidate, season: '2020/21', opensOn: '2020-11-15', closesOn: '2021-04-15' },
+            { season: '2026/27', source: 'operator', opensOn: '2026-11-20' },
+        ];
+        // The four recent seasons with both dates lasted 100, 87, 95, and 120 calendar days.
+        expect(readSeasonCalendar(calendar(records), skiAreas).byArea.get('alta')?.typical).toMatchObject({
+            lengthDays: 98, evidence: { count: 4, latest: '2025/26' },
+        });
+    });
+
+    it('sorts typical season lengths and leaves month-only and planned seasons unknown', () => {
+        const alta = area('alta');
+        const killington = area('killington');
+        const cannon = area('cannon-mountain');
+        const telluride = area('telluride-ski-resort');
+        const key = 'typicalSeasonLengthDays';
+        expect(formatSkiStat(alta, key, 'metric')).toBe('149 days');
+        expect(formatSkiStat(killington, key, 'imperial')).toBe('197 days');
+        expect(formatSkiStat(cannon, key, 'imperial')).toBeUndefined();
+        expect(formatSkiStat(area('coronet-peak'), key, 'imperial')).toBeUndefined();
+        expect(formatSkiStat(telluride, key, 'imperial')).toBeUndefined();
+        const resorts = [cannon, killington, alta, telluride];
+        expect(sortSkiAreas(resorts, { key, direction: 'asc' })).toEqual([alta, killington, cannon, telluride]);
+        expect(sortSkiAreas(resorts, { key, direction: 'desc' })).toEqual([killington, alta, cannon, telluride]);
+    });
 
     it('identifies the last recorded season and keeps a current opening separate', () => {
         const resort = { ...area('alta'), seasonWindow: undefined };

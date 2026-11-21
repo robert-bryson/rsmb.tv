@@ -88,6 +88,7 @@ export default function SkiStatus() {
     const terrain = searchParams.get('terrain') === '1';
     const snowDepth = searchParams.get('snowDepth') === '1';
     const resortTerrain = searchParams.get('skiTerrain') !== '0';
+    const peaks = searchParams.get('peaks') !== '0';
     const mapAreaParam = searchParams.get('mapArea');
     const searchedArea = useMemo(() => readSkiMapArea(mapAreaParam), [mapAreaParam]);
     const legacyArea = !searchedArea && searchParams.get('inView') === '1';
@@ -435,8 +436,8 @@ export default function SkiStatus() {
                             cameraAreas={catalogMatches} cameraFitKey={cameraFitKey}
                             selected={selected} colors={colors} units={units} passSelection={passSelection} statuses={statuses} conditions={conditions}
                             archive={archive}
-                            terrain={terrain} snowDepth={snowDepth} resortTerrain={resortTerrain} visible={showMap} searchedArea={searchedArea}
-                            layersModified={colors !== defaultColors || terrain || snowDepth || !resortTerrain}
+                            terrain={terrain} snowDepth={snowDepth} resortTerrain={resortTerrain} peaks={peaks} visible={showMap} searchedArea={searchedArea}
+                            layersModified={colors !== defaultColors || terrain || snowDepth || !resortTerrain || !peaks}
                             searchedAreaKey={searchedArea ? mapAreaParam : null} initializeArea={legacyArea}
                             terrainRequest={terrainRequest} locationRequest={locationRequest} willDockDetails={!wide && !detailsOpen}
                             camera={camera} navigationKey={location.key} restoreHistoryCamera={restoreHistoryCamera}
@@ -462,7 +463,7 @@ export default function SkiStatus() {
                 </div>
             </section>}
             {!compare && <aside id="ski-results-pane" tabIndex={-1} aria-label="Resort results" hidden={!showList || detailsOpen} className="ski-sidebar flex min-h-0 min-w-0 flex-col">
-                {sorted.length > 0 ? <SkiAreaList areas={sorted} selectedId={selected?.id} statuses={statuses} conditions={conditions} colors={colors}
+                {sorted.length > 0 ? <SkiAreaList areas={sorted} selectedId={selected?.id} statuses={statuses} conditions={conditions} colors={colors} archive={archive}
                     units={units} passSelection={passSelection} sort={sort} onSort={setSort} onSelect={selectArea} onZoomLocation={zoomToLocation} /> : emptyResults}
             </aside>}
             {selected && detailsOpen && <aside key={selected.id} className="ski-sidebar min-h-0 min-w-0 overflow-auto">

@@ -372,6 +372,14 @@
     "whiteface": {
       "url": "https://www.google.com/maps/place/whiteface+ski+resort/data=!4m5!3m4!1s0x0:0xf352b10f2264c391!8m2!3d44.3538743!4d-73.8617384",
       "source": "https://whiteface.com/plan-your-visit/directions/"
+    },
+    "big-sky-resort": {
+      "url": "https://maps.app.goo.gl/vupxDXTHNPcsfrxe9",
+      "source": "https://www.bigskyresort.com/getting-here/parking"
+    },
+    "powder-mountain": {
+      "url": "https://maps.app.goo.gl/5aCkSgJ1B1MWBKNT9",
+      "source": "https://powdermountain.com/getting-to-powder"
     }
   },
   "iconSources": {

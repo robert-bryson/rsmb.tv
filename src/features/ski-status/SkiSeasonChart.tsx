@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { formatSnowDepth, snowDepthValue, type SkiUnits } from './browse';
+import { formatSeasonLength, formatSnowDepth, snowDepthValue, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
 import type { Conditions } from './conditions';
 import { skiSnowHistory } from './resortDetailsData';
@@ -30,10 +30,11 @@ function BoundaryDate({ label, boundary }: { label: string; boundary: Outlook['o
 }
 
 function TypicalSeason({ window }: { window: NonNullable<Outlook['typical']> }) {
-    const { evidence, source } = window;
+    const { evidence, source, lengthDays } = window;
     const publishedNote = evidence && 'source' in evidence ? evidence.note : undefined;
     return <div className="ski-typical-season">
         <p><strong>Typical season</strong> {publishedNote ?? `${window.opening} – ${window.closing}`}</p>
+        {lengthDays !== undefined && <p><strong>Typical season length</strong> {formatSeasonLength(lengthDays)}</p>}
         {evidence && 'count' in evidence && <p className="ski-season-note">Median of {evidence.count} seasons through {evidence.latest}</p>}
         {source && <a className="ski-season-source ski-season-note" href={source}>Season source</a>}
     </div>;

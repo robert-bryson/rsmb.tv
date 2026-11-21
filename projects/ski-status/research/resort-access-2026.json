@@ -1,0 +1,157 @@
+{
+  "season": "2026",
+  "resorts": {
+    "corralco-resort-de-montana": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Cafetería Zorro con Botas",
+          "role": "Public day facility at 1,540 m.",
+          "source": "https://corralco.com/wp-content/uploads/2026/06/Mapa-de-Pistas_2026_OK_02.pdf",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Cafetería 1600",
+          "role": "Public day facility at 1,600 m.",
+          "source": "https://corralco.com/wp-content/uploads/2026/06/Mapa-de-Pistas_2026_OK_02.pdf",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Hotel Corralco & Spa",
+          "role": "Hotel and ski services in the reserve.",
+          "source": "https://corralco.com/wp-content/uploads/2026/06/Mapa-de-Pistas_2026_OK_02.pdf",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Base 1600 parking",
+          "location": "Cafetería 1600 base",
+          "source": "https://recarga.corralco.com/estacionamientos_1600/",
+          "checkedOn": "2026-11-21",
+          "policy": "Advance reservation with WTP card or order voucher. Direct ski access for intermediate and expert visitors."
+        },
+        {
+          "name": "Zorro con Botas parking",
+          "location": "Base 1540",
+          "source": "https://corralco.com/wp-content/uploads/2026/06/Mapa-de-Pistas_2026_OK_02.pdf",
+          "checkedOn": "2026-11-21",
+          "policy": "See signed day-skier parking near the cafeteria."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Corralco downhill lifts and trails, bases, and winter activity zones",
+          "assetUrl": "https://corralco.com/wp-content/uploads/2026/06/Mapa-de-Pistas_2026_OK_02.pdf",
+          "season": "2026",
+          "source": "https://corralco.com/que-hacer/invierno/",
+          "checkedOn": "2026-11-21"
+        }
+      ]
+    },
+    "perisher": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Perisher Centre",
+          "role": "Main public Perisher Valley skier base and Skitube terminal.",
+          "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Smiggin Holes",
+          "role": "Public skier base on Kosciuszko Road and free shuttle stop.",
+          "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Guthega base",
+          "role": "Public winter parking and ski access.",
+          "source": "https://www.nationalparks.nsw.gov.au/things-to-do/snow-sports-facilities/perisher/visitor-info",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Blue Cow terminal",
+          "role": "Skitube-only public winter approach from Perisher Valley.",
+          "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Bullocks Flat terminal",
+          "role": "Public parking and alpine railway access.",
+          "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Perisher Valley and Smiggin Holes parking",
+          "location": "Kosciuszko Road",
+          "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Bullocks Flat terminal parking",
+          "location": "Alpine Way",
+          "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Guthega parking",
+          "location": "Guthega Road",
+          "source": "https://www.nationalparks.nsw.gov.au/things-to-do/snow-sports-facilities/perisher/visitor-info",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "shuttle": {
+        "description": "Free Perisher Valley to Smiggin Holes shuttle during operation. Skitube links Bullocks Flat with Perisher Valley and Blue Cow.",
+        "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Front Valley",
+            "location": "Perisher Valley"
+          },
+          {
+            "name": "Blue Cow",
+            "location": "Blue Cow"
+          },
+          {
+            "name": "Smiggin Holes",
+            "location": "Smiggin Holes"
+          },
+          {
+            "name": "Guthega",
+            "location": "Guthega"
+          }
+        ],
+        "reuse": "Operator-page use. Independent embedding and rebroadcast terms remain unverified.",
+        "source": "https://www.perisher.com.au/file-not-found",
+        "checkedOn": "2026-11-21"
+      },
+      "trailMaps": [
+        {
+          "coverage": "2026 map across Perisher Valley, Smiggin Holes, Guthega and Blue Cow",
+          "assetUrl": "https://www.perisher.com.au/images/2025/Trail_Maps/UpdatedTrailMap26.jpg",
+          "season": "2026",
+          "source": "https://www.perisher.com.au/plan-your-trip/new-to-perisher/trail-maps",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Guthega downhill area detail",
+          "assetUrl": "https://www.perisher.com.au/images/2025/Trail_Maps/20109_PSR_FA2_WebsiteTrailMaps_Guthega_A0_Feb25_LR.pdf",
+          "source": "https://www.perisher.com.au/plan-your-trip/new-to-perisher/trail-maps",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Double Trouble and Devil’s Playground detailed inset",
+          "assetUrl": "https://www.perisher.com.au/images/2025/Trail_Maps/20109_PSR_FA_WebsiteTrailMaps_DoubleTrouble_A0_Feb25_LR.pdf",
+          "source": "https://www.perisher.com.au/plan-your-trip/new-to-perisher/trail-maps",
+          "checkedOn": "2026-11-21"
+        }
+      ]
+    }
+  }
+}

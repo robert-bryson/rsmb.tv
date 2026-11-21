@@ -1,0 +1,2202 @@
+{
+  "approachesByArea": {
+    "banff-sunshine": [
+      {
+        "from": "Banff (Highway 1)",
+        "to": "Sunshine Gondola Base parking",
+        "roads": [
+          "Highway 1",
+          "Sunshine Access Road"
+        ],
+        "statusUrls": [
+          "https://511.alberta.ca/"
+        ],
+        "source": "https://www.skibanff.com/plan/getting-here/parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.skibanff.com/plan-stay/getting-here/getting-here"
+        ]
+      },
+      {
+        "from": "Lake Louise (Highway 1)",
+        "to": "Sunshine Gondola Base parking",
+        "roads": [
+          "Highway 1",
+          "Sunshine Access Road"
+        ],
+        "statusUrls": [
+          "https://511.alberta.ca/"
+        ],
+        "source": "https://www.skibanff.com/plan/getting-here/parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.skibanff.com/plan-stay/getting-here/getting-here"
+        ]
+      }
+    ],
+    "big-sky-resort": [
+      {
+        "from": "Bozeman",
+        "to": "Mountain Village public parking",
+        "roads": [
+          "US 191",
+          "MT 64",
+          "Big Sky Resort Road"
+        ],
+        "statusUrls": [
+          "https://www.511mt.net/"
+        ],
+        "source": "https://www.bigskyresort.com/getting-here/parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mdt.mt.gov/other/webdata/external/cdb/US-191_MT-64-ICE-Conclusions-and-Recommendations.pdf",
+          "https://www.bigskyresort.com/getting-here/base-areas"
+        ]
+      },
+      {
+        "from": "West Yellowstone",
+        "to": "Mountain Village public parking",
+        "roads": [
+          "US 191",
+          "MT 64",
+          "Big Sky Resort Road"
+        ],
+        "statusUrls": [
+          "https://www.511mt.net/"
+        ],
+        "source": "https://www.bigskyresort.com/getting-here/parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mdt.mt.gov/other/webdata/external/cdb/US-191_MT-64-ICE-Conclusions-and-Recommendations.pdf",
+          "https://www.bigskyresort.com/getting-here/base-areas"
+        ]
+      },
+      {
+        "from": "US 191 / MT 64 junction",
+        "to": "Madison Base Lot",
+        "roads": [
+          "MT 64",
+          "Lone Mountain Trail",
+          "Moonlight Basin Road"
+        ],
+        "statusUrls": [
+          "https://www.511mt.net/"
+        ],
+        "source": "https://www.bigskyresort.com/getting-here/base-areas",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://www.bigskyresort.com/getting-here/parking",
+          "https://www.mdt.mt.gov/other/webdata/external/cdb/US-191_MT-64-ICE-Conclusions-and-Recommendations.pdf",
+          "https://cdn.sanity.io/files/8ts88bij/big-sky/b60b44b9f074e91b58345e424f3237dd7f5d60e7.pdf"
+        ]
+      }
+    ],
+    "castle-mountain-resort": [
+      {
+        "from": "Pincher Creek",
+        "to": "Castle Day Lodge",
+        "roads": [
+          "AB 6",
+          "AB 507",
+          "AB 774"
+        ],
+        "statusUrls": [
+          "https://511.alberta.ca/"
+        ],
+        "source": "https://www.skicastle.ca/byroad/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.transportation.alberta.ca/Content/docType181/Production/HwyServiceClass.pdf"
+        ]
+      },
+      {
+        "from": "Lundbreck (AB 3)",
+        "to": "Castle Day Lodge",
+        "roads": [
+          "AB 3",
+          "AB 507",
+          "AB 774"
+        ],
+        "statusUrls": [
+          "https://511.alberta.ca/"
+        ],
+        "source": "https://www.skicastle.ca/byroad/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.transportation.alberta.ca/Content/docType181/Production/HwyServiceClass.pdf"
+        ]
+      }
+    ],
+    "corralco-resort-de-montana": [
+      {
+        "from": "Curacautín via Malalcahuello",
+        "to": "Zorro con Botas and Base 1600 day parking",
+        "roads": [
+          "CH-181",
+          "R-89",
+          "Camino al centro de esquí Corralco"
+        ],
+        "statusUrls": [],
+        "source": "https://www.kutralkura.cl/georrutas/georruta-12?lang=en",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://chile.travel/atractivos/corralco/",
+          "https://corralco.com/wp-content/uploads/2026/06/Mapa-de-Pistas_2026_OK_02.pdf",
+          "https://recarga.corralco.com/estacionamientos_1600/"
+        ]
+      },
+      {
+        "from": "Lonquimay",
+        "to": "Corralco public bases",
+        "roads": [
+          "CH-181",
+          "R-89",
+          "Camino al centro de esquí Corralco"
+        ],
+        "statusUrls": [],
+        "source": "https://www.kutralkura.cl/georrutas/georruta-12?lang=en",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://chile.travel/atractivos/corralco/",
+          "https://corralco.com/wp-content/uploads/2026/06/Mapa-de-Pistas_2026_OK_02.pdf"
+        ]
+      }
+    ],
+    "deer-valley-resort": [
+      {
+        "from": "Park City (UT 224)",
+        "to": "Snow Park Lodge",
+        "roads": [
+          "UT 224",
+          "Deer Valley Drive South"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://www.deervalley.com/plan-your-trip/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://wasatchback.udot.utah.gov/road-information/",
+          "https://www.deervalley.com/explore-the-mountain/guest-services"
+        ]
+      },
+      {
+        "from": "US 40 at Mayflower",
+        "to": "East Village public parking",
+        "roads": [
+          "US 40",
+          "North Mayflower Mine Road"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://www.deervalley.com/plan-your-trip/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.deervalley.com/explore-the-mountain/guest-services"
+        ]
+      },
+      {
+        "from": "US 40 at Mayflower",
+        "to": "Jordanelle Express Gondola lot",
+        "roads": [
+          "US 40",
+          "West Deer Hollow Road"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://www.deervalley.com/plan-your-trip/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.deervalley.com/explore-the-mountain/guest-services"
+        ]
+      }
+    ],
+    "dryden-ski-club-nordic": [
+      {
+        "from": "Highway 17 / Highway 601 junction, Dryden",
+        "to": "Dryden Ski Club chalet and winter visitor parking",
+        "roads": [
+          "Highway 601",
+          "Dryden Ski Club Road",
+          "North Road",
+          "Ski Hill Road"
+        ],
+        "passIds": [],
+        "source": "https://www.skidryden.com/directions",
+        "additionalSources": [
+          "https://www.ontario.ca/locations/serviceontario/highway-17-and-highway-601-dryden/",
+          "https://ero.ontario.ca/public/2023-09/OP_ScheduleC_Map1.pdf"
+        ],
+        "checkedOn": "2026-11-21",
+        "statusUrls": [
+          "https://511on.ca/"
+        ]
+      }
+    ],
+    "heavenly": [
+      {
+        "from": "US 50 at Ski Run Boulevard, South Lake Tahoe",
+        "to": "California Lodge",
+        "roads": [
+          "Ski Run Boulevard",
+          "Saddle Road",
+          "Wildwood Avenue"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.skiheavenly.com/-/aemasset/image/upload/Heavenly/FIles/Getting%20To%20Heavenly%20From%20South%20Lake%20Tahoe%20-%20Spring.pdf",
+          "https://www.trpa.gov/wp-content/uploads/Heavenly-MMP-Annual-Report-2024_Final.pdf"
+        ]
+      },
+      {
+        "from": "US 50, South Lake Tahoe",
+        "to": "Heavenly Village Gondola",
+        "roads": [
+          "US 50",
+          "Heavenly Village Way"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.skiheavenly.com/-/aemasset/image/upload/Heavenly/FIles/Getting%20To%20Heavenly%20From%20South%20Lake%20Tahoe%20-%20Spring.pdf",
+          "https://www.trpa.gov/wp-content/uploads/Heavenly-MMP-Annual-Report-2024_Final.pdf"
+        ]
+      },
+      {
+        "from": "Placerville",
+        "to": "California Lodge",
+        "roads": [
+          "US 50",
+          "Ski Run Boulevard",
+          "Saddle Road",
+          "Wildwood Avenue"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-ca-echo-summit"
+        ],
+        "additionalSources": [
+          "https://www.skiheavenly.com/-/aemasset/image/upload/Heavenly/FIles/Getting%20To%20Heavenly%20From%20South%20Lake%20Tahoe%20-%20Spring.pdf",
+          "https://dot.ca.gov/travel/winter-driving-tips/chain-requirements"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry the required traction equipment and follow posted chain controls when Caltrans activates them.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "US 50 at Stateline",
+        "to": "Boulder Lodge",
+        "roads": [
+          "NV 207",
+          "South Benjamin Drive"
+        ],
+        "statusUrls": [
+          "https://www.nvroads.com/"
+        ],
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.trpa.gov/wp-content/uploads/Heavenly-MMP-Annual-Report-2024_Final.pdf",
+          "https://www.skiheavenly.com/-/aemasset/image/upload/Heavenly/FIles/Getting%20To%20Heavenly%20From%20South%20Lake%20Tahoe%20-%20Spring.pdf"
+        ]
+      },
+      {
+        "from": "US 395 at Mottsville Lane, Carson Valley",
+        "to": "Boulder Lodge",
+        "roads": [
+          "Mottsville Lane",
+          "NV 207",
+          "South Benjamin Drive"
+        ],
+        "statusUrls": [
+          "https://www.nvroads.com/"
+        ],
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-nv-daggett-pass"
+        ],
+        "additionalSources": [
+          "https://www.trpa.gov/wp-content/uploads/Heavenly-MMP-Annual-Report-2024_Final.pdf",
+          "https://shpo.nv.gov/nevadas-historical-markers/historical-markers/kingsbury-grade"
+        ]
+      },
+      {
+        "from": "US 50 at Stateline",
+        "to": "Stagecoach Lodge",
+        "roads": [
+          "NV 207",
+          "Tramway Drive",
+          "Quaking Aspen Lane"
+        ],
+        "statusUrls": [
+          "https://www.nvroads.com/"
+        ],
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.trpa.gov/wp-content/uploads/Heavenly-MMP-Annual-Report-2024_Final.pdf",
+          "https://www.skiheavenly.com/-/aemasset/image/upload/Heavenly/FIles/Getting%20To%20Heavenly%20From%20South%20Lake%20Tahoe%20-%20Spring.pdf"
+        ]
+      },
+      {
+        "from": "US 395 at Mottsville Lane, Carson Valley",
+        "to": "Stagecoach Lodge",
+        "roads": [
+          "Mottsville Lane",
+          "NV 207",
+          "Tramway Drive",
+          "Quaking Aspen Lane"
+        ],
+        "statusUrls": [
+          "https://www.nvroads.com/"
+        ],
+        "source": "https://www.skiheavenly.com/explore-the-resort/about-the-resort/getting-here-and-parking",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-nv-daggett-pass"
+        ],
+        "additionalSources": [
+          "https://www.trpa.gov/wp-content/uploads/Heavenly-MMP-Annual-Report-2024_Final.pdf",
+          "https://shpo.nv.gov/nevadas-historical-markers/historical-markers/kingsbury-grade"
+        ]
+      }
+    ],
+    "keystone-resort": [
+      {
+        "from": "Silverthorne–Dillon (I-70 exit 205)",
+        "to": "River Run public lot",
+        "roads": [
+          "I-70",
+          "US 6",
+          "Ida Belle Drive"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.keystoneresort.com/-/media/keystone/files/directions/drivingdirectionsriverrunfrontgondola.ashx?hash=446E135",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.parkkeystone.com/parkingbasics"
+        ],
+        "restrictions": [
+          {
+            "description": "Check CDOT seasonal traction rules and posted passenger-vehicle chain controls for the route.",
+            "source": "https://www.codot.gov/travel/winter-driving/tractionlaw",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Silverthorne–Dillon (I-70 exit 205)",
+        "to": "Mountain House day parking",
+        "roads": [
+          "I-70",
+          "US 6",
+          "Keystone Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.keystoneresort.com/-/media/keystone/files/directions/drivingdirectionsriverrunfrontgondola.ashx?hash=446E135",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.parkkeystone.com/parkingbasics"
+        ],
+        "restrictions": [
+          {
+            "description": "Check CDOT seasonal traction rules and posted passenger-vehicle chain controls for the route.",
+            "source": "https://www.codot.gov/travel/winter-driving/tractionlaw",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "I-70 / US 6 near Loveland Ski Area",
+        "to": "River Run public lot",
+        "roads": [
+          "I-70",
+          "US 6",
+          "Ida Belle Drive"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.keystoneresort.com/-/media/keystone/files/directions/drivingdirectionsriverrunfrontgondola.ashx?hash=446E135",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-co-loveland-pass"
+        ],
+        "additionalSources": [
+          "https://www.parkkeystone.com/parkingbasics",
+          "https://www.codot.gov/projects/statewidecameras"
+        ],
+        "restrictions": [
+          {
+            "description": "Check CDOT seasonal traction rules and posted passenger-vehicle chain controls for the route.",
+            "source": "https://www.codot.gov/travel/winter-driving/tractionlaw",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "kicking-horse": [
+      {
+        "from": "Banff (Highway 1)",
+        "to": "Kicking Horse Plaza and day lodge parking",
+        "roads": [
+          "Highway 1",
+          "BC 95",
+          "7th Street N",
+          "Kicking Horse Trail"
+        ],
+        "statusUrls": [
+          "https://511.alberta.ca/",
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://kickinghorseresort.com/discover-kickinghorse/getting-to-kicking-horse-mountain-resort/",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "ca-ab-bc-kicking-horse-pass"
+        ],
+        "additionalSources": [
+          "https://www.kickinghorselodging.com/directions/",
+          "https://apps.gov.bc.ca/pub/bcgnws/names/3822.html"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Radium Hot Springs (BC 95)",
+        "to": "Kicking Horse Plaza and day lodge parking",
+        "roads": [
+          "BC 95",
+          "7th Street N",
+          "Kicking Horse Trail"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://kickinghorseresort.com/discover-kickinghorse/getting-to-kicking-horse-mountain-resort/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.kickinghorselodging.com/directions/",
+          "https://apps.gov.bc.ca/pub/bcgnws/names/3822.html"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Donald (Highway 1)",
+        "to": "Kicking Horse Plaza and day lodge parking",
+        "roads": [
+          "Highway 1",
+          "BC 95",
+          "7th Street N",
+          "Kicking Horse Trail"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://kickinghorseresort.com/discover-kickinghorse/getting-to-kicking-horse-mountain-resort/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.kickinghorselodging.com/directions/",
+          "https://apps.gov.bc.ca/pub/bcgnws/names/3822.html"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "lake-louise": [
+      {
+        "from": "Banff (Highway 1)",
+        "to": "Lake Louise ski resort base",
+        "roads": [
+          "Highway 1",
+          "Whitehorn Road"
+        ],
+        "statusUrls": [
+          "https://511.alberta.ca/"
+        ],
+        "source": "https://www.skilouise.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://parks.canada.ca/pn-np/ab/banff/visit/les10-top10/~/~/-/media/09aa48b48c2b45c2baceef01630c981d.ashx"
+        ]
+      },
+      {
+        "from": "Field, BC (Highway 1)",
+        "to": "Lake Louise ski resort base",
+        "roads": [
+          "Highway 1",
+          "Whitehorn Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/",
+          "https://511.alberta.ca/"
+        ],
+        "source": "https://www.skilouise.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "ca-ab-bc-kicking-horse-pass"
+        ],
+        "additionalSources": [
+          "https://parks.canada.ca/pn-np/ab/banff/visit/les10-top10/~/~/-/media/09aa48b48c2b45c2baceef01630c981d.ashx",
+          "https://apps.gov.bc.ca/pub/bcgnws/names/3822.html"
+        ]
+      }
+    ],
+    "les-7-laux": [
+      {
+        "from": "A41 at Brignoud",
+        "to": "Prapoutel",
+        "roads": [
+          "A41",
+          "D528",
+          "D250",
+          "D281",
+          "D281A"
+        ],
+        "statusUrls": [
+          "https://itinisere.fr/"
+        ],
+        "source": "https://www.esi-7laux.fr/notre-ecole-de-ski-pro7/infos-pratiques/",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://www.isere.fr/shield?u=%2Fsites%2Fdefault%2Ffiles%2Fcarte_trafics_isere_2017.pdf&rf=",
+          "https://www.les7laux.com/ete/offres/prapoutel-pre-de-larc-les-sept-laux-prapoutel-fr-ete-3127582/"
+        ]
+      },
+      {
+        "from": "Theys",
+        "to": "Pipay",
+        "roads": [
+          "D280",
+          "D281",
+          "Route de Pipay"
+        ],
+        "statusUrls": [
+          "https://itinisere.fr/"
+        ],
+        "source": "https://www.esi-7laux.fr/notre-ecole-de-ski-pro7/infos-pratiques/",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://www.isere.fr/shield?u=%2Fsites%2Fdefault%2Ffiles%2Fcarte_trafics_isere_2017.pdf&rf=",
+          "https://www.les7laux.com/ete/offres/randonnee-pipay-col-du-merdaret-les-sept-laux-pipay-fr-ete-3123560/"
+        ]
+      },
+      {
+        "from": "Allevard",
+        "to": "Le Pleynet",
+        "roads": [
+          "D525",
+          "D525A"
+        ],
+        "statusUrls": [
+          "https://itinisere.fr/"
+        ],
+        "source": "https://www.esi-7laux.fr/notre-ecole-de-ski-pro7/infos-pratiques/",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://www.isere.fr/shield?u=%2Fsites%2Fdefault%2Ffiles%2Fcarte_trafics_isere_2017.pdf&rf="
+        ]
+      }
+    ],
+    "mammoth-mountain": [
+      {
+        "from": "US 395 / CA 203 junction",
+        "to": "Main Lodge and Minaret Road parking",
+        "roads": [
+          "CA 203 (Minaret Road)"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/",
+          "https://roads.dot.ca.gov/?roadnumber=203"
+        ],
+        "source": "https://www.mammothmountain.com/discover-mammoth/getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mammothmountain.com/discover-mammoth/getting-around/parking"
+        ],
+        "restrictions": [
+          {
+            "description": "West of Mammoth Mountain Inn, CA 203 is closed during the winter. Check current limits on the Caltrans road report.",
+            "source": "https://roads.dot.ca.gov/?roadnumber=203",
+            "checkedOn": "2026-11-21"
+          },
+          {
+            "description": "Travelers must follow posted Caltrans chain controls when activated.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "US 395 / CA 203 junction",
+        "to": "Canyon Lodge",
+        "roads": [
+          "CA 203",
+          "Canyon Boulevard"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/",
+          "https://roads.dot.ca.gov/?roadnumber=203"
+        ],
+        "source": "https://www.mammothmountain.com/discover-mammoth/getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mammothmountain.com/discover-mammoth/getting-around/parking"
+        ],
+        "restrictions": [
+          {
+            "description": "West of Mammoth Mountain Inn, CA 203 is closed during the winter. Check current limits on the Caltrans road report.",
+            "source": "https://roads.dot.ca.gov/?roadnumber=203",
+            "checkedOn": "2026-11-21"
+          },
+          {
+            "description": "Travelers must follow posted Caltrans chain controls when activated.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "US 395 / CA 203 junction",
+        "to": "Eagle Lodge",
+        "roads": [
+          "CA 203",
+          "Old Mammoth Road",
+          "Meridian Boulevard"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/",
+          "https://roads.dot.ca.gov/?roadnumber=203"
+        ],
+        "source": "https://www.mammothmountain.com/discover-mammoth/getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mammothmountain.com/discover-mammoth/getting-around/parking"
+        ],
+        "restrictions": [
+          {
+            "description": "West of Mammoth Mountain Inn, CA 203 is closed during the winter. Check current limits on the Caltrans road report.",
+            "source": "https://roads.dot.ca.gov/?roadnumber=203",
+            "checkedOn": "2026-11-21"
+          },
+          {
+            "description": "Travelers must follow posted Caltrans chain controls when activated.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "US 395 / CA 203 junction",
+        "to": "Village Gondola",
+        "roads": [
+          "CA 203",
+          "Minaret Road"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/",
+          "https://roads.dot.ca.gov/?roadnumber=203"
+        ],
+        "source": "https://www.mammothmountain.com/discover-mammoth/getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mammothmountain.com/discover-mammoth/getting-around/parking"
+        ],
+        "restrictions": [
+          {
+            "description": "West of Mammoth Mountain Inn, CA 203 is closed during the winter. Check current limits on the Caltrans road report.",
+            "source": "https://roads.dot.ca.gov/?roadnumber=203",
+            "checkedOn": "2026-11-21"
+          },
+          {
+            "description": "Travelers must follow posted Caltrans chain controls when activated.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "US 395 / CA 203 junction",
+        "to": "The Mill",
+        "roads": [
+          "CA 203 (Minaret Road)"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/",
+          "https://roads.dot.ca.gov/?roadnumber=203"
+        ],
+        "source": "https://www.mammothmountain.com/discover-mammoth/getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mammothmountain.com/discover-mammoth/getting-around/parking"
+        ],
+        "restrictions": [
+          {
+            "description": "West of Mammoth Mountain Inn, CA 203 is closed during the winter. Check current limits on the Caltrans road report.",
+            "source": "https://roads.dot.ca.gov/?roadnumber=203",
+            "checkedOn": "2026-11-21"
+          },
+          {
+            "description": "Travelers must follow posted Caltrans chain controls when activated.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "mt-bachelor": [
+      {
+        "from": "Bend",
+        "to": "West Village Lodge and Nordic Center",
+        "roads": [
+          "OR 372",
+          "Cascade Lakes Highway / Century Drive"
+        ],
+        "statusUrls": [
+          "https://www.tripcheck.com/"
+        ],
+        "source": "https://www.mtbachelor.com/the-mountain/getting-to-around-mt-bachelor/getting-here/driving/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mtbachelor.com/the-mountain/winter-maps/base-areas/",
+          "https://www.deschutescounty.gov/1134/News-and-Closures"
+        ],
+        "restrictions": [
+          {
+            "description": "The county closes Cascade Lakes Highway beyond the resort for winter. Follow posted closures and use the Bend approach.",
+            "source": "https://www.deschutescounty.gov/1134/News-and-Closures",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Bend",
+        "to": "Sunrise Lodge",
+        "roads": [
+          "OR 372",
+          "Cascade Lakes Highway / Century Drive"
+        ],
+        "statusUrls": [
+          "https://www.tripcheck.com/"
+        ],
+        "source": "https://www.mtbachelor.com/the-mountain/getting-to-around-mt-bachelor/getting-here/driving/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mtbachelor.com/the-mountain/winter-maps/base-areas/",
+          "https://www.deschutescounty.gov/1134/News-and-Closures"
+        ],
+        "restrictions": [
+          {
+            "description": "The county closes Cascade Lakes Highway beyond the resort for winter. Follow posted closures and use the Bend approach.",
+            "source": "https://www.deschutescounty.gov/1134/News-and-Closures",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "northstar-california-resort": [
+      {
+        "from": "Truckee (I-80)",
+        "to": "Northstar Village parking",
+        "roads": [
+          "I-80",
+          "CA 267",
+          "Northstar Drive"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.northstarcalifornia.com/explore-the-resort/about-the-resort/getting-here/.aspx",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.placer.ca.gov/6027/Martis-Valley-Trail"
+        ],
+        "restrictions": [
+          {
+            "description": "Travelers must follow posted Caltrans chain controls when activated.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Kings Beach (CA 28)",
+        "to": "Northstar Village parking",
+        "roads": [
+          "CA 28",
+          "CA 267",
+          "Northstar Drive"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.northstarcalifornia.com/explore-the-resort/about-the-resort/getting-here/.aspx",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-ca-brockway-summit"
+        ],
+        "additionalSources": [
+          "https://www.placer.ca.gov/6027/Martis-Valley-Trail",
+          "https://cwwp2.dot.ca.gov/vm/streamlist.htm"
+        ],
+        "restrictions": [
+          {
+            "description": "Travelers must follow posted Caltrans chain controls when activated.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "palisades-tahoe": [
+      {
+        "from": "Sacramento (I-80)",
+        "to": "Olympic Valley Village",
+        "roads": [
+          "I-80",
+          "CA 89",
+          "Olympic Valley Road"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.palisadestahoe.com/plan-your-visit/travel-here/navigate-nlt-guide",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-ca-donner-summit-i80"
+        ],
+        "additionalSources": [
+          "https://www.palisadestahoe.com/footer/mountain-statistics",
+          "https://content.govdelivery.com/attachments/CAPLACER/2025/03/27/file_attachments/3211683/89%20267.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry the required traction equipment and follow posted chain controls when Caltrans activates them.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Reno (I-80)",
+        "to": "Olympic Valley Village",
+        "roads": [
+          "I-80",
+          "CA 89",
+          "Olympic Valley Road"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.palisadestahoe.com/plan-your-visit/travel-here/navigate-nlt-guide",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.palisadestahoe.com/footer/mountain-statistics",
+          "https://content.govdelivery.com/attachments/CAPLACER/2025/03/27/file_attachments/3211683/89%20267.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry the required traction equipment and follow posted chain controls when Caltrans activates them.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Tahoe City",
+        "to": "Olympic Valley Village",
+        "roads": [
+          "CA 89",
+          "Olympic Valley Road"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.palisadestahoe.com/plan-your-visit/travel-here/navigate-nlt-guide",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.palisadestahoe.com/footer/mountain-statistics",
+          "https://content.govdelivery.com/attachments/CAPLACER/2025/03/27/file_attachments/3211683/89%20267.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry the required traction equipment and follow posted chain controls when Caltrans activates them.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Sacramento (I-80)",
+        "to": "Alpine Lodge",
+        "roads": [
+          "I-80",
+          "CA 89",
+          "Alpine Meadows Road"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.palisadestahoe.com/plan-your-visit/travel-here/navigate-nlt-guide",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-ca-donner-summit-i80"
+        ],
+        "additionalSources": [
+          "https://www.palisadestahoe.com/footer/mountain-statistics",
+          "https://content.govdelivery.com/attachments/CAPLACER/2025/03/27/file_attachments/3211683/89%20267.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry the required traction equipment and follow posted chain controls when Caltrans activates them.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Reno (I-80)",
+        "to": "Alpine Lodge",
+        "roads": [
+          "I-80",
+          "CA 89",
+          "Alpine Meadows Road"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.palisadestahoe.com/plan-your-visit/travel-here/navigate-nlt-guide",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.palisadestahoe.com/footer/mountain-statistics",
+          "https://content.govdelivery.com/attachments/CAPLACER/2025/03/27/file_attachments/3211683/89%20267.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry the required traction equipment and follow posted chain controls when Caltrans activates them.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Tahoe City",
+        "to": "Alpine Lodge",
+        "roads": [
+          "CA 89",
+          "Alpine Meadows Road"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.palisadestahoe.com/plan-your-visit/travel-here/navigate-nlt-guide",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.palisadestahoe.com/footer/mountain-statistics",
+          "https://content.govdelivery.com/attachments/CAPLACER/2025/03/27/file_attachments/3211683/89%20267.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry the required traction equipment and follow posted chain controls when Caltrans activates them.",
+            "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "panorama-mountain-resort": [
+      {
+        "from": "Invermere",
+        "to": "Panorama day skier parking",
+        "roads": [
+          "Panorama Drive",
+          "Toby Creek Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.panoramaresort.com/public/planning/first-time-visitor-guide-winter",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.panoramaresort.com/public/planning/getting-here",
+          "https://apps.gov.bc.ca/pub/bcgnws/names/24409.html",
+          "https://www.panoramaresort.com/assets/Maps/2024_Maps_VilliageMap_Winter_Horizontal.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Banff (Highway 1)",
+        "to": "Panorama day skier parking",
+        "roads": [
+          "Highway 1",
+          "Highway 93",
+          "BC 93/95",
+          "Athalmer Road",
+          "Panorama Drive",
+          "Toby Creek Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/",
+          "https://511.alberta.ca/"
+        ],
+        "source": "https://www.panoramaresort.com/public/planning/first-time-visitor-guide-winter",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "ca-ab-bc-vermilion-pass"
+        ],
+        "additionalSources": [
+          "https://www.panoramaresort.com/public/planning/getting-here",
+          "https://apps.gov.bc.ca/pub/bcgnws/names/24409.html",
+          "https://www.panoramaresort.com/assets/Maps/2024_Maps_VilliageMap_Winter_Horizontal.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "park-city-mountain": [
+      {
+        "from": "Salt Lake City (I-80)",
+        "to": "Mountain Village public parking",
+        "roads": [
+          "I-80",
+          "UT 224",
+          "Empire Avenue"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://www.parkcitymountain.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-ut-parleys-summit"
+        ],
+        "additionalSources": [
+          "https://wasatchback.udot.utah.gov/road-information/"
+        ]
+      },
+      {
+        "from": "Salt Lake City (I-80)",
+        "to": "Canyons Village public parking",
+        "roads": [
+          "I-80",
+          "UT 224",
+          "Canyons Resort Drive"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://www.parkcitymountain.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-ut-parleys-summit"
+        ],
+        "additionalSources": [
+          "https://wasatchback.udot.utah.gov/road-information/"
+        ]
+      }
+    ],
+    "perisher": [
+      {
+        "from": "Jindabyne",
+        "to": "Perisher Valley public parking",
+        "roads": [
+          "Kosciuszko Road"
+        ],
+        "statusUrls": [
+          "https://www.livetraffic.com/"
+        ],
+        "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.nationalparks.nsw.gov.au/things-to-do/snow-sports-facilities/perisher/visitor-info",
+          "https://www.nsw.gov.au/sites/default/files/2023-06/snow-chain-bay-locations.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "During snow season, two-wheel-drive vehicles must carry suitable snow chains on the designated alpine roads. Fit chains when directed and follow the posted requirements.",
+            "source": "https://www.nsw.gov.au/driving-boating-and-transport/plan-your-trip/holiday-driving/driving-snow",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Jindabyne",
+        "to": "Smiggin Holes public base",
+        "roads": [
+          "Kosciuszko Road"
+        ],
+        "statusUrls": [
+          "https://www.livetraffic.com/"
+        ],
+        "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.nationalparks.nsw.gov.au/things-to-do/snow-sports-facilities/perisher/visitor-info",
+          "https://www.nsw.gov.au/sites/default/files/2023-06/snow-chain-bay-locations.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "During snow season, two-wheel-drive vehicles must carry suitable snow chains on the designated alpine roads. Fit chains when directed and follow the posted requirements.",
+            "source": "https://www.nsw.gov.au/driving-boating-and-transport/plan-your-trip/holiday-driving/driving-snow",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Jindabyne",
+        "to": "Guthega public winter parking",
+        "roads": [
+          "Kosciuszko Road",
+          "Guthega Road"
+        ],
+        "statusUrls": [
+          "https://www.livetraffic.com/"
+        ],
+        "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.nationalparks.nsw.gov.au/things-to-do/snow-sports-facilities/perisher/visitor-info",
+          "https://www.nsw.gov.au/sites/default/files/2023-06/snow-chain-bay-locations.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "During snow season, two-wheel-drive vehicles must carry suitable snow chains on the designated alpine roads. Fit chains when directed and follow the posted requirements.",
+            "source": "https://www.nsw.gov.au/driving-boating-and-transport/plan-your-trip/holiday-driving/driving-snow",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Jindabyne",
+        "to": "Bullocks Flat Skitube parking",
+        "roads": [
+          "Kosciuszko Road",
+          "Alpine Way"
+        ],
+        "statusUrls": [
+          "https://www.livetraffic.com/"
+        ],
+        "source": "https://www.perisher.com.au/plan-your-trip/getting-to-perisher/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.nationalparks.nsw.gov.au/things-to-do/snow-sports-facilities/perisher/visitor-info",
+          "https://www.nsw.gov.au/sites/default/files/2023-06/snow-chain-bay-locations.pdf"
+        ]
+      }
+    ],
+    "powder-mountain": [
+      {
+        "from": "Eden",
+        "to": "Sundown Lodge",
+        "roads": [
+          "UT 158"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://powdermountain.com/getting-to-powder",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://ogdenvalley.udot.utah.gov/traction-law/"
+        ],
+        "restrictions": [
+          {
+            "description": "UDOT can activate its traction device requirements on UT 158 during winter storms.",
+            "source": "https://ogdenvalley.udot.utah.gov/traction-law/",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Eden",
+        "to": "Timberline Lodge",
+        "roads": [
+          "UT 158"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://powdermountain.com/getting-to-powder",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://ogdenvalley.udot.utah.gov/traction-law/"
+        ],
+        "restrictions": [
+          {
+            "description": "UDOT can activate its traction device requirements on UT 158 during winter storms.",
+            "source": "https://ogdenvalley.udot.utah.gov/traction-law/",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Eden",
+        "to": "Hidden Lake Lodge",
+        "roads": [
+          "UT 158",
+          "Summit Pass"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://powdermountain.com/getting-to-powder",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://ogdenvalley.udot.utah.gov/traction-law/"
+        ]
+      }
+    ],
+    "red-mountain-resort": [
+      {
+        "from": "Rossland",
+        "to": "RED Mountain Base Lodge",
+        "roads": [
+          "BC 3B",
+          "Red Mountain Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.redresort.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://rr-assets.b-cdn.net/wp-content/uploads/2024/10/redresort-base-area-facilities-map-2425-web.jpg"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Creston (BC 3)",
+        "to": "RED Mountain Base Lodge",
+        "roads": [
+          "BC 3",
+          "BC 3B",
+          "Red Mountain Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.redresort.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://nrc-publications.canada.ca/eng/view/ft/?id=50c4a1f1-0608-4db2-9ccd-74b038ef41bb",
+          "https://rr-assets.b-cdn.net/wp-content/uploads/2024/10/redresort-base-area-facilities-map-2425-web.jpg"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Spokane, via the Frontier–Paterson crossing",
+        "to": "RED Mountain Base Lodge",
+        "roads": [
+          "US 395",
+          "WA 25",
+          "BC 22",
+          "BC 3B",
+          "Red Mountain Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/",
+          "https://wsdot.com/Travel/Real-time/Map/"
+        ],
+        "source": "https://www.redresort.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://rr-assets.b-cdn.net/wp-content/uploads/2020/09/RED_Spokane_Directions.pdf",
+          "https://rr-assets.b-cdn.net/wp-content/uploads/2024/10/redresort-base-area-facilities-map-2425-web.jpg"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ],
+        "passIds": []
+      }
+    ],
+    "revelstoke": [
+      {
+        "from": "Downtown Revelstoke",
+        "to": "Revelstoke Village parking",
+        "roads": [
+          "Fourth Street",
+          "Airport Way",
+          "Nichol Road",
+          "Camozzi Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/",
+          "https://www.revelstokemountainresort.com/mountain/conditions/road-conditions/"
+        ],
+        "source": "https://www.revelstokemountainresort.com/real-estate/camozzi-road-open/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.revelstokemountainresort.com/discover/getting-here/getting-to-revelstoke/",
+          "https://www.revelstokemountainresort.com/site/assets/files/19486/village_map_-_60x48_-_print.pdf",
+          "https://www.revelstokemountainresort.com/discover/getting-here/resort-shuttle/"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "silverstar-mountain-resort": [
+      {
+        "from": "Vernon (Highway 97)",
+        "to": "SilverStar Village public parking",
+        "roads": [
+          "BC 97",
+          "Silver Star Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.skisilverstar.com/the-mountain/visitor-guide/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://bcparks.ca/silver-star-park/",
+          "https://www.alc.gov.bc.ca/assets/alc/assets/applications-and-decisions/search-for-applications-and-decisions/2009-decision-minutes/38741d1.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "snowbasin-resort": [
+      {
+        "from": "I-84 at Mountain Green",
+        "to": "Earl’s Lodge and base parking",
+        "roads": [
+          "I-84",
+          "UT 167",
+          "UT 226"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://www.snowbasin.com/about/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://ogdenvalley.udot.utah.gov/tips/your-guide-to-leaf-peeping-in-the-ogden-valley/",
+          "https://connect.udot.utah.gov/projects/current-projects/"
+        ]
+      },
+      {
+        "from": "Huntsville / Ogden Valley",
+        "to": "Earl’s Lodge and base parking",
+        "roads": [
+          "UT 39",
+          "UT 167",
+          "UT 226"
+        ],
+        "statusUrls": [
+          "https://udottraffic.utah.gov/"
+        ],
+        "source": "https://www.snowbasin.com/about/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://ogdenvalley.udot.utah.gov/tips/your-guide-to-leaf-peeping-in-the-ogden-valley/",
+          "https://connect.udot.utah.gov/projects/current-projects/"
+        ]
+      }
+    ],
+    "snowmass": [
+      {
+        "from": "CO 82 (Brush Creek junction)",
+        "to": "Snowmass Base Village and Mall",
+        "roads": [
+          "CO 82",
+          "Brush Creek Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.aspensnowmass.com/visit/parking-and-getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.gosnowmass.com/parking"
+        ]
+      },
+      {
+        "from": "CO 82 (Owl Creek junction)",
+        "to": "Two Creeks public lot",
+        "roads": [
+          "CO 82",
+          "Owl Creek Road",
+          "Burnt Mountain Circle"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.aspensnowmass.com/visit/parking-and-getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.gosnowmass.com/parking"
+        ]
+      },
+      {
+        "from": "CO 82 (Brush Creek junction)",
+        "to": "Town Park Station",
+        "roads": [
+          "CO 82",
+          "Brush Creek Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.aspensnowmass.com/visit/parking-and-getting-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.gosnowmass.com/parking"
+        ]
+      }
+    ],
+    "steamboat-ski-resort": [
+      {
+        "from": "Kremmling (US 40)",
+        "to": "Steamboat Square base parking",
+        "roads": [
+          "US 40",
+          "Mount Werner Road",
+          "Mount Werner Circle"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.steamboat.com/plan-your-trip/getting-here-and-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-co-rabbit-ears-pass"
+        ],
+        "additionalSources": [
+          "https://www.steamboat.com/winter-parking/parking-basics",
+          "https://www.codot.gov/projects/archives/us-40-rabbit-ears-pass"
+        ]
+      },
+      {
+        "from": "Hayden (US 40)",
+        "to": "Steamboat Square base parking",
+        "roads": [
+          "US 40",
+          "Mount Werner Road",
+          "Mount Werner Circle"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.steamboat.com/plan-your-trip/getting-here-and-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.steamboat.com/winter-parking/parking-basics"
+        ]
+      },
+      {
+        "from": "Kremmling (US 40)",
+        "to": "Meadows parking and Wildhorse Gondola",
+        "roads": [
+          "US 40",
+          "Mount Werner Road",
+          "Pine Grove Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.steamboat.com/plan-your-trip/getting-here-and-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-co-rabbit-ears-pass"
+        ],
+        "additionalSources": [
+          "https://www.steamboat.com/winter-parking/parking-basics",
+          "https://www.codot.gov/projects/archives/us-40-rabbit-ears-pass"
+        ]
+      },
+      {
+        "from": "Hayden (US 40)",
+        "to": "Meadows parking and Wildhorse Gondola",
+        "roads": [
+          "US 40",
+          "Mount Werner Road",
+          "Pine Grove Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.steamboat.com/plan-your-trip/getting-here-and-around",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.steamboat.com/winter-parking/parking-basics"
+        ]
+      }
+    ],
+    "sun-peaks-resort": [
+      {
+        "from": "Kamloops",
+        "to": "Village Day Lodge and Village parking",
+        "roads": [
+          "BC 5",
+          "Tod Mountain Road",
+          "Heffley-Louis Creek Road",
+          "Sun Peaks Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.sunpeaksresort.com/explore/how-to-get-to-sun-peaks",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/natural-resource-use/all-seasons-resorts/sun-peaks-master-plan-update-2020-final-doc-and-figs/sun_peaks_master_plan_update_2020-_text.pdf",
+          "https://sunpeaksmunicipality.ca/sites/sunpeaksmunicipality.ca/files/2022-07/reduced_Sun%20Peaks%20OCP_v.1.5.1_0.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter tires or chains are required on signed routes. Follow the dates posted on the provincial route map and signs.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Kamloops",
+        "to": "East Village parking",
+        "roads": [
+          "BC 5",
+          "Tod Mountain Road",
+          "Heffley-Louis Creek Road",
+          "Sun Peaks Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.sunpeaksresort.com/explore/how-to-get-to-sun-peaks",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/natural-resource-use/all-seasons-resorts/sun-peaks-master-plan-update-2020-final-doc-and-figs/sun_peaks_master_plan_update_2020-_text.pdf",
+          "https://sunpeaksmunicipality.ca/sites/sunpeaksmunicipality.ca/files/2022-07/reduced_Sun%20Peaks%20OCP_v.1.5.1_0.pdf",
+          "https://www.sunpeaksresort.com/explore/getting-here-around/parking"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter tires or chains are required on signed routes. Follow the dates posted on the provincial route map and signs.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Hope (BC 5)",
+        "to": "Sun Peaks Village public parking",
+        "roads": [
+          "BC 5",
+          "Tod Mountain Road",
+          "Heffley-Louis Creek Road",
+          "Sun Peaks Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.sunpeaksresort.com/explore/how-to-get-to-sun-peaks",
+        "checkedOn": "2026-11-21",
+        "additionalSources": [
+          "https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/natural-resource-use/all-seasons-resorts/sun-peaks-master-plan-update-2020-final-doc-and-figs/sun_peaks_master_plan_update_2020-_text.pdf",
+          "https://sunpeaksmunicipality.ca/sites/sunpeaksmunicipality.ca/files/2022-07/reduced_Sun%20Peaks%20OCP_v.1.5.1_0.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter tires or chains are required on signed routes. Follow the dates posted on the provincial route map and signs.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "vail-mountain": [
+      {
+        "from": "Denver",
+        "to": "Vail Village Parking Structure",
+        "roads": [
+          "I-70",
+          "South Frontage Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-co-vail-pass"
+        ],
+        "additionalSources": [
+          "https://www.vail.gov/visiting/getting-here",
+          "https://www.codot.gov/projects/i70westvailauxiliarylanes/construction",
+          "https://www.codot.gov/travel/ejmt/metering"
+        ],
+        "restrictions": [
+          {
+            "description": "I-70 between Dotsero and Morrison has a seasonal traction requirement from September 1 through May 31. Check CDOT for current passenger vehicle chain restrictions.",
+            "source": "https://www.codot.gov/travel/winter-driving/tractionlaw",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Eagle",
+        "to": "Vail Village Parking Structure",
+        "roads": [
+          "I-70",
+          "South Frontage Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.vail.gov/visiting/getting-here",
+          "https://www.codot.gov/projects/i70westvailauxiliarylanes/construction",
+          "https://www.codot.gov/travel/ejmt/metering"
+        ],
+        "restrictions": [
+          {
+            "description": "I-70 between Dotsero and Morrison has a seasonal traction requirement from September 1 through May 31. Check CDOT for current passenger vehicle chain restrictions.",
+            "source": "https://www.codot.gov/travel/winter-driving/tractionlaw",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Denver",
+        "to": "Lionshead Parking Structure",
+        "roads": [
+          "I-70",
+          "South Frontage Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-co-vail-pass"
+        ],
+        "additionalSources": [
+          "https://www.vail.gov/visiting/getting-here",
+          "https://www.codot.gov/projects/i70westvailauxiliarylanes/construction",
+          "https://www.codot.gov/travel/ejmt/metering"
+        ],
+        "restrictions": [
+          {
+            "description": "I-70 between Dotsero and Morrison has a seasonal traction requirement from September 1 through May 31. Check CDOT for current passenger vehicle chain restrictions.",
+            "source": "https://www.codot.gov/travel/winter-driving/tractionlaw",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Eagle",
+        "to": "Lionshead Parking Structure",
+        "roads": [
+          "I-70",
+          "South Frontage Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.vail.gov/visiting/getting-here",
+          "https://www.codot.gov/projects/i70westvailauxiliarylanes/construction",
+          "https://www.codot.gov/travel/ejmt/metering"
+        ],
+        "restrictions": [
+          {
+            "description": "I-70 between Dotsero and Morrison has a seasonal traction requirement from September 1 through May 31. Check CDOT for current passenger vehicle chain restrictions.",
+            "source": "https://www.codot.gov/travel/winter-driving/tractionlaw",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "whistler-blackcomb": [
+      {
+        "from": "West Vancouver (BC 99 junction)",
+        "to": "Creekside Parkade",
+        "roads": [
+          "BC 99",
+          "London Lane"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://trade.whistler.com/about/stats/",
+          "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2024-2025/20241120_WB_winter-base_map_001.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter tires or chains are required on signed routes. Follow the dates posted on the provincial route map and signs.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "West Vancouver (BC 99 junction)",
+        "to": "Whistler Village public gondola base",
+        "roads": [
+          "BC 99",
+          "Village Gate Boulevard"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://trade.whistler.com/about/stats/",
+          "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2024-2025/20241120_WB_winter-base_map_001.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter tires or chains are required on signed routes. Follow the dates posted on the provincial route map and signs.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "West Vancouver (BC 99 junction)",
+        "to": "Blackcomb Base II parking",
+        "roads": [
+          "BC 99",
+          "Village Gate Boulevard",
+          "Blackcomb Way",
+          "Glacier Lane"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://trade.whistler.com/about/stats/",
+          "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2024-2025/20241120_WB_winter-base_map_001.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter tires or chains are required on signed routes. Follow the dates posted on the provincial route map and signs.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "whitefish-mountain-resort": [
+      {
+        "from": "Whitefish",
+        "to": "Base Lodge",
+        "roads": [
+          "Wisconsin Avenue",
+          "East Lakeshore Drive",
+          "Big Mountain Road",
+          "Glades Drive"
+        ],
+        "statusUrls": [
+          "https://www.511mt.net/"
+        ],
+        "source": "https://skiwhitefish.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://skiwhitefish.com/parking/",
+          "https://skiwhitefish.com/WMREventGuide.pdf"
+        ]
+      },
+      {
+        "from": "Whitefish",
+        "to": "Upper Village",
+        "roads": [
+          "Wisconsin Avenue",
+          "East Lakeshore Drive",
+          "Big Mountain Road"
+        ],
+        "statusUrls": [
+          "https://www.511mt.net/"
+        ],
+        "source": "https://skiwhitefish.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://skiwhitefish.com/parking/",
+          "https://skiwhitefish.com/WMREventGuide.pdf"
+        ]
+      }
+    ],
+    "whitewater-mountain-resort": [
+      {
+        "from": "Nelson (Highway 6)",
+        "to": "Whitewater main day lodge parking",
+        "roads": [
+          "BC 6",
+          "Whitewater Ski Area Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://whitewatermountainresort.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.rdck.ca/wp-content/uploads/2025/09/2025-09-18-BRD_Addenda-lr.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      },
+      {
+        "from": "Nelson (Highway 6)",
+        "to": "Nordic parking at Hummingbird Lodge",
+        "roads": [
+          "BC 6",
+          "Whitewater Ski Area Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://whitewatermountainresort.com/getting-here/",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.rdck.ca/wp-content/uploads/2025/09/2025-09-18-BRD_Addenda-lr.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Vehicles need approved winter tires or chains on signed provincial routes during their posted dates.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "winter-park-resort": [
+      {
+        "from": "Empire Junction (I-70 exit 232)",
+        "to": "Winter Park Village day parking",
+        "roads": [
+          "US 40",
+          "Winter Park Drive"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.winterparkresort.com/plan-your-trip/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-co-berthoud-pass"
+        ],
+        "additionalSources": [
+          "https://winterparkco.org/getting-here",
+          "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking",
+          "https://www.codot.gov/projects/statewidecameras"
+        ]
+      },
+      {
+        "from": "Fraser (US 40)",
+        "to": "Winter Park Village day parking",
+        "roads": [
+          "US 40",
+          "Winter Park Drive"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.winterparkresort.com/plan-your-trip/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://winterparkco.org/getting-here",
+          "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking"
+        ]
+      },
+      {
+        "from": "Empire Junction (I-70 exit 232)",
+        "to": "Mary Jane day lots",
+        "roads": [
+          "US 40",
+          "Mary Jane Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.winterparkresort.com/plan-your-trip/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [
+          "us-co-berthoud-pass"
+        ],
+        "additionalSources": [
+          "https://winterparkco.org/getting-here",
+          "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking",
+          "https://www.codot.gov/projects/statewidecameras"
+        ]
+      },
+      {
+        "from": "Fraser (US 40)",
+        "to": "Mary Jane day lots",
+        "roads": [
+          "US 40",
+          "Mary Jane Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.winterparkresort.com/plan-your-trip/getting-here",
+        "checkedOn": "2026-11-21",
+        "passIds": [],
+        "additionalSources": [
+          "https://winterparkco.org/getting-here",
+          "https://www.winterparkresort.com/plan-your-trip/getting-here/resort-parking"
+        ]
+      }
+    ]
+  },
+  "mountainPasses": {
+    "ca-ab-bc-kicking-horse-pass": {
+      "name": "Kicking Horse Pass",
+      "road": "Highway 1",
+      "coordinates": [
+        -116.285833,
+        51.4525
+      ],
+      "source": "https://apps.gov.bc.ca/pub/bcgnws/names/3822.html",
+      "checkedOn": "2026-11-21"
+    },
+    "ca-ab-bc-vermilion-pass": {
+      "name": "Vermilion Pass",
+      "road": "Highway 93",
+      "coordinates": [
+        -116.050833,
+        51.233056
+      ],
+      "source": "https://apps.gov.bc.ca/pub/bcgnws/names/24409.html",
+      "checkedOn": "2026-11-21"
+    },
+    "us-ca-brockway-summit": {
+      "name": "Brockway Summit",
+      "road": "CA 267",
+      "coordinates": [
+        -120.071317,
+        39.261023
+      ],
+      "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/257473",
+      "checkedOn": "2026-11-21"
+    },
+    "us-ca-donner-summit-i80": {
+      "name": "Donner Summit",
+      "road": "I-80",
+      "coordinates": [
+        -120.3439,
+        39.34
+      ],
+      "source": "https://ohv.parks.ca.gov/?page_id=23055",
+      "checkedOn": "2026-11-21"
+    },
+    "us-ca-echo-summit": {
+      "name": "Echo Summit",
+      "road": "US 50",
+      "coordinates": [
+        -120.030196,
+        38.812968
+      ],
+      "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/259792",
+      "checkedOn": "2026-11-21"
+    },
+    "us-co-berthoud-pass": {
+      "name": "Berthoud Pass",
+      "road": "US 40",
+      "coordinates": [
+        -105.777795,
+        39.798327
+      ],
+      "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/181335",
+      "checkedOn": "2026-11-21"
+    },
+    "us-co-loveland-pass": {
+      "name": "Loveland Pass",
+      "road": "US 6",
+      "coordinates": [
+        -105.879189,
+        39.663604
+      ],
+      "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/181813",
+      "checkedOn": "2026-11-21"
+    },
+    "us-co-rabbit-ears-pass": {
+      "name": "Rabbit Ears Pass",
+      "road": "US 40",
+      "coordinates": [
+        -106.611717,
+        40.38471
+      ],
+      "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/172776",
+      "checkedOn": "2026-11-21"
+    },
+    "us-co-vail-pass": {
+      "name": "Vail Pass",
+      "road": "I-70",
+      "coordinates": [
+        -106.2172,
+        39.5295
+      ],
+      "source": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/CO/CO_Vail_Pass_20160915_TM_geo.pdf",
+      "checkedOn": "2026-11-21"
+    },
+    "us-nv-daggett-pass": {
+      "name": "Daggett Pass",
+      "road": "NV 207",
+      "coordinates": [
+        -119.888804,
+        38.97658
+      ],
+      "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/859444",
+      "checkedOn": "2026-11-21"
+    },
+    "us-ut-parleys-summit": {
+      "name": "Parleys Summit",
+      "road": "I-80",
+      "coordinates": [
+        -111.6224,
+        40.7516
+      ],
+      "source": "https://forecast.weather.gov/MapClick.php?lat=40.7516&lon=-111.6224",
+      "checkedOn": "2026-11-21"
+    }
+  }
+}

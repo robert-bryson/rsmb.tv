@@ -6,7 +6,7 @@ import { snowDepthAnalysis, snowDepthBands } from './skiMapOverlays';
 import { SkiIconButton } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 
-export type SetSkiLayer = (key: 'color' | 'terrain' | 'skiTerrain' | 'snowDepth', value?: string) => void;
+export type SetSkiLayer = (key: 'color' | 'terrain' | 'skiTerrain' | 'snowDepth' | 'peaks', value?: string) => void;
 
 interface Props {
     colors: MarkerMode;
@@ -15,6 +15,7 @@ interface Props {
     terrain: boolean;
     snowDepth: boolean;
     resortTerrain: boolean;
+    peaks: boolean;
     conventions: readonly TerrainConvention[];
     onChange: SetSkiLayer;
     onClose: () => void;
@@ -31,7 +32,7 @@ function LayerToggle({ label, note, checked, onChange }: {
     </label>;
 }
 
-export function SkiLayerPanel({ colors, units, indyDiscounts, terrain, snowDepth, resortTerrain, conventions, onChange, onClose }: Props) {
+export function SkiLayerPanel({ colors, units, indyDiscounts, terrain, snowDepth, resortTerrain, peaks, conventions, onChange, onClose }: Props) {
     const markerSelect = useRef<HTMLSelectElement>(null);
     useLayoutEffect(() => { markerSelect.current?.focus(); }, []);
     const legend = markerLegend(colors, units, indyDiscounts);
@@ -61,6 +62,7 @@ export function SkiLayerPanel({ colors, units, indyDiscounts, terrain, snowDepth
                 <legend>Overlays</legend>
                 <LayerToggle label="Terrain relief" checked={terrain} onChange={checked => onChange('terrain', checked ? '1' : '0')} />
                 <LayerToggle label="Ski terrain" checked={resortTerrain} onChange={checked => onChange('skiTerrain', checked ? undefined : '0')} />
+                <LayerToggle label="Mountain peaks" checked={peaks} onChange={checked => onChange('peaks', checked ? undefined : '0')} />
                 <LayerToggle label="Snow depth" note="Contiguous U.S." checked={snowDepth}
                     onChange={checked => onChange('snowDepth', checked ? '1' : undefined)} />
             </fieldset>

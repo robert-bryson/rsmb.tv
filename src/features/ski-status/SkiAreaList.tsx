@@ -4,10 +4,13 @@ import { columns, formatSkiStat, matchesSkiPass, passFilterOptions, selectedSkiP
 import type { SkiArea } from './catalog';
 import type { Conditions, ResortReport, ResortStatus } from './conditions';
 import { markerModes, passAccessAppearance, type MarkerMode } from './mapAppearance';
+import { skiResortIconCandidates } from './resortDetailsData';
+import { SkiAssetIcon } from './SkiAssetIcon';
 import { SkiIconButton } from './SkiIcon';
 import { SkiLocation } from './SkiLocation';
 import { SkiPassIcon } from './SkiPassIcon';
 import { SkiStatusLabel } from './SkiStatusLabel';
+import type { SkiArchive } from './useSkiArchive';
 
 const pageSize = 40;
 const sortOptions = columns.map(({ key, label }) => ({ key, label: key === 'name' ? 'Name' : label }));
@@ -24,6 +27,7 @@ interface ListProps {
     statuses: ReadonlyMap<string, ResortStatus>;
     conditions: Conditions;
     colors: MarkerMode;
+    archive?: SkiArchive;
     passSelection?: SkiPassSelection;
     units: SkiUnits;
     sort: SkiSort;
@@ -32,7 +36,7 @@ interface ListProps {
     onZoomLocation?: (place: string) => void;
 }
 
-export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, passSelection, units, sort, onSort, onSelect, onZoomLocation }: ListProps) {
+export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, archive, passSelection, units, sort, onSort, onSelect, onZoomLocation }: ListProps) {
     const [visibleCount, setVisibleCount] = useState(pageSize);
     const list = useRef<HTMLUListElement>(null);
     const nextResult = useRef<number>(undefined);
@@ -73,12 +77,14 @@ export function SkiAreaList({ areas, selectedId, statuses, conditions, colors, p
                     const matchingPasses = appliedPasses.length > 1
                         ? appliedPasses.filter(pass => matchesSkiPass(area, pass, passSelection?.product)) : [];
                     const access = colors === 'pass' && !matchingPasses.length ? passAccessAppearance(area, passSelection) : undefined;
+                    const { urls } = skiResortIconCandidates(area.id, archive?.get(area.id));
                     const metaId = `ski-result-${area.id}`;
                     const sortId = `${metaId}-sort`;
                     return <li key={area.id} className="ski-result" data-selected={selection || undefined}>
                         <button type="button" aria-describedby={sortField ? `${metaId} ${sortId}` : metaId} aria-pressed={selection}
                             className="ski-result-select" onClick={event => onSelect(area.id, event.currentTarget)}>
-                            {area.name}
+                            <SkiAssetIcon urls={urls} size={22} className="ski-resort-icon" loading="lazy" />
+                            <span>{area.name}</span>
                         </button>
                         <div id={metaId} className="ski-result-meta">
                             <span className="ski-result-location">

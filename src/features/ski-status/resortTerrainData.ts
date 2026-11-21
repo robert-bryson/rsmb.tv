@@ -1,9 +1,11 @@
-import manifest from '../../../projects/ski-status/data/resort-terrain.json';
+import manifest from '../../../projects/ski-status/data/resort-terrain.json' with { type: 'json' };
 import { skiAssetUrl, skiTerrainFile } from '../../../shared/skiAssets';
 import type { SkiArea } from './catalog';
 
 export const skiTerrainArchiveUrl = skiAssetUrl(skiTerrainFile(manifest.archiveSha256));
 export const resortTerrainMinZoom = manifest.minZoom;
+export const resortDetailMinZoom = manifest.detailMinZoom;
+export const resortStationMinZoom = manifest.stationMinZoom;
 const groupsByArea = new Map(Object.entries(manifest.groupsByArea));
 
 export type TerrainConvention = 'default' | 'europe' | 'japan';

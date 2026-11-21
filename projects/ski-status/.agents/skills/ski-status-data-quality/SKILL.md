@@ -1,6 +1,6 @@
 ---
 name: ski-status-data-quality
-description: Verify ski-status data, trail maps, and icons in small batches. Save checkpoints and archive verified assets on the project NAS.
+description: Verify ski-status resort data in acreage order. Fill catalog gaps and collect winter highway approaches, mountain passes, trail maps, peaks, and icons. Save batch checkpoints and archive verified assets on the project NAS.
 ---
 
 # Improve ski-status data in batches
@@ -9,11 +9,23 @@ Start at the repository root. Read the task list and the sections of the guide f
 
 ## Choose a batch
 
-Use one batch of up to 10 resorts or candidates by default. Use the scope and size the user requests. Group cases by region, operator, pass family, or source. Fill the batch when enough cases are due. Count fields from the current files. Include reported zero and `false` values.
+Use one batch of up to 10 resorts by default. Use the scope and size the user requests. For a candidate review, use the candidate log. [Candidate review](#verify-and-apply-evidence)
 
-Check credible corrections and time-sensitive season or pass changes first. For other gaps, start with base elevation, summit elevation, and skiable acres. Select areas with skiing type `downhill` or `both`. A missing skiing type means `downhill`. A complete record has all six fields. Check `baseFt`, `summitFt`, `acres`, `verticalFt`, `liftCount`, and `trailCount`.
+1. Rank catalog areas in `data/areas.json` by published skiable `acres`, from largest to smallest. Include `downhill` and `both`. A missing skiing type means `downhill`.
+2. Use the recorded minimum for a published lower bound. Use area ID to break ties. Keep areas with unknown acreage unranked until a source gives a value.
+3. Start with the largest area that has a check due. Use its current records and latest checkpoints to resume where work stopped.
+4. Finish the area's applicable checks before you start a smaller area. Re-rank the queue after you verify a new acreage. Use the same order in later batches.
 
-Check related fields while the source is open. For example, check the official conditions link on the operator's site. Use the log to review other regions and fields in later batches. Start with new cases and deferred cases that are due or have a new source. Move to another case after you check the available sources.
+After the ranked queue, review unranked areas for published acreage and other gaps. Put an area in the ranked queue when you verify its acreage.
+
+## Complete each resort
+
+- Verify `baseFt`, `summitFt`, `acres`, `verticalFt`, `liftCount`, and `trailCount`. Check the official conditions link, season dates, snowfall, ski pass rules, and catalog links. Use current source records. Keep reported zero and `false` values.
+- Check the verified winter entrance, lodges, parking, shuttles, trail maps, named peaks, day tickets, webcams, and icon. Check the road approaches to the public bases. [Seasonal resort access](#seasonal-resort-access), [Road approaches](#road-approaches), [Resort icons](#resort-icons)
+
+Check related fields while the source is open. Treat earlier reviews as evidence for the fields they cover. Include road approaches when you return to a resort.
+
+Mark an area complete when each applicable field has a verified value or evidence that it is unpublished. Record fields that do not apply. When a gap needs new evidence, record a deferral. Finish the area's other checks before you continue. Recheck larger deferred areas first when their checks are due. [Batch checkpoints](#validate-and-checkpoint)
 
 ## Verify and apply evidence
 
@@ -23,7 +35,7 @@ Open the source and locate each fact you need. Start with operators and pass iss
 | --- | --- |
 | Mountain statistics | Edit `data/areas.json`. List each field once in `statSources`. Group fields with the same direct HTTPS source, check date, and note. In the note, record scope, original units, conversions, and calculations. Verify a single skiable descent before you calculate vertical. Keep published lower bounds. Verify export terms before you add `exportLicense`. [Measurement rules](../../../readme.md#comparable-mountain-statistics) |
 | Conditions links and dated reports | Open the operator's report or its linked service. Check the area before you set `reportUrl` and `reportCheckedOn`. Verify reuse terms for a report in `data/conditions/operator-reports.json`. Use a source timestamp or a verified local ski date. Match the area and time for open and total counts. Check the Rockies pilot procedure and record terms that need review. [Report rules](../../../readme.md#report-and-forecast-rules), [Pilot checks](../../../readme.md#conditions-publication) |
-| Pass access | Match the current membership file and product rules by area ID, pass family, and season. Use `data/passes-2026-27.json` and `data/pass-rules/` for 2026/27. Check Indy rules first. Verify products, dates, allowances, shared groups, blackouts, reservations, and exceptions. Check the resort's redemption terms. Leave unverified product rules open. [Pass rules](../../../readme.md#pass-access-by-product-and-date) |
+| Ski pass access | Match the current membership file and product rules by area ID, pass family, and season. Use `data/passes-2026-27.json` and `data/pass-rules/` for 2026/27. Check Indy rules first for the selected resort. Verify products, dates, allowances, shared groups, blackouts, reservations, and exceptions. Check the resort's redemption terms. Leave unverified product rules open. [Pass rules](../../../readme.md#pass-access-by-product-and-date) |
 | Season events and snow | Use dated operator records for the first and last lift-served days in `data/seasons.json`. Use the separate fields for plans and typical seasons. Record the snow measure, location, period, and source in `data/snow-history.json`. Check station distance and reading coverage. Keep zeros. Cite a separate source for an annual total when applicable. [Season dates](../../../readme.md#opening-and-closing-dates), [Snow methods](../../../readme.md#snow-history-methods) |
 | Candidate review | Filter the North American log by region and `unresolved`. Verify active public access and catalog eligibility. Check duplicates, shared areas, and specialty areas. Record the decision, reason, source, and date. For `eligible`, record the matching catalog ID and location. Use `unresolved` with a specific `nextCheck` for uncertain matches. Recount the regional summary. [Eligibility](../../../readme.md#first-release), [Candidate log](../../../research/north-america-2026-11-16.csv), [Regional summary](../../../research/north-america-2026-11-16-summary.csv) |
 | Entrances and links | Use operator directions to check public winter entrance coordinates in `data/resort-bases.json`. Match Wikipedia titles to the ski area. [Catalog](../../../readme.md#catalog) |
@@ -32,7 +44,7 @@ Use existing IDs, schemas, units, and formatting. When you add a resort, update 
 
 ## Resort icons
 
-Check icon coverage for each resort you review. Include new candidates that qualify for the catalog. Keep missing icons due for review after all other fields are complete. Use the checkpoint to resume earlier checks.
+Check icon coverage for each resort you review. Include new candidates that qualify for the catalog. Use the resort checkpoint to resume deferred icon checks.
 
 Open the official mark. Check the press kit, favicon, Apple touch icon, or web manifest. Confirm that the mark represents the resort or its official group. Verify the terms for bundling it. Use a simple symbol on the map and a readable mark in details. Keep the original for the archive. [Icon sizes and archive](#archive-new-assets-at-the-end-of-the-run)
 
@@ -40,7 +52,7 @@ Save the app icon as `runtime/resort-icons/<areaId>.png` in the NAS asset folder
 Add its SHA-256 checksum to `data/runtime-icons.json` with the key `resort-icons/<areaId>.png`.
 Add its HTTPS source to `iconSources[areaId]` in `data/resort-links.json`.
 Run `skiStatusResortData.test.ts` to check for one source per icon.
-Check the map icon, the details icon, and the map's fallback symbol. [Asset folder](../../../readme.md#local-assets), [Icon registry](../../../../../src/features/ski-status/resortDetailsData.ts), [Map layers](../../../../../src/features/ski-status/skiMapLayers.ts)
+Check the icon on the map, in Results, and in details. Check the map's fallback symbol. [Asset folder](../../../readme.md#local-assets), [Icon registry](../../../../../src/features/ski-status/resortDetailsData.ts), [Map layers](../../../../../src/features/ski-status/skiMapLayers.ts)
 
 Add an `icon` target for each missing mark you check. When you defer a mark, record its URL and the next check. Count bundled icons before and after the batch. Use only catalog area IDs.
 
@@ -54,18 +66,36 @@ Check these fields for each resort. Use the resort's local ski season. Record th
 
 Save the facts by area ID in `projects/ski-status/research/resort-access-YYYY-YY.json`. Use `resort-access-YYYY.json` for a single-year season. Set `season` and `resorts` at the top level. Set `checkedOn` for each resort. Use the fields `lodges`, `mapPin`, `webcams`, `parking`, `trailMaps`, or `liftTickets` when verified. Give each fact a source. Keep the original check date when a later review checks a different field. List verified and deferred targets separately in the checkpoint.
 
+## Road approaches
+
+Use operator directions to identify the main winter driving approaches to public bases or parking lots. Check each published approach separately. Include common alternate approaches when the sources document them. Use road agency maps to verify highway numbers, junctions, and named mountain passes on each route.
+
+Save the records in `projects/ski-status/research/road-approaches.json`. Use HTTPS source URLs and `YYYY-MM-DD` check dates. Use these two objects.
+
+| Object | Fields |
+| --- | --- |
+| `approachesByArea` | Use the catalog area ID as the key. Store a list of approaches. Give the origin town or junction in `from`. Give the winter base or lot in `to`. Record `roads` and `passIds` in driving order. Include `source` and `checkedOn`. Add official `statusUrls` and `additionalSources` when available. |
+| `mountainPasses` | Use a stable pass ID that includes the jurisdiction. Record the official `name`, the `road`, and `coordinates` as `[longitude, latitude]`. Put the point where the road crosses the pass. Include `source` for the location and `checkedOn`. |
+
+Reuse the same pass ID when different routes cross the same point. Use an empty `passIds` list for a verified route without a named pass. If the crossing remains uncertain, omit `passIds` and record the next check. Give each published seasonal rule in `restrictions` a `description`, road agency `source`, and `checkedOn` date. Use the official status links for current closures. [Access routes and webcams](../../../readme.md#access-routes-and-webcams)
+
 ## Official trail maps and lift tickets
 
 - **Trail maps**. Open the operator's winter map. Check its season, labels, and area coverage. Open the print or full-size download. Compare files for the same edition and area. Use a vector print PDF when it gives the clearest labels. For raster files, use the highest native resolution with complete coverage and readable labels. Save the original file. Record the official page, direct HTTPS download, season, and coverage in `trailMaps`. Include maps for separate bases or activities. If no download is available, record the public page and the gap.
+- **Mountain peaks**. Check the named summits on each map. Verify their positions with a geographic names office or a topographic map. Record verified peaks in `data/resort-peaks.json`. Use the same peak ID for a summit that appears on maps from more than one resort. Record a deferral if you cannot match a label to a summit. [Peak records](../../../readme.md#mountain-peaks)
+- **Ski-area boundaries and backcountry gates**. Check published boundaries and marked gates on operator or land manager maps. Record the mapped feature, season, source, and check date in the research log. Record a deferral if you cannot verify its location. [Terrain audit](../../../readme.md#openskidata-audit)
 - **Lift tickets**. Find the operator's adult full-day downhill price in local currency. Record the price, published minimum, or price range in `liftTickets`. Give the dates, product, sales channel, and source. Include published taxes, pass rules, and required card fees. For dynamic prices, record the ski dates you sampled and the check date. Leave the price open when the source has no price for that season.
 
 ## Validate and checkpoint
 
 Check each change against its source. Review the diff for unrelated edits. Run the focused tests for the data you changed. Run `npm run test:ski-terrain` for candidate CSVs or terrain records. Fix regressions before you mark the batch as verified. [Local checks](../../../readme.md#local-checks)
 
+When road approaches change, run the road approach test. It checks area IDs, pass references, roads, coordinates, sources, and dates.
+
 ```sh
 git diff --check
 npx --no-install vitest run src/test/skiStatus.test.ts src/test/skiStatusRelease.test.ts src/test/skiStatusSeasons.test.ts src/test/skiStatusResortData.test.ts
+npx --no-install vitest run src/test/skiStatusRoadApproaches.test.ts
 ```
 
 Add one JSON object per verified batch to `projects/ski-status/research/data-quality-log.jsonl`. Create the file on the first run. Record the batch using these fields.
@@ -74,13 +104,15 @@ Add one JSON object per verified batch to `projects/ski-status/research/data-qua
 - Set `before` and `after` to the counts for the fields you checked.
 - Put the test commands and results in `checks`.
 - In `attempts`, set the `work`, `key`, and `targets` for each case. Use an area ID or candidate URL as the key. List the fields, series, season, or products in `targets`.
+- For road checks, use `road-approach` in `work`. List the directions, highways, or mountain passes that you checked in `targets`.
+- For peak checks, use `mountain-peak` in `work`. List the summit names in `targets`. If the map shows no named summits, record that result with the map source.
 - Set each `outcome` to `updated`, `confirmed`, or `deferred`. Include the sources you opened. For a deferral, specify the `nextCheck`. Set `retryOn` if a source is due to change.
 
 Read the last entry for each target before you repeat a search. Recheck a deferred target when its retry date arrives or when you find a new lead. Count only the targets you reviewed.
 
 ## Save each batch snapshot
 
-After you update the log, copy the changed data files, seasonal records, and both batch logs to a new timestamped directory under `N:\projects\ski-status\data-quality`. Keep the paths relative to the project. Use the WSL mount at `/mnt/n/projects/ski-status` or the Windows `N:` mapping. Verify the copies against the local files. Record the snapshot path. If the share is unavailable, record the pending copy and continue locally. Keep new assets in a local staging directory for the run. Record their paths until you verify the archive.
+Create a dated directory under `N:\projects\ski-status\data-quality`. Copy the changed data files, access records, and both batch logs to that directory. Keep the paths relative to the project. Use the WSL mount at `/mnt/n/projects/ski-status` or the Windows `N:` mapping. Verify the copies against the local files. Record the snapshot path. If the share is unavailable, record the pending copy and continue locally. Keep new assets in a local staging directory for the run. Record their paths until you verify the archive.
 
 ## Report each batch
 
@@ -118,6 +150,7 @@ Verify the copy against the manifest. If the NAS is unavailable, keep the staged
 After the archive check, add a run summary to the log. Report the same results in your final reply.
 
 - Give the batch and case counts, changes in coverage, and test results.
+- Count the resorts with checked road approaches and the mountain passes recorded.
 - Count archived trail maps, original icons, and icon variants.
 - Give the NAS manifest path and remaining checks.
 - If the run ends early, report completed work and pending copies.

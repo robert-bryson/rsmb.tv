@@ -2,6 +2,7 @@ import type {
     ExpressionSpecification, HillshadeLayerSpecification, Map as MapLibreMap,
     RasterDEMSourceSpecification, RasterLayerSpecification, RasterSourceSpecification,
 } from '../../maps/maplibre';
+import { resortDetailMinZoom, resortStationMinZoom, resortTerrainMinZoom } from './resortTerrainData';
 
 export const reliefSource = 'ski-terrain-dem';
 export const reliefLayer = 'ski-terrain-relief';
@@ -13,6 +14,7 @@ const reliefExaggeration: ExpressionSpecification = [
 export const snowDepthSource = 'ski-snow-depth-tiles';
 export const snowDepthLayer = 'ski-snow-depth';
 export const snowDepthMinZoom = 4;
+export const snowDepthMaxZoom = resortStationMinZoom + 1;
 export type SkiMapOverlaySource = typeof reliefSource | typeof snowDepthSource;
 export const snowDepthTileEndpoint = 'https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer/export';
 export const snowDepthAnalysis = 'https://www.nohrsc.noaa.gov/nsa/';
@@ -42,7 +44,9 @@ const snowDepthTiles: RasterSourceSpecification = {
 };
 
 const snowDepthOpacity: ExpressionSpecification = [
-    'interpolate', ['linear'], ['zoom'], snowDepthMinZoom, 0, 5, 0.1, 6, 0.26, 8, 0.52, 10, 0.52, 13, 0.3,
+    'interpolate', ['linear'], ['zoom'], snowDepthMinZoom, 0, 5, 0.1, 6, 0.26,
+    resortTerrainMinZoom - 1, 0.52, resortTerrainMinZoom, 0.52,
+    resortDetailMinZoom, 0.16, resortStationMinZoom, 0.02, snowDepthMaxZoom, 0,
 ];
 
 function syncOverlay(map: MapLibreMap, source: RasterSourceSpecification | RasterDEMSourceSpecification,
@@ -59,7 +63,7 @@ function syncOverlay(map: MapLibreMap, source: RasterSourceSpecification | Raste
 export function syncSkiMapOverlays(map: MapLibreMap, before: string, terrain: boolean, snowDepth: boolean, duration: number) {
     syncOverlay(map, reliefTiles, relief, terrain, map.getLayer(snowDepthLayer) ? snowDepthLayer : before);
     syncOverlay(map, snowDepthTiles, {
-        id: snowDepthLayer, type: 'raster', source: snowDepthSource, minzoom: snowDepthMinZoom,
+        id: snowDepthLayer, type: 'raster', source: snowDepthSource, minzoom: snowDepthMinZoom, maxzoom: snowDepthMaxZoom,
         paint: {
             'raster-opacity': 0,
             'raster-resampling': 'nearest',

@@ -2,12 +2,11 @@ import manifest from '../../../projects/ski-status/data/resort-terrain.json';
 import type { CircleLayerSpecification, ExpressionSpecification, FillLayerSpecification, FilterSpecification, LineLayerSpecification, Map as MapLibreMap } from '../../maps/maplibre';
 import { pmtilesSourceUrl } from '../../maps/pmtiles';
 import type { TooltipPoint } from '../../maps/screenGeometry';
-import { resortTerrainMinZoom, skiTerrainArchiveUrl, terrainColors, type TerrainConvention } from './resortTerrainData';
+import { resortDetailMinZoom, resortStationMinZoom, resortTerrainMinZoom, skiTerrainArchiveUrl, terrainColors,
+    type TerrainConvention } from './resortTerrainData';
 
 export const resortTerrainSource = 'ski-resort-terrain';
-const resortDetailMinZoom = manifest.detailMinZoom;
 const runAreaMinZoom = 12;
-const stationMinZoom = manifest.stationMinZoom;
 export const resortFootprintLayer = 'ski-resort-footprints';
 const liftLayer = 'ski-resort-lifts';
 const runLayer = 'ski-resort-runs';
@@ -25,7 +24,7 @@ const runColor: ExpressionSpecification = ['match', ['get', 'use'],
 ];
 const runCasing: ExpressionSpecification = ['case', ['==', runColor, '#18181b'], '#d4d4d8', '#18181b'];
 const detailOpacity: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], resortDetailMinZoom, 0.18, resortDetailMinZoom + 1.25, 1];
-const stationOpacity: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], stationMinZoom, 0.24, stationMinZoom + 1, 1];
+const stationOpacity: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], resortStationMinZoom, 0.24, resortStationMinZoom + 1, 1];
 
 const layers: (FillLayerSpecification | LineLayerSpecification | CircleLayerSpecification)[] = [
     {
@@ -61,11 +60,11 @@ const layers: (FillLayerSpecification | LineLayerSpecification | CircleLayerSpec
         },
     },
     {
-        id: stationLayer, type: 'circle', source: resortTerrainSource, 'source-layer': 'stations', minzoom: stationMinZoom,
+        id: stationLayer, type: 'circle', source: resortTerrainSource, 'source-layer': 'stations', minzoom: resortStationMinZoom,
         paint: {
             'circle-color': terrainColors.lift, 'circle-opacity': stationOpacity, 'circle-stroke-opacity': stationOpacity,
             'circle-stroke-color': '#18181b', 'circle-stroke-width': 1,
-            'circle-radius': ['interpolate', ['linear'], ['zoom'], stationMinZoom, 2, stationMinZoom + 1, 3.5],
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], resortStationMinZoom, 2, resortStationMinZoom + 1, 3.5],
         },
     },
 ];

@@ -3602,5 +3602,37 @@
         "12": 92
       }
     }
+  },
+  "kicking-horse": {
+    "snowfall": {
+      "label": "Kicking Horse Mountain Resort",
+      "source": "https://kickinghorseresort.com/discover-kickinghorse/mountain-stats/",
+      "location": "Kicking Horse summit snow stations at 2,450 m",
+      "annualCm": 750
+    }
+  },
+  "whitewater-mountain-resort": {
+    "snowfall": {
+      "label": "Whitewater Mountain Resort",
+      "source": "https://whitewatermountainresort.com/faq/",
+      "location": "Operator resort-wide snowfall statistic",
+      "annualCm": 1200
+    }
+  },
+  "revelstoke": {
+    "snowfall": {
+      "label": "Revelstoke Mountain Resort",
+      "source": "https://www.revelstokemountainresort.com/mountain/mountain-stats/",
+      "location": "Operator resort-wide snowfall statistic",
+      "annualCm": 1050
+    }
+  },
+  "whitefish-mountain-resort": {
+    "snowfall": {
+      "label": "Whitefish Mountain Resort",
+      "source": "https://skiwhitefish.com/WMREventGuide.pdf",
+      "location": "Operator resort-wide snowfall statistic",
+      "annualCm": 762
+    }
   }
 }

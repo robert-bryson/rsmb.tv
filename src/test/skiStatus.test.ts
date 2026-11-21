@@ -110,6 +110,7 @@ describe('ski-status catalog validation', () => {
         [{ terrainParks: 'yes' }, /expected boolean/],
         [{ trailCountQualifier: 'lower-bound' }, /Lower bound.*reported value/],
         [{ nightAcresQualifier: 'lower-bound' }, /Lower bound.*reported value/],
+        [{ nordicKmQualifier: 'lower-bound' }, /Lower bound.*reported value/],
         [{ baseFt: 3_000, summitFt: 2_500 }, /Inverted base and summit/],
         [{ baseFt: 3_000, summitFt: 3_000, verticalFt: 500 }, /Equal base and summit elevations with positive vertical drop/],
         [{ highestLiftTerminalFt: 3_000, lowestLiftTerminalFt: 3_100 }, /Inverted lift terminal/],
@@ -293,6 +294,16 @@ describe('ski-status catalog and browse', () => {
         expect(formatArea(101, 'metric', true)).toBe('40.8+ ha');
         expect(formatSkiStat({ ...peak, verticalFt: 1000 }, 'verticalFt', 'metric')).toBe('305 m');
         expect(formatSkiStat({ ...peak, nightSkiing: false }, 'nightSkiing', 'metric')).toBe('No');
+    });
+
+    it('preserves published Nordic trail minimums in both distance units', () => {
+        const chapleau = skiAreas.find(area => area.id === 'chapleau-ski-club-nordic')!;
+        const kenora = skiAreas.find(area => area.id === 'kenora-nordic-biathlon-club')!;
+        expect(formatSkiStat(chapleau, 'nordicKm', 'metric')).toBe('11+ km');
+        expect(formatSkiStat(kenora, 'nordicKm', 'imperial')).toBe('12.4+ mi');
+        expect(formatSkiStat({ ...kenora, nordicKm: 12.5 }, 'nordicKm', 'imperial')).toBe('7.7+ mi');
+        expect(formatSkiStat({ ...kenora, nordicKmQualifier: undefined }, 'nordicKm', 'metric')).toBe('20 km');
+        expect(sortSkiAreas([kenora, chapleau], { key: 'nordicKm', direction: 'asc' })).toEqual([chapleau, kenora]);
     });
 
     it('sorts a reported zero ahead of unknown values in either direction and preserves lower bounds', () => {

@@ -8,6 +8,7 @@ import { formatSkiLocation } from './skiGeography';
 
 const mountainOverview = new Set<ColumnKey>(['acres', 'verticalFt', 'liftCount', 'trailCount', 'baseFt', 'summitFt']);
 const leadsCatalogComparison = (key: ColumnKey) => key === 'name' || key === 'region' || mountainOverview.has(key);
+const numericColumn = (key: ColumnKey) => key === 'typicalSeasonLengthDays' || mountainOverview.has(key);
 const pageSize = 50;
 
 interface Props {
@@ -57,7 +58,7 @@ export function SkiAreaTable({ areas, units, sort, selected, conditions, columnP
                     {visibleColumns.map(({ key, label }) => {
                         const direction = sort.key === key ? sort.direction : undefined;
                         return <th key={key} scope="col" aria-sort={direction === 'asc' ? 'ascending' : direction === 'desc' ? 'descending' : undefined}
-                            className={key === 'name' ? 'ski-compare-name' : undefined} data-numeric={mountainOverview.has(key) || undefined}>
+                            className={key === 'name' ? 'ski-compare-name' : undefined} data-numeric={numericColumn(key) || undefined}>
                             <button type="button" onClick={() => { changePage(0); onSort(key); }}>
                                 {label}{direction && <SkiIcon name={direction === 'asc' ? 'ascending' : 'descending'} />}
                             </button>
@@ -75,7 +76,7 @@ export function SkiAreaTable({ areas, units, sort, selected, conditions, columnP
                             <span id={`ski-compare-${area.id}`} className="sr-only">{formatSkiLocation(area)}</span>
                         </th>
                         {visibleColumns.slice(1).map(({ key }) => <td key={key}
-                            className={key === 'region' ? 'ski-compare-region' : undefined} data-numeric={mountainOverview.has(key) || undefined}>
+                            className={key === 'region' ? 'ski-compare-region' : undefined} data-numeric={numericColumn(key) || undefined}>
                             {key === 'region' ? <SkiLocation area={area} onZoom={onZoomLocation} />
                                 : formatSkiStat(area, key, units, conditions) ?? <><span aria-hidden="true" className="ski-compare-missing">—</span><span className="sr-only">Unknown</span></>}
                         </td>)}
