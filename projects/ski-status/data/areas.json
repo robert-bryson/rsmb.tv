@@ -69,7 +69,7 @@
     "trailCount": 90,
     "baseFt": 3923,
     "summitFt": 5774,
-    "verticalFt": 1851,
+    "verticalFt": 1871,
     "nightSkiing": false,
     "terrainParks": true,
     "grades": {
@@ -84,7 +84,16 @@
     },
     "additionalSources": [
       "https://www.ski49n.com/promotions-perks/details/indy-pass-49"
-    ]
+    ],
+    "statSources": [
+      {
+        "source": "https://www.ski49n.com/mountain-info/trail-map-stats",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"],
+        "note": "Operator lists 1,871 ft skiable vertical independently of the main base and summit values."
+      }
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "afton-alps",
@@ -272,7 +281,8 @@
       "https://www.alta.com/stories/trail-running-at-alta",
       "https://www.skiutah.com/members/alta/"
     ],
-    "summitFt": 11068
+    "summitFt": 11068,
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "alta-badia",
@@ -1315,7 +1325,8 @@
         "Advanced": 34
       }
     },
-    "skiing": "both"
+    "skiing": "both",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "beaver-mountain",
@@ -2101,7 +2112,8 @@
     ],
     "reportUrl": "https://bogusbasin.org/your-mountain/conditions-webcams/",
     "baseFt": 6100,
-    "summitFt": 7590
+    "summitFt": 7590,
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "bolton-valley-resort",
@@ -2544,7 +2556,8 @@
       }
     ],
     "liftCount": 11,
-    "baseFt": 6100
+    "baseFt": 6100,
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "brighton-resort",
@@ -3839,7 +3852,7 @@
     "trailCount": 157,
     "summitFt": 12441,
     "baseFt": 9712,
-    "verticalFt": 2729,
+    "verticalFt": 2738,
     "terrainParks": true,
     "statsUrl": "https://www.coloradoski.com/resorts/copper-mountain/",
     "reportUrl": "https://www.coppercolorado.com/the-mountain/conditions-weather/snow-report/",
@@ -3851,6 +3864,12 @@
         "checkedOn": "2026-11-20",
         "fields": ["liftCount"],
         "note": "The winter fact sheet lists 24 lifts including conveyor and surface lifts."
+      },
+      {
+        "source": "https://www.coppercolorado.com/the-mountain/mountain-safety-stats/winter-mountain-stats/",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"],
+        "note": "Copper’s operator publishes 2,738 ft as vertical rise. Its separately listed base and summit elevations remain in the endpoint fields."
       }
     ]
   },
@@ -4333,7 +4352,8 @@
         "fields": ["highestLiftTerminalFt", "lowestLiftTerminalFt"],
         "note": "Extremes in the operator’s individual lift table. Highest shown is Chair 6; lowest shown is the Discovery start."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "crystal-mountain-mi",
@@ -4777,11 +4797,18 @@
         "checkedOn": "2026-11-21",
         "fields": ["liftCount"],
         "note": "The operator lists five triple chairs, two double chairs, and one surface lift."
+      },
+      {
+        "source": "https://www.skidiscovery.com/wp-content/uploads/2017/11/DIS-1021-7_FY18_2017BacksideMap_cropped_HR.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Operator backside map marks the Silver Chief low point at 5,770 ft. This is the low point of the published skiable vertical, below the main day lodge."
       }
     ],
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-21",
     "liftCount": 8,
-    "statsUrl": "https://www.skidiscovery.com/the-mountain/"
+    "statsUrl": "https://www.skidiscovery.com/the-mountain/",
+    "baseFt": 5770
   },
   {
     "id": "disentis",
@@ -5827,7 +5854,8 @@
         "Advanced": 30,
         "Expert": 15
       }
-    }
+    },
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "grands-montets",
@@ -7417,7 +7445,7 @@
       }
     ],
     "reportUrl": "https://www.jacksonhole.com/mountain-report",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "jackson-xc",
@@ -9005,7 +9033,8 @@
         "checkedOn": "2026-11-21",
         "fields": ["acres", "baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "lost-valley",
@@ -9101,7 +9130,8 @@
     "terrainParks": true,
     "additionalSources": [
       "https://skiloveland.com/indypass/"
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "lutsen-mountains",
@@ -9969,7 +9999,7 @@
     "verticalFt": 2250,
     "summitFt": 6820,
     "trailCount": 36,
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-21",
     "baseFt": 4570,
     "statsUrl": "https://www.missionridge.com/news/mission-ridge-adds-more-days-longest-season-in-26-years/",
     "liftCount": 7
@@ -10370,9 +10400,9 @@
     "nightSkiing": false,
     "terrainParks": false,
     "reportUrl": "https://www.montanasnowbowl.com/trails-report/index.php",
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-21",
     "acres": 2000,
-    "baseFt": 4980,
+    "baseFt": 5000,
     "summitFt": 7600,
     "grades": {
       "unit": "percent",
@@ -10386,7 +10416,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/montana-snowbowl",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["acres", "summitFt", "grades"]
+      },
+      {
+        "source": "https://montanasnowbowl.com/trailmap.html",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Operator reports base 5,000 ft, summit 7,600 ft and 2,600 ft published drop for the same mountain."
       }
     ]
   },
@@ -11141,7 +11177,8 @@
         "Intermediate": 40,
         "Advanced": 28
       }
-    }
+    },
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "mt-hood-skibowl",
@@ -11460,7 +11497,8 @@
         "fields": ["baseFt"],
         "note": "Published base lodge elevation."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "mt-t",
@@ -11900,7 +11938,8 @@
         "Intermediate": 26,
         "Advanced": 19
       }
-    }
+    },
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "nordic-mountain",
@@ -12697,7 +12736,8 @@
     "acres": 1747,
     "baseFt": 5085,
     "summitFt": 8399,
-    "verticalFt": 3314
+    "verticalFt": 3314,
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "palcall-tsumagoi-resort",
@@ -14673,7 +14713,7 @@
       }
     ],
     "reportUrl": "https://www.schweitzer.com/mountain-info/mountain-report",
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-21",
     "baseFt": 3960
   },
   {
@@ -15045,7 +15085,7 @@
     "baseFt": 6640,
     "summitFt": 8852,
     "verticalFt": 2212,
-    "trailCount": 47,
+    "trailCount": 50,
     "liftCount": 14,
     "terrainParks": true,
     "grades": {
@@ -15063,7 +15103,13 @@
       {
         "source": "https://skicalifornia.org/resorts/sierra-at-tahoe-resort",
         "checkedOn": "2026-11-19",
-        "fields": ["acres", "liftCount", "trailCount", "baseFt", "summitFt", "verticalFt", "terrainParks", "grades"]
+        "fields": ["acres", "liftCount", "baseFt", "summitFt", "verticalFt", "terrainParks", "grades"]
+      },
+      {
+        "source": "https://sierraattahoe.com/sierra-at-tahoe-to-open-nov-25-for-its-80th-anniversary-season/",
+        "checkedOn": "2026-11-21",
+        "fields": ["trailCount"],
+        "note": "Operator resort-wide winter release for its 80th anniversary gives 50 named trails."
       }
     ],
     "reportUrl": "https://sierraattahoe.com/weather-snow-report/",
@@ -16013,7 +16059,8 @@
       "https://www.ikonpass.com/en/destinations/snowbird",
       "https://www.skiutah.com/members/snowbird/"
     ],
-    "baseFt": 7760
+    "baseFt": 7760,
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "snowmass",
@@ -17087,7 +17134,8 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "liftCount", "trailCount", "baseFt", "summitFt", "verticalFt"]
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "sun-valley-dollar-mountain",
@@ -17531,7 +17579,8 @@
         "fields": ["liftCount", "highestLiftTerminalFt"],
         "note": "The 2024/25 trail map lift count includes surface lifts and gondolas. The lift-served high point is separate from the maximum hike-to elevation."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "tenney-mountain",

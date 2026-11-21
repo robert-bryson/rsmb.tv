@@ -108,8 +108,10 @@ export function mountainPeakLabel(map: MapLibreMap, point: ScreenPoint, units: S
     const feature = map.queryRenderedFeatures(point, { layers })[0];
     const name: unknown = feature?.properties.name;
     if (typeof name !== 'string') return;
-    if (feature.layer.id !== trailMapPeakLayer) return name;
-    const elevationFt: unknown = feature.properties.elevationFt;
-    const elevation = typeof elevationFt === 'number' ? formatElevation(elevationFt, units) : undefined;
-    return [name, elevation, 'Trail map'].filter(Boolean).join(' · ');
+    const trailMap = feature.layer.id === trailMapPeakLayer;
+    const label = trailMap ? `${name} · Trail map` : name;
+    const value: unknown = trailMap ? feature.properties.elevationFt : feature.properties.elevation;
+    const elevation = typeof value === 'number' && Number.isFinite(value)
+        ? formatElevation(value, units, trailMap ? 'imperial' : 'metric') : undefined;
+    return elevation ? `${label}\n${elevation}` : label;
 }

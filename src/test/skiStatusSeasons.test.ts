@@ -36,6 +36,13 @@ describe('ski season dates', () => {
         expect(sunshine.typical).toMatchObject({ opening: 'Nov 8', closing: 'May 19', evidence: { count: 3 } });
     });
 
+    it('links Grand Targhee’s revised opening and planned closing to their own sources', () => {
+        expect(skiSeasonOutlook(area('grand-targhee-resort'), '2026-11-21')).toMatchObject({
+            opening: { date: '2026-11-22', source: 'https://www.grandtarghee.com/the-mountain/cams-conditions/mountain-report' },
+            closing: { date: '2027-04-18', source: 'https://www.grandtarghee.com/tickets-passes/lift-tickets/winter-lift-tickets' },
+        });
+    });
+
     it('matches the month in cross-year and same-year seasons without using planned windows', () => {
         const areas = [area('killington'), area('coronet-peak'), area('telluride-ski-resort'), area('big-snow-american-dream')];
         expect(filterSkiAreas(areas, { seasonMonth: 12 }).map(({ id }) => id)).toEqual(['killington', 'big-snow-american-dream']);

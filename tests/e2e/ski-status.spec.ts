@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { expect, test, type JSHandle, type Locator, type Page, type Response, type Route } from '@playwright/test';
-import type { GeoJSONSource, Map as MapLibreMap, MapSourceDataEvent, StyleSpecification } from 'maplibre-gl';
+import type { GeoJSONSource, Map as MapLibreMap, MapGeoJSONFeature, MapSourceDataEvent, StyleSpecification } from 'maplibre-gl';
 import sharp from 'sharp';
 import locations from '../../projects/ski-status/data/locations.json' with { type: 'json' };
 import resortBases from '../../projects/ski-status/data/resort-bases.json' with { type: 'json' };
@@ -1878,6 +1878,61 @@ function evaluatedPaint(renderer: JSHandle<MapLibreMap>, layer: string, property
     }, { layer, property });
 }
 
+test('fades state and province boundaries in at the western North America zoom', async ({ page }) => {
+    const tileUrl = 'https://ski-boundaries.test/tiles/';
+    const stateLayer = 'boundary_state';
+    const countryLayer = 'boundary_country_inner';
+    await prepare(page, {
+        ...baseStyle,
+        sources: { protomaps: { type: 'vector', tiles: [`${tileUrl}{z}/{x}/{y}.mvt`], minzoom: 3, maxzoom: 3 } },
+        layers: [
+            ...baseStyle.layers,
+            { id: stateLayer, type: 'line', source: 'protomaps', 'source-layer': 'boundaries', minzoom: 4,
+                filter: ['any',
+                    ['all', ['==', ['get', 'kind_detail'], 4], ['>=', ['zoom'], 6]],
+                    ['all', ['==', ['get', 'kind'], 'macroregion'], ['<', ['zoom'], 6]],
+                ],
+            },
+            { id: countryLayer, type: 'line', source: 'protomaps', 'source-layer': 'boundaries',
+                filter: ['==', ['get', 'kind_detail'], 2], paint: { 'line-opacity': 1 },
+            },
+        ],
+    });
+    // Tile 3/1/2 has parallel country, macroregion, region, and county lines.
+    const boundaries = Buffer.from('GrYBCgpib3VuZGFyaWVzGgRraW5kGgtraW5kX2RldGFpbCIJCgdjb3VudHJ5IgIoAiINCgttYWNyb3JlZ2lvbiICKAMiCAoGcmVnaW9uIgIoBCII'
+        + 'CgZjb3VudHkiAigGKIAgeAISExIEAAABARgCIgkJrBacOwrkDwASExIEAAIBAxgCIgkJrBaUPArkDwASExIEAAQBBRgCIgkJrBaMPQrkDwASExIE'
+        + 'AAYBBxgCIgkJrBaEPgrkDwA=', 'base64');
+    const headers = { 'access-control-allow-origin': '*' };
+    await page.route(`${tileUrl}**`, route => route.fulfill({
+        headers, body: new URL(route.request().url()).pathname === '/tiles/3/1/2.mvt' ? boundaries : Buffer.alloc(0),
+    }));
+    await page.route('https://tiles.mapterhorn.com/**', route => route.fulfill({ headers, contentType: 'image/png', body: tile }));
+    await page.route(`${snowDepthTileEndpoint}**`, route => route.fulfill({ headers, contentType: 'image/png', body: tile }));
+    const renderer = await captureMap(page);
+    const zoomTo = (zoom: number) => renderer.evaluate((map, zoom) => { map.jumpTo({ center: [-115, 43], zoom }); }, zoom);
+    const kindsIn = (layer: string) => renderer.evaluate((map, layer) => [...new Set(map.queryRenderedFeatures({ layers: [layer] })
+        .map(feature => feature.properties.kind))].sort(), layer);
+    const stateOpacity = () => evaluatedPaint(renderer, stateLayer, 'line-opacity');
+    await zoomTo(4.5);
+    await expect.poll(() => kindsIn(stateLayer)).toEqual(['macroregion', 'region']);
+    await expect.poll(() => kindsIn(countryLayer)).toEqual(['country']);
+    await setLayer(page, 'Terrain relief', true);
+    await setLayer(page, 'Snow depth', true);
+    const layerOrder = ['ski-terrain-relief', 'ski-snow-depth', stateLayer, countryLayer, 'ski-area-points'];
+    expect(await renderer.evaluate((map, ids) => map.getStyle().layers.map(layer => layer.id)
+        .filter(id => ids.includes(id)), layerOrder)).toEqual(layerOrder);
+
+    for (const [zoom, expected] of [[4.5, 0.625], [6, 1], [5, 0.75], [4, 0.5], [3.5, 0.25], [2.75, 0]]) {
+        await zoomTo(zoom);
+        await expect.poll(stateOpacity).toBeCloseTo(expected, 3);
+        expect(await evaluatedPaint(renderer, countryLayer, 'line-opacity')).toBe(1);
+    }
+    await expect.poll(() => kindsIn(stateLayer)).toEqual([]);
+    await zoomTo(6);
+    await expect.poll(() => kindsIn(stateLayer)).toEqual(['region']);
+    await renderer.dispose();
+});
+
 test('fades in only major highways at regional zoom above the snow and relief layers', async ({ page }) => {
     const roadsUrl = 'https://tiles.example.test/roads/';
     await prepare(page, {
@@ -2130,10 +2185,10 @@ test('fades peak icons in before their labels and prioritizes trail-map peaks', 
         sources: { protomaps: { type: 'vector', tiles: [`${tileUrl}{z}/{x}/{y}.mvt`], minzoom: 8, maxzoom: 8 } },
         layers: [...baseStyle.layers, { id: 'provider-roads', type: 'line', source: 'protomaps', 'source-layer': 'roads' }],
     });
-    // This tile contains a nearby peak, a distant peak, a duplicate of Sargents, an unnamed peak, and a saddle.
-    const tile = Buffer.from('GrwBeAIKBHBvaXMogCAaBGtpbmQaBG5hbWUiBgoEcGVhayIICgZzYWRkbGUiCgoIRmFyIFBlYWsiDQoLTmVhcmJ5IFBlYWsiDwoN'
-        + 'TmVhcmJ5IFNhZGRsZSISChBTYXJnZW50IE1vdW50YWluEg8YARIEAAABAyIFCfgZzgMSDxgBEgQAAAEFIgUJ8BqiBBINGAESAgAAIgUJyBq+BRIP'
-        + 'GAESBAABAQQiBQnsG4gEEg8YARIEAAABAiIFCa4klAM=', 'base64');
+    // Nearby Peak has an elevation. Lower Peak has none. The other features test the spatial and name filters.
+    const tile = Buffer.from('Gu0BeAIKBHBvaXMogCAaBGtpbmQaBG5hbWUaCWVsZXZhdGlvbiIGCgRwZWFrIg0KC05lYXJieSBQZWFrIgMoxBMiEgoQU2FyZ2VudCBNb3VudG'
+        + 'FpbiIICgZzYWRkbGUiDwoNTmVhcmJ5IFNhZGRsZSIKCghGYXIgUGVhayIMCgpMb3dlciBQZWFrEhESBgAAAQECAhgBIgUJ+BnOAxIPEgQAAAED'
+        + 'GAEiBQnwGqIEEg0SAgAAGAEiBQnIGr4FEg8SBAAEAQUYASIFCewbiAQSDxIEAAABBhgBIgUJriSUAxIPEgQAAAEHGAEiBQnQG9IE', 'base64');
     await page.route(`${tileUrl}**`, route => route.fulfill({
         headers: { 'access-control-allow-origin': '*' },
         body: new URL(route.request().url()).pathname === '/tiles/8/45/92.mvt' ? tile : Buffer.alloc(0),
@@ -2153,12 +2208,21 @@ test('fades peak icons in before their labels and prioritizes trail-map peaks', 
         return map.queryRenderedFeatures([[x - 18, y + 12], [x + 18, y + 32]], { layers: [layer] })
             .some(feature => feature.properties.name === name);
     }, { layer, coordinates, name });
+    const peakText = (layer: string, name: string) => renderer.evaluate((map, { layer, name }) => {
+        const feature = map.queryRenderedFeatures({ layers: [layer] }).find(feature => feature.properties.name === name);
+        if (!feature) return;
+        const layout = map.getLayer(layer)?.layout as {
+            get: (property: 'text-field') => { evaluate: (feature: MapGeoJSONFeature, state: object) => { toString: () => string } };
+        } | undefined;
+        return layout?.get('text-field').evaluate(feature, {}).toString();
+    }, { layer, name });
 
     await zoomTo(7.5);
     expect(await peakNames(trailMapPeakLayer)).toEqual([]);
+    const nearbyCoordinates: [number, number] = [-116.148834, 45.033016];
     for (const peak of [
         { layer: trailMapPeakLayer, coordinates: center, name: 'Sargents', labelZoom: 10, size: 1 },
-        { layer: nearbyPeakLayer, coordinates: [-116.149, 45.033] as [number, number], name: 'Nearby Peak', labelZoom: 12, size: 0.78 },
+        { layer: nearbyPeakLayer, coordinates: nearbyCoordinates, name: 'Nearby Peak', labelZoom: 12, size: 0.78 },
     ]) {
         for (const [offset, scale, opacity] of [[-2, 0.55, 0.28], [-1, 0.78, 0.65], [0, 1, 0.85]]) {
             await zoomTo(peak.labelZoom + offset);
@@ -2166,22 +2230,37 @@ test('fades peak icons in before their labels and prioritizes trail-map peaks', 
             await expect.poll(() => peakIconSize(peak.layer)).toBeCloseTo(scale * peak.size, 3);
             await expect.poll(() => evaluatedPaint(renderer, peak.layer, 'icon-opacity')).toBeCloseTo(opacity, 3);
             await expect.poll(() => peakHasLabel(peak.layer, peak.coordinates, peak.name)).toBe(offset === 0);
+            await expect.poll(() => peakText(peak.layer, peak.name)).toBe(offset === 0 ? peak.name : '');
         }
     }
     await zoomTo(13);
-    await expect.poll(() => peakNames(nearbyPeakLayer)).toEqual(['Nearby Peak']);
-    const position = await renderer.evaluate((map, point) => map.project(point), center);
+    await expect.poll(() => peakNames(nearbyPeakLayer)).toEqual(['Lower Peak', 'Nearby Peak']);
+    expect(await peakText(nearbyPeakLayer, 'Lower Peak')).toBe('Lower Peak');
     const canvas = page.getByTestId('ski-status-map').locator('canvas');
-    await canvas.hover({ position });
-    await expect(page.getByText('Sargents · 7,803 ft · Trail map', { exact: true })).toBeVisible();
+    const tooltip = page.locator('.ski-area-popup-hover .maplibregl-popup-content');
+    const hoverPeak = async (coordinates: [number, number], text: string) => {
+        const position = await renderer.evaluate((map, point) => map.project(point), coordinates);
+        await canvas.hover({ position });
+        await expect(tooltip).toBeVisible();
+        await expect.poll(() => tooltip.innerText()).toBe(text);
+    };
+    await hoverPeak(center, 'Sargents · Trail map\n7,803 ft');
+    await hoverPeak(nearbyCoordinates, 'Nearby Peak\n8,202 ft');
+    await hoverPeak([-116.111755, 45.017001], 'Lower Peak');
+
+    await setFilter(page, 'Units', 'metric');
+    await expect.poll(() => peakText(trailMapPeakLayer, 'Sargents')).toBe('Sargents');
+    await hoverPeak(center, 'Sargents · Trail map\n2,378 m');
+    await hoverPeak(nearbyCoordinates, 'Nearby Peak\n2,500 m');
 
     await setLayer(page, 'Mountain peaks', false);
     await expect(page).toHaveURL(/(?:\?|&)peaks=0(?:&|$)/);
     expect(await renderer.evaluate(map => Boolean(map.getSource('ski-resort-peaks')))).toBe(false);
-    await expect(page.getByText('Sargents · 7,803 ft · Trail map', { exact: true })).toBeHidden();
+    await expect(tooltip).toBeHidden();
     await setLayer(page, 'Mountain peaks', true);
     await expect.poll(() => peakNames(trailMapPeakLayer)).toEqual(['Sargents']);
-    await expect.poll(() => peakNames(nearbyPeakLayer)).toEqual(['Nearby Peak']);
+    await expect.poll(() => peakNames(nearbyPeakLayer)).toEqual(['Lower Peak', 'Nearby Peak']);
+    await expect.poll(() => peakText(trailMapPeakLayer, 'Sargents')).toBe('Sargents');
 
     await renderer.evaluate(map => { map.jumpTo({ center: [-115.92, 45.04] }); });
     await expect.poll(() => renderer.evaluate(map => map.querySourceFeatures('protomaps', { sourceLayer: 'pois' })

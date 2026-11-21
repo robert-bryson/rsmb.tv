@@ -212,7 +212,7 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
             {report?.nightOpen !== undefined && <p>Night operations {report.nightOpen ? 'open' : 'closed'}{operationsAge}</p>}
             {forecast && <p>
                 <a href={forecast.source.url} className={linkClass}>{forecast.source.name} forecast</a>{' · '}{forecast.location}
-                {forecast.elevationM !== undefined && ` (${formatElevation(forecast.elevationM / 0.3048, units)})`}{' · '}
+                {forecast.elevationM !== undefined && ` (${formatElevation(forecast.elevationM, units, 'metric')})`}{' · '}
                 <time dateTime={forecast.startsAt}>{localReportTime(forecast.startsAt, area)}</time>{' to '}
                 <time dateTime={forecast.endsAt}>{localReportTime(forecast.endsAt, area)}</time>
                 {forecast.issuedAt && <> · Issued <time dateTime={forecast.issuedAt}>{localReportTime(forecast.issuedAt, area)}</time></>}

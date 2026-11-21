@@ -4,6 +4,8 @@ import type {
 
 const detailStartZoom = 3;
 const detailLayers = new Set(['park_nature_reserve', 'landuse', 'waterway', 'water_shadow', 'waterway_label', 'watername_ocean', 'watername_lake_line']);
+const stateBoundaryStartZoom = 3;
+export const stateBoundaryLayer = 'boundary_state';
 const roadStartZoom = 5.75;
 const roadEndZoom = 12;
 export const regionalRoadLayer = 'ski-regional-roads';
@@ -92,10 +94,27 @@ export function addHighwayShieldImages(map: MapLibreMap) {
 
 export const skiGlobeStyle: TransformStyleFunction = (_, style) => {
     if (!Array.isArray(style?.layers)) return style;
-    // Keep the coastline, boundaries, and place labels at the globe overview.
-    const layers = style.layers.map(layer => layer && detailLayers.has(layer.id)
-        && (layer.maxzoom ?? 24) > detailStartZoom && (layer.minzoom ?? 0) < detailStartZoom
-        ? { ...layer, minzoom: detailStartZoom } : layer);
+    const layers = style.layers.map(layer => {
+        if (layer?.type === 'line' && layer.id === stateBoundaryLayer && layer['source-layer'] === 'boundaries') {
+            // CARTO tiles already include state and province boundaries below the provider style's zoom gate.
+            return {
+                ...layer,
+                minzoom: stateBoundaryStartZoom,
+                filter: ['any',
+                    ['==', ['get', 'kind_detail'], 4],
+                    ['all', ['==', ['get', 'kind'], 'macroregion'], ['<', ['zoom'], 6]],
+                ],
+                paint: {
+                    ...layer.paint,
+                    'line-opacity': ['interpolate', ['linear'], ['zoom'], stateBoundaryStartZoom, 0, 4, 0.5, 6, 1],
+                    'line-width': ['interpolate', ['linear'], ['zoom'], stateBoundaryStartZoom, 0.5, 4, 1, 8, 1, 9, 1.2],
+                },
+            } satisfies LineLayerSpecification;
+        }
+        return layer && detailLayers.has(layer.id)
+            && (layer.maxzoom ?? 24) > detailStartZoom && (layer.minzoom ?? 0) < detailStartZoom
+            ? { ...layer, minzoom: detailStartZoom } : layer;
+    });
     const providerRoads = layers.find((layer): layer is LineLayerSpecification => layer?.type === 'line'
         && layer['source-layer'] === 'roads' && style.sources?.[layer.source]?.type === 'vector');
     if (providerRoads) {

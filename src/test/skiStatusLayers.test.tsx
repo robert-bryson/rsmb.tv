@@ -83,4 +83,23 @@ describe('ski-status map layers', () => {
             layers: [], projection: { type: 'globe' },
         });
     });
+
+    it('keeps the basemap boundary colors and dashes when applying the state fade', () => {
+        const base: StyleSpecification = {
+            version: 8,
+            sources: { basemap: { type: 'vector', tiles: ['https://example.test/{z}/{x}/{y}.pbf'] } },
+            layers: [
+                { id: 'boundary_state', type: 'line', source: 'basemap', 'source-layer': 'boundaries', minzoom: 4,
+                    paint: { 'line-color': '#676772', 'line-dasharray': [1, 2, 3] },
+                },
+                { id: 'boundary_country_inner', type: 'line', source: 'basemap', 'source-layer': 'boundaries', minzoom: 0,
+                    paint: { 'line-opacity': 1 },
+                },
+            ],
+        };
+        const [state, country] = skiGlobeStyle(undefined, base).layers;
+        expect(state).toMatchObject({ minzoom: 3, paint: { 'line-color': '#676772', 'line-dasharray': [1, 2, 3] } });
+        expect(country).toEqual(base.layers[1]);
+        expect(base.layers[0].minzoom).toBe(4);
+    });
 });

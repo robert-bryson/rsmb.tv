@@ -2908,6 +2908,24 @@
       "name": "Moseltret X-Press",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=bbbfaa27816f58cfdfecc5b692b0ee59dde891f5"
+    },
+    "discovery-ski-area": {
+      "coordinates": [
+        -113.238451,
+        46.249615
+      ],
+      "name": "Discovery Day Lodge arrival",
+      "source": "https://www.skidiscovery.com/the-mountain/",
+      "kind": "entrance"
+    },
+    "pal-arinsal": {
+      "coordinates": [
+        1.491468,
+        42.536382
+      ],
+      "name": "Pal sector, La Caubella visitor approach",
+      "source": "https://visitandorra.com/en/nature--sports/pal-arinsal-summer/",
+      "kind": "entrance"
     }
   }
 }

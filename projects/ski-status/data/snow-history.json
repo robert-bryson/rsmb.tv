@@ -3,10 +3,11 @@
     "snowfall": {
       "label": "Alta Ski Area",
       "source": "https://www.alta.com/weather",
-      "annualCm": 1391.92,
+      "annualCm": 1379.22,
       "annualSource": {
         "label": "Alta Ski Area",
-        "source": "https://www.alta.com/stories/mid-season-report-card"
+        "source": "https://www.alta.com/about",
+        "location": "Alta Ski Area annual average"
       },
       "period": "Since 1980",
       "location": "Collins Study Plot",
@@ -403,7 +404,12 @@
     "snowfall": {
       "label": "Ski Idaho",
       "source": "https://www.skiidaho.us/compare",
-      "annualCm": 711.2
+      "annualCm": 635,
+      "annualSource": {
+        "label": "Bogus Basin",
+        "source": "https://bogusbasin.org/your-mountain/maps-statistics/",
+        "location": "Operator mountain-wide annual average"
+      }
     }
   },
   "bolton-valley-resort": {
@@ -3633,6 +3639,71 @@
       "source": "https://skiwhitefish.com/WMREventGuide.pdf",
       "location": "Operator resort-wide snowfall statistic",
       "annualCm": 762
+    }
+  },
+  "crystal-mountain": {
+    "snowfall": {
+      "label": "Crystal Mountain",
+      "source": "https://www.crystalmountainresort.com/media/mountain-stats-and-facts",
+      "location": "Crystal Mountain operator mountain facts",
+      "period": "2001–2022",
+      "annualCm": 883.92
+    }
+  },
+  "49-north-mountain-resort": {
+    "snowfall": {
+      "label": "49° North Mountain Resort",
+      "source": "https://www.ski49n.com/mountain-info/trail-map-stats",
+      "location": "Operator resort annual average of 301 inches",
+      "annualCm": 764.54
+    }
+  },
+  "discovery-ski-area": {
+    "snowfall": {
+      "label": "Discovery Ski Area",
+      "source": "https://www.skidiscovery.com/the-mountain/",
+      "location": "Operator published 215-inch annual average",
+      "annualCm": 546.1
+    }
+  },
+  "mt-hood-meadows": {
+    "snowfall": {
+      "label": "Mt. Hood Meadows",
+      "source": "https://www.skihood.com/explore/trail-maps",
+      "location": "Operator mountain-wide 430-inch annual average",
+      "annualCm": 1092.2
+    }
+  },
+  "mission-ridge": {
+    "snowfall": {
+      "label": "Mission Ridge Ski & Board Resort",
+      "source": "https://www.missionridge.com/about/",
+      "location": "Operator 200-inch average on the east side of the Cascade crest",
+      "annualCm": 508
+    }
+  },
+  "montana-snowbowl": {
+    "snowfall": {
+      "label": "Montana Snowbowl",
+      "source": "https://montanasnowbowl.com/trailmap.html",
+      "location": "Operator 300-inch annual average",
+      "annualCm": 762
+    }
+  },
+  "niseko-united": {
+    "snowfall": {
+      "label": "Niseko United",
+      "source": "https://www.niseko.ne.jp/en/news/how-much-snow-fell-in-niseko-2019-20-winter/",
+      "location": "Operator typical winter snowfall at mid-mountain",
+      "annualCm": 1500
+    }
+  },
+  "marmot-basin": {
+    "snowfall": {
+      "label": "Marmot Basin",
+      "source": "https://www.skimarmot.com/mountain/mountain-stats/",
+      "location": "Operator mountain-wide average, published as over 440 cm",
+      "annualCm": 440
     }
   }
 }

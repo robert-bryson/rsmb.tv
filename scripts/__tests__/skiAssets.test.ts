@@ -165,4 +165,30 @@ describe('NAS ski-status assets', () => {
             expect((await fetch(origin + path)).status, path).toBe(404);
         }
     });
+
+    it('rejects an archive version after its file changes without changing size', async () => {
+        const asset = { ...map, areaId: 'another-resort', relativePath: 'trail-maps/another-resort/undated/map.pdf' };
+        const path = join(assetsRoot, asset.relativePath);
+        await mkdir(dirname(path), { recursive: true });
+        await writeFile(path, pdf);
+        await writeFile(join(assetsRoot, 'manifests', 'versioned-map.json'),
+            JSON.stringify({ version: 1, archivedAt: '2026-11-21T14:00:00Z', files: [asset] }));
+        const url = origin + skiArchiveAssetUrl(asset);
+        const range = { headers: { Range: 'bytes=0-3' } };
+        const response = await fetch(url, range);
+        expect(response.status).toBe(206);
+        expect(Buffer.from(await response.arrayBuffer())).toEqual(pdf.subarray(0, 4));
+
+        await writeFile(path, Buffer.alloc(pdf.length, 65));
+        const stale = await Promise.all([fetch(url, { method: 'HEAD' }), fetch(url, range)]);
+        expect(stale.map(result => result.status)).toEqual([404, 404]);
+
+        await writeFile(path, pdf.subarray(0, 3));
+        expect((await fetch(url, range)).status).toBe(404);
+
+        await writeFile(path, pdf);
+        const restored = await fetch(url, range);
+        expect(restored.status).toBe(206);
+        expect(Buffer.from(await restored.arrayBuffer())).toEqual(pdf.subarray(0, 4));
+    });
 });

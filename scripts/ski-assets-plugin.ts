@@ -1,18 +1,24 @@
-import { open } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { createReadStream, type BigIntStats } from 'node:fs';
+import { open, type FileHandle } from 'node:fs/promises';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { extname } from 'node:path';
+import { buffer } from 'node:stream/consumers';
 import { pipeline } from 'node:stream/promises';
 import type { Connect, Plugin } from 'vite';
-import { skiArchiveIndexUrl } from '../shared/skiArchive.ts';
+import { readResponseBytes } from '../shared/readResponseBytes.ts';
+import { skiArchiveIndexUrl, type SkiArchiveAsset } from '../shared/skiArchive.ts';
 import { isSkiAssetPathSegment, skiAssetsRoute, skiAssetUrl } from '../shared/skiAssets.ts';
 import { readSkiArchiveIndex } from './ski-archive-index.ts';
-import { findSkiAsset, readSkiAsset, skiRuntimeFiles, verifySkiAsset } from './ski-asset-files.ts';
+import { findSkiAsset, skiRuntimeFiles, verifySkiAsset } from './ski-asset-files.ts';
 
 const assetTypes = new Map([
     ['.avif', 'image/avif'], ['.ico', 'image/x-icon'], ['.jpeg', 'image/jpeg'], ['.jpg', 'image/jpeg'],
     ['.pdf', 'application/pdf'], ['.pmtiles', 'application/octet-stream'], ['.png', 'image/png'], ['.webp', 'image/webp'],
 ]);
 const loopback = new Set(['127.0.0.1', '::1', '::ffff:127.0.0.1']);
+const maxBuildIconBytes = 1024 * 1024;
+const maxBuildTerrainBytes = 64 * 1024 * 1024;
 
 function assetFile(path: string) {
     try {
@@ -31,15 +37,53 @@ function byteRange(header: string, size: number) {
     if (Number.isSafeInteger(start) && Number.isSafeInteger(end) && start <= end) return { start, end };
 }
 
-async function serveFile(request: IncomingMessage, response: ServerResponse, path: string, type: string, expectedSize?: number) {
+type ArchiveChecks = WeakMap<SkiArchiveAsset, { identity: string; valid: Promise<boolean> }>;
+
+function archiveIdentity({ dev, ino, size, mtimeNs, ctimeNs }: BigIntStats) {
+    return `${dev}:${ino}:${size}:${mtimeNs}:${ctimeNs}`;
+}
+
+async function checkArchiveChecksum(file: FileHandle, version: SkiArchiveAsset) {
+    const hash = createHash('sha256');
+    const chunk = Buffer.allocUnsafe(Math.min(1024 * 1024, version.byteCount));
+    let offset = 0;
+    while (offset < version.byteCount) {
+        const length = Math.min(chunk.length, version.byteCount - offset);
+        const { bytesRead } = await file.read(chunk, 0, length, offset);
+        if (bytesRead === 0) return false;
+        hash.update(chunk.subarray(0, bytesRead));
+        offset += bytesRead;
+    }
+    return hash.digest('hex') === version.sha256;
+}
+
+async function verifyArchive(file: FileHandle, stats: BigIntStats, version: SkiArchiveAsset, checks: ArchiveChecks) {
+    if (stats.size !== BigInt(version.byteCount)) return false;
+    const identity = archiveIdentity(stats);
+    let check = checks.get(version);
+    if (check?.identity !== identity) {
+        check = { identity, valid: checkArchiveChecksum(file, version) };
+        checks.set(version, check);
+    }
+    try {
+        // Check the open file again after the checksum, then serve from the same handle.
+        return await check.valid && archiveIdentity(await file.stat({ bigint: true })) === identity;
+    } catch (error) {
+        if (checks.get(version) === check) checks.delete(version);
+        throw error;
+    }
+}
+
+async function serveFile(request: IncomingMessage, response: ServerResponse, path: string, type: string,
+    checks: ArchiveChecks, version?: SkiArchiveAsset) {
     const file = await open(path, 'r');
     try {
-        const stats = await file.stat();
-        if (!stats.isFile() || (expectedSize !== undefined && stats.size !== expectedSize)) {
+        const stats = await file.stat({ bigint: true });
+        const size = Number(stats.size);
+        if (!stats.isFile() || (version && !(await verifyArchive(file, stats, version, checks)))) {
             response.writeHead(404).end();
             return;
         }
-        const { size } = stats;
         const range = request.headers.range;
         const positions = range ? byteRange(range, size) : undefined;
         if (range && !positions) {
@@ -68,10 +112,11 @@ async function serveFile(request: IncomingMessage, response: ServerResponse, pat
 
 function serveSkiAssets(root: string): Connect.NextHandleFunction {
     let archiveRequest: ReturnType<typeof readSkiArchiveIndex> | undefined;
-    let archiveFiles = new Map<string, number>();
+    let archiveFiles = new Map<string, SkiArchiveAsset>();
+    const checks: ArchiveChecks = new WeakMap();
     function refreshArchive() {
         archiveRequest ??= readSkiArchiveIndex(root).then(index => {
-            archiveFiles = new Map(index.map(({ relativePath, sha256, byteCount }) => [`${relativePath}:${sha256}`, byteCount]));
+            archiveFiles = new Map(index.map(asset => [`${asset.relativePath}:${asset.sha256}`, asset]));
             return index;
         }).finally(() => { archiveRequest = undefined; });
         return archiveRequest;
@@ -106,9 +151,9 @@ function serveSkiAssets(root: string): Connect.NextHandleFunction {
         }
         void (async () => {
             if (archiveKey && !archiveFiles.has(archiveKey)) await refreshArchive();
-            const size = archiveKey ? archiveFiles.get(archiveKey) : undefined;
-            const path = runtime || size !== undefined ? await findSkiAsset(root, runtime?.localFile ?? file) : undefined;
-            if (path) await serveFile(request, response, path, type, size);
+            const archive = archiveKey ? archiveFiles.get(archiveKey) : undefined;
+            const path = runtime || archive ? await findSkiAsset(root, runtime?.localFile ?? file) : undefined;
+            if (path) await serveFile(request, response, path, type, checks, archive);
             else response.writeHead(404).end();
         })().catch(error => {
             if (response.destroyed) return;
@@ -130,14 +175,21 @@ function releaseAssetBase(configured: string | undefined) {
 }
 
 async function loadReleaseAsset(root: string, base: URL | undefined, file: string, localFile: string) {
-    const local = await readSkiAsset(root, localFile);
-    if (local) return local;
+    const limit = file.endsWith('.pmtiles') ? maxBuildTerrainBytes : maxBuildIconBytes;
+    const label = `Ski-status asset ${file}`;
+    const path = await findSkiAsset(root, localFile);
+    if (path) {
+        // The end offset is inclusive. Read one extra byte to detect overflow.
+        const bytes = await buffer(createReadStream(path, { end: limit }));
+        if (bytes.length > limit) throw new Error(`${label} exceeds the size limit`);
+        return bytes;
+    }
     if (!base) {
         throw new Error(`Missing ski-status asset ${localFile}. Mount the NAS, set SKI_ASSETS_ROOT, or configure SKI_ASSETS_BASE_URL for this build.`);
     }
     const response = await fetch(new URL(file, base), { redirect: 'error', signal: AbortSignal.timeout(30_000) });
-    if (!response.ok) throw new Error(`Could not fetch ski-status asset ${file} (HTTP ${response.status}).`);
-    return Buffer.from(await response.arrayBuffer());
+    const bytes = await readResponseBytes(response, limit, label);
+    return Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength);
 }
 
 export function skiAssetsPlugin({ root, releaseUrl, includeInBuild }: { root: string; releaseUrl?: string; includeInBuild: boolean }): Plugin {

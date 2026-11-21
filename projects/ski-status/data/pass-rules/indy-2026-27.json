@@ -29,14 +29,42 @@
     {
       "areaId": "49-north-mountain-resort",
       "products": [
-        "indy-plus"
+        "indy-base",
+        "indy-base-addon"
       ],
       "access": "included",
       "days": 2,
       "reservation": "none",
-      "note": "A discounted third day is available.",
+      "note": "The operator waives advance Indy reservations. The third day discount and separately sold Destination Upgrade are described by the issuer.",
+      "source": "https://www.indyskipass.com/blackout-dates-reservations",
+      "checkedOn": "2026-11-21",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-18"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-15"
+        ]
+      ]
+    },
+    {
+      "areaId": "49-north-mountain-resort",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "The operator waives advance Indy reservations. The third day discount and separately sold Destination Upgrade are described by the issuer.",
       "source": "https://www.ski49n.com/promotions-perks/details/packs-of-tickets",
-      "checkedOn": "2026-11-20"
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "bear-valley-mountain-resort",
@@ -174,6 +202,74 @@
       "reservation": "check",
       "note": "Indy currently lists no Base blackouts. Check current pickup instructions for the new RFID system.",
       "source": "https://www.indyskipass.com/our-resorts/big-rock-mountain",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "big-white-ski-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Two base days. Check resort ticket-window and capacity instructions. The separately sold Destination Upgrade adds three no-blackout days for this resort.",
+      "source": "https://www.indyskipass.com/blackout-dates-reservations",
+      "checkedOn": "2026-11-21",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-09",
+          "2027-01-10"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-01-23",
+          "2027-01-24"
+        ],
+        [
+          "2027-01-30",
+          "2027-01-31"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-07"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-21"
+        ],
+        [
+          "2027-02-27",
+          "2027-02-28"
+        ],
+        [
+          "2027-03-06",
+          "2027-03-07"
+        ],
+        [
+          "2027-03-13",
+          "2027-03-21"
+        ]
+      ]
+    },
+    {
+      "areaId": "big-white-ski-resort",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Two base days. Check resort ticket-window and capacity instructions. The separately sold Destination Upgrade adds three no-blackout days for this resort.",
+      "source": "https://www.indyskipass.com/our-resorts/big-white-ski-resort",
       "checkedOn": "2026-11-21"
     },
     {
@@ -616,6 +712,45 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "lost-trail",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Operator publishes no blackouts or advance reservations. Complete Indy registration, bring ID to the Indy window and buy a $5 RFID card on the first visit if needed.",
+      "source": "https://www.indyskipass.com/blackout-dates-reservations",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "lost-trail",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Operator publishes no blackouts or advance reservations. Complete Indy registration, bring ID to the Indy window and buy a $5 RFID card on the first visit if needed.",
+      "source": "https://losttrail.com/indypass/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "loveland-ski-area",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://skiloveland.com/indypass/",
+      "checkedOn": "2026-11-21",
+      "note": "Check resort instructions for visitors before redeeming. The issuer publishes no blackouts on Indy+ products."
+    },
+    {
       "areaId": "magic-mountain-ski-area",
       "products": [
         "indy-base",
@@ -773,12 +908,68 @@
     {
       "areaId": "mt-hood-meadows",
       "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy Base and Base Add-On follow the issuer’s dates. Use the operator ticket window and check any capacity requirements before visiting.",
+      "source": "https://www.indyskipass.com/blackout-dates-reservations",
+      "checkedOn": "2026-11-21",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-09",
+          "2027-01-10"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-18"
+        ],
+        [
+          "2027-01-23",
+          "2027-01-24"
+        ],
+        [
+          "2027-01-30",
+          "2027-01-31"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-07"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-15"
+        ],
+        [
+          "2027-02-20",
+          "2027-02-21"
+        ],
+        [
+          "2027-02-27",
+          "2027-02-28"
+        ],
+        [
+          "2027-03-06",
+          "2027-03-07"
+        ]
+      ]
+    },
+    {
+      "areaId": "mt-hood-meadows",
+      "products": [
         "indy-plus",
         "indy-plus-addon"
       ],
       "access": "included",
       "days": 2,
       "reservation": "check",
+      "note": "Indy Base and Base Add-On follow the issuer’s dates. Use the operator ticket window and check any capacity requirements before visiting.",
       "source": "https://www.skihood.com/explore/indy-pass",
       "checkedOn": "2026-11-21"
     },

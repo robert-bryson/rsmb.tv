@@ -2,13 +2,32 @@
 
 Use the guide for procedures and checks. Find completed work in Git history and dated reviews. [Project guide](readme.md), [Review index](../../docs/README.md#reviews)
 
+## Status on November 21, 2026
+
+- The local app shows season length, ski terrain, and resort icons. Peak popups show the elevation when known. State and province lines fade in with zoom. [Map and resort details](readme.md#map-display)
+- Of 527 conventional downhill areas, 315 have all six comparison fields. The North American review has 459 candidates with an open decision. [Catalog](readme.md#catalog), [Candidate decisions](research/north-america-2026-11-16.csv)
+- The data review checked 30 resorts through batch 25. The next area in acreage order is Mount Washington Alpine Resort. Check larger deferred areas when their reviews are due. [Batch 25](research/data-quality-log.md#batch-25--2026-11-21)
+- Production and the hosted preview serve revision `0ec3dfd`, which predates ski-status. The Amplify app lacks `SKI_ASSETS_BASE_URL`. The public ski-status manifest returns HTTP 403. [Production revision](https://www.rsmb.tv/deployment.json), [Preview revision](https://release-preview.d38ki8k4lanh8s.amplifyapp.com/deployment.json), [Conditions manifest](https://data.rsmb.tv/ski-status/manifest.json)
+
 ## Release checks
 
-- [ ] Copy the versioned runtime files to the HTTPS mirror. Set `SKI_ASSETS_BASE_URL` in Amplify. Build the candidate revision. [Release assets](readme.md#release-assets)
+The first hosted release is the highest priority.
+
+- [x] Stage each indexed runtime file. Build the local app from an HTTPS mirror with an empty NAS path. Verify each SHA-256 checksum in the build output. [Build check](../../docs/reviews/2026-11-21-ski-status-release-asset-and-map-review.md#verification)
+- [x] Run the Heavenly terrain check on that local build. Verify eight byte ranges and the Heavenly Gondola and Cloud 9 tooltips. [Terrain verifier](../../scripts/release-ski-terrain.ts)
+- [x] Exclude `.pmtiles` from the SPA rewrite in Terraform. [Amplify rule](../../infra/main.tf), [Rewrite test](../../infra/tests/page-rewrites.tftest.hcl)
+- [ ] Copy the versioned runtime files to the release HTTPS mirror. Set `SKI_ASSETS_BASE_URL` in Amplify. [Release assets](readme.md#release-assets)
+- [ ] Apply the updated Amplify rewrite and build the candidate revision. [Preview setup](../../docs/release-validation.md#ski-status-build-assets)
 - [ ] Run the validator on the hosted preview. Check the terrain checksum, byte ranges, and Heavenly tooltips. Match the report to the candidate revision and Amplify job. [Release checks](readme.md#release-checks)
-- [ ] Run **Sync Ski Status** on `main` with its scoped role. Check the active manifest and its archived predecessor. [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
+- [ ] Deploy the scoped ski-status sync role. Set `AWS_SKI_STATUS_SYNC_ROLE_ARN`. Run **Sync Ski Status** on `main`. Check the active manifest and its archived predecessor. [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
+
+## Next feature
+
+- [ ] Show verified winter approaches in resort details and on the map. Show each named pass once. Link to official road status and winter restrictions. [Access routes](readme.md#access-routes-and-webcams)
 
 ## Rockies report pilot
+
+The recorded spot checks matched Lake Louise and Banff Sunshine. Mt. Norquay returned HTTP 500. [Rockies spot checks](../../docs/reviews/2026-11-21-ski-status-engineering-review.md#rockies-spot-checks)
 
 - [ ] Confirm the storage and display terms for Banff Sunshine and Mt. Norquay. [Report sources](readme.md#sources-and-pilot)
 - [ ] Recheck the Mt. Norquay XML feed. If it responds, compare its counts with the operator's report. [Report sources](readme.md#sources-and-pilot)
@@ -37,7 +56,6 @@ Use the guide for procedures and checks. Find completed work in Git history and 
 - [ ] Show straight-line distance, driving distance, and drive time from a selected origin. [Access routes](readme.md#access-routes-and-webcams)
 - [ ] Add verified lodge locations to the map. Show the services at each location. [Visitor information](readme.md#inspect-and-compare-areas)
 - [ ] Show published run access, length, maximum slope, and grooming status. [Terrain guide](readme.md#runs-and-lifts-at-resort-zoom)
-- [ ] Show verified winter approaches in resort details and on the map. Show each named pass once. Link to official road status and winter restrictions. [Access routes](readme.md#access-routes-and-webcams)
 - [ ] Link to agency cameras. Test a map layer for nearby cameras. [Webcams](readme.md#access-routes-and-webcams)
 - [ ] Store visited areas on the device. Add a filter and a backup format. [Visited areas](readme.md#visited-areas)
 

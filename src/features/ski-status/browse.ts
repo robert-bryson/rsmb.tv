@@ -294,8 +294,10 @@ export function formatArea(acres: number, units: SkiUnits, lowerBound = false) {
     return `${formatDecimal(value, lowerBound)} ${units === 'metric' ? 'ha' : 'ac'}`;
 }
 
-export function formatElevation(feet: number, units: SkiUnits) {
-    return units === 'metric' ? `${integer.format(feet * metersPerFoot)} m` : `${integer.format(feet)} ft`;
+export function formatElevation(value: number, units: SkiUnits, sourceUnits: SkiUnits = 'imperial') {
+    const metric = units === 'metric';
+    const elevation = units === sourceUnits ? value : metric ? value * metersPerFoot : value / metersPerFoot;
+    return `${integer.format(elevation)} ${metric ? 'm' : 'ft'}`;
 }
 
 export function snowDepthValue(cm: number, units: SkiUnits) {
@@ -355,7 +357,7 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, co
     }
     if (key === 'forecastPrecipitation') return `${decimal.format(value)}%`;
     if (key.endsWith('Ft')) return formatElevation(value, units);
-    if (key.endsWith('M')) return formatElevation(value / metersPerFoot, units);
+    if (key.endsWith('M')) return formatElevation(value, units, 'metric');
     if (key.endsWith('Km')) {
         const distance = units === 'metric' ? value : value / 1.609344;
         const lowerBound = key === 'nordicKm' && area.nordicKmQualifier === 'lower-bound';

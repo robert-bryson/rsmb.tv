@@ -42,6 +42,14 @@ describe('ski-status resort data', () => {
         });
     });
 
+    it('accepts a separate HTTPS source for a published summit elevation', () => {
+        const sourcedPeak = { ...peak, elevationSource: 'https://example.test/summit-map' };
+        expect(readResortPeaks([sourcedPeak], areas)).toEqual([sourcedPeak]);
+        expect(() => readResortPeaks([{ ...sourcedPeak, elevationFt: undefined }], areas))
+            .toThrow('Elevation source requires a summit elevation');
+        expect(() => readResortPeaks([{ ...sourcedPeak, elevationSource: 'http://example.test/map' }], areas)).toThrow();
+    });
+
     it('uses the published skiable vertical at Mt. Norquay', () => {
         const norquay = skiAreas.find(area => area.id === 'mt-norquay');
         expect(norquay?.verticalFt).toBe(1650);

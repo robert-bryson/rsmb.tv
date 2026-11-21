@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiStat, passFilterFamily, readPassFilters, readSkiingFilter, readSkiResultsView, readSkiSort, skiAreaBounds, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatElevation, formatSkiStat, passFilterFamily, readPassFilters, readSkiingFilter, readSkiResultsView, readSkiSort, skiAreaBounds, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreaMapPoint, skiAreas } from '../features/ski-status/catalog';
 import { markerAppearance, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 import { readSkiFilters, skiLocationLabels, toggleSkiPassFilter, writeSkiPassProduct } from '../features/ski-status/skiFilters';
@@ -294,6 +294,13 @@ describe('ski-status catalog and browse', () => {
         expect(formatArea(101, 'metric', true)).toBe('40.8+ ha');
         expect(formatSkiStat({ ...peak, verticalFt: 1000 }, 'verticalFt', 'metric')).toBe('305 m');
         expect(formatSkiStat({ ...peak, nightSkiing: false }, 'nightSkiing', 'metric')).toBe('No');
+    });
+
+    it('rounds elevation in the displayed units without converting back to the original units', () => {
+        expect(formatElevation(1754.49, 'metric', 'metric')).toBe('1,754 m');
+        expect(formatElevation(1754.5, 'metric', 'metric')).toBe('1,755 m');
+        expect(formatElevation(7802.6, 'imperial')).toBe('7,803 ft');
+        expect(formatElevation(7802.6, 'metric')).toBe('2,378 m');
     });
 
     it('preserves published Nordic trail minimums in both distance units', () => {

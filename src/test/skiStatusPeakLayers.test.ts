@@ -78,13 +78,18 @@ describe('ski-status peak layers', () => {
 
         renderer.getZoom.mockReturnValue(9);
         renderer.queryRenderedFeatures.mockReturnValue([{ layer: { id: trailMapLayer }, properties: { name: 'Sargents', elevationFt: 7803 } }]);
-        expect(mountainPeakLabel(map, point, 'metric')).toBe('Sargents · 2,378 m · Trail map');
+        expect(mountainPeakLabel(map, point, 'metric')).toBe('Sargents · Trail map\n2,378 m');
         expect(renderer.queryRenderedFeatures).toHaveBeenLastCalledWith(point, { layers: [trailMapLayer] });
 
         renderer.getZoom.mockReturnValue(10);
+        renderer.queryRenderedFeatures.mockReturnValue([{ layer: { id: nearbyLayer }, properties: { name: 'Nearby Peak', elevation: 2500 } }]);
+        expect(mountainPeakLabel(map, point, 'imperial')).toBe('Nearby Peak\n8,202 ft');
+        expect(mountainPeakLabel(map, point, 'metric')).toBe('Nearby Peak\n2,500 m');
+        expect(renderer.queryRenderedFeatures).toHaveBeenLastCalledWith(point, { layers: [trailMapLayer, nearbyLayer] });
         renderer.queryRenderedFeatures.mockReturnValue([{ layer: { id: nearbyLayer }, properties: { name: 'Nearby Peak' } }]);
         expect(mountainPeakLabel(map, point, 'imperial')).toBe('Nearby Peak');
-        expect(renderer.queryRenderedFeatures).toHaveBeenLastCalledWith(point, { layers: [trailMapLayer, nearbyLayer] });
+        renderer.queryRenderedFeatures.mockReturnValue([{ layer: { id: nearbyLayer }, properties: { name: 'Nearby Peak', elevation: 'unknown' } }]);
+        expect(mountainPeakLabel(map, point, 'metric')).toBe('Nearby Peak');
         renderer.queryRenderedFeatures.mockReturnValue([]);
         expect(mountainPeakLabel(map, point, 'imperial')).toBeUndefined();
     });

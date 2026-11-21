@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -62,6 +63,43 @@ describe('ski-status release asset packaging', () => {
             redirect: 'error', signal: expect.any(AbortSignal),
         });
         expect(files.map(file => [file.fileName, Buffer.from(file.source).toString()])).toEqual([[outputName, bytes]]);
+    });
+
+    it('cancels an oversized mirror response before it finishes', async () => {
+        const cancel = vi.fn();
+        let chunks = 0;
+        const body = new ReadableStream<Uint8Array>({
+            pull(controller) {
+                if (chunks === 2) controller.close();
+                else controller.enqueue(new Uint8Array(chunks++ === 0 ? 1024 * 1024 : 1));
+            },
+            cancel,
+        }, { highWaterMark: 0 });
+        vi.stubGlobal('fetch', vi.fn(async () => new Response(body)));
+        await expect(buildAssets('https://example.test/ski/')).rejects.toThrow('response exceeds the size limit');
+        expect(cancel).toHaveBeenCalledOnce();
+    });
+
+    it('applies the same size budget to indexed local assets', async () => {
+        const path = join(root, localFile);
+        await mkdir(dirname(path), { recursive: true });
+        await writeFile(path, Buffer.alloc(1024 * 1024 + 1));
+        await expect(buildAssets()).rejects.toThrow('exceeds the size limit');
+    });
+
+    it('allows the terrain archive to exceed the icon size budget', async () => {
+        const terrainBytes = Buffer.alloc(1024 * 1024 + 1);
+        const checksum = createHash('sha256').update(terrainBytes).digest('hex');
+        const file = `runtime/terrain/${checksum}/resort-terrain.pmtiles`;
+        skiRuntimeFiles.set(file, { localFile: file, checksum });
+        try {
+            vi.stubGlobal('fetch', vi.fn(async (url: URL) => new Response(url.pathname.endsWith(`/${file}`) ? terrainBytes : bytes)));
+            const assets = await buildAssets('https://example.test/ski/');
+            const terrain = assets.find(asset => asset.fileName === skiAssetUrl(file).slice(1));
+            expect(terrain && Buffer.from(terrain.source).equals(terrainBytes)).toBe(true);
+        } finally {
+            skiRuntimeFiles.delete(file);
+        }
     });
 
     it('rejects missing and corrupt input in a release build and skips fixture builds', async () => {

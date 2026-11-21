@@ -20,7 +20,7 @@ import { addAreaLayers, addPassBadges, addResortImages, areaFeatures, filterPass
     pointLayer, resortIconLayer, selectionSource, sourceId } from './skiMapLayers';
 import { reliefMinZoom, reliefSource, revealSkiMapOverlay, snowDepthMaxZoom, snowDepthMinZoom, snowDepthSource, syncSkiMapOverlays,
     type SkiMapOverlaySource } from './skiMapOverlays';
-import { addHighwayShieldImages, regionalRoadLayer, skiGlobeStyle } from './skiMapStyle';
+import { addHighwayShieldImages, regionalRoadLayer, skiGlobeStyle, stateBoundaryLayer } from './skiMapStyle';
 import { isPeakLayer, mountainPeakLabel, peakSource, syncPeakLayers } from './skiPeakLayers';
 import { SkiAreaPopup } from './SkiAreaPopup';
 import { SkiIcon, SkiIconButton } from './SkiIcon';
@@ -225,7 +225,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, cameraFit
     const showTerrain = useEffectEvent(onShowTerrain);
     const syncOverlays = useEffectEvent((map: maplibre.Map) => {
         if (!map.getLayer(pointLayer)) return;
-        const foreground = map.getStyle().layers.find(layer => layer.id === regionalRoadLayer
+        const foreground = map.getStyle().layers.find(layer => layer.id === stateBoundaryLayer || layer.id === regionalRoadLayer
             || (layer.type === 'symbol' && layer.source !== sourceId && layer.source !== selectionSource && !isPeakLayer(layer.id)));
         const before = foreground?.id ?? (map.getLayer(resortFootprintLayer) ? resortFootprintLayer : pointLayer);
         syncSkiMapOverlays(map, before, terrain, snowDepth, duration);
@@ -597,7 +597,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, cameraFit
         terrainPopupRef.current?.remove();
         const map = mapRef.current;
         if (map) syncPeaks(map);
-    }, [peaks]);
+    }, [peaks, units]);
 
     useEffect(() => {
         terrainPopupRef.current?.remove();

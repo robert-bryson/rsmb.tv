@@ -51,4 +51,12 @@ run "page_metadata_rewrites" {
     )
     error_message = "The SPA rewrite must precede the final error handler, and rewrite sources must be unique."
   }
+
+  assert {
+    condition = can(regex(
+      "\\(\\?!\\(([^)]*\\|)?pmtiles(\\|[^)]*)?\\)\\$\\)",
+      aws_amplify_app.rsmbtv.custom_rule[length(aws_amplify_app.rsmbtv.custom_rule) - 2].source
+    ))
+    error_message = "The SPA rewrite must exclude .pmtiles so the host can serve terrain byte ranges."
+  }
 }

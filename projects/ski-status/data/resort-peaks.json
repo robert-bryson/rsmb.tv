@@ -6,6 +6,8 @@
       -111.480814,
       40.608874
     ],
+    "elevationFt": 9400,
+    "elevationSource": "https://www.deervalley.com/-/media/deer-valley/media/deervalleypresskitsummer2026.pdf",
     "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1425258",
     "checkedOn": "2026-11-21",
     "trailMaps": [
@@ -22,6 +24,8 @@
       -122.870833,
       50.081111
     ],
+    "elevationFt": 8000,
+    "elevationSource": "https://www.whistlerblackcomb.com/-/aemasset/digital-experience-assets-library/destination-resorts/whistler-blackcomb/mountain-operations/summer-2026/20260521_WB_summer-trail_map_001.pdf",
     "locationSource": "https://apps.gov.bc.ca/pub/bcgnws/names/5163.html",
     "checkedOn": "2026-11-21",
     "trailMaps": [
@@ -79,6 +83,23 @@
       {
         "areaId": "powder-mountain",
         "source": "https://images.prismic.io/powdermountain/aTneDXNYClf9oCZT_PM_2526_WinterTrailMap.jpg"
+      }
+    ]
+  },
+  {
+    "id": "jp-jp01-niseko-annupuri",
+    "name": "Mount Niseko Annupuri",
+    "coordinates": [
+      140.6588889,
+      42.875
+    ],
+    "elevationFt": 4291,
+    "locationSource": "https://www.data.jma.go.jp/vois/data/sapporo/118_Niseko/118_index.html",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "niseko-united",
+        "source": "https://www.niseko.ne.jp/ja/wp-content/uploads/2020/08/2026-27_NU_Trail-Map_EN.pdf"
       }
     ]
   },
@@ -157,6 +178,8 @@
       -119.897636,
       38.922835
     ],
+    "elevationFt": 10067,
+    "elevationSource": "https://pubs.usgs.gov/wsp/1972/report.pdf",
     "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/228994",
     "checkedOn": "2026-11-21",
     "trailMaps": [
@@ -207,6 +230,8 @@
       -119.940833,
       50.916389
     ],
+    "elevationFt": 7060,
+    "elevationSource": "https://www.sunpeaksresort.com/sites/default/files/2024-05/Hike_Map_Web2024.pdf",
     "locationSource": "https://apps.gov.bc.ca/pub/bcgnws/names/20917.html",
     "checkedOn": "2026-11-21",
     "trailMaps": [
@@ -285,6 +310,382 @@
     ]
   },
   {
+    "id": "us-ca-covered-wagon-peak",
+    "name": "Covered Wagon Peak",
+    "coordinates": [
+      -120.047535,
+      38.6570134
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1702068",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "kirkwood-mountain-resort",
+        "source": "https://www.kirkwood.com/-/aemasset/sitecore/kirkwood/maps/winter-2025-2026/20251202_KW_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-ca-thimble-peak",
+    "name": "Thimble Peak",
+    "coordinates": [
+      -120.0605277,
+      38.6624923
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/268215",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "kirkwood-mountain-resort",
+        "source": "https://www.kirkwood.com/-/aemasset/sitecore/kirkwood/maps/winter-2025-2026/20251202_KW_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-grouse-mountain",
+    "name": "Grouse Mountain",
+    "coordinates": [
+      -106.5087281,
+      39.5173928
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/176094",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "beaver-creek-resort",
+        "source": "https://www.beavercreek.com/-/aemasset/digital-experience-assets-library/destination-resorts/beaver-creek/mountain-operations/winter-2026-2027/20261110_BC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-mount-jackson",
+    "name": "Mount Jackson",
+    "coordinates": [
+      -106.5366553,
+      39.4852967
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/179483",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "beaver-creek-resort",
+        "source": "https://www.beavercreek.com/-/aemasset/digital-experience-assets-library/destination-resorts/beaver-creek/mountain-operations/winter-2026-2027/20261110_BC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-mount-of-the-holy-cross",
+    "name": "Mount of the Holy Cross",
+    "coordinates": [
+      -106.4817024,
+      39.4666301
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/179522",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "beaver-creek-resort",
+        "source": "https://www.beavercreek.com/-/aemasset/digital-experience-assets-library/destination-resorts/beaver-creek/mountain-operations/winter-2026-2027/20261110_BC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-palmyra-peak",
+    "name": "Palmyra Peak",
+    "coordinates": [
+      -107.829295,
+      37.8836734
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/187171",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "telluride-ski-resort",
+        "source": "https://tellurideskiresort.com/wp-content/uploads/palmyra-23.24.png"
+      }
+    ]
+  },
+  {
+    "id": "us-co-tenmile-peak-10",
+    "name": "Peak 10",
+    "coordinates": [
+      -106.1028196,
+      39.443159
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/179648",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "breckenridge-ski-resort",
+        "source": "https://www.breckenridge.com/-/aemasset/digital-experience-assets-library/destination-resorts/breckenridge/mountain-operations/winter-2026-2027/20261103_BR_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-tenmile-peak-6",
+    "name": "Peak 6",
+    "coordinates": [
+      -106.1113251,
+      39.4938259
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/179626",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "breckenridge-ski-resort",
+        "source": "https://www.breckenridge.com/-/aemasset/digital-experience-assets-library/destination-resorts/breckenridge/mountain-operations/winter-2026-2027/20261103_BR_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-tenmile-peak-7",
+    "name": "Peak 7",
+    "coordinates": [
+      -106.1052328,
+      39.4784361
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/179627",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "breckenridge-ski-resort",
+        "source": "https://www.breckenridge.com/-/aemasset/digital-experience-assets-library/destination-resorts/breckenridge/mountain-operations/winter-2026-2027/20261103_BR_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-tenmile-peak-8",
+    "name": "Peak 8",
+    "coordinates": [
+      -106.1024776,
+      39.4726985
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/179628",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "breckenridge-ski-resort",
+        "source": "https://www.breckenridge.com/-/aemasset/digital-experience-assets-library/destination-resorts/breckenridge/mountain-operations/winter-2026-2027/20261103_BR_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-co-tenmile-peak-9",
+    "name": "Peak 9",
+    "coordinates": [
+      -106.1049967,
+      39.4515215
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/179647",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "breckenridge-ski-resort",
+        "source": "https://www.breckenridge.com/-/aemasset/digital-experience-assets-library/destination-resorts/breckenridge/mountain-operations/winter-2026-2027/20261103_BR_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-id-bald-mountain-blaine",
+    "name": "Bald Mountain",
+    "coordinates": [
+      -114.4093259,
+      43.6549374
+    ],
+    "elevationFt": 9150,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/376878",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "sun-valley-bald-mountain",
+        "source": "https://www.sunvalley.com/getmedia/a75ad925-ada1-4ffe-ae8a-7dcf6840b228/2627_SV_Baldy_Map_26-27_2580X1456.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-id-deer-point",
+    "name": "Deer Point",
+    "coordinates": [
+      -116.0990053,
+      43.7548902
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/397621",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "bogus-basin",
+        "source": "https://media.bogusbasin.org/uploads/2025/11/24191036/RGB_2025-26Winter_DayMap_Web.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-id-shafer-butte",
+    "name": "Shafer Butte",
+    "coordinates": [
+      -116.0885976,
+      43.7715571
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/390131",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "bogus-basin",
+        "source": "https://media.bogusbasin.org/uploads/2025/11/24191036/RGB_2025-26Winter_DayMap_Web.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-mt-rumsey-mountain",
+    "name": "Rumsey Mountain",
+    "coordinates": [
+      -113.2472811,
+      46.262381
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/789852",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "discovery-ski-area",
+        "source": "https://www.skidiscovery.com/wp-content/uploads/2017/11/DIS-1021-7_FY18_2017BacksideMap_cropped_HR.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-or-mount-hood",
+    "name": "Mount Hood",
+    "coordinates": [
+      -121.6957927,
+      45.373373
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1143711",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "mt-hood-meadows",
+        "source": "https://cms.skihood.com/uploads/Trail_Map_20x17_2026_27_map_APPROVED_fd40289331.jpg"
+      }
+    ]
+  },
+  {
+    "id": "us-ut-devils-castle",
+    "name": "Devil’s Castle",
+    "coordinates": [
+      -111.6146556,
+      40.5657907
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1440423",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "alta",
+        "source": "https://res.cloudinary.com/altaskiarea/image/upload/v1793054038/resources/Maps/26_27_Alta_Trailmap_WEB.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-ut-hidden-peak",
+    "name": "Hidden Peak",
+    "coordinates": [
+      -111.6449571,
+      40.5607696
+    ],
+    "elevationFt": 11000,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/2555183",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "snowbird",
+        "source": "https://cms.snowbird.com/sites/default/files/2026-10/TrailMap_1920x2318_2627.jpg"
+      }
+    ]
+  },
+  {
+    "id": "us-ut-mount-baldy",
+    "name": "Mount Baldy",
+    "coordinates": [
+      -111.6380432,
+      40.5679733
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1425265",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "alta",
+        "source": "https://res.cloudinary.com/altaskiarea/image/upload/v1793054038/resources/Maps/26_27_Alta_Trailmap_WEB.pdf"
+      },
+      {
+        "areaId": "snowbird",
+        "source": "https://cms.snowbird.com/sites/default/files/2026-10/TrailMap_1920x2318_2627.jpg"
+      }
+    ]
+  },
+  {
+    "id": "us-ut-sugarloaf-mountain",
+    "name": "Sugarloaf Peak",
+    "coordinates": [
+      -111.6248266,
+      40.5658668
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1454917",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "alta",
+        "source": "https://res.cloudinary.com/altaskiarea/image/upload/v1793054038/resources/Maps/26_27_Alta_Trailmap_WEB.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-wa-mount-spokane",
+    "name": "Mount Spokane",
+    "coordinates": [
+      -117.1122916,
+      47.9237182
+    ],
+    "elevationFt": 5883,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1512684",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "mt-spokane-ski-snowboard-park",
+        "source": "https://irp.cdn-website.com/d9eb3da0/files/uploaded/MtSPOKANE_front-01.4_09282024forWEBkey.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-wy-grand-teton",
+    "name": "Grand Teton",
+    "coordinates": [
+      -110.80249,
+      43.7411307
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1609199",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "grand-targhee-resort",
+        "source": "https://www.grandtarghee.com/sites/default/files/2026-10/GRAND%20TARGHEE-01.1%2009242026forWEB_0.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-wy-rendezvous-peak",
+    "name": "Rendezvous Peak",
+    "coordinates": [
+      -110.9048366,
+      43.567208
+    ],
+    "elevationFt": 10450,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1602487",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "jackson-hole-mountain-resort",
+        "source": "https://www.datocms-assets.com/50871/1764786024-2025-26trailmapresized.png?dl=Jackson-Hole-Winter-Trail-Map.jpg"
+      }
+    ]
+  },
+  {
     "id": "ward-peak",
     "name": "Ward Peak",
     "coordinates": [
@@ -308,6 +709,8 @@
       -122.956944,
       50.058889
     ],
+    "elevationFt": 7160,
+    "elevationSource": "https://cdn.whistler.com/s3/pdf/maps/whistler-mountain-bike-park-trail-map-2026.pdf",
     "locationSource": "https://apps.gov.bc.ca/pub/bcgnws/names/21096.html",
     "checkedOn": "2026-11-21",
     "trailMaps": [

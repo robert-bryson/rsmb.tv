@@ -8,10 +8,12 @@ const peakSchema = z.strictObject({
     name: z.string().trim().min(1),
     coordinates: skiCoordinates,
     elevationFt: z.number().int().positive().optional(),
+    elevationSource: httpsUrl.optional(),
     locationSource: httpsUrl,
     checkedOn: z.iso.date(),
     trailMaps: z.array(z.strictObject({ areaId: skiId, source: httpsUrl })).min(1),
-});
+}).refine(peak => peak.elevationSource === undefined || peak.elevationFt !== undefined,
+    { message: 'Elevation source requires a summit elevation', path: ['elevationSource'] });
 type ResortPeak = z.infer<typeof peakSchema>;
 
 export function readResortPeaks(input: unknown, areas: readonly { id: string }[]): readonly ResortPeak[] {

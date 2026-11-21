@@ -20,6 +20,23 @@ describe('ski-status road approaches', () => {
         expect(mountainPasses['us-ca-donner-summit-i80'].road).toBe('I-80');
     });
 
+    it('records the OR 35 summit crossings for each direction to the Mt. Hood Meadows main lots', () => {
+        const { approachesByArea } = readSkiRoadApproaches(roadData, skiAreas);
+        const mainLots = approachesByArea['mt-hood-meadows'].filter(row => row.to === 'Main, Sunrise and Twilight lots');
+        expect(mainLots).toEqual(expect.arrayContaining([
+            expect.objectContaining({ from: 'Hood River (OR 35)', passIds: [] }),
+            expect.objectContaining({ from: 'US 26 / OR 35 junction', passIds: ['us-or-barlow-pass', 'us-or-bennett-pass'] }),
+        ]));
+    });
+
+    it('lists both US 40 passes in driving order from Kremmling to Steamboat', () => {
+        const { approachesByArea, mountainPasses } = readSkiRoadApproaches(roadData, skiAreas);
+        const eastApproaches = approachesByArea['steamboat-ski-resort'].filter(row => row.from === 'Kremmling (US 40)');
+        const passes = ['us-co-muddy-pass', 'us-co-rabbit-ears-pass'];
+        expect(eastApproaches.map(row => row.passIds)).toEqual([passes, passes]);
+        expect(mountainPasses['us-co-muddy-pass'].road).toBe('US 40');
+    });
+
     it('keeps verified routes with no pass and routes with an open check distinct', () => {
         const noPass = { ...route, from: 'Base junction', passIds: [] };
         const unchecked = { ...route, from: 'Alternate junction', passIds: undefined };
