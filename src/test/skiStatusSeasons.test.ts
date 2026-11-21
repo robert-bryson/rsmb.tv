@@ -3,7 +3,10 @@ import operatorReports from '../../projects/ski-status/data/conditions/operator-
 import { dolomitiTerrainReport } from '../../projects/ski-status/scripts/conditions-sources';
 import { filterSkiAreas, formatSkiStat, sortSkiAreas } from '../features/ski-status/browse';
 import { skiAreas } from '../features/ski-status/catalog';
-import { mergeResortReports, reportSnapshotSchema, reportStatus, reportStatusText, skiDayStatus, terrainStatusText, type ResortReport } from '../features/ski-status/conditions';
+import {
+    areaForecast, mergeResortReports, reportSnapshotSchema, reportStatus, reportStatusText, skiDayStatus, terrainStatusText,
+    type BaseForecast, type ResortReport,
+} from '../features/ski-status/conditions';
 import { includesSeasonMonth, readSeasonCalendar, readSeasonMonth, seasonCalendar, skiSeasonOutlook, upcomingSeasonPlan } from '../features/ski-status/seasons';
 import { skiAreaCsv } from '../features/ski-status/skiCsv';
 
@@ -147,14 +150,20 @@ describe('ski operations and terrain', () => {
         expect(terrainStatusText(louise.terrain!.items[0], louise, deadline + 1)).toBe('Open (stale)');
     });
 
-    it('accepts a verified date-only ski day and rejects a mismatched deadline', () => {
-        const report = { ...louise, reportedAt: undefined, reportedOn: '2026-11-20' };
+    it.each(['2026-11-20T23:59:59.999-06:00', '2026-11-21T05:59:59.999Z'])(
+        'accepts a deadline on the resort ski day in %s', validThrough => {
+        const report = { ...louise, reportedAt: undefined, reportedOn: '2026-11-20', validThrough };
         const snapshot = reportSnapshotSchema.parse({ ...operatorReports, reports: [report] });
         expect(reportStatus(snapshot.reports[0], Date.parse(louise.retrievedAt) - 1)).toBe('unknown');
         expect(reportStatus(snapshot.reports[0], now)).toBe('limited');
         expect(reportStatus(snapshot.reports[0], deadline + 1)).toBe('unknown');
+    });
+
+    it('rejects a deadline that falls on a different day in the resort time zone', () => {
         expect(reportSnapshotSchema.safeParse({
-            ...operatorReports, reports: [{ ...report, reportedOn: '2026-11-19' }],
+            ...operatorReports, reports: [{
+                ...louise, reportedAt: undefined, reportedOn: '2026-11-20', validThrough: '2026-11-20T23:59:59.999-08:00',
+            }],
         }).success).toBe(false);
     });
 
@@ -224,6 +233,50 @@ describe('ski operations and terrain', () => {
         const merged = mergeResortReports(previous, next, now);
         expect(merged).toEqual({ ...previous, terrain: { ...terrain, retrievedAt } });
         expect(reportSnapshotSchema.safeParse({ ...operatorReports, reports: [merged] }).success).toBe(true);
+    });
+
+    it.each(['limited', 'unknown'] as const)('keeps the latest named observations when new operations are %s', status => {
+        const source = { name: 'Terrain operator', url: 'https://example.test/terrain', exportable: false };
+        const lift = { id: 'lift:chair', name: 'Main chair', kind: 'lift', status: 'open', updatedAt: '2026-11-20T17:00:00Z' } as const;
+        const run = { id: 'trail:main', name: 'Main run', kind: 'trail', status: 'open', updatedAt: '2026-11-20T16:00:00Z' } as const;
+        const previous: ResortReport = { ...louise, terrain: { source, retrievedAt: lift.updatedAt, items: [
+            lift, run, { ...lift, id: 'lift:removed' },
+        ] } };
+        const retrievedAt = '2026-11-20T17:30:00Z';
+        const closedRun = { ...run, status: 'closed', updatedAt: retrievedAt } as const;
+        const next: ResortReport = { ...previous, status, retrievedAt, terrain: { source, items: [
+            { ...lift, status: 'closed', updatedAt: '2026-11-20T16:30:00Z' }, closedRun,
+        ] } };
+
+        for (const [first, second] of [[previous, next], [next, previous]]) {
+            const merged = mergeResortReports(first, second, now);
+            expect(merged.terrain).toEqual({ source, retrievedAt, items: [lift, closedRun] });
+            expect(reportSnapshotSchema.safeParse({ ...operatorReports, reports: [merged] }).success).toBe(true);
+        }
+    });
+
+    it('keeps terrain observations under the license that supplied them', () => {
+        const source = { name: 'Terrain operator', url: 'https://example.test/terrain', exportable: false };
+        const item = { id: 'lift:chair', name: 'Main chair', kind: 'lift', status: 'open', updatedAt: '2026-11-20T17:00:00Z' } as const;
+        const previous: ResortReport = { ...louise, terrain: { source, items: [item], retrievedAt: item.updatedAt } };
+        const next: ResortReport = {
+            ...previous, status: 'unknown', retrievedAt: '2026-11-20T17:30:00Z',
+            terrain: { source: { ...source, exportable: true, license: 'https://example.test/license' }, items: [item] },
+        };
+        expect(mergeResortReports(previous, next, now)).toBe(previous);
+    });
+
+    it('displays a base forecast from retrieval until the end of the forecast period', () => {
+        const forecast: BaseForecast = {
+            areaId: louise.areaId, source: louise.source, retrievedAt: '2026-11-20T17:50:00Z',
+            startsAt: '2026-11-20T18:00:00Z', endsAt: '2026-11-21T18:00:00Z', location: 'Base', snowfallCm: 0,
+        };
+        const forecasts = new Map([[forecast.areaId, forecast]]);
+        const forecastAt = (now: number) => areaForecast({ forecasts, reports, now }, forecast.areaId);
+        expect(forecastAt(Date.parse(forecast.retrievedAt) - 1)).toBeUndefined();
+        expect(forecastAt(Date.parse(forecast.retrievedAt))).toBe(forecast);
+        expect(forecastAt(Date.parse(forecast.endsAt) - 1)).toBe(forecast);
+        expect(forecastAt(Date.parse(forecast.endsAt))).toBeUndefined();
     });
 
     it('keeps a catalog schedule out of CSV when a separate report has an export license', () => {

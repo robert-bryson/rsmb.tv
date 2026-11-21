@@ -1,12 +1,14 @@
 import { execFile } from 'node:child_process';
-import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { mkdir, mkdtemp, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { promisify } from 'node:util';
 
 export const manifestName = 'manifest.json';
 export type StoredObject = { body: Buffer; etag?: string };
 export type ConditionsStore = {
-    read: (file: string) => Promise<StoredObject | undefined>;
+    // Include one extra byte so callers can detect a file that exceeds the limit.
+    read: (file: string, limit: number) => Promise<StoredObject | undefined>;
     write: (file: string, body: Buffer) => Promise<void>;
     commit: (body: Buffer, previous?: StoredObject) => Promise<void>;
 };
@@ -14,6 +16,12 @@ export type ConditionsStore = {
 const exec = promisify(execFile);
 const prefix = 'ski-status/';
 const runAws = async (args: string[]) => (await exec('aws', ['--no-cli-pager', ...args])).stdout;
+
+async function readBounded(path: string, limit: number) {
+    const chunks: Buffer[] = [];
+    for await (const chunk of createReadStream(path, { end: limit })) chunks.push(chunk);
+    return Buffer.concat(chunks);
+}
 
 export async function withConditionsStore<T>(
     directory: string, bucket: string | undefined, publish: (store: ConditionsStore) => Promise<T>, aws = runAws,
@@ -31,24 +39,27 @@ export async function withConditionsStore<T>(
         const staging = await mkdtemp(join(directory, '.conditions-'));
         try {
             return await publish({
-                async read(file) {
+                async read(file, limit) {
                     if (bucket) {
-                        if (file === manifestName && !await existsRemotely(bucket, file)) return;
+                        if (file === manifestName && !await findRemoteObject(bucket, file)) return;
                         const path = join(staging, `${file}.download`);
                         let metadata: string;
                         try {
                             metadata = await aws(['s3api', 'get-object', '--bucket', bucket,
-                                '--key', `${prefix}${file}`, '--output', 'json', path]);
+                                '--key', `${prefix}${file}`, '--range', `bytes=0-${limit}`, '--output', 'json', path]);
                         } catch (error) {
-                            if (file !== manifestName && !await existsRemotely(bucket, file)) return;
+                            if (file !== manifestName) {
+                                const listed = await findRemoteObject(bucket, file);
+                                if (!listed || listed.Size === 0) return;
+                            }
                             throw error;
                         }
                         const { ETag: etag } = JSON.parse(metadata) as { ETag?: string };
                         if (file === manifestName && !etag) throw Error('S3 omitted the manifest ETag');
-                        return { body: await readFile(path), etag };
+                        return { body: await readBounded(path, limit), etag };
                     }
                     try {
-                        return { body: await readFile(join(directory, file)) };
+                        return { body: await readBounded(join(directory, file), limit) };
                     } catch (error) {
                         if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
                     }
@@ -67,11 +78,11 @@ export async function withConditionsStore<T>(
         await rm(lock);
     }
 
-    async function existsRemotely(bucket: string, file: string) {
+    async function findRemoteObject(bucket: string, file: string) {
         const key = `${prefix}${file}`;
         const result = await aws(['s3api', 'list-objects-v2', '--bucket', bucket, '--prefix', key, '--max-keys', '1', '--output', 'json']);
-        const listed = JSON.parse(result) as { Contents?: { Key: string }[] };
-        return listed.Contents?.some(object => object.Key === key) ?? false;
+        const listed = JSON.parse(result) as { Contents?: { Key: string; Size: number }[] };
+        return listed.Contents?.find(object => object.Key === key);
     }
 
     async function write(staging: string, file: string, body: Buffer, ttl: number, condition: string[] = []) {

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import {
-    conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, mergeResortReports, reportAgeHours, reportSnapshotSchema, skiDayStatus,
+    conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, isCurrentForecast, mergeResortReports, reportAgeHours, reportSnapshotSchema, skiDayStatus,
     type BaseForecast, type ResortReport,
 } from '../../../src/features/ski-status/conditions.ts';
 import { decodeConditionsJson, maxConditionsManifestBytes, maxConditionsSnapshotBytes } from '../../../src/features/ski-status/conditions-response.ts';
@@ -28,7 +28,7 @@ async function readSnapshot<T extends { generatedAt: string }>(
     store: ConditionsStore, file: string | undefined, updatedAt: string | undefined, parse: (value: unknown) => T, warn: (message: string) => void,
 ) {
     if (!file || !updatedAt) return;
-    const object = await store.read(file);
+    const object = await store.read(file, maxConditionsSnapshotBytes);
     try {
         if (object && object.body.length > maxConditionsSnapshotBytes) throw Error('Snapshot exceeds the size limit');
         if (!object || digest(object.body) !== conditionsFileDigest(file)) throw Error('Invalid checksum or missing snapshot');
@@ -74,7 +74,8 @@ const reportFields: (keyof ResortReport)[] = [
 export async function publishConditions<T extends PilotArea>(store: ConditionsStore, {
     areas, catalogRevision, refreshForecasts, fetchReport, fetchForecast, warn, now = Date.now,
 }: PublicationOptions<T>) {
-    const previousObject = await store.read(manifestName);
+    const previousObject = await store.read(manifestName, maxConditionsManifestBytes);
+    if (previousObject && previousObject.body.length > maxConditionsManifestBytes) throw Error('Ski conditions manifest exceeds the size limit');
     const previous = previousObject && conditionsManifestSchema.parse(decodeConditionsJson(previousObject.body));
     const [oldReports, oldForecasts] = await Promise.all([
         readSnapshot(store, previous?.reports, previous?.updatedAt, reportSnapshotSchema.parse, warn),
@@ -109,7 +110,7 @@ export async function publishConditions<T extends PilotArea>(store: ConditionsSt
         reportAgesHours: Object.fromEntries(reportAges.map(({ id, age }) => [id, Math.round(age * 10) / 10])),
         reportFields: Object.fromEntries(reportFields.map(field => [field, reportRows.filter(report =>
             field === 'status' ? report.status !== 'unknown' : report[field] !== undefined).length])),
-        forecasts: forecasts.rows.filter(forecast => Date.parse(forecast.endsAt) > observedAt).length,
+        forecasts: forecasts.rows.filter(forecast => isCurrentForecast(forecast, observedAt)).length,
     };
 
     const reportsData = reportSnapshotSchema.parse({ version: 1, generatedAt: updatedAt, reports: reportRows });

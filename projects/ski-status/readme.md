@@ -41,6 +41,7 @@ Pan or zoom the globe to explore. The URL updates when the map stops. Select **S
 
 At globe scale, the map groups nearby resorts. In the operating status layer, each number counts resorts that report skiing today.
 A gray group has no resorts that report skiing today. Select a group to zoom in.
+The map ignores a pending group zoom when you move the map or change the results.
 The map shows individual markers from zoom level 3. Symbols and colors show each area's operating status. A gold outline marks the selected area.
 
 The map uses a verified visitor entrance when one is available. It can use an inferred lift base when the mapped lifts support that location.
@@ -221,24 +222,24 @@ If the trip media path is unavailable, start Vite directly for ski-status.
 npx vite --host 127.0.0.1
 ```
 
-Run the catalog, table, conditions, and terrain tests. The archive test checks the index, the packaged file, and the base point snapshot.
-The Python tests check the importer and candidate review. They require no GDAL or Tippecanoe installation.
+Run the project tests with V8 coverage. Use the same file selection to compare coverage before and after a change.
 
 ```bash
-npx vitest run src/test/skiStatus*.test.* src/test/skiMapArea.test.ts src/test/skiResortTerrainMap.test.ts \
-  src/test/useSearchQuery.test.tsx \
-  scripts/__tests__/skiResortTerrain.test.ts scripts/__tests__/releaseSkiTerrain.test.ts \
+npx vitest run src/test/ski*.test.* scripts/__tests__/ski*.test.ts \
   scripts/__tests__/syncSkiStatus.test.ts scripts/__tests__/lakeLouiseConditions.test.ts \
-  scripts/__tests__/skiBig3Conditions.test.ts
-npm run test:ski-terrain
+  scripts/__tests__/releaseSkiTerrain.test.ts --coverage \
+  --coverage.include='src/features/ski-status/**' \
+  --coverage.include='src/pages/SkiStatus.tsx' \
+  --coverage.include='projects/ski-status/scripts/**/*.ts' \
+  --coverage.include='scripts/release-ski-terrain.ts'
 ```
 
-Run the ski-status UI and data tests with coverage. Use the same command before and after a change.
+Run the shared search tests. Run the Python tests for the terrain importer and candidate review.
+The Python tests can run without GDAL or Tippecanoe.
 
 ```bash
-npx vitest run src/test/ski*.test.* --coverage \
-  --coverage.include='src/features/ski-status/**' \
-  --coverage.include='src/pages/SkiStatus.tsx'
+npx vitest run src/test/useSearchQuery.test.tsx
+npm run test:ski-terrain
 ```
 
 Run the browser tests for filters, resort reports, and map behavior. They check attribution downloads and terrain byte ranges.
@@ -408,11 +409,8 @@ The collector covers Lake Louise and all 12 Dolomiti Superski regions. Open-Mete
 
 The Lake Louise XML lists daily operations and named terrain. The collector compares the open counts with the named records. It uses the verified local ski day for the operations report. Snow and temperature keep their measurement dates. The XML generation time changes on each request. The report has a ski date with no exact report age. The app marks Lake Louise data as display-only. [Lake Louise feed](https://api.skilouise.com/docs/MTN-XML.php), [Snow report method](https://www.skilouise.com/things-to-do/how-we-report-snowfall-mountain-conditions/)
 
-The local Rockies pilot covers Lake Louise, Banff Sunshine, and Mt. Norquay. On November 20, the Sunshine XML matched the operator's terrain report. It recorded 3 of 12 open lifts and 4 of 139 open trails. The Norquay XML endpoint returned HTTP 500. Use the Norquay conditions page for manual checks. The pilot stores numeric counts and the report time. Alberta uses UTC−06 year-round from November 2026. [SkiBig3 API](https://www.skibig3.com/api/), [Sunshine terrain report](https://www.skibanff.com/the-mountain/mountain-report/lifts-trails-report), [Mt. Norquay conditions](https://banffnorquay.com/conditions/), [Alberta Time](https://www.alberta.ca/albertas-new-time-system-abt)
-
-On November 21 at 13:57 UTC, Sunshine's 11:08 UTC XML report matched its operator page at 3 of 12 lifts and 8 of 139 trails. Lake Louise's November 21 XML matched the operator's four open lifts and six open runs. Norquay's XML still returned HTTP 500. Its dated operator page showed two open lifts and two open runs. **Ski today** showed the two matched reports in a local browser check. It excluded a simulated undated report and aged both current reports out at the local ski-day cutoff. The seven-day review remains open. [Sunshine terrain report](https://www.skibanff.com/the-mountain/mountain-report/lifts-trails-report), [Lake Louise conditions](https://www.skilouise.com/snow-conditions/), [Mt. Norquay conditions](https://banffnorquay.com/conditions/)
-
-The November 21 review found documentation for the XML format and update schedule. Public display and retention of archived Sunshine and Norquay data still need explicit operator terms. [SkiBig3 API](https://www.skibig3.com/api/), [SkiBig3 terms](https://www.skibig3.com/terms-of-use/), [Norquay terms](https://banffnorquay.com/terms-conditions/)
+The local Rockies pilot covers Lake Louise, Banff Sunshine, and Mt. Norquay. It stores numeric counts and the report time.
+Use the operator's conditions page to check the counts during a feed outage. [Rockies spot checks](../../docs/reviews/2026-11-21-ski-status-engineering-review.md#rockies-spot-checks)
 
 The collector accepts up to 4 MiB per JSON response and 256 KiB per XML response. It rejects redirects and invalid UTF-8. The XML reader also rejects document types. The SkiBig3 reader requires one value for each count and an exact report time.
 
@@ -423,11 +421,11 @@ Open Data Hub and LTS supply the Dolomiti Superski resort counts and snow data. 
 - Store operating status with each report. Use open, limited, temporarily closed, season closed, or unknown. Store hours and planned opening dates when the operator publishes them.
 - Show open and total lifts, trails, and acres when the operator reports them. Calculate percentages from counts with the same scope and time.
 - Keep the snow depth unit, range, and measurement location. Show the reporting period for new snow. Show forecast snow in its own column. Show reported zeros as zero.
-- Store the source report time and the retrieval time. Calculate age from the source report time. Check that a report date matches its timestamp in the resort time zone. For a date-only report, collect the report during that ski day.
+- Store the source report time and the retrieval time. Calculate age from the source report time. Check that the report date matches the timestamp in the resort time zone. For a date-only report, collect the report during that ski day. Set the deadline within the same local ski day.
 - Keep an observed temperature with the station and measurement time. Show this reading separately from the forecast.
 - Mark pilot reports older than 24 hours as stale. Expire the daily status when the local ski day ends. Apply the provider deadline if it comes first.
 - Keep the last report and its date visible when a refresh fails. Use gray markers for stale or unverified reports in the operating status layer.
-- Show base forecasts for the next 24 hours of complete hourly data. Sum snowfall over the period. Show the highest hourly precipitation probability. Hide expired forecasts. [Open-Meteo hourly variables](https://open-meteo.com/en/docs)
+- Show base forecasts for the next 24 hours of complete hourly data. Sum snowfall over the period. Show the highest hourly precipitation probability. Use a forecast from its retrieval time until its period ends. [Open-Meteo hourly variables](https://open-meteo.com/en/docs)
 
 ## Repository and hosting design
 
@@ -487,14 +485,21 @@ The collector locks the local directory during a write. If a job leaves `conditi
 
 The workflow runs on `main` when `AWS_SKI_STATUS_SYNC_ROLE_ARN` is set. It collects reports hourly and forecasts every six hours. The role can read and write the `ski-status/` prefix. [Sync workflow](../../.github/workflows/sync-ski-status.yml), [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
 
-The collector saves the snapshots and history entry before it attempts to replace `manifest.json`. If the archive write fails, the active manifest stays in use.
-The collector uses the S3 ETag to check for a concurrent update. If the ETag changes, retry with the current manifest. [S3 conditional writes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html)
+The collector saves the snapshots and history entry before it replaces `manifest.json`.
+The collector uses the S3 entity tag (ETag) to check for a concurrent update. If the ETag changes, retry with the current manifest. [S3 conditional writes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html)
 
 Each snapshot file name contains its SHA-256 checksum. The app checks the manifest every five minutes. It verifies each changed file before use.
-The app and collector accept manifests up to 64 KiB and snapshots up to 8 MiB.
-If a check fails, the app keeps its last valid snapshot. The app uses packaged data until it gets a valid snapshot.
+The app and collector accept up to 64 KiB for a manifest and 8 MiB for a snapshot.
+The collector reads one extra byte to detect a larger file. It requests that range from S3. [S3 byte ranges](https://docs.aws.amazon.com/cli/latest/reference/s3api/get-object.html)
+An oversized active manifest stops the collector. An oversized snapshot triggers a refresh of that data.
+If a file check fails, the app uses its last valid snapshot. It uses packaged data before the first valid download.
 
-The collector keeps the previous data when a provider request fails. It keeps a dated operations report when a later response gives no report date. The app marks the dated report stale after the local ski day. Named terrain can update separately. `recentReports` counts reports with a known status for the area's current ski day. `reports` also counts earlier or unverified reports.
+The collector uses the previous data when a provider request fails. A dated operations report has priority over an undated response.
+The app marks the report stale after the local ski day. Named terrain can update separately.
+For timed terrain from the same source and license, the last retrieval sets the list of lifts and runs.
+Each item in that list uses its latest timed observation across the two reports.
+`recentReports` counts reports with a known status for the current ski day. `reports` also counts earlier or unverified reports.
+`forecasts` counts records that the app can show at the time of collection.
 
 Find archive entries under `history/YYYY-MM-DD/`. The new entry names contain a UTC timestamp and the SHA-256 checksum. Older entries have timestamp-only names. Each entry lists the snapshots from one collection. A concurrent update can leave a valid archive entry while the active manifest points to a different collection.
 
@@ -525,7 +530,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 | Rockies publication | Before you enable the Rockies feed, compare its snapshots with the operator pages for seven ski days. Check the local ski-day cutoff, missing reports, closures, and partial openings. [Pilot](#conditions-publication) |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
 
-On November 21, the hosted preview served `0ec3dfde887655c8bca93c3c71430eb64987a4a2` in Amplify job 22. The ski-status candidate still needs a hosted run. The sync workflow was absent from `main`, and the public conditions manifest returned HTTP 403. [Hosted deployment record](https://release-preview.d38ki8k4lanh8s.amplifyapp.com/deployment.json), [Sync setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
+Check the hosted preview and sync results before release. [Hosted checks](../../docs/reviews/2026-11-21-ski-status-engineering-review.md#hosted-checks)
 
 ## Version 2
 

@@ -59,6 +59,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-21 | [ski-status engineering review](reviews/2026-11-21-ski-status-engineering-review.md) |
 | 2026-11-20 | [ski-status map and resort data review](reviews/2026-11-20-ski-status-map-and-resort-data-review.md) |
 | 2026-11-20 | [ski-status interface review](reviews/2026-11-20-ski-status-interface-review.md) |
 | 2026-11-20 | [ski-status map quality review](reviews/2026-11-20-ski-status-map-quality-review.md) |

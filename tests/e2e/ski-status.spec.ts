@@ -1135,6 +1135,60 @@ test('groups resorts on the globe and shows individual pass badges from continen
     await renderer.dispose();
 });
 
+for (const action of ['change the resort filter', 'move the map']) {
+    test(`discards an old cluster expansion when users ${action}`, async ({ page }) => {
+        await prepare(page);
+        const renderer = await captureMap(page);
+        await renderer.evaluate(map => { map.jumpTo({ center: [-106, 42], zoom: 1.5 }); });
+        await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
+        const expansion = await renderer.evaluateHandle(map => {
+            const layer = 'ski-area-clusters';
+            const cluster = map.queryRenderedFeatures({ layers: [layer] }).find(feature => {
+                if (feature.geometry.type !== 'Point') return false;
+                const [lng, lat] = feature.geometry.coordinates;
+                const point = map.project([lng, lat]);
+                return map.queryRenderedFeatures(point, { layers: [layer] }).length > 0
+                    && map.queryRenderedFeatures(point, { layers: ['ski-area-points'] }).length === 0;
+            });
+            if (!cluster || cluster.geometry.type !== 'Point') throw Error('No visible resort cluster');
+
+            const source = map.getSource<GeoJSONSource>('ski-areas')!;
+            const original = source.getClusterExpansionZoom;
+            let resolveZoom: (zoom: number) => void;
+            const zoom = new Promise<number>(resolve => { resolveZoom = resolve; });
+            let requested = false;
+            source.getClusterExpansionZoom = () => {
+                requested = true;
+                return zoom;
+            };
+            const [lng, lat] = cluster.geometry.coordinates;
+            const point = map.project([lng, lat]);
+            map.fire('click', { point, lngLat: map.unproject(point), originalEvent: new MouseEvent('click') });
+            return {
+                requested,
+                finish() {
+                    source.getClusterExpansionZoom = original;
+                    resolveZoom(5);
+                },
+            };
+        });
+        expect(await expansion.evaluate(value => value.requested)).toBe(true);
+        if (action === 'change the resort filter') await setFilter(page, 'Region', { label: 'Japan' });
+        else await renderer.evaluate(map => { map.jumpTo({ center: [136, 38], zoom: 3 }); });
+
+        await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
+        const camera = () => renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }));
+        const settled = await camera();
+        await expansion.evaluate(async value => {
+            value.finish();
+            await new Promise(requestAnimationFrame);
+        });
+        expect(await camera()).toEqual(settled);
+        await expansion.dispose();
+        await renderer.dispose();
+    });
+}
+
 test('keeps a fallback dot if a pass image fails and restores other badges after a background retry', async ({ page }) => {
     await prepare(page, null);
     await page.route(/\/pass-icons\/indy\.png\?no-inline$/, route => route.abort());

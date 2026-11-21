@@ -7,6 +7,7 @@ import { digest, publishConditions } from '../../projects/ski-status/scripts/con
 import { fetchOpenDataHubReport, pilotAreas } from '../../projects/ski-status/scripts/conditions-sources';
 import { manifestName, withConditionsStore } from '../../projects/ski-status/scripts/conditions-store';
 import { loadConditionsFeed } from '../../src/features/ski-status/conditions-feed';
+import { maxConditionsManifestBytes, maxConditionsSnapshotBytes } from '../../src/features/ski-status/conditions-response';
 import { type BaseForecast, type ConditionsManifest, type ResortReport } from '../../src/features/ski-status/conditions';
 
 const retrievedAt = '2026-12-25T12:00:00Z';
@@ -270,6 +271,14 @@ describe('ski-status publication', () => {
         expect((await publish(input)).coverage).toMatchObject({ reports: 2, recentReports: 0, reportFields: { status: 2 } });
     });
 
+    it('excludes forecasts retrieved after the collection clock from coverage', async () => {
+        await publish();
+        const next = options();
+        next.now = () => Date.parse(retrievedAt) - 1;
+        next.refreshForecasts = false;
+        expect((await publish(next)).coverage.forecasts).toBe(0);
+    });
+
     it('preserves the active manifest and history when every source fails', async () => {
         await publish();
         const previous = await readFile(join(directory, manifestName));
@@ -294,15 +303,37 @@ describe('ski-status publication', () => {
         expect(await readdir(join(directory, 'history', '2026-12-25'))).toHaveLength(1);
     });
 
-    it('rebuilds a corrupt stored snapshot even outside its normal refresh schedule', async () => {
+    it('reads at most the requested bytes plus one byte from a local file', async () => {
+        await writeFile(join(directory, manifestName), '123456789');
+        await withConditionsStore(directory, undefined, async store => {
+            expect((await store.read(manifestName, 9))?.body.toString()).toBe('123456789');
+            expect((await store.read(manifestName, 4))?.body.toString()).toBe('12345');
+        });
+    });
+
+    it('stops before fetching reports when the active manifest exceeds the size limit', async () => {
+        const { manifest } = await publish();
+        const oversized = `${' '.repeat(maxConditionsManifestBytes)}${JSON.stringify(manifest)}`;
+        await writeFile(join(directory, manifestName), oversized);
+        const next = options();
+
+        await expect(publish(next)).rejects.toThrow('Ski conditions manifest exceeds the size limit');
+        expect(next.fetchReport).not.toHaveBeenCalled();
+        expect(next.fetchForecast).not.toHaveBeenCalled();
+        expect(await readFile(join(directory, manifestName), 'utf8')).toBe(oversized);
+    });
+
+    it.each(['bad checksum', 'too large'])('refreshes a forecast snapshot with %s outside its normal schedule', async fault => {
         const first = await publish();
         const file = first.manifest.forecasts!;
-        await writeFile(join(directory, file), 'corrupt');
+        await writeFile(join(directory, file), fault === 'bad checksum' ? 'corrupt' : Buffer.alloc(maxConditionsSnapshotBytes + 2));
         const secondOptions = options();
         secondOptions.refreshForecasts = false;
         secondOptions.fetchReport.mockImplementation(offline);
         const recovered = await publish(secondOptions);
-        expect(secondOptions.warn).toHaveBeenCalledWith(expect.stringContaining('Invalid checksum'));
+        expect(secondOptions.warn).toHaveBeenCalledWith(expect.stringContaining(
+            fault === 'bad checksum' ? 'Invalid checksum' : 'Snapshot exceeds the size limit',
+        ));
         expect(recovered.manifest.reports).toBe(first.manifest.reports);
         expect(recovered.manifest.forecasts).not.toBe(file);
         expect(recovered.received).toEqual({ reports: 0, forecasts: 2 });
@@ -319,6 +350,7 @@ describe('ski-status publication', () => {
     it('publishes the manifest with a conditional S3 put and leaves the local mirror unchanged on conflict', async () => {
         const objects = new Map<string, Buffer>();
         let conflict = false;
+        let failedRead = '';
         const aws = vi.fn(async (args: string[]) => {
             const value = (flag: string) => args[args.indexOf(flag) + 1];
             const key = value('--key');
@@ -326,12 +358,17 @@ describe('ski-status publication', () => {
                 case 'list-objects-v2': {
                     const prefix = value('--prefix');
                     expect(prefix).toMatch(/^ski-status\//);
-                    return JSON.stringify({ Contents: objects.has(prefix) ? [{ Key: prefix }] : [] });
+                    const body = objects.get(prefix);
+                    return JSON.stringify({ Contents: body ? [{ Key: prefix, Size: body.length }] : [] });
                 }
                 case 'get-object': {
+                    const limit = key === `ski-status/${manifestName}` ? maxConditionsManifestBytes : maxConditionsSnapshotBytes;
+                    expect(value('--range')).toBe(`bytes=0-${limit}`);
+                    if (key === failedRead) throw Error('Read failed');
                     const body = objects.get(key);
                     if (!body) throw Error('NoSuchKey');
-                    await writeFile(args.at(-1)!, body);
+                    if (body.length === 0) throw Error('InvalidRange');
+                    await writeFile(args.at(-1)!, body.subarray(0, limit + 1));
                     return JSON.stringify({ ETag: '"current-etag"' });
                 }
                 case 'put-object':
@@ -365,10 +402,22 @@ describe('ski-status publication', () => {
         expect([...objects.keys()].filter(key => key.startsWith('ski-status/history/'))).toHaveLength(2);
 
         conflict = false;
-        objects.delete(`ski-status/${first.manifest.forecasts}`);
-        const recovered = await run();
-        expect(recovered.manifest.forecasts).not.toBe(first.manifest.forecasts);
-        expect(objects.has(`ski-status/${recovered.manifest.forecasts}`)).toBe(true);
+        let previousForecasts = first.manifest.forecasts!;
+        for (const body of [undefined, Buffer.alloc(0)]) {
+            const key = `ski-status/${previousForecasts}`;
+            if (body) objects.set(key, body);
+            else objects.delete(key);
+            const recovered = await run();
+            expect(recovered.manifest.forecasts).not.toBe(previousForecasts);
+            previousForecasts = recovered.manifest.forecasts!;
+            expect(objects.has(`ski-status/${previousForecasts}`)).toBe(true);
+        }
+
+        const active = objects.get(`ski-status/${manifestName}`);
+        failedRead = `ski-status/${previousForecasts}`;
+        await expect(run()).rejects.toThrow('Read failed');
+        expect(objects.get(`ski-status/${manifestName}`)).toEqual(active);
+        expect(await readFile(join(directory, manifestName))).toEqual(active);
     });
 });
 

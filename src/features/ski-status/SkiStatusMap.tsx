@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useMemo, useRef, useState, type RefObject } from 'react';
+import { useEffect, useEffectEvent, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
 import { globeOverviewZoom, projectVisibleGlobeLocation } from '../../maps/globe';
@@ -152,7 +152,7 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<
     return nearest;
 }
 
-function expandCluster(map: maplibre.Map, point: TooltipPoint, duration: number) {
+function expandCluster(map: maplibre.Map, point: TooltipPoint, duration: number, isCurrent: () => boolean) {
     const source = map.getSource<maplibre.GeoJSONSource>(sourceId);
     if (!source || !map.getLayer(clusterLayer)) return false;
     const cluster = map.queryRenderedFeatures([point.x, point.y], { layers: [clusterLayer] })[0];
@@ -163,7 +163,7 @@ function expandCluster(map: maplibre.Map, point: TooltipPoint, duration: number)
     const id: unknown = cluster.properties.cluster_id;
     if (typeof id !== 'number') return false;
     void source.getClusterExpansionZoom(id).then(zoom => {
-        if (map.getSource(sourceId) !== source || map.isMoving()) return;
+        if (!isCurrent() || map.getSource(sourceId) !== source || map.isMoving()) return;
         map.easeTo({ center, zoom: Math.max(map.getZoom() + 0.5, zoom), duration });
     }).catch(() => { /* The source changed before the cluster could expand. */ });
     return true;
@@ -184,6 +184,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const appliedTerrainRequest = useRef<Props['terrainRequest']>(undefined);
     const pinSelection = useRef<string | undefined>(undefined);
     const lastTerrainKey = useRef('');
+    const clusterRequest = useRef(0);
     const [attempt, setAttempt] = useState(0);
     const [basemap, setBasemap] = useState<BasemapState>('loading');
     const [ready, setReady] = useState(false);
@@ -298,6 +299,11 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         }
     });
 
+    useLayoutEffect(() => {
+        // Cluster IDs can change even when the map reuses the source object.
+        clusterRequest.current++;
+    }, [points, selection, visible]);
+
     useEffect(() => {
         let map: maplibre.Map | undefined;
         let viewportFrame: number | undefined;
@@ -370,6 +376,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             });
             instance.setMissingStyleImageResolver(id => addCountImage(instance, id));
             instance.on('style.load', () => {
+                clusterRequest.current++;
                 clearHover();
                 const data = current();
                 passLayers.current = false;
@@ -387,6 +394,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 queueViewport();
             });
             instance.on('movestart', event => {
+                clusterRequest.current++;
                 setMoving(true);
                 if ('originalEvent' in event && event.originalEvent) setSearchSuggested(true);
                 clearHover();
@@ -420,6 +428,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             });
             instance.on('mouseout', clearHover);
             instance.on('click', event => {
+                const request = ++clusterRequest.current;
                 if (!instance.getSource(sourceId) || !instance.isSourceLoaded(sourceId)) return;
                 clearHover();
                 const data = current();
@@ -428,7 +437,8 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 if (area) {
                     if (area.id !== data.selected?.id) pinSelection.current = area.id;
                     selectArea(area.id, canvas);
-                } else if (expandCluster(instance, event.point, data.duration)) {
+                } else if (expandCluster(instance, event.point, data.duration,
+                    () => clusterRequest.current === request && mapRef.current === instance)) {
                     setSearchSuggested(true);
                 } else {
                     selectArea();

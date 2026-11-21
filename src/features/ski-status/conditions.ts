@@ -54,9 +54,10 @@ const operationSchema = z.strictObject({
         const deadline = Date.parse(validThrough);
         if (reportedAt) return Date.parse(reportedAt) <= deadline;
         const retrieved = Date.parse(retrievedAt);
-        if (reportedOn !== validThrough.slice(0, 10) || !(retrieved <= deadline)) return false;
+        if (!reportedOn || !(retrieved <= deadline)) return false;
         const timeZone = areaTimeZones.get(areaId);
-        if (timeZone) return localSkiDate(retrieved, timeZone) === reportedOn;
+        if (timeZone) return [retrieved, deadline].every(instant => localSkiDate(instant, timeZone) === reportedOn);
+        if (reportedOn !== validThrough.slice(0, 10)) return false;
         const offset = validThrough.endsWith('Z') ? 'Z' : validThrough.slice(-6);
         return Date.parse(`${reportedOn}T00:00:00${offset}`) <= retrieved;
     }, 'Use a known report time or a matching local ski day')
@@ -179,15 +180,36 @@ function selectOperations(previous: ResortReport, next: ResortReport, now: numbe
     return Date.parse(next.retrievedAt) >= Date.parse(previous.retrievedAt) ? next : previous;
 }
 
+function mergeTerrain(report: ResortReport, other: ResortReport) {
+    const retained = report.terrain;
+    const incoming = other.terrain;
+    if (!incoming?.source || incoming.items.some(item => !item.updatedAt)) return retained;
+    const incomingTime = incoming.retrievedAt ?? other.retrievedAt;
+    if (!retained) return { ...incoming, retrievedAt: incomingTime };
+    const { source } = retained;
+    if (source?.url !== incoming.source.url || source.license !== incoming.source.license
+        || source.exportable !== incoming.source.exportable) return retained;
+
+    const retainedTime = retained.retrievedAt ?? report.retrievedAt;
+    const useIncoming = Date.parse(incomingTime) > Date.parse(retainedTime);
+    const inventory = useIncoming ? incoming : retained;
+    const alternative = useIncoming ? retained : incoming;
+    const alternativeById = new Map(alternative.items.map(item => [item.id, item]));
+    let changed = useIncoming;
+    const items = inventory.items.map(item => {
+        const otherItem = alternativeById.get(item.id);
+        if (item.kind !== otherItem?.kind || !item.updatedAt || !otherItem.updatedAt
+            || Date.parse(otherItem.updatedAt) <= Date.parse(item.updatedAt)) return item;
+        changed = true;
+        return otherItem;
+    });
+    return changed ? { ...inventory, items, retrievedAt: useIncoming ? incomingTime : retainedTime } : retained;
+}
+
 export function mergeResortReports(previous: ResortReport, next: ResortReport, now: number) {
     const report = selectOperations(previous, next, now);
-    const other = report === previous ? next : previous;
-    const terrain = other.terrain;
-    if (!terrain?.source || terrain.items.some(item => !item.updatedAt)) return report;
-    const retrievedAt = terrain.retrievedAt ?? other.retrievedAt;
-    if (report.terrain && (report.terrain.source?.url !== terrain.source.url ||
-        Date.parse(report.terrain.retrievedAt ?? report.retrievedAt) >= Date.parse(retrievedAt))) return report;
-    return { ...report, terrain: { ...terrain, retrievedAt } };
+    const terrain = mergeTerrain(report, report === previous ? next : previous);
+    return terrain === report.terrain ? report : { ...report, terrain };
 }
 
 export function reportAgeLabel(report: ResortReport, now: number, timeZone = areaTimeZones.get(report.areaId)) {
@@ -234,9 +256,13 @@ export function terrainStatusText(item: z.infer<typeof terrainItem>, report: Res
     return age ? `${label} (${age})` : label;
 }
 
+export function isCurrentForecast(forecast: BaseForecast, now: number) {
+    return Date.parse(forecast.retrievedAt) <= now && now < Date.parse(forecast.endsAt);
+}
+
 export function areaForecast(conditions: Conditions | undefined, areaId: string) {
     const forecast = conditions?.forecasts.get(areaId);
-    return forecast && conditions && Date.parse(forecast.endsAt) > conditions.now ? forecast : undefined;
+    return forecast && conditions && isCurrentForecast(forecast, conditions.now) ? forecast : undefined;
 }
 
 export function localReportTime(value: string, area: SkiArea) {
