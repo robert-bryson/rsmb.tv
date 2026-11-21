@@ -158,6 +158,7 @@ The `typescript` package stays on the latest supported 6.0 patch series to meet 
 `npm run typecheck` invokes that package's compiler entry directly.
 This avoids the shared `tsc` command name also supplied by TypeScript 7.
 The separate `@typescript/native` alias supplies TypeScript 7. The lint and typecheck commands do not use it.
+The ESLint adapter is pinned to 8.72.2 because 8.73.0 expects a TypeScript 7.1 prerelease for the native alias.
 Do not replace the lint compiler with TypeScript 7 until the adapter supports it.
 
 After an update, run these checks:

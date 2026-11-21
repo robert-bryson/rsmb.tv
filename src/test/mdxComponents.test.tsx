@@ -165,8 +165,10 @@ describe('November 15 trip contents review regressions', () => {
         });
         render(<TripContentsFixture level={1} />);
         await screen.findByRole('navigation', { name: 'Table of contents' });
-        expect(observe).toHaveBeenCalledWith(screen.getByRole('heading', { name: 'First Stop' }));
-        expect(observe).toHaveBeenCalledWith(screen.getByRole('heading', { name: 'Second Day' }));
+        await waitFor(() => {
+            expect(observe).toHaveBeenCalledWith(screen.getByRole('heading', { name: 'First Stop' }));
+            expect(observe).toHaveBeenCalledWith(screen.getByRole('heading', { name: 'Second Day' }));
+        });
         expect(observe).not.toHaveBeenCalledWith(screen.getByRole('heading', { name: 'Camp Notes' }));
     });
 });
