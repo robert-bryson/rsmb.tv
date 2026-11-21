@@ -313,12 +313,19 @@ describe('ski-status catalog and browse', () => {
         expect(sortSkiAreas(rows, { key: 'name', direction: 'desc' })).toEqual([rows[1], rows[0]]);
         expect(sortSkiAreas(rows, { key: 'region', direction: 'asc' })).toEqual([rows[1], rows[0]]);
     });
+
+    it('keeps unconfirmed listings out of the included-access filter and pass markers', () => {
+        const listed = { ...membership, family: 'ikon', access: 'listed' };
+        const [resort] = readSkiCatalog([area], locations, { ...passes, memberships: [listed] }).areas;
+        expect(filterSkiAreas([resort], { passes: ['ikon'] })).toEqual([]);
+        expect(markerAppearance(resort, 'pass')).toEqual(markerAppearance({ ...resort, passes: [] }, 'pass'));
+    });
 });
 
 describe('2026/27 Ikon destination coverage', () => {
     it.each([
         ['AD', ['grandvalira', 'ordino-arcalis', 'pal-arinsal']],
-        ['AT', ['ischgl-samnaun', 'kitzbuehel']],
+        ['AT', ['galtuer', 'ischgl-samnaun', 'kappl', 'kitzbuehel', 'see']],
         ['AU', ['mt-buller', 'thredbo']],
         ['CH', ['corvatsch', 'corviglia', 'diavolezza-lagalb', 'zermatt-matterhorn']],
         ['CL', ['valle-nevado']],
@@ -341,16 +348,6 @@ describe('2026/27 Ikon destination coverage', () => {
         ['SkiBig3', 3], ['St. Moritz', 3], ['Valle d’Aosta', 5],
     ] as const)('finds all entries for %s by its destination name', (name, count) => {
         expect(filterSkiAreas(skiAreas, { query: name, passes: ['ikon'] })).toHaveLength(count);
-    });
-
-    it('keeps the listed Austrian areas without advertising lift access', () => {
-        const austrianAreas = filterSkiAreas(skiAreas, { region: 'country:AT' });
-        const onlyListed = austrianAreas.filter(area => area.passes.some(pass => pass.family === 'ikon' && pass.access === 'listed'));
-        expect(onlyListed.map(area => area.id)).toEqual(['galtuer', 'kappl', 'see']);
-        expect(filterSkiAreas(onlyListed, { passes: ['ikon'] })).toEqual([]);
-        for (const area of onlyListed) {
-            expect(markerAppearance(area, 'pass')).toEqual(markerAppearance({ ...area, passes: [] }, 'pass'));
-        }
     });
 });
 

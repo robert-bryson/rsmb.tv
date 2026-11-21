@@ -672,17 +672,16 @@ test('searches only the facing side of the globe across the antimeridian', async
     await renderer.dispose();
 });
 
-test('keeps listed Ikon destinations visible until the included-access filter is selected', async ({ page }) => {
+test('shows confirmed Ikon access at Paznaun ski areas', async ({ page }) => {
     await prepare(page);
     await page.goto(`${path}?view=table&region=country%3AAT&area=kappl`);
     const details = page.getByRole('region', { name: 'Kappl', exact: true });
-    await expect(details.getByRole('link', { name: 'Ikon (lift access unconfirmed)', exact: true })).toBeVisible();
+    await expect(details.getByRole('link', { name: 'Ikon', exact: true })).toBeVisible();
     const table = page.getByRole('region', { name: 'Ski area comparison table' });
-    await expect(table.getByRole('button', { name: 'See', exact: true })).toBeVisible();
 
     await setPass(page, 'Ikon');
     await expect(details).toBeVisible();
-    await expect(table.getByRole('button', { name: 'See', exact: true })).toHaveCount(0);
+    await expect(table.getByRole('button', { name: 'See', exact: true })).toBeVisible();
     await expect(table.getByRole('button', { name: 'Ischgl / Samnaun', exact: true })).toBeVisible();
 });
 

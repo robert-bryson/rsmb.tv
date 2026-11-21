@@ -66,13 +66,62 @@
     {
       "areaId": "cannon-mountain",
       "products": [
-        "indy-plus"
+        "indy-base",
+        "indy-base-addon"
       ],
       "access": "included",
       "days": 2,
       "reservation": "check",
+      "blackouts": [
+        [
+          "2027-01-16",
+          "2027-01-18"
+        ],
+        [
+          "2027-01-23",
+          "2027-01-24"
+        ],
+        [
+          "2027-01-30",
+          "2027-01-31"
+        ],
+        [
+          "2027-02-06",
+          "2027-02-07"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-15"
+        ],
+        [
+          "2027-02-20",
+          "2027-02-21"
+        ],
+        [
+          "2027-02-27",
+          "2027-02-28"
+        ],
+        [
+          "2027-03-06",
+          "2027-03-07"
+        ]
+      ],
+      "note": "Cannon recommends reserving tickets in advance. Daily tickets can sell out.",
       "source": "https://www.cannonmt.com/indy-pass",
-      "checkedOn": "2026-11-20"
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "cannon-mountain",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Cannon recommends reserving tickets in advance. Daily tickets can sell out.",
+      "source": "https://www.cannonmt.com/indy-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "catamount-mountain-resort",
@@ -98,6 +147,83 @@
       "note": "Redeem at partner areas away from your home resort. An unrestricted home season pass is required.",
       "source": "https://berkshireeast.com/?id=8&view=category",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mt-hood-meadows",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "source": "https://www.skihood.com/explore/indy-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "red-lodge-mountain",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ],
+        [
+          "2027-03-06",
+          "2027-03-06"
+        ],
+        [
+          "2027-03-13",
+          "2027-03-13"
+        ],
+        [
+          "2027-03-20",
+          "2027-03-20"
+        ],
+        [
+          "2027-03-27",
+          "2027-03-27"
+        ]
+      ],
+      "note": "A discounted third day is available.",
+      "source": "https://www.redlodgemountain.com/season-passes/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "red-lodge-mountain",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "A discounted third day is available.",
+      "source": "https://www.redlodgemountain.com/season-passes/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "st-johann-in-tirol",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Show your pass or photo ID when redeeming a ski day at the resort.",
+      "source": "https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html",
+      "checkedOn": "2026-11-21"
     }
   ]
 }

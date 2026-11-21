@@ -323,21 +323,20 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/amihari-onsen-ski-resort",
     "liftCount": 4,
     "trailCount": 7,
-    "verticalFt": 1969,
     "nightSkiing": false,
     "terrainParks": false,
     "summitFt": 4049,
     "statSources": [
       {
-        "source": "https://www.qkamura.or.jp/iwate/ski/",
-        "checkedOn": "2026-11-19",
-        "fields": ["summitFt"],
-        "note": "Operator's course description gives the highest point of the ski slopes."
-      },
-      {
         "source": "https://www.indyskipass.com/our-resorts/amihari-onsen-ski-resort",
         "checkedOn": "2026-11-21",
         "fields": ["acres", "baseFt", "grades"]
+      },
+      {
+        "source": "https://www.qkamura.or.jp/iwate/ski/",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "The operator gives 1,234 m at the head of the Todomatsu course. The published base and this point span 484 m."
       }
     ],
     "acres": 143,
@@ -1347,7 +1346,7 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/bergbahnen-hohsaas",
     "liftCount": 8,
     "trailCount": 13,
-    "verticalFt": 5577,
+    "verticalFt": 5381,
     "nightSkiing": false,
     "terrainParks": true,
     "downhillKm": 34,
@@ -1367,6 +1366,12 @@
         "source": "https://www.indyskipass.com/our-resorts/bergbahnen-hohsaas",
         "checkedOn": "2026-11-21",
         "fields": ["grades"]
+      },
+      {
+        "source": "https://www.myswitzerland.com/en-gb/experiences/hohsaas-ski-run/",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"],
+        "note": "Switzerland Tourism reports a 1,640 m descent from Hohsaas at 3,200 m to Saas-Grund at 1,560 m."
       }
     ],
     "baseFt": 5115,
@@ -1817,7 +1822,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["acres", "baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://blueknob.com/trail-map-conditions/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "blue-mountain-resort",
@@ -2965,8 +2972,8 @@
     "locality": "Davis",
     "website": "https://www.canaanresort.com/winter/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/canaan-valley",
-    "liftCount": 6,
-    "trailCount": 47,
+    "liftCount": 4,
+    "trailCount": 26,
     "verticalFt": 850,
     "nightSkiing": false,
     "terrainParks": false,
@@ -2985,9 +2992,17 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/canaan-valley",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["acres", "baseFt", "grades"]
+      },
+      {
+        "source": "https://www.canaanresort.com/winter-activities/mountain-rules-and-stats",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "The alpine inventory includes three chairlifts and one carpet. The operator lists 26 snowmaking trails and additional natural-snow terrain."
       }
-    ]
+    ],
+    "reportUrl": "https://www.canaanresort.com/trail-report",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "canmore-ski-village",
@@ -4314,15 +4329,22 @@
     "locality": "Park City",
     "website": "https://www.deervalley.com/",
     "acres": 4500,
-    "acresQualifier": "lower-bound",
-    "liftCount": 31,
-    "trailCount": 202,
+    "liftCount": 40,
+    "trailCount": 209,
     "baseFt": 6450,
     "summitFt": 9570,
     "verticalFt": 3120,
     "statsUrl": "https://www.skiutah.com/members/deer-valley/",
     "reportUrl": "https://www.deervalley.com/explore-the-mountain/mountain-report",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "statSources": [
+      {
+        "source": "https://www.deervalley.com/media-room/110926-ikon-base-pass",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "trailCount", "liftCount"],
+        "note": "Expanded 2026/27 ski area. The lift total combines 32 aerial lifts and eight surface lifts."
+      }
+    ]
   },
   {
     "id": "destination-owls-head",
@@ -4432,7 +4454,9 @@
         "fields": ["nordicKm"],
         "note": "Operator gives an approximate 120 km."
       }
-    ]
+    ],
+    "reportUrl": "https://www.devilsthumbranch.com/adventure/cross-country-skiing/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "diavolezza-lagalb",
@@ -7475,7 +7499,9 @@
         "Intermediate": 17,
         "Advanced": 33
       }
-    }
+    },
+    "reportUrl": "https://www.skikendall.com/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "keystone-resort",
@@ -7846,7 +7872,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.rtc-krvavec.si/live",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "kvitfjell",
@@ -8708,7 +8736,9 @@
         "fields": ["liftCount", "trailCount"],
         "note": "Madarao sector as described by its operator."
       }
-    ]
+    ],
+    "reportUrl": "https://www.madarao.jp/en",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "madonna-di-campiglio",
@@ -10357,7 +10387,7 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/mt-eyak",
     "liftCount": 2,
     "trailCount": 10,
-    "verticalFt": 1200,
+    "verticalFt": 800,
     "nightSkiing": false,
     "terrainParks": false,
     "grades": {
@@ -10373,8 +10403,16 @@
         "source": "https://www.indyskipass.com/our-resorts/mt-eyak",
         "checkedOn": "2026-11-21",
         "fields": ["grades"]
+      },
+      {
+        "source": "https://www.mteyak.org/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt"],
+        "note": "The operator gives the base and top of the single chair in feet."
       }
-    ]
+    ],
+    "baseFt": 400,
+    "summitFt": 1200
   },
   {
     "id": "mt-holiday",
@@ -11420,10 +11458,10 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/ober-mountain",
     "liftCount": 3,
     "trailCount": 10,
-    "verticalFt": 660,
+    "verticalFt": 500,
     "nightSkiing": true,
     "terrainParks": true,
-    "acres": 50,
+    "acres": 38,
     "baseFt": 2682,
     "summitFt": 3208,
     "grades": {
@@ -11438,9 +11476,23 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/ober-mountain",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.obermountain.com/wp-content/uploads/2024/01/23Winter_brochure_web.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"],
+        "note": "The operator trail map gives the ski slope elevations in feet. Mount Harrison and the aerial tram have separate elevations."
+      },
+      {
+        "source": "https://www.obergatlinburg.com/slope-report",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "verticalFt"],
+        "note": "The operator describes 38 skiable acres and a 500 ft ski-area vertical. The slope table gives the figures for individual trails."
       }
-    ]
+    ],
+    "reportUrl": "https://www.obergatlinburg.com/slope-report",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "oberstdorf-kleinwalsertal-bergbahnen",
@@ -12382,7 +12434,9 @@
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.petzen.net/en/winterseason/slopes-lifts",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "phoenix-mountain",

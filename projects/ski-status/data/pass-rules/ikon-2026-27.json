@@ -82,6 +82,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "3-zinnen-dolomites",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "alpe-lusia-san-pellegrino",
       "products": [
         "ikon-base"
@@ -130,6 +141,17 @@
       "shared": "Dolomiti Superski",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alpe-lusia-san-pellegrino",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "alpental",
@@ -241,6 +263,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "alta",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "alta-badia",
       "products": [
         "ikon-base"
@@ -289,6 +322,17 @@
       "shared": "Dolomiti Superski",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "alta-badia",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "alyeska-resort",
@@ -419,6 +463,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "appi-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "arabba-marmolada",
       "products": [
         "ikon-base"
@@ -469,6 +524,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "arabba-marmolada",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "arai-mountain-resort",
       "products": [
         "ikon-base"
@@ -515,6 +581,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "arai-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "arapahoe-basin",
@@ -624,6 +701,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "aspen-highlands",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "aspen-mountain",
       "products": [
         "ikon-base"
@@ -649,6 +737,17 @@
       "shared": "Aspen Snowmass",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "aspen-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "balme-vallorcine",
@@ -699,6 +798,17 @@
       "shared": "Chamonix Mont-Blanc Valley",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "balme-vallorcine",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "banff-sunshine",
@@ -909,6 +1019,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "beidahu-ski-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "big-sky-resort",
@@ -1284,6 +1405,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "brevent-flegere",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "brighton-resort",
       "products": [
         "ikon-base"
@@ -1362,6 +1494,50 @@
       ],
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "buck-hill",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "buck-hill",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "buttermilk",
@@ -1391,6 +1567,61 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "buttermilk",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "caberfae-peaks",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "caberfae-peaks",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "camelback-mountain-resort",
       "products": [
         "ikon-base"
@@ -1521,6 +1752,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "cervino-ski-paradise",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "civetta",
       "products": [
         "ikon-base"
@@ -1569,6 +1811,17 @@
       "shared": "Dolomiti Superski",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "civetta",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "copper-mountain",
@@ -1783,6 +2036,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "cortina-d-ampezzo",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "corvatsch",
       "products": [
         "ikon-base"
@@ -1831,6 +2095,17 @@
       "shared": "St. Moritz",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "corvatsch",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "corviglia",
@@ -1883,6 +2158,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "corviglia",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "courmayeur-mont-blanc",
       "products": [
         "ikon-base"
@@ -1931,6 +2217,61 @@
       "shared": "Valle d’Aosta",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "courmayeur-mont-blanc",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "cranmore-mountain-resort",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "cranmore-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "crystal-mountain",
@@ -2011,6 +2352,50 @@
       ],
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "crystal-ridge",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "crystal-ridge",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "cypress-mountain",
@@ -2120,8 +2505,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.ikonpass.com/en/compare-benefits",
-      "checkedOn": "2026-11-20"
+      "source": "https://www.deervalley.com/plan-your-trip/tickets-and-passes/ikon-base-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "deer-valley-resort",
@@ -2141,6 +2526,61 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "deer-valley-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "devil-s-head-resort",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "devil-s-head-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "diavolezza-lagalb",
       "products": [
         "ikon-base"
@@ -2189,6 +2629,17 @@
       "shared": "St. Moritz",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "diavolezza-lagalb",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "eldora-mountain-resort",
@@ -2319,6 +2770,122 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "furano-ski-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "galtuer",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-12-04",
+          "2027-04-11"
+        ]
+      ],
+      "reservation": "none",
+      "days": 5,
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "galtuer",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-12-04",
+          "2027-04-11"
+        ]
+      ],
+      "reservation": "none",
+      "days": 7,
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "galtuer",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "giants-ridge",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "giants-ridge",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Scan your Ikon Pass at the lift.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "grands-montets",
       "products": [
         "ikon-base"
@@ -2369,6 +2936,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "grands-montets",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "grandvalira",
       "products": [
         "ikon-base"
@@ -2417,6 +2995,17 @@
       "shared": "Grandvalira Resorts Andorra",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "grandvalira",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "granite-peak",
@@ -2499,9 +3088,21 @@
       "checkedOn": "2026-11-20"
     },
     {
-      "areaId": "ischgl-samnaun",
+      "areaId": "grouse-mountain",
       "products": [
-        "ikon-base"
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "grouse-mountain",
+      "products": [
+        "ikon-pass"
       ],
       "access": "included",
       "validDates": [
@@ -2510,9 +3111,8 @@
           "2027-06-30"
         ]
       ],
-      "reservation": "check",
-      "note": "Redeem at the participating Silvretta Arena ticket offices.",
-      "days": 5,
+      "reservation": "none",
+      "days": 2,
       "blackouts": [
         [
           "2026-12-26",
@@ -2527,8 +3127,41 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
-      "checkedOn": "2026-11-20"
+      "note": "Scan your Ikon Pass at the lift.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "ischgl-samnaun",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-11-26",
+          "2027-05-02"
+        ]
+      ],
+      "reservation": "none",
+      "days": 5,
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "ischgl-samnaun",
@@ -2538,15 +3171,26 @@
       "access": "included",
       "validDates": [
         [
-          "2026-09-01",
-          "2027-06-30"
+          "2026-11-26",
+          "2027-05-02"
         ]
       ],
-      "reservation": "check",
-      "note": "Redeem at the participating Silvretta Arena ticket offices.",
+      "reservation": "none",
       "days": 7,
-      "source": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
-      "checkedOn": "2026-11-20"
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "ischgl-samnaun",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "jackson-hole-mountain-resort",
@@ -2575,6 +3219,61 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "jackson-hole-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "jiminy-peak-mountain-resort",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "jiminy-peak-mountain-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "june-mountain",
       "products": [
         "ikon-base"
@@ -2653,6 +3352,67 @@
       ],
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "kappl",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-12-11",
+          "2027-04-04"
+        ]
+      ],
+      "reservation": "none",
+      "days": 5,
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "kappl",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-12-11",
+          "2027-04-04"
+        ]
+      ],
+      "reservation": "none",
+      "days": 7,
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "kappl",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "killington",
@@ -2785,6 +3545,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "kitzbuehel",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "kronplatz",
       "products": [
         "ikon-base"
@@ -2835,6 +3606,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "kronplatz",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "la-thuile-espace-san-bernardo",
       "products": [
         "ikon-base"
@@ -2883,6 +3665,17 @@
       "shared": "Valle d’Aosta",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "la-thuile-espace-san-bernardo",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "lake-louise",
@@ -3015,6 +3808,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "lake-songhua-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "le-massif",
       "products": [
         "ikon-base"
@@ -3143,6 +3947,61 @@
       "shared": "Chamonix Mont-Blanc Valley",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "les-houches",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "little-switzerland",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "little-switzerland",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "loon-mountain-resort",
@@ -3353,6 +4212,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "madarao-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "mammoth-mountain",
       "products": [
         "ikon-base"
@@ -3481,6 +4351,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "megeve",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "mona-yongpyong",
       "products": [
         "ikon-base"
@@ -3527,6 +4408,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mona-yongpyong",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "monterosa-ski",
@@ -3577,6 +4469,17 @@
       "shared": "Valle d’Aosta",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "monterosa-ski",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "mt-bachelor",
@@ -3951,6 +4854,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "mt-t",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "myoko-suginohara-ski-resort",
       "products": [
         "ikon-base"
@@ -3999,6 +4913,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "myoko-suginohara-ski-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "nekoma-mountain",
       "products": [
         "ikon-base"
@@ -4045,6 +4970,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "nekoma-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "niseko-united",
@@ -4127,6 +5063,50 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "nordic-mountain",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "nordic-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "ordino-arcalis",
       "products": [
         "ikon-base"
@@ -4177,6 +5157,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "ordino-arcalis",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "pal-arinsal",
       "products": [
         "ikon-base"
@@ -4225,6 +5216,17 @@
       "shared": "Grandvalira Resorts Andorra",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "pal-arinsal",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "palisades-tahoe",
@@ -4519,6 +5521,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "pila",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "red-mountain-resort",
       "products": [
         "ikon-base"
@@ -4729,6 +5742,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "rio-pusteria-bressanone",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "san-martino-rolle-pass",
       "products": [
         "ikon-base"
@@ -4777,6 +5801,17 @@
       "shared": "Dolomiti Superski",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "san-martino-rolle-pass",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "schweitzer-mountain-resort",
@@ -4859,6 +5894,67 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "see",
+      "products": [
+        "ikon-base"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-12-11",
+          "2027-04-04"
+        ]
+      ],
+      "reservation": "none",
+      "days": 5,
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "see",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-12-11",
+          "2027-04-04"
+        ]
+      ],
+      "reservation": "none",
+      "days": 7,
+      "shared": "Ischgl / Samnaun and Paznaun",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "see",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "shiga-kogen-mountain-resort",
       "products": [
         "ikon-base"
@@ -4905,6 +6001,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "shiga-kogen-mountain-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "sierra-at-tahoe-ski-resort",
@@ -5065,6 +6172,50 @@
       ],
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "ski-butternut",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "ski-butternut",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "snow-summit",
@@ -5251,6 +6402,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowbasin-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "snowbird",
@@ -5302,6 +6464,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "snowbird",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "snowmass",
       "products": [
         "ikon-base"
@@ -5351,6 +6524,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "snowmass",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "snowriver-mountain-resort-black-river-basin",
       "products": [
         "ikon-base"
@@ -5593,6 +6777,50 @@
       ],
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "snowy-range-ski-area",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "snowy-range-ski-area",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Scan your Ikon Pass at the lift.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "solitude-mountain-resort",
@@ -6102,6 +7330,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "sun-valley-bald-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "sun-valley-dollar-mountain",
       "products": [
         "ikon-base"
@@ -6129,6 +7368,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "sun-valley-dollar-mountain",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "sunday-river",
       "products": [
         "ikon-base"
@@ -6207,6 +7457,50 @@
       ],
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "tamarack-resort",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "tamarack-resort",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Scan your Ikon Pass at the lift.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "taos-ski-valley",
@@ -6585,6 +7879,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "thredbo",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "tremblant",
       "products": [
         "ikon-base"
@@ -6715,6 +8020,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "val-di-fassa-carezza",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "val-di-fiemme-obereggen",
       "products": [
         "ikon-base"
@@ -6765,6 +8081,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "val-di-fiemme-obereggen",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "val-gardena-alpe-di-siusi",
       "products": [
         "ikon-base"
@@ -6813,6 +8140,17 @@
       "shared": "Dolomiti Superski",
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "val-gardena-alpe-di-siusi",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "valle-nevado",
@@ -6893,6 +8231,50 @@
       ],
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "wild-mountain",
+      "products": [
+        "ikon-base",
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/faq/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "wild-mountain",
+      "products": [
+        "ikon-pass"
+      ],
+      "access": "included",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ],
+      "reservation": "none",
+      "days": 2,
+      "blackouts": [
+        [
+          "2026-12-26",
+          "2026-12-30"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-17"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Show your Ikon Pass at the ticket window.",
+      "source": "https://www.ikonpass.com/en/bonus-mountain-program",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "winter-park-resort",
@@ -7023,6 +8405,17 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "yunding-snow-park",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "zao-onsen-ski-resort",
       "products": [
         "ikon-base"
@@ -7069,6 +8462,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zao-onsen-ski-resort",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "zermatt-matterhorn",
@@ -7119,6 +8523,17 @@
       "days": 7,
       "source": "https://www.ikonpass.com/en/compare-benefits",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zermatt-matterhorn",
+      "products": [
+        "ikon-session-2",
+        "ikon-session-3",
+        "ikon-session-4"
+      ],
+      "access": "excluded",
+      "source": "https://www.ikonpass.com/en/shop-passes/ikon-session-pass",
+      "checkedOn": "2026-11-21"
     }
   ]
 }

@@ -83,6 +83,146 @@
       "id": "epic-day-7-all-unrestricted",
       "name": "Epic Day Pass · 7 days · All Resorts · Any date",
       "totalDays": 7
+    },
+    {
+      "id": "epic-day-1-32-restricted",
+      "name": "Epic Day Pass · 1 day · 32 Resorts · Restricted",
+      "totalDays": 1
+    },
+    {
+      "id": "epic-day-1-32-unrestricted",
+      "name": "Epic Day Pass · 1 day · 32 Resorts · Any date",
+      "totalDays": 1
+    },
+    {
+      "id": "epic-day-2-32-restricted",
+      "name": "Epic Day Pass · 2 days · 32 Resorts · Restricted",
+      "totalDays": 2
+    },
+    {
+      "id": "epic-day-2-32-unrestricted",
+      "name": "Epic Day Pass · 2 days · 32 Resorts · Any date",
+      "totalDays": 2
+    },
+    {
+      "id": "epic-day-3-32-restricted",
+      "name": "Epic Day Pass · 3 days · 32 Resorts · Restricted",
+      "totalDays": 3
+    },
+    {
+      "id": "epic-day-3-32-unrestricted",
+      "name": "Epic Day Pass · 3 days · 32 Resorts · Any date",
+      "totalDays": 3
+    },
+    {
+      "id": "epic-day-4-32-restricted",
+      "name": "Epic Day Pass · 4 days · 32 Resorts · Restricted",
+      "totalDays": 4
+    },
+    {
+      "id": "epic-day-4-32-unrestricted",
+      "name": "Epic Day Pass · 4 days · 32 Resorts · Any date",
+      "totalDays": 4
+    },
+    {
+      "id": "epic-day-5-32-restricted",
+      "name": "Epic Day Pass · 5 days · 32 Resorts · Restricted",
+      "totalDays": 5
+    },
+    {
+      "id": "epic-day-5-32-unrestricted",
+      "name": "Epic Day Pass · 5 days · 32 Resorts · Any date",
+      "totalDays": 5
+    },
+    {
+      "id": "epic-day-6-32-restricted",
+      "name": "Epic Day Pass · 6 days · 32 Resorts · Restricted",
+      "totalDays": 6
+    },
+    {
+      "id": "epic-day-6-32-unrestricted",
+      "name": "Epic Day Pass · 6 days · 32 Resorts · Any date",
+      "totalDays": 6
+    },
+    {
+      "id": "epic-day-7-32-restricted",
+      "name": "Epic Day Pass · 7 days · 32 Resorts · Restricted",
+      "totalDays": 7
+    },
+    {
+      "id": "epic-day-7-32-unrestricted",
+      "name": "Epic Day Pass · 7 days · 32 Resorts · Any date",
+      "totalDays": 7
+    },
+    {
+      "id": "epic-day-1-22-restricted",
+      "name": "Epic Day Pass · 1 day · 22 Resorts · Restricted",
+      "totalDays": 1
+    },
+    {
+      "id": "epic-day-1-22-unrestricted",
+      "name": "Epic Day Pass · 1 day · 22 Resorts · Any date",
+      "totalDays": 1
+    },
+    {
+      "id": "epic-day-2-22-restricted",
+      "name": "Epic Day Pass · 2 days · 22 Resorts · Restricted",
+      "totalDays": 2
+    },
+    {
+      "id": "epic-day-2-22-unrestricted",
+      "name": "Epic Day Pass · 2 days · 22 Resorts · Any date",
+      "totalDays": 2
+    },
+    {
+      "id": "epic-day-3-22-restricted",
+      "name": "Epic Day Pass · 3 days · 22 Resorts · Restricted",
+      "totalDays": 3
+    },
+    {
+      "id": "epic-day-3-22-unrestricted",
+      "name": "Epic Day Pass · 3 days · 22 Resorts · Any date",
+      "totalDays": 3
+    },
+    {
+      "id": "epic-day-4-22-restricted",
+      "name": "Epic Day Pass · 4 days · 22 Resorts · Restricted",
+      "totalDays": 4
+    },
+    {
+      "id": "epic-day-4-22-unrestricted",
+      "name": "Epic Day Pass · 4 days · 22 Resorts · Any date",
+      "totalDays": 4
+    },
+    {
+      "id": "epic-day-5-22-restricted",
+      "name": "Epic Day Pass · 5 days · 22 Resorts · Restricted",
+      "totalDays": 5
+    },
+    {
+      "id": "epic-day-5-22-unrestricted",
+      "name": "Epic Day Pass · 5 days · 22 Resorts · Any date",
+      "totalDays": 5
+    },
+    {
+      "id": "epic-day-6-22-restricted",
+      "name": "Epic Day Pass · 6 days · 22 Resorts · Restricted",
+      "totalDays": 6
+    },
+    {
+      "id": "epic-day-6-22-unrestricted",
+      "name": "Epic Day Pass · 6 days · 22 Resorts · Any date",
+      "totalDays": 6
+    },
+    {
+      "id": "epic-day-7-22-restricted",
+      "name": "Epic Day Pass · 7 days · 22 Resorts · Restricted",
+      "totalDays": 7
+    },
+    {
+      "id": "epic-day-7-22-unrestricted",
+      "name": "Epic Day Pass · 7 days · 22 Resorts · Any date",
+      "totalDays": 7
     }
   ],
   "rules": [
@@ -116,14 +256,15 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/4412221543451-Does-the-Epic-Day-Pass-include-bonus-days-at-Wilmot-Mt-Brighton-and-Afton-Alps",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "This tier also includes matching bonus days shared by Afton Alps, Mt. Brighton, and Wilmot."
     },
     {
       "areaId": "afton-alps",
@@ -137,14 +278,15 @@
         "epic-day-7-all-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/4412221543451-Does-the-Epic-Day-Pass-include-bonus-days-at-Wilmot-Mt-Brighton-and-Afton-Alps",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "This tier also includes matching bonus days shared by Afton Alps, Mt. Brighton, and Wilmot."
     },
     {
       "areaId": "afton-alps",
@@ -171,6 +313,80 @@
       "days": "unlimited",
       "source": "https://www.epicpass.com/pass-results/college.aspx",
       "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "afton-alps",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "afton-alps",
+      "products": [
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -197,6 +413,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "alpe-cimbra",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "alpine-valley",
       "products": [
         "epic-day-1-all-restricted",
@@ -205,7 +457,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -226,8 +492,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -244,11 +510,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -322,6 +602,104 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "andermatt-gemsstock",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Bring your pass and photo ID to the ticket window for an area access card. The train requires a separate ticket.",
+      "source": "https://www.andermatt-sedrun-disentis.ch/en/stories/epic-pass-general",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "andermatt-gemsstock",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "note": "Bring your pass and photo ID to the ticket window for an area access card. The train requires a separate ticket.",
+      "source": "https://www.andermatt-sedrun-disentis.ch/en/stories/epic-pass-general",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "andermatt-gemsstock",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "andermatt-sedrun",
       "products": [
         "epic-local"
@@ -355,7 +733,7 @@
       "checkedOn": "2026-11-20"
     },
     {
-      "areaId": "attitash-mountain-resort",
+      "areaId": "andermatt-sedrun",
       "products": [
         "epic-day-1-all-restricted",
         "epic-day-2-all-restricted",
@@ -384,8 +762,120 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "note": "Bring your pass and photo ID to the ticket window for an area access card. The train requires a separate ticket.",
+      "source": "https://www.andermatt-sedrun-disentis.ch/en/stories/epic-pass-general",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "andermatt-sedrun",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "note": "Bring your pass and photo ID to the ticket window for an area access card. The train requires a separate ticket.",
+      "source": "https://www.andermatt-sedrun-disentis.ch/en/stories/epic-pass-general",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "andermatt-sedrun",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "attitash-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -402,11 +892,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -558,6 +1062,42 @@
       ]
     },
     {
+      "areaId": "beaver-creek-resort",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "big-boulder",
       "products": [
         "epic-day-1-all-restricted",
@@ -566,7 +1106,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -587,8 +1141,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -605,11 +1159,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -658,7 +1226,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -679,8 +1261,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -697,11 +1279,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -750,7 +1346,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -771,8 +1381,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -789,11 +1399,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -924,6 +1548,42 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "breckenridge-ski-resort",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "brides-les-bains",
@@ -942,6 +1602,42 @@
       "shared": "Les 3 Vallées",
       "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "brides-les-bains",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "bruson",
@@ -998,6 +1694,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "bruson",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "courchevel",
       "products": [
         "epic-pass"
@@ -1014,6 +1746,42 @@
       "shared": "Les 3 Vallées",
       "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "courchevel",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "crans-montana",
@@ -1048,7 +1816,7 @@
       "checkedOn": "2026-11-20"
     },
     {
-      "areaId": "crested-butte-mountain-resort",
+      "areaId": "crans-montana",
       "products": [
         "epic-day-1-all-restricted",
         "epic-day-2-all-restricted",
@@ -1077,8 +1845,111 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/25359856291227-Does-my-Pass-have-access-to-Crans-Montana",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crans-montana",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/25359856291227-Does-my-Pass-have-access-to-Crans-Montana",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "crans-montana",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "crested-butte-mountain-resort",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1095,11 +1966,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1140,6 +2018,28 @@
       ]
     },
     {
+      "areaId": "crested-butte-mountain-resort",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "crotched-mountain",
       "products": [
         "epic-day-1-all-restricted",
@@ -1148,7 +2048,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -1169,8 +2083,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1187,11 +2101,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1265,6 +2193,104 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "disentis",
+      "products": [
+        "epic-day-1-all-restricted",
+        "epic-day-2-all-restricted",
+        "epic-day-3-all-restricted",
+        "epic-day-4-all-restricted",
+        "epic-day-5-all-restricted",
+        "epic-day-6-all-restricted",
+        "epic-day-7-all-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "note": "Bring your pass and photo ID to the ticket window for an area access card. The train requires a separate ticket.",
+      "source": "https://www.andermatt-sedrun-disentis.ch/en/stories/epic-pass-general",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "disentis",
+      "products": [
+        "epic-day-1-all-unrestricted",
+        "epic-day-2-all-unrestricted",
+        "epic-day-3-all-unrestricted",
+        "epic-day-4-all-unrestricted",
+        "epic-day-5-all-unrestricted",
+        "epic-day-6-all-unrestricted",
+        "epic-day-7-all-unrestricted"
+      ],
+      "access": "included",
+      "note": "Bring your pass and photo ID to the ticket window for an area access card. The train requires a separate ticket.",
+      "source": "https://www.andermatt-sedrun-disentis.ch/en/stories/epic-pass-general",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "disentis",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "falls-creek",
       "products": [
         "epic-pass"
@@ -1279,6 +2305,42 @@
       "days": "unlimited",
       "source": "https://www.epicpass.com/regions/australia.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "falls-creek",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "fernie-alpine-resort",
@@ -1386,6 +2448,42 @@
       ]
     },
     {
+      "areaId": "fernie-alpine-resort",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "folgarida-marilleva",
       "products": [
         "epic-pass"
@@ -1402,6 +2500,42 @@
       "shared": "Skirama Dolomiti",
       "source": "https://www.epicpass.com/regions/europe.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "folgarida-marilleva",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "hakuba-47",
@@ -1423,6 +2557,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "hakuba-47",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "hakuba-cortina",
       "products": [
         "epic-pass",
@@ -1440,6 +2610,42 @@
       "shared": "Hakuba Valley",
       "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-cortina",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "hakuba-goryu",
@@ -1461,6 +2667,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "hakuba-goryu",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "hakuba-happo-one",
       "products": [
         "epic-pass",
@@ -1478,6 +2720,42 @@
       "shared": "Hakuba Valley",
       "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-happo-one",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "hakuba-iwatake",
@@ -1499,6 +2777,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "hakuba-iwatake",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "hakuba-norikura-onsen",
       "products": [
         "epic-pass",
@@ -1516,6 +2830,42 @@
       "shared": "Hakuba Valley",
       "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "hakuba-norikura-onsen",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "hakuba-sanosaka",
@@ -1537,6 +2887,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "hakuba-sanosaka",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "heavenly",
       "products": [
         "epic-day-1-all-restricted",
@@ -1545,7 +2931,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -1566,8 +2959,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1584,11 +2977,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1647,6 +3047,28 @@
       ]
     },
     {
+      "areaId": "heavenly",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "hidden-valley-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -1655,7 +3077,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -1676,8 +3112,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1694,11 +3130,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1747,7 +3197,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -1768,8 +3232,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1786,11 +3250,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1849,6 +3327,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "hintertux-glacier",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "hochfuegen-hochzillertal",
       "products": [
         "epic-pass"
@@ -1867,6 +3381,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "hochfuegen-hochzillertal",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "hotham",
       "products": [
         "epic-pass"
@@ -1883,6 +3433,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "hotham",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "hunter-mountain",
       "products": [
         "epic-day-1-all-restricted",
@@ -1891,7 +3477,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -1912,8 +3505,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1930,11 +3523,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -1975,6 +3575,28 @@
       ]
     },
     {
+      "areaId": "hunter-mountain",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "jack-frost-mountain",
       "products": [
         "epic-day-1-all-restricted",
@@ -1983,7 +3605,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -2004,8 +3640,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2022,11 +3658,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2086,6 +3736,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "jigatake",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "kashimayari",
       "products": [
         "epic-pass",
@@ -2105,6 +3791,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "kashimayari",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "keystone-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -2113,7 +3835,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -2134,8 +3863,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2152,11 +3881,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2195,6 +3931,28 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "keystone-resort",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "kicking-horse",
@@ -2302,6 +4060,42 @@
       ]
     },
     {
+      "areaId": "kicking-horse",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "kimberley-alpine-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -2407,6 +4201,42 @@
       ]
     },
     {
+      "areaId": "kimberley-alpine-resort",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "kirkwood-mountain-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -2415,7 +4245,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -2436,8 +4273,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2454,11 +4291,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2515,6 +4359,28 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "kirkwood-mountain-resort",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "kitzsteinhorn",
@@ -2532,6 +4398,42 @@
       "shared": "Saalbach and Zell am See-Kaprun",
       "source": "https://www.epicpass.com/regions/europe.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "kitzsteinhorn",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "la-tzoumaz",
@@ -2588,6 +4490,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "la-tzoumaz",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "laurel-mountain",
       "products": [
         "epic-day-1-all-restricted",
@@ -2596,7 +4534,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -2617,8 +4569,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2635,11 +4587,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2700,6 +4666,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "lech-am-arlberg",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "les-menuires",
       "products": [
         "epic-pass"
@@ -2718,6 +4720,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "les-menuires",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "liberty-mountain-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -2726,7 +4764,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -2747,8 +4799,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2765,11 +4817,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2818,7 +4884,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -2839,8 +4919,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2857,11 +4937,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -2920,6 +5014,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "madonna-di-campiglio",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "mayrhofen",
       "products": [
         "epic-pass"
@@ -2936,6 +5066,42 @@
       "shared": "Zillertal",
       "source": "https://www.epicpass.com/regions/europe.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "mayrhofen",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "meribel",
@@ -2956,6 +5122,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "meribel",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "mont-sainte-anne",
       "products": [
         "epic-day-1-all-restricted",
@@ -3059,6 +5261,42 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "monte-bondone",
@@ -3079,6 +5317,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "monte-bondone",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "mount-snow",
       "products": [
         "epic-day-1-all-restricted",
@@ -3087,7 +5361,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -3108,8 +5389,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3126,11 +5407,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3171,6 +5459,28 @@
       ]
     },
     {
+      "areaId": "mount-snow",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "mount-sunapee",
       "products": [
         "epic-day-1-all-restricted",
@@ -3179,7 +5489,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -3200,8 +5524,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3218,11 +5542,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3292,14 +5630,15 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/4412221543451-Does-the-Epic-Day-Pass-include-bonus-days-at-Wilmot-Mt-Brighton-and-Afton-Alps",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "This tier also includes matching bonus days shared by Afton Alps, Mt. Brighton, and Wilmot."
     },
     {
       "areaId": "mt-brighton",
@@ -3313,14 +5652,15 @@
         "epic-day-7-all-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/4412221543451-Does-the-Epic-Day-Pass-include-bonus-days-at-Wilmot-Mt-Brighton-and-Afton-Alps",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "This tier also includes matching bonus days shared by Afton Alps, Mt. Brighton, and Wilmot."
     },
     {
       "areaId": "mt-brighton",
@@ -3347,6 +5687,80 @@
       "days": "unlimited",
       "source": "https://www.epicpass.com/pass-results/college.aspx",
       "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mt-brighton",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "mt-brighton",
+      "products": [
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3458,6 +5872,42 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "nendaz",
@@ -3514,6 +5964,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "nendaz",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "northstar-california-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -3522,7 +6008,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -3543,8 +6036,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3561,11 +6054,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3624,6 +6124,28 @@
       ]
     },
     {
+      "areaId": "northstar-california-resort",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "okemo-mountain-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -3632,7 +6154,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -3653,8 +6182,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3671,11 +6200,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3714,6 +6250,28 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "okemo-mountain-resort",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "orelle",
@@ -3734,6 +6292,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "orelle",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "paganella-ski",
       "products": [
         "epic-pass"
@@ -3752,6 +6346,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "paganella-ski",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "paoli-peaks",
       "products": [
         "epic-day-1-all-restricted",
@@ -3760,7 +6390,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -3781,8 +6425,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3799,11 +6443,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -3952,6 +6610,42 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "park-city-mountain",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "pejo-3000",
@@ -3972,6 +6666,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "pejo-3000",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "perisher",
       "products": [
         "epic-pass"
@@ -3986,6 +6716,42 @@
       "days": "unlimited",
       "source": "https://www.epicpass.com/regions/australia.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "perisher",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "pinzolo",
@@ -4006,6 +6772,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "pinzolo",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "pontedilegno-tonale",
       "products": [
         "epic-pass"
@@ -4024,6 +6826,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "pontedilegno-tonale",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "roundtop-mountain-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -4032,7 +6870,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -4053,8 +6905,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4071,11 +6923,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4134,6 +7000,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "rusutsu-resort",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "saint-martin-de-belleville",
       "products": [
         "epic-pass"
@@ -4150,6 +7052,42 @@
       "shared": "Les 3 Vallées",
       "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "saint-martin-de-belleville",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "schmittenhoehe",
@@ -4169,6 +7107,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "schmittenhoehe",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "seven-springs-mountain-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -4177,7 +7151,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -4198,8 +7186,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4216,11 +7204,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4277,6 +7279,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "silvretta-montafon",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "skicircus-saalbach",
       "products": [
         "epic-pass"
@@ -4294,6 +7332,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "skicircus-saalbach",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "snow-creek",
       "products": [
         "epic-day-1-all-restricted",
@@ -4302,7 +7376,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -4323,8 +7411,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4341,11 +7429,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4402,6 +7504,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "soelden",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "spieljoch",
       "products": [
         "epic-pass"
@@ -4418,6 +7556,42 @@
       "shared": "Zillertal",
       "source": "https://www.epicpass.com/regions/europe.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "spieljoch",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "st-anton-am-arlberg",
@@ -4440,6 +7614,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "st-anton-am-arlberg",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "st-christoph-am-arlberg",
       "products": [
         "epic-pass"
@@ -4458,6 +7668,42 @@
       "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
       "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "st-christoph-am-arlberg",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "station-touristique-stoneham",
@@ -4565,6 +7811,42 @@
       ]
     },
     {
+      "areaId": "station-touristique-stoneham",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "stevens-pass",
       "products": [
         "epic-day-1-all-restricted",
@@ -4573,7 +7855,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -4594,8 +7883,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4612,11 +7901,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4657,6 +7953,28 @@
       ]
     },
     {
+      "areaId": "stevens-pass",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "stowe",
       "products": [
         "epic-day-1-all-restricted",
@@ -4665,7 +7983,14 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -4686,8 +8011,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4704,11 +8029,18 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -4765,6 +8097,28 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "stowe",
+      "products": [
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "stuben-am-arlberg",
@@ -4785,6 +8139,42 @@
       "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
       "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "stuben-am-arlberg",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "telluride-ski-resort",
@@ -4847,15 +8237,16 @@
           "2027-02-14"
         ]
       ],
-      "reservation": "required",
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "reservation": "none",
+      "source": "https://www.epicpass.com/regions/us/rockies/telluride.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "Bring your physical pass card to go directly to the lift."
     },
     {
       "areaId": "telluride-ski-resort",
@@ -4866,15 +8257,16 @@
         "epic-day-7-all-unrestricted"
       ],
       "access": "included",
-      "reservation": "required",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "reservation": "none",
+      "source": "https://www.epicpass.com/regions/us/rockies/telluride.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "Bring your physical pass card to go directly to the lift."
     },
     {
       "areaId": "telluride-ski-resort",
@@ -4883,15 +8275,52 @@
       ],
       "access": "included",
       "days": 7,
-      "reservation": "required",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "reservation": "none",
+      "source": "https://www.epicpass.com/regions/us/rockies/telluride.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "Bring your physical pass card to go directly to the lift."
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "thyon",
@@ -4946,6 +8375,42 @@
       "shared": "Verbier 4 Vallées",
       "source": "https://www.epicpass.com/regions/europe.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "thyon",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "tsugaike-mountain-resort",
@@ -4967,6 +8432,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "tsugaike-mountain-resort",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "vail-mountain",
       "products": [
         "epic-day-1-all-restricted",
@@ -5076,6 +8577,42 @@
           "2027-06-30"
         ]
       ]
+    },
+    {
+      "areaId": "vail-mountain",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "val-thorens",
@@ -5096,6 +8633,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "val-thorens",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "verbier",
       "products": [
         "epic-local"
@@ -5150,6 +8723,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "verbier",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "veysonnaz",
       "products": [
         "epic-local"
@@ -5202,6 +8811,42 @@
       "shared": "Verbier 4 Vallées",
       "source": "https://www.epicpass.com/regions/europe.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "veysonnaz",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     },
     {
       "areaId": "whistler-blackcomb",
@@ -5315,6 +8960,42 @@
       ]
     },
     {
+      "areaId": "whistler-blackcomb",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "whitetail-resort",
       "products": [
         "epic-day-1-all-restricted",
@@ -5323,7 +9004,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -5344,8 +9039,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -5362,11 +9057,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -5415,7 +9124,21 @@
         "epic-day-4-all-restricted",
         "epic-day-5-all-restricted",
         "epic-day-6-all-restricted",
-        "epic-day-7-all-restricted"
+        "epic-day-7-all-restricted",
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
       ],
       "access": "included",
       "blackouts": [
@@ -5436,8 +9159,8 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -5454,11 +9177,25 @@
         "epic-day-4-all-unrestricted",
         "epic-day-5-all-unrestricted",
         "epic-day-6-all-unrestricted",
-        "epic-day-7-all-unrestricted"
+        "epic-day-7-all-unrestricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -5528,14 +9265,15 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.epicpass.com/info/peak-restricted-dates.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/4412221543451-Does-the-Epic-Day-Pass-include-bonus-days-at-Wilmot-Mt-Brighton-and-Afton-Alps",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "This tier also includes matching bonus days shared by Afton Alps, Mt. Brighton, and Wilmot."
     },
     {
       "areaId": "wilmot-mountain",
@@ -5549,14 +9287,15 @@
         "epic-day-7-all-unrestricted"
       ],
       "access": "included",
-      "source": "https://www.epicpass.com/regions/partner-resorts.aspx",
-      "checkedOn": "2026-11-20",
+      "source": "https://epicpass.zendesk.com/hc/en-us/articles/4412221543451-Does-the-Epic-Day-Pass-include-bonus-days-at-Wilmot-Mt-Brighton-and-Afton-Alps",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
           "2027-06-30"
         ]
-      ]
+      ],
+      "note": "This tier also includes matching bonus days shared by Afton Alps, Mt. Brighton, and Wilmot."
     },
     {
       "areaId": "wilmot-mountain",
@@ -5583,6 +9322,80 @@
       "days": "unlimited",
       "source": "https://www.epicpass.com/pass-results/college.aspx",
       "checkedOn": "2026-11-20",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wilmot-mountain",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted"
+      ],
+      "access": "included",
+      "blackouts": [
+        [
+          "2026-11-27",
+          "2026-11-28"
+        ],
+        [
+          "2026-12-26",
+          "2026-12-31"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-16"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-14"
+        ]
+      ],
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
+      "validDates": [
+        [
+          "2026-09-01",
+          "2027-06-30"
+        ]
+      ]
+    },
+    {
+      "areaId": "wilmot-mountain",
+      "products": [
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "included",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21",
       "validDates": [
         [
           "2026-09-01",
@@ -5609,6 +9422,42 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "zillertal-arena",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "zuers-am-arlberg",
       "products": [
         "epic-pass"
@@ -5627,6 +9476,42 @@
       "note": "Book directly with a participating lodging partner. Confirm the required minimum stay with the property.",
       "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx",
       "checkedOn": "2026-11-20"
+    },
+    {
+      "areaId": "zuers-am-arlberg",
+      "products": [
+        "epic-day-1-32-restricted",
+        "epic-day-2-32-restricted",
+        "epic-day-3-32-restricted",
+        "epic-day-4-32-restricted",
+        "epic-day-5-32-restricted",
+        "epic-day-6-32-restricted",
+        "epic-day-7-32-restricted",
+        "epic-day-1-32-unrestricted",
+        "epic-day-2-32-unrestricted",
+        "epic-day-3-32-unrestricted",
+        "epic-day-4-32-unrestricted",
+        "epic-day-5-32-unrestricted",
+        "epic-day-6-32-unrestricted",
+        "epic-day-7-32-unrestricted",
+        "epic-day-1-22-restricted",
+        "epic-day-2-22-restricted",
+        "epic-day-3-22-restricted",
+        "epic-day-4-22-restricted",
+        "epic-day-5-22-restricted",
+        "epic-day-6-22-restricted",
+        "epic-day-7-22-restricted",
+        "epic-day-1-22-unrestricted",
+        "epic-day-2-22-unrestricted",
+        "epic-day-3-22-unrestricted",
+        "epic-day-4-22-unrestricted",
+        "epic-day-5-22-unrestricted",
+        "epic-day-6-22-unrestricted",
+        "epic-day-7-22-unrestricted"
+      ],
+      "access": "excluded",
+      "source": "https://www.epicpass.com/passes/epic-day-pass.aspx",
+      "checkedOn": "2026-11-21"
     }
   ]
 }

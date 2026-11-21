@@ -94,6 +94,8 @@
     "norquay-2024-opening": "https://www.skibig3.com/blog/mt-norquay-ski-resort-opens-for-the-24-25/",
     "norquay-2025-opening": "https://www.skibig3.com/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/",
     "norquay-2026-opening": "https://www.skibig3.com/blog/mt-norquay-welcomes-skiers-back-for-the-2627-season/",
+    "ober-mountain-2026-opening": "https://www.obergatlinburg.com/slope-report",
+    "obertauern-2026-opening": "https://www.obertauern.com/winter/liftanlagen.html",
     "obertauern-2026-schedule": "https://www.obertauern.com/en/winter/start-of-the-ski-season.html",
     "obertauern-2027-closing": "https://www.obertauern.com/en/sunny-skiing.html",
     "oppdal-2026-schedule": "https://www.alpinco.com/en/oppdal/opening-hours",
@@ -137,6 +139,7 @@
     "togakushi-ski-resort-2026-schedule": "https://www.togakusi.com/ski/course/",
     "valle-nevado": "https://www.vallenevado.com/en/frequently-asked-questions/",
     "waterville-valley-resort-2026-schedule": "https://www.skinh.com/resorts/waterville-valley-resort",
+    "whistler-blackcomb-2026-opening": "https://news.vailresorts.com/WhistlerBlackcomb-Opening-2026",
     "whistler-winter-hours": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/hours-of-operation.aspx",
     "zermatt-matterhorn": "https://www.matterhornparadise.ch/en/experience/skiing"
   },
@@ -2183,6 +2186,21 @@
       ]
     },
     {
+      "areaId": "ober-mountain",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-20",
+          "source": "ober-mountain-2026-opening",
+          "openingTerrain": {
+            "lifts": 2,
+            "trails": 3
+          },
+          "note": "The ski school slope, Cub Way, and the terrain park on lower Castle Run opened."
+        }
+      ]
+    },
+    {
       "areaId": "obertauern",
       "planned": [
         {
@@ -2191,6 +2209,17 @@
           "closesOn": "2027-05-02",
           "source": "obertauern-2026-schedule",
           "closingSource": "obertauern-2027-closing"
+        }
+      ],
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-20",
+          "source": "obertauern-2026-opening",
+          "openingTerrain": {
+            "lifts": 4
+          },
+          "note": "Three ski lifts and the Grünwaldkopfbahn access lift operated."
         }
       ]
     },
@@ -2875,6 +2904,14 @@
           "closesOn": "2027-05-16",
           "source": "whistler-winter-hours",
           "note": "Blackcomb dates. Whistler Mountain is scheduled for November 25 through April 18."
+        }
+      ],
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-20",
+          "source": "whistler-blackcomb-2026-opening",
+          "note": "Blackcomb opened first. Whistler Mountain was scheduled to follow on November 25."
         }
       ]
     },

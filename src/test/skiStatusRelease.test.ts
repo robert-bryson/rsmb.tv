@@ -65,6 +65,57 @@ describe('ski-status pass products', () => {
         expect(evaluatePass(product('ikon-pass'), resort, now, '2027-04-16').status).toBe('outside-dates');
     });
 
+    it('shares Ischgl days across Paznaun with local resort dates and Base blackouts', () => {
+        const kappl = area('kappl');
+        const ischgl = area('ischgl-samnaun');
+        const full = product('ikon-pass');
+        const base = product('ikon-base');
+        const shared = 'Ischgl / Samnaun and Paznaun';
+        expect(evaluatePass(full, ischgl, now, '2026-12-10')).toMatchObject({ status: 'included', rule: { days: 7, shared } });
+        expect(evaluatePass(full, kappl, now, '2026-12-10').status).toBe('outside-dates');
+        expect(evaluatePass(base, kappl, now, '2026-12-11')).toMatchObject({ status: 'included', rule: { days: 5, shared } });
+        expect(evaluatePass(base, kappl, now, '2026-12-26').status).toBe('blackout');
+        expect(evaluatePass(product('ikon-session-4'), kappl, now, '2026-12-11').status).toBe('excluded');
+    });
+
+    it('uses the separate Ikon Bonus Mountain blackout and redemption rules', () => {
+        const buckHill = area('buck-hill');
+        const grouse = area('grouse-mountain');
+        const full = product('ikon-pass');
+        expect(evaluatePass(full, buckHill, now, '2026-12-26').status).toBe('blackout');
+        expect(evaluatePass(full, buckHill, now, '2026-12-31'))
+            .toMatchObject({ status: 'included', rule: { days: 2, reservation: 'none', note: expect.stringContaining('ticket window') } });
+        expect(evaluatePass(full, grouse, now, '2026-12-31')).toMatchObject({ rule: { days: 2, note: expect.stringContaining('at the lift') } });
+        expect(evaluatePass(product('ikon-base'), buckHill, now).status).toBe('excluded');
+        expect(evaluatePass(product('ikon-session-2'), buckHill, now).status).toBe('excluded');
+    });
+
+    it.each([22, 32])('matches the official %i-resort Epic roster for every duration and peak option', (tier) => {
+        for (const day of [1, 2, 3, 4, 5, 6, 7]) {
+            for (const option of ['restricted', 'unrestricted']) {
+                const pass = product(`epic-day-${day}-${tier}-${option}`);
+                expect(filterSkiAreas(skiAreas, { product: { pass, date: '2026-12-25', now } })).toHaveLength(tier);
+                expect(evaluatePass(pass, area('mount-sunapee'), now, '2026-12-31')).toMatchObject({
+                    status: option === 'restricted' ? 'blackout' : 'included', totalDays: day,
+                });
+                expect(evaluatePass(pass, area('hunter-mountain'), now, '2026-12-25').status)
+                    .toBe(tier === 32 ? 'included' : 'excluded');
+                for (const id of ['whistler-blackcomb', 'telluride-ski-resort', 'crans-montana']) {
+                    expect(evaluatePass(pass, area(id), now, '2026-12-25').status).toBe('excluded');
+                }
+            }
+        }
+    });
+
+    it('includes Swiss Epic areas on the one-day All Resorts product and applies peak dates', () => {
+        for (const id of ['andermatt-gemsstock', 'andermatt-sedrun', 'disentis', 'crans-montana']) {
+            expect(evaluatePass(product('epic-day-1-all-unrestricted'), area(id), now, '2026-12-26').status).toBe('included');
+            expect(evaluatePass(product('epic-day-1-all-restricted'), area(id), now, '2026-12-26').status).toBe('blackout');
+        }
+        expect(evaluatePass(product('epic-day-4-all-unrestricted'), area('telluride-ski-resort'), now, '2026-12-25'))
+            .toMatchObject({ status: 'included', rule: { reservation: 'none' } });
+    });
+
     it('requires the Indy Add-On home area and excludes it from the results', () => {
         const berkshire = area('berkshire-east-ski-resort');
         const catamount = area('catamount-mountain-resort');
@@ -74,6 +125,20 @@ describe('ski-status pass products', () => {
         expect(evaluatePass(addOn, berkshire, now, '2027-05-31', catamount.id).status).toBe('included');
         expect(evaluatePass(addOn, berkshire, now, '2027-06-01', catamount.id).status).toBe('outside-dates');
         expect(filterSkiAreas([berkshire, catamount], { product: { pass: addOn, now, homeAreaId: berkshire.id } })).toEqual([catamount]);
+    });
+
+    it('applies the verified Cannon and Red Lodge blackouts only to Indy Base products', () => {
+        const cannon = area('cannon-mountain');
+        const redLodge = area('red-lodge-mountain');
+        const base = product('indy-base');
+        expect(evaluatePass(base, cannon, now, '2027-01-18').status).toBe('blackout');
+        expect(evaluatePass(base, cannon, now, '2027-01-19').status).toBe('included');
+        expect(evaluatePass(base, redLodge, now, '2027-03-13').status).toBe('blackout');
+        expect(evaluatePass(base, redLodge, now, '2027-03-14').status).toBe('included');
+        expect(evaluatePass(product('indy-base-addon'), cannon, now, '2027-01-18', redLodge.id).status).toBe('blackout');
+        expect(evaluatePass(product('indy-plus-addon'), cannon, now, '2027-01-18', redLodge.id)).toMatchObject({
+            status: 'included', rule: { days: 2, reservation: 'check' },
+        });
     });
 
     it('shows the mandatory Ski Arlberg stay with its shared consecutive days', () => {

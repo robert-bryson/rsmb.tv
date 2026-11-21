@@ -80,19 +80,19 @@ If the ski terrain fails, select **Retry ski terrain** at resort zoom. This retr
 On November 21, 2026, the catalog had 583 map points in 21 countries.
 The United States had 334 points. Canada had 72. Other countries had 177.
 The country filter also includes Germany through shared areas.
-The catalog had 126 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
+The catalog had 129 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
 
-All 583 areas have at least one published statistic. The catalog has 525 conventional downhill areas, including areas with Nordic trails. Of these, 289 have all six main comparison fields.
+All 583 areas have at least one published statistic. The catalog has 525 conventional downhill areas, including areas with Nordic trails. Of these, 288 have all six main comparison fields.
 Mapped terrain values cover 536 areas. [First-release data review](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#catalog-coverage)
 
 | Published field | Areas |
 | --- | ---: |
 | Skiable acreage | 377 |
-| Vertical drop | 464 |
+| Vertical drop | 463 |
 | Lift count | 483 |
 | Trail count | 504 |
-| Base elevation | 394 |
-| Summit elevation | 403 |
+| Base elevation | 395 |
+| Summit elevation | 404 |
 | Downhill trail length | 86 |
 | Nordic trail length | 64 |
 | Highest lift terminal | 43 |
@@ -100,7 +100,7 @@ Mapped terrain values cover 536 areas. [First-release data review](../../docs/re
 | Night skiable acreage | 10 |
 | Difficulty breakdown | 293 |
 | Season window | 65 |
-| Official conditions link | 527 |
+| Official conditions link | 535 |
 | Planned season dates | 139 |
 | Average annual snowfall | 165 |
 | Average monthly snowfall | 61 |
@@ -196,7 +196,7 @@ The importer builds files in a temporary directory. It restores the previous out
 
 The catalog covers the 26/27 Ikon destination list, including Europe, Asia, Oceania, and Chile. It uses separate points for the three NZSki areas, the three Grandvalira areas, and the five Valle d’Aosta areas. Each of the 12 Dolomiti Superski regions has one point. Search by group name, such as **Dolomiti Superski** or **SkiBig3**, to find its areas. The pass links give shared limits and product rules. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
 
-The Ikon map lists Kappl, See, and Galtür without access details. Find them in the full catalog under **Austria**. Their details show **Lift access unconfirmed**. The Ikon filter shows the confirmed Ischgl / Samnaun and Kitzbühel areas. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Ischgl / Samnaun access](https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass)
+Ischgl / Samnaun, Galtür, Kappl, and See share seven days on the Ikon Pass or five days on the Ikon Base Pass. The date filter uses each area's published winter schedule. [Ikon access at Ischgl](https://www.ikonpass.com/en/destinations/ischgl), [Ischgl / Samnaun schedule](https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass), [Galtür schedule](https://www.galtuer.com/en/bergbahnen-galtuer/winter/ski-pass-prices-silvapark), [Kappl and See schedule](https://www.see.at/en/winter/operating-times-prices/skipass-prices-see-kappl)
 
 ### Epic destinations
 
@@ -299,6 +299,10 @@ The catalog rejects equal base and summit elevations for areas with a positive v
 Pomerelle's operator gives an 8,762 ft summit and a 1,002 ft vertical drop. The catalog calculates a 7,760 ft base from those values.
 Pizol publishes a 1,718 m vertical between Pizolhütte and Wangs. The connecting lift reaches 2,250 m. [Pomerelle mountain data](https://www.pomerelle.com/the-mountain), [Pizol mountain data](https://pizol.com/en/company/company/)
 
+Hohsaas uses the published 1,640 m descent from 3,200 m at Hohsaas to 1,560 m at Saas-Grund. Ober Mountain uses the operator's 500 ft ski-area figure and the 2,682 ft base and 3,208 ft ski slope elevations on its map. [Hohsaas descent](https://www.myswitzerland.com/en-gb/experiences/hohsaas-ski-run/), [Ober slope report](https://www.obergatlinburg.com/slope-report), [Ober mountain map](https://www.obermountain.com/wp-content/uploads/2024/01/23Winter_brochure_web.pdf)
+
+Amihari Onsen's current course description places the Todomatsu start at 1,234 m. That point is 484 m above the catalog's published base. The earlier 600 m vertical had unverified endpoints. The vertical field is pending confirmation of a lift-served descent. [Amihari course descriptions](https://www.qkamura.or.jp/iwate/ski/)
+
 ## Inventory and data quality
 
 ### OpenSkiData audit
@@ -346,7 +350,15 @@ Season dates select the rules that apply during a winter season. Apply exact res
 Use the resort details to check the published allowance and reservation requirements. Check reservation availability on the operator's site.
 Time zones come from the catalog point. [Coordinate to time zone lookup](https://github.com/photostructure/tz-lookup)
 
+Epic Day Pass offers one to seven shared days in each of the three resort tiers. The 22-resort tier includes ten Midwest areas, eight Pennsylvania areas, and four New Hampshire areas. The 32-resort tier adds ten areas in Colorado, California, Washington, Vermont, and New York. The Restricted options apply November 27–28, December 26–31, January 16, and February 13–14. [Epic Day Pass configurator](https://www.epicpass.com/passes/epic-day-pass.aspx), [Epic peak dates](https://www.epicpass.com/info/peak-restricted-dates.aspx)
+
+All Resorts includes Andermatt–Sedrun–Disentis and Crans-Montana at every duration. Four to seven days also include Telluride and the six Resorts of the Canadian Rockies. Telluride accepts the physical pass card at the lift. Matching Midwest bonus days apply to All Resorts at Afton Alps, Mt. Brighton, and Wilmot. [Andermatt access](https://www.andermatt-sedrun-disentis.ch/en/stories/epic-pass-general), [Crans-Montana access](https://epicpass.zendesk.com/hc/en-us/articles/25359856291227-Does-my-Pass-have-access-to-Crans-Montana), [Telluride terms](https://www.epicpass.com/regions/us/rockies/telluride.aspx), [Epic Midwest bonus days](https://epicpass.zendesk.com/hc/en-us/articles/4412221543451-Does-the-Epic-Day-Pass-include-bonus-days-at-Wilmot-Mt-Brighton-and-Afton-Alps)
+
+The Ikon Pass includes two separate days at each of 14 Bonus Mountains. Their blackouts are December 26–30, January 16–17, and February 13–14. The details give ticket-window or direct-to-lift instructions. Standard Ikon lift reservations are required at Deer Valley, Jackson Hole, and Loon for products with access. [Bonus Mountain terms](https://www.ikonpass.com/en/bonus-mountain-program), [Ikon reservation rules](https://www.ikonpass.com/en/how-to-use-your-ikon-pass)
+
 Indy Add-On access requires verification of an unrestricted home season pass. Select a home area to apply the exclusion. The app shows the requirement in the pass terms. [Indy Add-On rules](https://www.indyskipass.com/this-is-indy/how-it-works)
+
+Seven Indy areas have verified product rules. Cannon and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Mt. Hood Meadows and St. Johann have verified Indy+ terms. Use independently published operator terms for further rules. [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
 
 Ski Arlberg requires a direct booking with a lodging partner. The app shows this requirement with the shared three-day allowance. [Ski Arlberg pass terms](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
@@ -369,7 +381,7 @@ Each checked report expires at the end of its local ski day. Alberta uses UTC−
 
 ### Opening and closing dates
 
-The season file has 161 records of actual dates across 27 areas and plans for 139 areas. Thirteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
+The season file has 164 records of actual dates across 30 areas and plans for 139 areas. Fifteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
@@ -397,6 +409,10 @@ The collector covers Lake Louise and all 12 Dolomiti Superski regions. Open-Mete
 The Lake Louise XML lists daily operations and named terrain. The collector compares the open counts with the named records. It uses the verified local ski day for the operations report. Snow and temperature keep their measurement dates. The XML generation time changes on each request. The report has a ski date with no exact report age. The app marks Lake Louise data as display-only. [Lake Louise feed](https://api.skilouise.com/docs/MTN-XML.php), [Snow report method](https://www.skilouise.com/things-to-do/how-we-report-snowfall-mountain-conditions/)
 
 The local Rockies pilot covers Lake Louise, Banff Sunshine, and Mt. Norquay. On November 20, the Sunshine XML matched the operator's terrain report. It recorded 3 of 12 open lifts and 4 of 139 open trails. The Norquay XML endpoint returned HTTP 500. Use the Norquay conditions page for manual checks. The pilot stores numeric counts and the report time. Alberta uses UTC−06 year-round from November 2026. [SkiBig3 API](https://www.skibig3.com/api/), [Sunshine terrain report](https://www.skibanff.com/the-mountain/mountain-report/lifts-trails-report), [Mt. Norquay conditions](https://banffnorquay.com/conditions/), [Alberta Time](https://www.alberta.ca/albertas-new-time-system-abt)
+
+On November 21 at 13:57 UTC, Sunshine's 11:08 UTC XML report matched its operator page at 3 of 12 lifts and 8 of 139 trails. Lake Louise's November 21 XML matched the operator's four open lifts and six open runs. Norquay's XML still returned HTTP 500. Its dated operator page showed two open lifts and two open runs. **Ski today** showed the two matched reports in a local browser check. It excluded a simulated undated report and aged both current reports out at the local ski-day cutoff. The seven-day review remains open. [Sunshine terrain report](https://www.skibanff.com/the-mountain/mountain-report/lifts-trails-report), [Lake Louise conditions](https://www.skilouise.com/snow-conditions/), [Mt. Norquay conditions](https://banffnorquay.com/conditions/)
+
+The November 21 review found documentation for the XML format and update schedule. Public display and retention of archived Sunshine and Norquay data still need explicit operator terms. [SkiBig3 API](https://www.skibig3.com/api/), [SkiBig3 terms](https://www.skibig3.com/terms-of-use/), [Norquay terms](https://banffnorquay.com/terms-conditions/)
 
 The collector accepts up to 4 MiB per JSON response and 256 KiB per XML response. It rejects redirects and invalid UTF-8. The XML reader also rejects document types. The SkiBig3 reader requires one value for each count and an exact report time.
 
@@ -508,6 +524,8 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 | Snow history | Open an area with snow measurements outside the scheduled season. Verify that the table shows those months. Verify the annual and monthly source links. Check the details at 320 pixels wide. |
 | Rockies publication | Before you enable the Rockies feed, compare its snapshots with the operator pages for seven ski days. Check the local ski-day cutoff, missing reports, closures, and partial openings. [Pilot](#conditions-publication) |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
+
+On November 21, the hosted preview served `0ec3dfde887655c8bca93c3c71430eb64987a4a2` in Amplify job 22. The ski-status candidate still needs a hosted run. The sync workflow was absent from `main`, and the public conditions manifest returned HTTP 403. [Hosted deployment record](https://release-preview.d38ki8k4lanh8s.amplifyapp.com/deployment.json), [Sync setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
 
 ## Version 2
 

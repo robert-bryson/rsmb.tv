@@ -953,8 +953,8 @@
     {
       "areaId": "galtuer",
       "family": "ikon",
-      "access": "listed",
-      "source": "https://www.ikonpass.com/en/destinations"
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl"
     },
     {
       "areaId": "garnet-hill-xc",
@@ -1260,7 +1260,7 @@
       "areaId": "ischgl-samnaun",
       "family": "ikon",
       "access": "included",
-      "source": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass"
+      "source": "https://www.ikonpass.com/en/destinations/ischgl"
     },
     {
       "areaId": "jack-frost-mountain",
@@ -1325,8 +1325,8 @@
     {
       "areaId": "kappl",
       "family": "ikon",
-      "access": "listed",
-      "source": "https://www.ikonpass.com/en/destinations"
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl"
     },
     {
       "areaId": "kashimayari",
@@ -2483,8 +2483,8 @@
     {
       "areaId": "see",
       "family": "ikon",
-      "access": "listed",
-      "source": "https://www.ikonpass.com/en/destinations"
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/ischgl"
     },
     {
       "areaId": "seven-springs-mountain-resort",

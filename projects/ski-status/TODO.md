@@ -5,8 +5,9 @@ Use the guide for procedures and acceptance checks. Record completed work in Git
 ## Before release
 
 - [ ] Check terrain on the hosted preview. Confirm byte ranges and the Heavenly tooltips. Match the report to the candidate revision and Amplify job. [Release checks](readme.md#release-checks)
-- [ ] Verify the 22-resort and 32-resort Epic Day Pass tiers. Record the access rules for each area. [Product coverage](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#pass-product-coverage)
-- [ ] Complete the remaining Ikon and Indy product rules. Record each verified exception, blackout date, and reservation rule. [Product coverage](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#pass-product-coverage)
+- [x] Verify the 22-resort and 32-resort Epic Day Pass tiers and record the access rules for each area. [Pass rules](readme.md#pass-access-by-product-and-date)
+- [x] Complete Ikon product coverage for the catalog, including the Bonus Mountains and shared Paznaun access. [Pass rules](readme.md#pass-access-by-product-and-date)
+- [ ] Complete the remaining Indy product rules beyond the seven areas with verified terms. Record each verified exception, blackout date, and reservation rule. [Pass rules](readme.md#pass-access-by-product-and-date)
 - [ ] Verify the sync workflow with its scoped role on `main`. Check the active manifest and its archived predecessor. [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
 
 ## Before publishing the Rockies feed
@@ -17,9 +18,10 @@ Use the guide for procedures and acceptance checks. Record completed work in Git
 
 ## Catalog gaps
 
-- [ ] Fill the six main comparison fields for the 236 downhill areas that have gaps. Start with base elevation, summit elevation, and skiable acres. Give each value its units, scope, source, and date. Update the field counts. [Measurement rules](readme.md#comparable-mountain-statistics)
-- [ ] Confirm the scope of the published vertical at Amihari Onsen, Bergbahnen Hohsaas, and Ober Mountain. Compare it with each area's published elevation range. Record the measurement scope or correct the source. [Measurement rules](readme.md#comparable-mountain-statistics)
-- [ ] Add official conditions links for the 56 areas that need them. Open each link and confirm that the report covers the intended area. [Catalog](readme.md#catalog)
+- [ ] Fill the six main comparison fields for the 237 downhill areas that have gaps. Start with base elevation, summit elevation, and skiable acres. Give each value its units, scope, source, and date. Update the field counts. [Measurement rules](readme.md#comparable-mountain-statistics)
+- [x] Reconcile the published vertical with the elevation measurements at Bergbahnen Hohsaas and Ober Mountain. [Measurement rules](readme.md#comparable-mountain-statistics)
+- [ ] Verify the endpoints of a lift-served descent at Amihari Onsen before restoring its vertical figure. [Measurement rules](readme.md#comparable-mountain-statistics)
+- [ ] Add official conditions links for the 48 areas that need them. Open each link and confirm that the report covers the intended area. [Catalog](readme.md#catalog)
 - [ ] Review the 485 open North American candidates by region. Record each decision and its source. Update the regional counts. [Candidate log](research/north-america-2026-11-16.csv)
 - [ ] Check the visitor entrances for the 16 areas that lost an inferred base. Use operator directions. [Terrain and base review](../../docs/reviews/2026-11-20-ski-status-map-and-resort-data-review.md#terrain-and-base-points)
 - [ ] Add more verified resort icons and Wikipedia articles. Give each icon a source. [Catalog](readme.md#catalog)
