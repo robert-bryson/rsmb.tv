@@ -65,6 +65,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=04d84a3789b94eba19ce3c951fece8117d931c03"
     },
+    "amihari-onsen-ski-resort": {
+      "coordinates": [
+        140.936273,
+        39.821235
+      ],
+      "name": "Amihari Onsen Ski Center",
+      "kind": "entrance",
+      "source": "https://www.qkamura.or.jp/iwate/ski/"
+    },
     "aomori-spring-ski-resort": {
       "coordinates": [
         140.282214,
@@ -235,6 +244,15 @@
       "name": "Mapped lift base",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=d4086b2e9d44022ca27bde811816b5a4fc859c87"
+    },
+    "big-white-ski-resort": {
+      "coordinates": [
+        -118.921228,
+        49.717917
+      ],
+      "name": "Happy Valley Day Lodge",
+      "source": "https://www.openstreetmap.org/way/171474883",
+      "kind": "entrance"
     },
     "black-mountain-of-maine": {
       "coordinates": [
@@ -614,6 +632,24 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=89f555b5b8a62c0c002adaa796997b635f38e6da"
     },
+    "cuchara": {
+      "coordinates": [
+        -105.124509,
+        37.349995
+      ],
+      "name": "Cuchara Mountain Park entrance by the Day Lodge",
+      "kind": "entrance",
+      "source": "https://cucharamountainpark.org/pages/plan-your-visit"
+    },
+    "cupid-valley": {
+      "coordinates": [
+        138.484388,
+        37.054063
+      ],
+      "name": "Center House base area by the No. 1 Quad",
+      "kind": "entrance",
+      "source": "https://www.yukidaruma-kogen.com/winter/course.html"
+    },
     "cypress-mountain": {
       "coordinates": [
         -123.203579,
@@ -724,12 +760,12 @@
     },
     "fernie-alpine-resort": {
       "coordinates": [
-        -115.087878,
-        49.463145
+        -115.086708,
+        49.463188
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=ecea3ea316650e534c05c56dca021977818dc214"
+      "name": "Griz Day Lodge",
+      "source": "https://www.openstreetmap.org/way/171808650",
+      "kind": "entrance"
     },
     "folgarida-marilleva": {
       "coordinates": [
@@ -739,6 +775,15 @@
       "name": "Mapped lift base",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=29b30f99e12f6399919a7bbd34ab3ad948bf6ede"
+    },
+    "frost-fire-park": {
+      "coordinates": [
+        -98.068687,
+        48.91199
+      ],
+      "name": "Frost Fire Park Lodge",
+      "kind": "entrance",
+      "source": "https://www.frostfirepark.org/howatt-hangar"
     },
     "furano-ski-resort": {
       "coordinates": [
@@ -1075,12 +1120,21 @@
     },
     "kelly-canyon": {
       "coordinates": [
-        -111.626751,
-        43.645947
+        -111.629733,
+        43.646095
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=404f9961432a5c4db64c85b97591e6bbe7c7f8fc"
+      "name": "Kelly Canyon Ski Lodge",
+      "kind": "entrance",
+      "source": "https://kellycanyonresort.com/ski/"
+    },
+    "kicking-horse": {
+      "coordinates": [
+        -117.04912,
+        51.297907
+      ],
+      "name": "Kicking Horse Day Lodge",
+      "source": "https://www.openstreetmap.org/way/172464322",
+      "kind": "entrance"
     },
     "killington": {
       "coordinates": [
@@ -1089,6 +1143,15 @@
       ],
       "name": "K-1 base lodge",
       "source": "https://www.killington.com/the-mountain/mountain-info/trail-maps",
+      "kind": "entrance"
+    },
+    "kimberley-alpine-resort": {
+      "coordinates": [
+        -116.004765,
+        49.689083
+      ],
+      "name": "Village Core ski school at the North Star base",
+      "source": "https://www.openstreetmap.org/way/172527193",
       "kind": "entrance"
     },
     "kirkwood-mountain-resort": {
@@ -1208,6 +1271,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=6ff3d800655f463f2ea8d24980630b01000c8c49"
     },
+    "little-ski-hill": {
+      "coordinates": [
+        -116.162529,
+        44.930107
+      ],
+      "name": "Little Ski Hill Historic Lodge",
+      "kind": "entrance",
+      "source": "https://payettelakesskiclub.org/pages/contact"
+    },
     "loch-lomond": {
       "coordinates": [
         -89.346618,
@@ -1318,12 +1390,12 @@
     },
     "marmot-basin": {
       "coordinates": [
-        -118.083641,
-        52.801556
+        -118.082849,
+        52.80099
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=5e819ebcf0e2f7b4cee8123304ed019d6eff2e59"
+      "name": "Caribou Chalet",
+      "source": "https://www.openstreetmap.org/way/775845552",
+      "kind": "entrance"
     },
     "massanutten-resort": {
       "coordinates": [
@@ -1351,6 +1423,15 @@
       "name": "Mapped lift base",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=e7bdf3f0770b5330ef22f507b3c5b445550bd296"
+    },
+    "middlebury-snowbowl": {
+      "coordinates": [
+        -72.957654,
+        43.939157
+      ],
+      "name": "Starr Shelter at the VT 125 base",
+      "kind": "entrance",
+      "source": "https://middleburysnowbowl.com/trail-map/"
     },
     "mona-yongpyong": {
       "coordinates": [
@@ -1423,6 +1504,24 @@
       "name": "Sant'Anna",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=5ffd86e2374dc98261a846de36bfc510ab758dfc"
+    },
+    "moose-mountain-ski-resort": {
+      "coordinates": [
+        -147.991241,
+        64.940449
+      ],
+      "name": "Moose Mountain Base Lodge",
+      "kind": "entrance",
+      "source": "https://shredthemoose.com/moose-mountain-maps/"
+    },
+    "mount-baldy-ski-area": {
+      "coordinates": [
+        -89.127934,
+        48.525993
+      ],
+      "name": "Mount Baldy Base Chalet",
+      "kind": "entrance",
+      "source": "https://www.skimountbaldy.ca/contact"
     },
     "mount-racey-ski-resort": {
       "coordinates": [
@@ -1505,6 +1604,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=28098c43579d6e0b939ab6daad2f6c62c7206faf"
     },
+    "mt-holiday": {
+      "coordinates": [
+        -85.514436,
+        44.743508
+      ],
+      "name": "Mt. Holiday day lodge",
+      "kind": "entrance",
+      "source": "https://www.mt-holiday.com/contact"
+    },
     "mt-hood-meadows": {
       "coordinates": [
         -121.665028,
@@ -1552,12 +1660,12 @@
     },
     "mt-t": {
       "coordinates": [
-        138.951368,
-        36.817846
+        138.961899,
+        36.836358
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=d764592885db846086b2e701a8519bb27ca70e55"
+      "name": "Base Plaza lower ropeway station",
+      "kind": "entrance",
+      "source": "https://tanigawadake-joch.com/en/mt-t/route/"
     },
     "muica-snow-resort": {
       "coordinates": [
@@ -1579,12 +1687,21 @@
     },
     "nakiska-ski-area": {
       "coordinates": [
-        -115.153286,
-        50.942579
+        -115.151722,
+        50.942528
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=629f41736fe9e223bb92ecae332e0d736721da14"
+      "name": "Nakiska Day Lodge",
+      "source": "https://www.openstreetmap.org/way/1327131488",
+      "kind": "entrance"
+    },
+    "nayoro-piyashiri-ski-resort": {
+      "coordinates": [
+        142.514787,
+        44.40267
+      ],
+      "name": "Nayoro Piyashiri ski day base, lower chair",
+      "kind": "entrance",
+      "source": "https://www.nayoro.co.jp/piyashiri/status/"
     },
     "nekoma-mountain": {
       "coordinates": [
@@ -1738,6 +1855,15 @@
       "name": "Mountain Village base",
       "source": "https://www.parkcitymountain.com/explore-the-resort/about-the-resort/getting-here-and-parking.aspx",
       "kind": "entrance"
+    },
+    "pats-peak": {
+      "coordinates": [
+        -71.796192,
+        43.162468
+      ],
+      "name": "Main Base Lodge",
+      "kind": "entrance",
+      "source": "https://www.patspeak.com/the-mountain/mountain-info/trail-map/"
     },
     "paul-bunyan-ski-hill": {
       "coordinates": [
@@ -1946,6 +2072,15 @@
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=24ee51415a84a991406320a88bd1bd2e7aa81030"
     },
+    "saddleback": {
+      "coordinates": [
+        -70.527195,
+        44.946117
+      ],
+      "name": "Saddleback Base Lodge",
+      "kind": "entrance",
+      "source": "https://www.saddlebackmaine.com/getting-here/"
+    },
     "san-martino-rolle-pass": {
       "coordinates": [
         11.77864,
@@ -1963,6 +2098,15 @@
       "name": "Mapped lift base",
       "kind": "lift-base",
       "source": "https://openskimap.org/?obj=c3bdf2365be8731aa6cb20ce76de31e246dfab57"
+    },
+    "saskadena-six-ski-area": {
+      "coordinates": [
+        -72.543228,
+        43.665065
+      ],
+      "name": "247 Stage Road visitor address",
+      "kind": "entrance",
+      "source": "https://www.saskadenasix.com/contact-us"
     },
     "sasquatch-mountain-resort": {
       "coordinates": [
@@ -2317,12 +2461,12 @@
     },
     "sun-peaks-resort": {
       "coordinates": [
-        -119.885412,
-        50.884966
+        -119.886071,
+        50.884298
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=9f1d79969a331ae7d0969bf41f5d4910c7d07a0d"
+      "name": "Village Day Lodge guest services",
+      "source": "https://www.openstreetmap.org/node/12963528112",
+      "kind": "entrance"
     },
     "sun-valley-bald-mountain": {
       "coordinates": [
@@ -2434,12 +2578,12 @@
     },
     "togari-onsen-snow-resort": {
       "coordinates": [
-        138.37718,
-        36.943663
+        138.387319,
+        36.931464
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=2d0444657597437042f88000cae4cf8468681dea"
+      "name": "Earth Dragon Field day base",
+      "kind": "entrance",
+      "source": "https://togari.jp/winter/access/"
     },
     "tremblant": {
       "coordinates": [

@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
-import { formatSkiLocation, formatSkiStat, visibleSkiColumns, type ColumnKey, type SkiSort, type SkiUnits } from './browse';
+import { formatSkiStat, visibleSkiColumns, type ColumnKey, type SkiSort, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
 import type { Conditions } from './conditions';
 import { SkiIcon } from './SkiIcon';
+import { SkiLocation } from './SkiLocation';
+import { formatSkiLocation } from './skiGeography';
 
 const mountainOverview = new Set<ColumnKey>(['acres', 'verticalFt', 'liftCount', 'trailCount', 'baseFt', 'summitFt']);
 const leadsCatalogComparison = (key: ColumnKey) => key === 'name' || key === 'region' || mountainOverview.has(key);
@@ -18,9 +20,10 @@ interface Props {
     reportsFirst?: boolean;
     onSort: (key: SkiSort['key']) => void;
     onSelect: (id: string, control: HTMLButtonElement) => void;
+    onZoomLocation?: (place: string) => void;
 }
 
-export function SkiAreaTable({ areas, units, sort, selected, conditions, columnPreference, reportsFirst, onSort, onSelect }: Props) {
+export function SkiAreaTable({ areas, units, sort, selected, conditions, columnPreference, reportsFirst, onSort, onSelect, onZoomLocation }: Props) {
     const scroller = useRef<HTMLDivElement>(null);
     const [requestedPage, setPage] = useState(() => Math.max(0, Math.floor(areas.findIndex(area => area.id === selected?.id) / pageSize)));
     const lastPage = Math.max(0, Math.ceil(areas.length / pageSize) - 1);
@@ -73,7 +76,8 @@ export function SkiAreaTable({ areas, units, sort, selected, conditions, columnP
                         </th>
                         {visibleColumns.slice(1).map(({ key }) => <td key={key}
                             className={key === 'region' ? 'ski-compare-region' : undefined} data-numeric={mountainOverview.has(key) || undefined}>
-                            {formatSkiStat(area, key, units, conditions) ?? <><span aria-hidden="true" className="ski-compare-missing">—</span><span className="sr-only">Unknown</span></>}
+                            {key === 'region' ? <SkiLocation area={area} onZoom={onZoomLocation} />
+                                : formatSkiStat(area, key, units, conditions) ?? <><span aria-hidden="true" className="ski-compare-missing">—</span><span className="sr-only">Unknown</span></>}
                         </td>)}
                     </tr>;
                 })}</tbody>

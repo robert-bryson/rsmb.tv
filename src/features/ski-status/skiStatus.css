@@ -347,9 +347,27 @@
 .ski-result-sort { flex-wrap: nowrap; gap: 0; max-width: 75%; }
 .ski-result-sort .ski-input { max-width: 10rem; font-size: 0.875rem; border-start-end-radius: 0; border-end-end-radius: 0; }
 .ski-result-sort .ski-icon-button { border-inline-start: 0; border-start-start-radius: 0; border-end-start-radius: 0; }
-.ski-result { display: block; width: 100%; min-height: var(--ski-target); padding: 0.6rem 0.85rem; text-align: left; line-height: 1.4; }
-.ski-result[aria-pressed="true"] { background: var(--ski-selected); box-shadow: inset 3px 0 var(--ski-link); }
-.ski-result-meta { display: grid; gap: 0.1rem; color: var(--ski-muted); font-size: 0.8125rem; }
+.ski-result { position: relative; min-height: var(--ski-target); padding: 0.6rem 0.85rem; line-height: 1.4; }
+.ski-result:has(.ski-result-sort-stat) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) fit-content(min(42%, 9rem));
+    column-gap: 0.65rem;
+}
+.ski-result[data-selected] { background: var(--ski-selected); box-shadow: inset 3px 0 var(--ski-link); }
+.ski-result-select { grid-column: 1; justify-self: start; text-align: start; font-weight: 600; overflow-wrap: anywhere; }
+.ski-result-select::after { content: ''; position: absolute; inset: 0; }
+.ski-result-sort-stat { grid-area: 1 / 2 / span 2; align-self: start; text-align: end; overflow-wrap: anywhere; }
+.ski-result-sort-stat dt { color: var(--ski-muted); font-size: 0.75rem; }
+.ski-result-sort-stat dd { font-size: 0.875rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+.ski-location-link {
+    min-block-size: 1.5rem;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--ski-selected-line);
+}
+.ski-location-link:hover { color: var(--ski-link); text-decoration-color: currentColor; }
+.ski-result .ski-location-link { position: relative; z-index: 1; }
+.ski-result-meta { grid-column: 1; display: grid; gap: 0.1rem; color: var(--ski-muted); font-size: 0.8125rem; }
 .ski-result-location, .ski-result-passes {
     display: flex;
     flex-wrap: wrap;
@@ -510,9 +528,9 @@
 .ski-compare th, .ski-compare td { padding-inline: 0.75rem; }
 .ski-compare th { text-align: start; }
 .ski-compare thead th { border-bottom: 1px solid var(--ski-line); font-weight: 650; }
-.ski-compare button { width: 100%; min-height: var(--ski-target); text-align: inherit; }
+.ski-compare th > button { width: 100%; min-height: var(--ski-target); text-align: inherit; }
 .ski-compare thead button { display: flex; align-items: center; gap: 0.375rem; }
-.ski-compare tbody button { padding-block: 0.5rem; }
+.ski-compare tbody th > button { padding-block: 0.5rem; }
 .ski-compare button:hover, .ski-compare th[aria-sort], .ski-compare tr[data-selected] th { color: var(--ski-link); }
 .ski-compare thead .ski-icon { width: 0.875rem; height: 0.875rem; }
 .ski-compare tbody tr { --ski-row: var(--ski-background); background: var(--ski-row); }
@@ -535,7 +553,7 @@
     white-space: normal;
 }
 .ski-compare thead .ski-compare-name { background: var(--ski-panel); }
-.ski-compare-region { max-width: 7rem; white-space: normal; }
+.ski-compare-region { max-width: 15rem; white-space: normal; }
 .ski-compare-missing { color: #8d9dab; }
 
 .ski-map { position: relative; height: 100%; min-height: 0; isolation: isolate; container-type: size; }
@@ -551,8 +569,16 @@
     pointer-events: none;
 }
 .ski-map-actions .ski-control { pointer-events: auto; white-space: nowrap; }
+.ski-map-actions .ski-previous-view {
+    grid-area: 1 / 1;
+    justify-self: start;
+    width: auto;
+    padding-inline: 0.65rem;
+    box-shadow: var(--ski-panel-shadow);
+}
 .ski-area-search {
     grid-column: 2;
+    grid-row: 1;
     justify-self: center;
     min-width: 9.65rem;
     border-radius: 2rem;
@@ -561,6 +587,7 @@
 .ski-area-search:not(.ski-primary) .ski-icon { color: var(--ski-link); }
 .ski-map-utilities {
     grid-column: 3;
+    grid-row: 1;
     justify-self: end;
     display: flex;
     border-radius: var(--ski-radius);
@@ -655,6 +682,7 @@
 
 @container (max-width: 32rem) {
     .ski-map-actions { grid-template-columns: minmax(0, 1fr) auto; }
+    .ski-map-actions .ski-previous-view { grid-row: 2; }
     .ski-area-search { grid-column: 1; }
     .ski-map-utilities { grid-column: 2; }
     .ski-map .maplibregl-ctrl-top-right { top: auto; bottom: 3.125rem; }
@@ -723,6 +751,9 @@
 .ski-check { align-self: end; }
 .ski-check input, .ski-pass-option input { flex: none; width: 1rem; height: 1rem; accent-color: var(--ski-link); }
 .ski-pass-options { grid-column: 1 / -1; min-width: 0; }
+.ski-location-fields { grid-column: 1 / -1; display: grid; gap: 0.4rem; min-width: 0; }
+.ski-location-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 0.375rem; }
+.ski-location-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; }
 .ski-pass-options-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.375rem; }
 .ski-pass-option, .ski-check {
     display: flex;
@@ -751,6 +782,11 @@
     .ski-view-switch .ski-icon { display: none; }
     .ski-segments button { padding-inline: 0.45rem; font-size: 0.8125rem; }
     .ski-clear-filters span { display: none; }
+}
+
+@media (max-width: 29rem) {
+    .ski-location-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ski-location-controls select { grid-column: 1 / -1; }
 }
 
 @media (max-width: 44rem) and (min-height: 27rem), (max-width: 36rem) {

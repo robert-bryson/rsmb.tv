@@ -4,6 +4,7 @@ import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaList } from '../features/ski-status/SkiAreaList';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
 import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
+import { SkiResortLinks } from '../features/ski-status/SkiResortLinks';
 import { SkiShareButton } from '../features/ski-status/SkiShareButton';
 import { defaultSkiColumns } from '../features/ski-status/browse';
 import { skiAreas } from '../features/ski-status/catalog';
@@ -40,6 +41,44 @@ describe('ski-status results and comparison', () => {
         expect(list.getByText(`${label} · ${value}`)).toBeVisible();
         fireEvent.change(list.getByRole('combobox', { name: 'Sort results' }), { target: { value: colors } });
         expect(onSort).toHaveBeenCalledWith(colors);
+    });
+
+    it('shows the active sort value and distinguishes zero from a missing value', () => {
+        const known = { ...skiAreas.find(area => area.id === 'alta')!, liftCount: 0 };
+        const missing = { ...skiAreas.find(area => area.id === 'whaleback')!, liftCount: undefined };
+        render(<SkiAreaList {...listDefaults} areas={[known, missing]} colors="default" sort={{ key: 'liftCount', direction: 'asc' }} />);
+        const list = within(screen.getByRole('region', { name: 'Ski area list' }));
+        const knownButton = list.getByRole('button', { name: known.name });
+        const missingButton = list.getByRole('button', { name: missing.name });
+        expect(within(knownButton.closest('li')!).getByText('0', { exact: true })).toBeVisible();
+        expect(within(missingButton.closest('li')!).getByText('Unknown', { exact: true })).toBeVisible();
+        expect(knownButton).toHaveAccessibleDescription(/Lifts 0/);
+        expect(missingButton).toHaveAccessibleDescription(/Lifts Unknown/);
+    });
+
+    it('shows a sorted map metric once in the selected units', () => {
+        const alta = skiAreas.find(area => area.id === 'alta')!;
+        render(<SkiAreaList {...listDefaults} areas={[alta]} units="metric" colors="summitFt" sort={{ key: 'summitFt', direction: 'desc' }} />);
+        const row = within(screen.getByRole('listitem'));
+        expect(row.getByText('Summit', { exact: true })).toBeVisible();
+        expect(row.getAllByText(/3,374 m/)).toHaveLength(1);
+    });
+
+    it('shows a sorted live count once alongside the other terrain count', () => {
+        const area = skiAreas.find(area => area.id === 'alta')!;
+        const report: ResortReport = {
+            areaId: area.id, status: 'limited', reportedAt: '2026-11-21T15:00:00Z', retrievedAt: '2026-11-21T15:05:00Z',
+            source: { name: 'Operator', url: 'https://example.test/conditions', exportable: false },
+            lifts: { open: 2, total: 6 }, trails: { open: 10, total: 120 },
+        };
+        const conditions = { ...listDefaults.conditions, reports: new Map([[area.id, report]]), now: Date.parse('2026-11-21T15:15:00Z') };
+        render(<SkiAreaList {...listDefaults} areas={[area]} colors="operatingStatus" conditions={conditions}
+            statuses={new Map([[area.id, 'limited']])} sort={{ key: 'reportLifts', direction: 'desc' }} />);
+        const row = within(screen.getByRole('listitem'));
+        expect(row.getByText('Lifts open / total')).toBeVisible();
+        expect(row.getByText('2 / 6', { exact: true })).toBeVisible();
+        expect(row.queryByText('2 / 6 lifts open')).toBeNull();
+        expect(row.getByText('10 / 120 trails open')).toBeVisible();
     });
 
     it('shows map access labels and logos alongside the resort results', () => {
@@ -157,6 +196,14 @@ describe('ski-status area details', () => {
         fireEvent.click(scope.getByText('Snow sources', { selector: 'summary' }));
         return within(scope.getByRole('list', { name: 'Historical snow sources' }));
     }
+
+    it('keeps the qualified map search available when there is no verified article', () => {
+        const area = skiAreas.find(area => area.id === 'hunter-mountain')!;
+        render(<SkiResortLinks area={{ ...area, id: 'unverified-area' }} />);
+        const group = within(screen.getByRole('group', { name: 'Resort links' }));
+        expect(group.getByRole('link', { name: 'Search Google Maps' })).toHaveAttribute('href', expect.stringContaining('ski+area'));
+        expect(group.getAllByRole('link')).toHaveLength(1);
+    });
 
     it('shows measured depth sources and leaves missing months empty in the selected units', () => {
         const sunshine = skiAreas.find(area => area.id === 'banff-sunshine')!;
@@ -341,6 +388,50 @@ describe('ski-status area details', () => {
         expect(table.getByRole('row', { name: 'First trail Trail Open (record stale)' })).toBeVisible();
         fireEvent.click(summary);
         await waitFor(() => expect(disclosure.querySelector('table')).toBeNull());
+    });
+
+    it('shows Mammoth snow, operator forecasts, and named terrain with their source and freshness', async () => {
+        const area = skiAreas.find(area => area.id === 'mammoth-mountain')!;
+        const report: ResortReport = {
+            areaId: area.id, status: 'limited', reportedAt: '2026-11-21T08:40:00-08:00', retrievedAt: '2026-11-21T16:42:00Z',
+            source: { name: 'Mammoth Mountain', url: 'https://www.mammothmountain.com/on-the-mountain/mountain-report#lifts-and-trails', exportable: false },
+            snowByLocation: [{ location: 'Base', snow24HoursCm: 0 }, { location: 'Summit', baseCm: [101.6, 106.68], snow48HoursCm: 27.94 }],
+            forecastDays: [
+                { date: '2026-11-21', highC: -5, lowC: -10, description: 'Clear' },
+                { date: '2026-11-22', highC: -3, lowC: -7, description: 'Snow' },
+            ],
+            terrain: { items: [{ id: 'main-run', name: 'Main Run', kind: 'trail', status: 'open', area: 'Main Lodge',
+                difficulty: 'Difficult', groomed: true, snowmaking: true }] },
+        };
+        const conditions = { reports: new Map([[area.id, report]]), forecasts: new Map(), now: Date.parse(report.retrievedAt) };
+        const props = { area, units: 'imperial', onClose: vi.fn() } as const;
+        const { rerender } = render(<SkiAreaDetails {...props} conditions={conditions} />);
+        const summary = within(screen.getByRole('region', { name: 'Conditions summary' }));
+        expect(screen.getByRole('link', { name: 'Official conditions' })).toHaveAttribute('href', report.source.url);
+        expect(summary.getByText(/Less than an hour old/)).toBeVisible();
+
+        fireEvent.click(summary.getByText('Snow by location'));
+        expect(summary.getByText('0 in')).toBeVisible();
+        const summit = within(summary.getByRole('heading', { name: 'Summit' }).closest('li')!);
+        expect(summit.getByText('40–42 in')).toBeVisible();
+        expect(summit.getByText('11 in')).toBeVisible();
+        expect(summit.queryByText('Past 24 hours')).not.toBeInTheDocument();
+
+        fireEvent.click(summary.getByText('Operator forecast'));
+        const forecast = within(summary.getByRole('table', { name: 'Daily forecast from Mammoth Mountain' }));
+        expect(forecast.getByRole('row', { name: /Nov 21/ })).toHaveTextContent('23 °F');
+        fireEvent.click(summary.getByText('Reported lifts and trails (1)'));
+        const terrain = within(await summary.findByRole('table', { name: 'Reported lift and trail status' }));
+        expect(terrain.getByRole('row', { name: /Main Run/ })).toHaveTextContent('Main Lodge · Difficult · Groomed · Snowmaking');
+
+        rerender(<SkiAreaDetails {...props} units="metric" conditions={{ ...conditions, now: Date.parse('2026-11-22T08:00:00Z') }} />);
+        expect(summary.getByText('Snow by location (stale)')).toBeVisible();
+        expect(summit.getByText('27.9 cm')).toBeVisible();
+        expect(forecast.queryByRole('row', { name: /Nov 21/ })).not.toBeInTheDocument();
+        expect(forecast.getByRole('row', { name: /Nov 22/ })).toHaveTextContent('-3 °C');
+
+        rerender(<SkiAreaDetails {...props} conditions={{ ...conditions, now: Date.parse('2026-11-23T12:00:00Z') }} />);
+        expect(summary.queryByText('Operator forecast')).not.toBeInTheDocument();
     });
 
     it('shows each source once and retains its pass label', () => {

@@ -981,6 +981,14 @@
       }
     }
   },
+  "fairmont-hot-springs": {
+    "snowfall": {
+      "label": "Indy Pass",
+      "source": "https://www.indyskipass.com/our-resorts/fairmont-hot-springs",
+      "location": "Fairmont Hot Springs Ski Area",
+      "annualCm": 254
+    }
+  },
   "fernie-alpine-resort": {
     "snowfall": {
       "label": "Fernie Alpine Resort",
@@ -1003,6 +1011,14 @@
         "11": 5.7,
         "12": 19.4
       }
+    }
+  },
+  "frost-fire-park": {
+    "snowfall": {
+      "label": "Indy Pass",
+      "source": "https://www.indyskipass.com/our-resorts/frost-fire-park",
+      "location": "Frost Fire Park",
+      "annualCm": 88.9
     }
   },
   "furano-ski-resort": {
@@ -2190,6 +2206,14 @@
         "11": 191.9,
         "12": 377.8
       }
+    }
+  },
+  "mt-eyak": {
+    "snowfall": {
+      "label": "Sheridan Alpine Association",
+      "source": "https://www.mteyak.org/",
+      "location": "Mt. Eyak Ski Area",
+      "annualCm": 889
     }
   },
   "mt-holiday": {

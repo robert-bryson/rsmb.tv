@@ -69,6 +69,7 @@ async function writeVersion(store: ConditionsStore, prefix: string, body: Buffer
 
 const reportFields: (keyof ResortReport)[] = [
     'status', 'lifts', 'trails', 'acres', 'baseCm', 'snowfallCm', 'temperature', 'nightOpen', 'opensOn', 'terrain',
+    'snowByLocation', 'forecastDays',
 ];
 
 export async function publishConditions<T extends PilotArea>(store: ConditionsStore, {
@@ -85,9 +86,10 @@ export async function publishConditions<T extends PilotArea>(store: ConditionsSt
     const previousReports = oldReports?.data.reports ?? [];
     const previousForecasts = oldForecasts?.data.forecasts ?? [];
     const retainedForecasts = previousForecasts.filter(row => areaIds.has(row.areaId));
+    const collectionStartedAt = now();
     const [reports, forecasts] = await Promise.all([
         updateRows(areas, previousReports, fetchReport, warn),
-        refreshForecasts || !retainedForecasts.length
+        refreshForecasts || !retainedForecasts.some(row => Date.parse(row.endsAt) > collectionStartedAt)
             ? updateRows(areas, retainedForecasts, fetchForecast, warn)
             : { rows: retainedForecasts, received: 0 },
     ]);

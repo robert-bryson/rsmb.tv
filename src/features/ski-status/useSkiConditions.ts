@@ -13,6 +13,7 @@ const reviewedReports = reportSnapshotSchema.parse(operatorReports).reports;
 export function useSkiConditions() {
     const [now, setNow] = useState(Date.now);
     const [feed, setFeed] = useState<ConditionsFeed>({});
+    const [reportsLoading, setReportsLoading] = useState(true);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -30,7 +31,10 @@ export function useSkiConditions() {
             } catch {
                 // Keep the most recent valid snapshots on provider and network failures.
             } finally {
-                if (!signal.aborted) refresh = setTimeout(() => { void load(); }, 5 * minute);
+                if (!signal.aborted) {
+                    setReportsLoading(false);
+                    refresh = setTimeout(() => { void load(); }, 5 * minute);
+                }
             }
         }
         void load();
@@ -56,5 +60,5 @@ export function useSkiConditions() {
         return latest;
     }, [reportData, now]);
     const forecasts = useMemo(() => new Map(forecastData.forecasts.map(forecast => [forecast.areaId, forecast])), [forecastData]);
-    return useMemo(() => ({ reports, forecasts, now }), [reports, forecasts, now]);
+    return useMemo(() => ({ reports, forecasts, now, reportsLoading }), [reports, forecasts, now, reportsLoading]);
 }

@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Locator, type Page, type Response } from '@playwright/test';
-import type { GeoJSONSource, Map as MapLibreMap, StyleSpecification } from 'maplibre-gl';
+import type { GeoJSONSource, Map as MapLibreMap, MapSourceDataEvent, StyleSpecification } from 'maplibre-gl';
 import locations from '../../projects/ski-status/data/locations.json' with { type: 'json' };
 import resortBases from '../../projects/ski-status/data/resort-bases.json' with { type: 'json' };
 import { SKI_TERRAIN_ROUTE, skiTerrainArchivePath, verifyRenderedSkiTerrain, verifySkiTerrainResponse } from '../../scripts/release-ski-terrain.ts';
@@ -65,6 +65,13 @@ function setFilter(page: Page, name: string, value: string | { label: string }) 
     return inDialog(page, 'Filters', dialog => dialog.getByLabel(name, { exact: true }).selectOption(value));
 }
 
+function addLocationFilter(page: Page, value: string | { label: string }, action: 'Include' | 'Exclude' = 'Include') {
+    return inDialog(page, 'Filters', async dialog => {
+        await dialog.getByLabel('Choose a location').selectOption(value);
+        await dialog.getByRole('button', { name: action, exact: true }).click();
+    });
+}
+
 function setPass(page: Page, name: string, checked = true) {
     return inDialog(page, 'Filters', dialog => dialog.getByRole('checkbox', { name, exact: true }).setChecked(checked));
 }
@@ -81,6 +88,7 @@ const results = (page: Page) => page.getByRole('region', { name: 'Ski area list'
 const comparison = (page: Page) => page.getByRole('region', { name: 'Ski area comparison table', exact: true });
 const resort = (page: Page, name: string) => page.getByRole('region', { name, exact: true });
 const result = (page: Page, name: string) => results(page).getByRole('button', { name, exact: true });
+const resultRow = (page: Page, name: string) => result(page, name).locator('..');
 const searchArea = (page: Page) => page.getByRole('button', { name: 'Search this area', exact: true });
 const selectView = (page: Page, name: 'Map' | 'Results' | 'Compare') => page.getByRole('button', { name, exact: true }).click();
 const mapCamera = (page: Page) => readSkiMapCamera(new URL(page.url()).searchParams.get('camera'));
@@ -166,6 +174,9 @@ test('opens the filtered results from the map on a phone', async ({ page }) => {
     await expect(page).toHaveURL(/pass=indy/);
     await expect(result(page, 'Whaleback Mountain')).toBeVisible();
     await expect(filters).toBeFocused();
+    await results(page).getByRole('combobox', { name: 'Sort results' }).selectOption('liftCount');
+    await expect(resultRow(page, 'Whaleback Mountain').locator('dd')).toHaveText('4');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 });
 
 test('shows a selectable share link when the browser cannot copy it', async ({ page }) => {
@@ -248,13 +259,13 @@ test('shows the union of selected passes in the map, results, and Compare', asyn
     await page.setViewportSize({ width: 1280, height: 800 });
     await prepare(page);
     const renderer = await captureMap(page);
-    await setFilter(page, 'Region', 'UT');
+    await addLocationFilter(page, 'region:US:UT');
     const passes = page.getByRole('group', { name: 'Pass filters' });
     await passes.getByRole('button', { name: 'Ikon', exact: true }).press('Space');
     await passes.getByRole('button', { name: 'Epic', exact: true }).press('Enter');
     await passes.getByRole('button', { name: 'Mountain Collective', exact: true }).click();
-    const alta = result(page, 'Alta Ski Area');
-    const parkCity = result(page, 'Park City Mountain');
+    const alta = resultRow(page, 'Alta Ski Area');
+    const parkCity = resultRow(page, 'Park City Mountain');
     await expect(alta.getByText('Ikon', { exact: true })).toBeVisible();
     await expect(alta.getByText('Mountain Collective', { exact: true })).toBeVisible();
     await expect(parkCity.getByText('Epic', { exact: true })).toBeVisible();
@@ -333,17 +344,18 @@ test('pages through the catalog with the keyboard without loading the map render
 
     const pages = page.getByRole('navigation', { name: 'Comparison pages' });
     const rows = comparison(page).locator('tbody tr');
+    const firstResort = rows.first().getByRole('rowheader').getByRole('button');
     await expect(rows).toHaveCount(50);
     await expect(pages.getByRole('status')).toHaveText(/^1–50 of \d+ areas$/);
     await expect(pages.getByRole('button', { name: 'Previous' })).toBeDisabled();
-    const first = await rows.first().getByRole('button').innerText();
+    const first = await firstResort.innerText();
 
     const next = pages.getByRole('button', { name: 'Next' });
     await next.focus();
     await page.keyboard.press('Enter');
     await expect(next).toBeFocused();
     await expect(pages.getByRole('status')).toHaveText(/^51–100 of \d+ areas$/);
-    await expect(rows.first().getByRole('button')).not.toHaveText(first);
+    await expect(firstResort).not.toHaveText(first);
     await comparison(page).getByRole('button', { name: 'Vertical', exact: true }).click();
     await expect(pages.getByRole('status')).toHaveText(/^1–50 of \d+ areas$/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
@@ -399,7 +411,24 @@ test('finds current ski operations, shows reported terrain by name, and expires 
     await page.clock.setFixedTime(new Date('2026-11-21T08:00:00Z'));
     await page.reload();
     await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
-    await expect(page.getByText(`0 of ${locations.locations.length} areas have current reports`)).toBeVisible();
+    await expect(page.getByText(`0 of ${locations.locations.length} areas have current operating reports`)).toBeVisible();
+});
+
+test('explains the empty Ski today view when current reports are unavailable', async ({ page }) => {
+    await prepare(page);
+    await page.clock.setFixedTime(new Date('2026-11-22T18:00:00Z'));
+    let finishRequest!: () => void;
+    const requestReady = new Promise<void>(resolve => { finishRequest = resolve; });
+    await page.route('https://data.rsmb.tv/ski-status/manifest.json', async route => {
+        await requestReady;
+        await route.fulfill({ status: 403, headers: { 'access-control-allow-origin': '*' } });
+    });
+    await page.goto(`${path}?view=table&status=today&q=lake+louise`);
+    await expect(page.getByText('Checking today’s resort reports…', { exact: true })).toBeVisible();
+    finishRequest();
+    await expect(page.getByText('No current operating reports are available for this search.', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Show all statuses', exact: true }).click();
+    await expect(comparison(page).getByRole('button', { name: 'Lake Louise Ski Resort', exact: true })).toBeVisible();
 });
 
 test('uses a fresh daily feed for named terrain and shows when the resort measured temperature', async ({ page }) => {
@@ -506,6 +535,17 @@ test('plots vertical snow bars and exposes monthly values on a phone', async ({ 
     expect(violations).toEqual([]);
 });
 
+test('opens the Hunter ski resort links from its details panel', async ({ page }) => {
+    await prepare(page);
+    await page.goto(`${path}?area=hunter-mountain&status=all`);
+    const links = resort(page, 'Hunter Mountain').getByRole('group', { name: 'Resort links' });
+    const maps = links.getByRole('link', { name: 'Google Maps', exact: true });
+    await expect(maps).toHaveAttribute('href',
+        'https://www.google.com/maps/search/?api=1&query=Hunter+Mountain+Resort%2C+64+Klein+Ave%2C+Hunter%2C+NY+12442');
+    await expect(links.getByRole('link', { name: 'Wikipedia', exact: true }))
+        .toHaveAttribute('href', 'https://en.wikipedia.org/wiki/Hunter_Mountain_(ski_area)');
+});
+
 test('opens the Sunshine gondola base and shows sourced season dates, snow, and resort links', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await prepare(page);
@@ -582,7 +622,7 @@ test('ages a verified report without resetting the camera when local-date result
     await query.press('Enter');
     await setFilter(page, 'Pass product', 'ikon-base');
     await setColor(page, 'operatingStatus');
-    await expect(result(page, 'Snowbird')).toContainText('Limited today');
+    await expect(resultRow(page, 'Snowbird')).toContainText('Limited today');
     const color = () => renderer.evaluate(async map => {
         const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
         return data?.type === 'FeatureCollection' && data.features.find(feature => feature.id === 'snowbird')?.properties?.color;
@@ -595,23 +635,23 @@ test('ages a verified report without resetting the camera when local-date result
     });
 
     await page.clock.fastForward(60_001);
-    await expect(result(page, 'Snowbird')).toContainText('Stale report');
+    await expect(resultRow(page, 'Snowbird')).toContainText('Stale report');
     await expect.poll(color).toBe('#abb9c6');
     expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
     await renderer.dispose();
 });
 
-test('opens on the phone globe with current reports, clusters, and a usable resort panel', async ({ page }) => {
+test('opens on the phone globe with individual status markers and a usable resort panel', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await prepare(page);
     await page.clock.setFixedTime(new Date('2026-11-20T18:00:00Z'));
     const renderer = await captureMap(page, { today: true });
     expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
     await expect(page.getByText('5 reporting skiing today', { exact: true })).toBeVisible();
-    await expect(page.getByText(`6 of ${locations.locations.length} areas have current reports`)).toBeVisible();
+    await expect(page.getByText(`6 of ${locations.locations.length} areas have current operating reports`)).toBeVisible();
     await expect(results(page)).toBeHidden();
-    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-cluster-counts'] })
-        .map(feature => feature.properties.skiingCount).some(count => count > 1))).toBe(true);
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-status'] })
+        .map(feature => feature.properties.areaId))).toContain('lake-louise');
     const skipMap = page.getByRole('link', { name: 'Skip to map', exact: true });
     await skipMap.focus();
     await skipMap.press('Enter');
@@ -620,8 +660,8 @@ test('opens on the phone globe with current reports, clusters, and a usable reso
     await expect(searchArea(page)).toBeFocused();
     await selectView(page, 'Results');
     const lakeLouise = result(page, 'Lake Louise Ski Resort');
-    await expect(lakeLouise).toContainText('Limited today');
-    await expect(lakeLouise).toContainText('4 lifts open');
+    await expect(resultRow(page, 'Lake Louise Ski Resort')).toContainText('Limited today');
+    await expect(resultRow(page, 'Lake Louise Ski Resort')).toContainText('4 lifts open');
     await lakeLouise.press('Enter');
     const details = resort(page, 'Lake Louise Ski Resort');
     await expect(details).toBeFocused();
@@ -660,10 +700,8 @@ test('fits filtered Ikon resorts in New Zealand from the phone globe', async ({ 
     await page.setViewportSize({ width: 320, height: 780 });
     await prepare(page);
     const renderer = await captureMap(page);
-    await inDialog(page, 'Filters', async dialog => {
-        await dialog.getByLabel('Region', { exact: true }).selectOption({ label: 'New Zealand' });
-        await dialog.getByRole('checkbox', { name: 'Ikon', exact: true }).check();
-    });
+    await addLocationFilter(page, { label: 'New Zealand' });
+    await setPass(page, 'Ikon');
     await setColor(page, 'pass');
     const membership = () => renderer.evaluate(async map => {
         const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
@@ -753,7 +791,7 @@ test('loads and removes a skiing-type chip in the phone comparison', async ({ pa
 test('keeps separate Epic points and resort cards for Hakuba Valley resorts', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    await setFilter(page, 'Region', { label: 'Japan' });
+    await addLocationFilter(page, { label: 'Japan' });
     await setPass(page, 'Epic');
     await page.getByRole('searchbox', { name: 'Search areas' }).fill('Hakuba Valley');
     await setColor(page, 'pass');
@@ -771,7 +809,7 @@ test('keeps separate Epic points and resort cards for Hakuba Valley resorts', as
 test('filters worldwide Indy memberships and discounts on the map and in results', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    await setFilter(page, 'Region', { label: 'Finland' });
+    await addLocationFilter(page, { label: 'Finland' });
     await setPass(page, 'Indy');
     await setColor(page, 'pass');
     await expect(results(page).locator('li')).toHaveCount(3);
@@ -779,7 +817,7 @@ test('filters worldwide Indy memberships and discounts on the map and in results
         const data = await map.getSource<GeoJSONSource>('ski-areas')!.getData();
         return data.type === 'FeatureCollection' ? data.features.filter(point => point.properties?.passBadge === 'indy').map(point => point.id).sort() : [];
     })).toEqual(['levi-ski-resort', 'pyha-ski-resort', 'ruka-ski-resort']);
-    await setFilter(page, 'Region', '');
+    await page.getByRole('button', { name: 'Remove Include Finland', exact: true }).click();
     await inDialog(page, 'Filters', async dialog => {
         await dialog.getByRole('checkbox', { name: 'Indy', exact: true }).uncheck();
         await dialog.getByRole('checkbox', { name: 'Indy discounts', exact: true }).check();
@@ -804,15 +842,107 @@ test('shows a single shared destination for either country', async ({ page }) =>
     await page.getByRole('searchbox', { name: 'Search areas' }).fill('Portes du Soleil');
     await setPass(page, 'Indy');
     for (const country of ['France', 'Switzerland']) {
-        await setFilter(page, 'Region', { label: country });
+        await addLocationFilter(page, { label: country });
         await expect(results(page).locator('li')).toHaveCount(1);
-        await expect(result(page, 'Portes du Soleil')).toContainText('France / Switzerland');
+        await expect(resultRow(page, 'Portes du Soleil')).toContainText('France / Switzerland');
         await expect.poll(() => renderer.evaluate(async map => {
             const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
             return data?.type === 'FeatureCollection' ? data.features.map(feature => feature.id) : [];
         })).toEqual(['portes-du-soleil']);
+        await page.getByRole('button', { name: `Remove Include ${country}`, exact: true }).click();
     }
     await renderer.dispose();
+});
+
+test('combines geographic filters and remembers exclusions on a fresh visit', async ({ page }) => {
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await addLocationFilter(page, { label: 'Europe' }, 'Exclude');
+    const markerIds = () => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+        return data?.type === 'FeatureCollection' ? data.features.map(feature => feature.id) : [];
+    });
+    await expect.poll(markerIds).toContain('hakuba-happo-one');
+    await expect.poll(markerIds).not.toContain('portes-du-soleil');
+    await addLocationFilter(page, { label: 'California' });
+    await expect.poll(markerIds).toContain('mammoth-mountain');
+    await expect.poll(markerIds).not.toContain('banff-sunshine');
+    await addLocationFilter(page, { label: 'Japan' });
+    await expect.poll(markerIds).toEqual(expect.arrayContaining(['mammoth-mountain', 'hakuba-happo-one']));
+    expect(new URL(page.url()).searchParams.getAll('region')).toEqual(['region:US:CA', 'country:JP']);
+    await page.getByRole('button', { name: 'Remove Include California', exact: true }).click();
+    await expect.poll(markerIds).not.toContain('mammoth-mountain');
+    await expect.poll(markerIds).toContain('hakuba-happo-one');
+    await renderer.dispose();
+
+    const europe = `${path}?status=all&view=table&q=portes+du+soleil`;
+    await page.goto(`${europe}&area=portes-du-soleil`);
+    await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Remove Exclude Europe', exact: true })).toBeVisible();
+    await expect(resort(page, 'Portes du Soleil')).toHaveCount(0);
+    await page.goto(`${europe}&excludeRegion=`);
+    await expect(comparison(page).getByRole('button', { name: 'Portes du Soleil', exact: true })).toBeVisible();
+    await page.goto(europe);
+    await inDialog(page, 'Filters', dialog => dialog.getByRole('button', { name: 'Remove Exclude Europe', exact: true }).click());
+    await page.goto(europe);
+    await expect(comparison(page).getByRole('button', { name: 'Portes du Soleil', exact: true })).toBeVisible();
+    await addLocationFilter(page, { label: 'Europe' }, 'Exclude');
+    await addLocationFilter(page, { label: 'Europe' });
+    await expect(page.getByRole('button', { name: 'Remove Exclude Europe', exact: true })).toHaveCount(0);
+    await expect(comparison(page).getByRole('button', { name: 'Portes du Soleil', exact: true })).toBeVisible();
+});
+
+test('zooms from results and details to the selected province or country', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const search = page.getByRole('searchbox', { name: 'Search areas' });
+    await search.fill('Banff Sunshine');
+    await search.press('Enter');
+    const row = resultRow(page, 'Banff Sunshine Village');
+    await expect(row).toContainText('Banff, AB, Canada');
+    const alberta = row.getByRole('button', { name: 'Zoom to Alberta (AB)', exact: true });
+    await alberta.press('Enter');
+    await expect.poll(() => mapCamera(page)?.center[0]).toBeCloseTo(-115, 0);
+    await expect.poll(() => mapCamera(page)?.zoom ?? 0).toBeGreaterThan(4);
+    await expect(page).not.toHaveURL(/[?&](area|region|mapArea)=/);
+    await expect(result(page, 'Banff Sunshine Village')).toBeVisible();
+
+    await result(page, 'Banff Sunshine Village').click();
+    const details = resort(page, 'Banff Sunshine Village');
+    await expect(details).toContainText('Banff, AB, Canada');
+    await details.getByRole('button', { name: 'Zoom to Canada', exact: true }).click();
+    await expect.poll(() => mapCamera(page)?.center[0]).toBeCloseTo(-96.8, 0);
+    await expect(details).toBeVisible();
+    await expect(page).toHaveURL(/[?&]area=banff-sunshine/);
+    await renderer.dispose();
+});
+
+test('opens a phone map at the country selected in Compare', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await prepare(page);
+    await page.goto(`${path}?view=table&status=all&q=hakuba+happo&region=country%3AJP`);
+    const table = comparison(page);
+    await expect(table.getByRole('cell', { name: /Hakuba, Japan|Hakuba, Zoom to Japan/ })).toBeVisible();
+    await table.getByRole('button', { name: 'Zoom to Japan', exact: true }).press('Enter');
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    await expect.poll(() => mapCamera(page)?.center[0]).toBeCloseTo(134.75, 0);
+    const params = new URL(page.url()).searchParams;
+    expect(params.get('view')).toBe('map');
+    expect(params.get('region')).toBe('country:JP');
+    expect(params.has('area')).toBe(false);
+    await expect(page.getByTestId('ski-status-map').locator('canvas')).toBeFocused();
+    await inDialog(page, 'Filters', async dialog => {
+        const chooser = dialog.getByLabel('Choose a location');
+        const exclude = dialog.getByRole('button', { name: 'Exclude', exact: true });
+        await expect(chooser).toBeInViewport({ ratio: 1 });
+        await chooser.selectOption({ label: 'Europe' });
+        await exclude.press('Enter');
+        await expect(chooser).toBeFocused();
+        const { violations } = await new AxeBuilder({ page }).include('.ski-location-fields')
+            .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+        expect(violations).toEqual([]);
+    });
 });
 
 test('changes results only when someone searches the new area and restores each view from history', async ({ page }) => {
@@ -860,6 +990,7 @@ test('shares the visible map without changing the searched area', async ({ page 
     await page.addInitScript(() => { Object.defineProperty(navigator, 'share', { value: undefined }); });
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
     const renderer = await captureMap(page);
+    await addLocationFilter(page, { label: 'Europe' }, 'Exclude');
     await renderer.evaluate(map => { map.jumpTo({ center: [-111.64, 40.6], zoom: 10 }); });
     await searchArea(page).click();
     await expect(result(page, 'Alta Ski Area')).toBeVisible();
@@ -872,6 +1003,7 @@ test('shares the visible map without changing the searched area', async ({ page 
     await expect(page.getByText('Link copied', { exact: true })).toBeAttached();
     const sharedUrl = new URL(await page.evaluate(() => navigator.clipboard.readText()));
     expect(sharedUrl.searchParams.get('view')).toBe('map');
+    expect(sharedUrl.searchParams.getAll('excludeRegion')).toEqual(['continent:Europe']);
     expect(sharedUrl.searchParams.get('mapArea')).toBe(area);
     expect(readSkiMapCamera(sharedUrl.searchParams.get('camera'))).toEqual(mapCamera(page));
 
@@ -937,7 +1069,7 @@ test('fits changes made in the phone table after the real map viewport returns',
     await selectView(page, 'Compare');
     await expect(page.getByTestId('ski-status-map')).toBeHidden();
     await renderer.evaluate(map => { map.resize(); });
-    await setFilter(page, 'Region', 'BC');
+    await addLocationFilter(page, 'region:CA:BC');
     await page.getByRole('button', { name: 'Map', exact: true }).click();
     const edges = ['mount-washington-alpine-resort', 'fernie-alpine-resort'].map(resortPoint);
     await expect.poll(() => renderer.evaluate((map, points) => {
@@ -954,7 +1086,7 @@ test('centers the resort selected while the background style is being retried', 
     await prepare(page, null);
     const renderer = await captureMap(page, { state: 'degraded' });
     expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
-    await setFilter(page, 'Region', 'WA');
+    await addLocationFilter(page, 'region:US:WA');
     let release = () => {};
     const waiting = new Promise<void>(resolve => { release = resolve; });
     let requested = false;
@@ -966,7 +1098,8 @@ test('centers the resort selected while the background style is being retried', 
     try {
         await page.getByRole('button', { name: 'Retry background' }).click();
         await expect.poll(() => requested).toBe(true);
-        await setFilter(page, 'Region', 'UT');
+        await page.getByRole('button', { name: 'Remove Include Washington', exact: true }).click();
+        await addLocationFilter(page, 'region:US:UT');
         await page.getByRole('button', { name: 'Alta Ski Area', exact: true }).click();
         await expect(page.getByRole('heading', { name: 'Alta Ski Area', exact: true })).toBeVisible();
     } finally {
@@ -994,6 +1127,102 @@ async function findWhaleback(page: Page, renderer: Awaited<ReturnType<typeof cap
         return { x, y };
     }, coordinates);
 }
+
+test('opens runs and lifts from a marker double-click and returns to the previous camera', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const renderer = await captureMap(page);
+    const search = page.getByRole('searchbox', { name: 'Search areas' });
+    await search.fill('Banff Sunshine');
+    await search.press('Enter');
+    await expect(result(page, 'Banff Sunshine Village')).toBeVisible();
+    await setLayer(page, 'Ski terrain', false);
+    const base = resortPoint('banff-sunshine');
+    await renderer.evaluate((map, [lng, lat]) => {
+        map.jumpTo({ center: [lng + 0.08, lat - 0.02], zoom: 7.75, bearing: -12, pitch: 20 });
+    }, base);
+    await expect.poll(() => mapCamera(page)).toMatchObject({ zoom: 7.75, bearing: -12, pitch: 20 });
+    await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
+    const before = mapCamera(page)!;
+    const position = await renderer.evaluate((map, point) => {
+        const { x, y } = map.project(point);
+        return { x, y };
+    }, base);
+    const canvas = page.getByTestId('ski-status-map').locator('canvas');
+    const previous = page.getByRole('button', { name: 'Previous view', exact: true });
+    const details = resort(page, 'Banff Sunshine Village');
+    await expect(previous).toHaveCount(0);
+
+    const repeated = await renderer.evaluateHandle(map => {
+        const state = { clicked: false };
+        const ease = map.easeTo.bind(map);
+        // Give the test time to repeat the request while the actual map animation is running.
+        map.easeTo = (options, data) => ease(options.zoom === 13 ? { ...options, duration: 700 } : options, data);
+        const repeat = () => {
+            if (map.getZoom() <= 10 || map.getZoom() >= 13) return;
+            const button = Array.from(document.querySelectorAll<HTMLButtonElement>('#ski-area-details button'))
+                .find(button => button.textContent === 'Show runs and lifts');
+            if (!button) return;
+            map.off('move', repeat);
+            state.clicked = true;
+            button.click();
+        };
+        map.on('move', repeat);
+        return state;
+    });
+    await canvas.dblclick({ position, delay: 75 });
+    await expect.poll(() => mapCamera(page)).toMatchObject({ center: terrainPoint('banff-sunshine'), zoom: 13 });
+    expect(await repeated.evaluate(state => state.clicked)).toBe(true);
+    await repeated.dispose();
+    await expect(details).toBeVisible();
+    await expect(page).not.toHaveURL(/skiTerrain=0/);
+    await expect(previous).toBeVisible();
+    await details.getByRole('button', { name: 'Show runs and lifts' }).click();
+    await previous.press('Enter');
+    await expect.poll(() => mapCamera(page)).toEqual(before);
+    await expect(previous).toHaveCount(0);
+    await expect(canvas).toBeFocused();
+    await expect(details).toBeVisible();
+    await expect(search).toHaveValue('Banff Sunshine');
+
+    const emptyPosition = { x: 24, y: (await canvas.boundingBox())!.height / 2 };
+    await canvas.dblclick({ position: emptyPosition });
+    await expect.poll(() => mapCamera(page)?.zoom).toBeCloseTo(before.zoom + 1, 1);
+    await expect(previous).toHaveCount(0);
+    await renderer.dispose();
+});
+
+test('accepts both clicks on a narrow map before the resort details dock', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await findWhaleback(page, renderer);
+    const center = resortPoint('whaleback');
+    await renderer.evaluate((map, center) => {
+        map.jumpTo({ center, zoom: 8 });
+        map.panBy([0, -Math.round(map.getContainer().clientHeight * 0.2)], { duration: 0 });
+    }, center);
+    await expect.poll(() => mapCamera(page)?.zoom).toBeCloseTo(8, 1);
+    await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
+    const before = mapCamera(page);
+    const position = await renderer.evaluate((map, point) => {
+        const { x, y } = map.project(point);
+        return { x, y };
+    }, center);
+    const canvas = page.getByTestId('ski-status-map').locator('canvas');
+    expect(position.y).toBeGreaterThan((await canvas.boundingBox())!.height * 0.65);
+
+    await canvas.dblclick({ position, delay: 100 });
+    await expect.poll(() => mapCamera(page)).toMatchObject({ center: terrainPoint('whaleback'), zoom: 13 });
+    await expect(resort(page, 'Whaleback Mountain')).toBeVisible();
+    const previous = page.getByRole('button', { name: 'Previous view', exact: true });
+    await expect(previous).toBeInViewport({ ratio: 1 });
+    await previous.click();
+    await expect.poll(() => mapCamera(page)).toEqual(before);
+    await expect(resort(page, 'Whaleback Mountain')).toBeVisible();
+    await renderer.dispose();
+});
 
 test('recenters a result after tapping its selected marker and panning away', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -1025,15 +1254,18 @@ test('previews a resort on hover and opens one docked details panel', async ({ p
     const canvas = page.getByTestId('ski-status-map').locator('canvas');
     const background = { x: 24, y: (await canvas.boundingBox())!.height / 2 };
     const details = resort(page, 'Whaleback Mountain');
+    const preview = page.getByRole('group', { name: 'Whaleback Mountain map preview' });
     await canvas.hover({ position });
-    await expect(page.getByRole('tooltip')).toContainText('Enfield, NH');
+    await expect(preview).toContainText('Enfield, NH, United States');
+    await preview.getByRole('button', { name: 'Zoom to New Hampshire (NH)' }).hover();
+    await expect(preview.getByRole('button', { name: 'Zoom to United States' })).toBeVisible();
     await expect(details).toHaveCount(0);
     await canvas.hover({ position: background });
-    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await expect(preview).toHaveCount(0);
     await canvas.click({ position });
     await expect(details).toBeFocused();
     await expect(details.getByText('86 ac', { exact: true })).toBeVisible();
-    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await expect(preview).toHaveCount(0);
     await renderer.evaluate(map => { map.panBy([40, 20], { duration: 0 }); });
     await expect(details).toBeVisible();
     const camera = await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }));
@@ -1046,6 +1278,12 @@ test('previews a resort on hover and opens one docked details panel', async ({ p
     await canvas.press('Escape');
     await expect(details).toHaveCount(0);
     await expect(canvas).toBeFocused();
+    const currentPoint = await findWhaleback(page, renderer);
+    await canvas.hover({ position: currentPoint });
+    await preview.getByRole('button', { name: 'Zoom to New Hampshire (NH)', exact: true }).click();
+    await expect.poll(() => mapCamera(page)?.center[0]).toBeCloseTo(-71.6, 0);
+    await expect.poll(() => mapCamera(page)?.zoom ?? 0).toBeLessThan(8);
+    await expect(details).toHaveCount(0);
     await renderer.dispose();
 });
 
@@ -1086,7 +1324,7 @@ test.describe('ski-status on touch screens', () => {
 test('selects the closest ski area where two markers overlap', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
-    await setFilter(page, 'Region', 'UT');
+    await addLocationFilter(page, 'region:US:UT');
     await page.getByRole('button', { name: 'Alta Ski Area', exact: true }).click();
     const altaDetails = page.getByRole('region', { name: 'Alta Ski Area', exact: true });
     await expect(altaDetails).toBeVisible();
@@ -1107,17 +1345,27 @@ test('selects the closest ski area where two markers overlap', async ({ page }) 
     await renderer.dispose();
 });
 
-test('draws one point per resort and changes its color without moving the camera', async ({ page }) => {
+test('draws individual resort icons and changes the marker mode without moving the camera', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
+    await inDialog(page, 'Layers', async dialog => {
+        await expect(dialog.getByRole('option', { name: 'Resort icons', exact: true })).toHaveJSProperty('selected', true);
+    });
+    await renderer.evaluate(map => { map.jumpTo({ center: [-100, 44], zoom: 1.5 }); });
+    const resortIcons = () => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-icons'] })
+        .map(feature => feature.properties.areaId));
+    await expect.poll(resortIcons).toEqual(expect.arrayContaining(['alta', 'snowbird', 'beaver-mountain']));
+    await expect.poll(() => renderer.evaluate(map => map.hasImage('ski-area-mountain') && map.hasImage('ski-resort-image-alta')
+        && map.hasImage('ski-resort-image-heavenly'))).toBe(true);
     const start = await renderer.evaluate(map => {
         const source = map.getSource<GeoJSONSource>('ski-areas')!.serialize();
         if (typeof source.data === 'string' || source.data.type !== 'FeatureCollection') throw new Error('Missing resort points');
         return { count: source.data.features.length, clustered: Boolean(source.cluster), center: map.getCenter().toArray(), zoom: map.getZoom() };
     });
     expect(start.count).toBe(locations.locations.length);
-    expect(start.clustered).toBe(true);
+    expect(start.clustered).toBe(false);
     await setColor(page, 'pass');
+    await expect.poll(resortIcons).toHaveLength(0);
     await inDialog(page, 'Layers', dialog => expect(dialog.getByRole('list', { name: 'Resort map key' })).toContainText('Multiple passes'));
     await expect.poll(() => renderer.evaluate(map => {
         const data = map.getSource<GeoJSONSource>('ski-areas')!.serialize().data;
@@ -1129,7 +1377,7 @@ test('draws one point per resort and changes its color without moving the camera
     await renderer.dispose();
 });
 
-test('groups resorts on the globe and shows individual pass badges from continent zoom', async ({ page }) => {
+test('draws overlapping pass badges on the globe and highlights a selected resort', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
     await setColor(page, 'pass');
@@ -1140,17 +1388,18 @@ test('groups resorts on the globe and shows individual pass badges from continen
             image instanceof HTMLImageElement && image.naturalWidth >= 32 && new URL(image.src).origin === location.origin))).toBe(true);
     });
     await expect.poll(() => renderer.evaluate(map => map.hasImage('ski-status-pass-badge-ikon-plus'))).toBe(true);
-    const counts = () => renderer.evaluate(map => ({
-        clusters: map.queryRenderedFeatures({ layers: ['ski-area-clusters', 'ski-area-cluster-counts'] }).length,
-        badges: new Set(map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] }).map(feature => feature.properties.areaId)).size,
-    }));
+    const badgeIds = () => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] })
+        .map(feature => feature.properties.areaId));
     await renderer.evaluate(map => { map.jumpTo({ center: [-100, 44], zoom: 1.5 }); });
-    await expect.poll(async () => (await counts()).clusters).toBeGreaterThan(0);
+    await expect.poll(badgeIds).toEqual(expect.arrayContaining(['alta', 'snowbird']));
+    const separation = await renderer.evaluate((map, [first, second]) => {
+        const a = map.project(first);
+        const b = map.project(second);
+        return Math.hypot(a.x - b.x, a.y - b.y);
+    }, [resortPoint('alta'), resortPoint('snowbird')]);
+    expect(separation).toBeLessThan(4);
     await renderer.evaluate(map => { map.jumpTo({ zoom: 3 }); });
-    await expect.poll(async () => {
-        const { clusters, badges } = await counts();
-        return clusters === 0 && badges > 10;
-    }).toBe(true);
+    await expect.poll(badgeIds).toEqual(expect.arrayContaining(['alta', 'snowbird']));
     await page.getByRole('searchbox', { name: 'Search areas' }).fill('Alta Ski Area');
     await result(page, 'Alta Ski Area').click();
     await expect(resort(page, 'Alta Ski Area').getByRole('link', { name: 'Ikon', exact: true }).locator('img')).toBeVisible();
@@ -1162,59 +1411,55 @@ test('groups resorts on the globe and shows individual pass badges from continen
     await renderer.dispose();
 });
 
-for (const action of ['change the resort filter', 'move the map']) {
-    test(`discards an old cluster expansion when users ${action}`, async ({ page }) => {
-        await prepare(page);
-        const renderer = await captureMap(page);
-        await renderer.evaluate(map => { map.jumpTo({ center: [-106, 42], zoom: 1.5 }); });
-        await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
-        const expansion = await renderer.evaluateHandle(map => {
-            const layer = 'ski-area-clusters';
-            const cluster = map.queryRenderedFeatures({ layers: [layer] }).find(feature => {
-                if (feature.geometry.type !== 'Point') return false;
-                const [lng, lat] = feature.geometry.coordinates;
-                const point = map.project([lng, lat]);
-                return map.queryRenderedFeatures(point, { layers: [layer] }).length > 0
-                    && map.queryRenderedFeatures(point, { layers: ['ski-area-points'] }).length === 0;
-            });
-            if (!cluster || cluster.geometry.type !== 'Point') throw Error('No visible resort cluster');
+test('selects a small mountain icon on the globe without changing the zoom', async ({ page }) => {
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const id = 'bosques-de-monterreal';
+    const center = resortPoint(id);
+    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 1.5 }); }, center);
+    await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
+    const hits = (offset: number) => renderer.evaluate((map, { center, offset }) => {
+        const point = map.project(center);
+        return map.queryRenderedFeatures([point.x + offset, point.y], { layers: ['ski-area-icons'] })
+            .map(feature => feature.properties.areaId);
+    }, { center, offset });
+    await expect.poll(() => hits(0)).toContain(id);
+    expect(await hits(4)).not.toContain(id);
+    const point = await renderer.evaluate((map, center) => map.project(center), center);
+    await page.locator('.maplibregl-canvas').click({ position: { x: point.x, y: point.y } });
+    await expect(resort(page, 'Bosques de Monterreal')).toBeVisible();
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-selected-icon'] })
+        .map(feature => feature.properties.areaId))).toContain(id);
+    expect(await renderer.evaluate(map => map.getZoom())).toBe(1.5);
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 9 }); });
+    await expect.poll(() => hits(4)).toContain(id);
+    await renderer.dispose();
+});
 
-            const source = map.getSource<GeoJSONSource>('ski-areas')!;
-            const original = source.getClusterExpansionZoom;
-            let resolveZoom: (zoom: number) => void;
-            const zoom = new Promise<number>(resolve => { resolveZoom = resolve; });
-            let requested = false;
-            source.getClusterExpansionZoom = () => {
-                requested = true;
-                return zoom;
-            };
-            const [lng, lat] = cluster.geometry.coordinates;
-            const point = map.project([lng, lat]);
-            map.fire('click', { point, lngLat: map.unproject(point), originalEvent: new MouseEvent('click') });
-            return {
-                requested,
-                finish() {
-                    source.getClusterExpansionZoom = original;
-                    resolveZoom(5);
-                },
-            };
-        });
-        expect(await expansion.evaluate(value => value.requested)).toBe(true);
-        if (action === 'change the resort filter') await setFilter(page, 'Region', { label: 'Japan' });
-        else await renderer.evaluate(map => { map.jumpTo({ center: [136, 38], zoom: 3 }); });
-
-        await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
-        const camera = () => renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }));
-        const settled = await camera();
-        await expansion.evaluate(async value => {
-            value.finish();
-            await new Promise(requestAnimationFrame);
-        });
-        expect(await camera()).toEqual(settled);
-        await expansion.dispose();
-        await renderer.dispose();
+test('shows a mountain when a resort icon fails and restores the icons after a background retry', async ({ page }) => {
+    await prepare(page, null);
+    let failedImage = false;
+    await page.route(/\/resort-icons\/whaleback\.png(?:\?|$)/, route => {
+        if (route.request().resourceType() !== 'image') return route.fallback();
+        failedImage = true;
+        return route.abort();
     });
-}
+    const renderer = await captureMap(page, { state: 'degraded' });
+    await findWhaleback(page, renderer);
+    const icons = () => renderer.evaluate(map => ({
+        mountain: map.hasImage('ski-area-mountain'),
+        available: map.hasImage('ski-resort-image-heavenly'),
+        missing: map.hasImage('ski-resort-image-whaleback'),
+        whaleback: map.queryRenderedFeatures({ layers: ['ski-area-icons'] }).some(feature => feature.properties.areaId === 'whaleback'),
+    }));
+    await expect.poll(icons).toEqual({ mountain: true, available: true, missing: false, whaleback: true });
+    expect(failedImage).toBe(true);
+    await page.route(styleUrl, route => route.fulfill({ json: baseStyle, headers: { 'access-control-allow-origin': '*' } }));
+    await page.getByRole('button', { name: 'Retry background', exact: true }).click();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    await expect.poll(icons).toEqual({ mountain: true, available: true, missing: false, whaleback: true });
+    await renderer.dispose();
+});
 
 test('keeps a fallback dot if a pass image fails and restores other badges after a background retry', async ({ page }) => {
     await prepare(page, null);
@@ -1242,7 +1487,7 @@ test('opens a full-width comparison and preserves the map, sort, filters, and se
     await prepare(page);
     const renderer = await captureMap(page);
     const map = page.getByRole('region', { name: 'Map of ski areas' });
-    await setFilter(page, 'Region', 'UT');
+    await addLocationFilter(page, 'region:US:UT');
     await results(page).getByRole('combobox', { name: 'Sort results' }).selectOption('verticalFt');
     await result(page, 'Alta Ski Area').click();
     await expect(resort(page, 'Alta Ski Area')).toBeVisible();
@@ -1258,7 +1503,7 @@ test('opens a full-width comparison and preserves the map, sort, filters, and se
     await expect(map).toBeVisible();
     expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
     expect(await renderer.evaluate(map => map.getContainer() === document.querySelector('[data-testid="ski-status-map"]'))).toBe(true);
-    expect(Object.fromEntries(new URL(page.url()).searchParams)).toMatchObject({ area: 'alta', region: 'UT', sort: 'verticalFt:desc', view: 'map' });
+    expect(Object.fromEntries(new URL(page.url()).searchParams)).toMatchObject({ area: 'alta', region: 'region:US:UT', sort: 'verticalFt:desc', view: 'map' });
     await renderer.evaluate(map => { map.jumpTo({ center: [-106, 40], zoom: 8 }); });
     await expect.poll(() => mapCamera(page)?.zoom).toBe(8);
     await page.goBack();
@@ -1271,7 +1516,7 @@ test('opens a full-width comparison and preserves the map, sort, filters, and se
     await renderer.dispose();
 });
 
-test('shows the map metric and status in results and carries sorting into Compare', async ({ page }) => {
+test('shows the sorted field with the map metric and carries sorting into Compare', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
     await page.goto(`${path}?view=map&region=UT&sort=acres%3Adesc`);
@@ -1280,12 +1525,18 @@ test('shows the map metric and status in results and carries sorting into Compar
     await setColor(page, 'summitFt');
     await expect(page.getByRole('button', { name: 'Layers', exact: true })).toHaveAccessibleDescription('Custom map layers');
     await expect(list.locator('li').first()).toContainText('Park City Mountain');
+    await expect(list.locator('li').first().locator('dt')).toHaveText('Skiable area');
     await expect(list.locator('li').first()).toContainText('Summit elevation · 10,026 ft');
     await expect(list.locator('li').first()).toContainText('No report');
     await expect(page).toHaveURL(/sort=acres%3Adesc/);
     await page.reload();
+    await list.getByRole('combobox', { name: 'Sort results' }).selectOption('liftCount');
+    await expect(list.locator('li').first()).toContainText('Park City Mountain');
+    await expect(list.locator('li').first().locator('dd')).toHaveText('41');
     await list.getByRole('combobox', { name: 'Sort results' }).selectOption('summitFt');
     await expect(list.locator('li').first()).toContainText('Alta Ski Area');
+    await expect(list.locator('li').first().locator('dd')).toHaveText('11,068 ft');
+    await expect(list.getByText(/^Summit elevation ·/)).toHaveCount(0);
     await expect(page).toHaveURL(/sort=summitFt%3Adesc/);
     await selectView(page, 'Compare');
     await expect(comparison(page).getByRole('columnheader', { name: 'Summit', exact: true })).toHaveAttribute('aria-sort', 'descending');
@@ -1293,22 +1544,55 @@ test('shows the map metric and status in results and carries sorting into Compar
 
 const tile = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==', 'base64');
 
-test('loads terrain only when enabled and zoomed in, with CARTO underneath', async ({ page }) => {
+test('loads terrain at detail zoom and gradually increases hillshade over CARTO', async ({ page }) => {
     await prepare(page);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
     let terrainRequests = 0;
-    await page.route('https://tiles.mapterhorn.com/**', route => {
+    let releaseTiles = () => {};
+    const waitForTiles = new Promise<void>(resolve => { releaseTiles = resolve; });
+    await page.route('https://tiles.mapterhorn.com/**', async route => {
         terrainRequests++;
+        if (terrainRequests > 1) await waitForTiles;
         return route.fulfill({ headers: { 'access-control-allow-origin': '*' }, contentType: 'image/png', body: tile });
     });
     const renderer = await captureMap(page);
-    await setLayer(page, 'Terrain relief', true);
-    await expect.poll(() => renderer.evaluate(map => map.getLayer('ski-terrain-relief')?.type)).toBe('hillshade');
-    expect(terrainRequests).toBe(0);
-    await renderer.evaluate(map => { map.jumpTo({ center: [-111.635515, 40.573361], zoom: 10 }); });
-    await expect.poll(() => terrainRequests).toBeGreaterThan(0);
+    const firstTile = await renderer.evaluateHandle(map => {
+        const status = { loaded: false };
+        const onTile = (event: MapSourceDataEvent) => {
+            if (event.sourceId !== 'ski-terrain-dem' || !event.tile?.dem) return;
+            status.loaded = true;
+            map.off('sourcedata', onTile);
+        };
+        map.on('sourcedata', onTile);
+        return status;
+    });
+    try {
+        await setLayer(page, 'Terrain relief', true);
+        await expect.poll(() => renderer.evaluate(map => map.getLayer('ski-terrain-relief')?.type)).toBe('hillshade');
+        expect(terrainRequests).toBe(0);
+        await renderer.evaluate(map => { map.jumpTo({ center: [-111.635515, 40.573361], zoom: 13 }); });
+        await expect.poll(() => terrainRequests).toBeGreaterThan(1);
+        await expect.poll(() => firstTile.evaluate(status => status.loaded)).toBe(true);
+        expect(await renderer.evaluate(map => map.getPaintProperty('ski-terrain-relief', 'hillshade-exaggeration'))).toBe(0);
+    } finally {
+        releaseTiles();
+    }
+
+    const strength = () => renderer.evaluate(map => {
+        const paint = map.getLayer('ski-terrain-relief')?.paint as { get: (key: string) => number };
+        return paint.get('hillshade-exaggeration');
+    });
+    await expect.poll(strength).toBeCloseTo(0.4, 3);
+    expect(await renderer.evaluate(map => map.getPaintProperty('ski-terrain-relief', 'hillshade-exaggeration-transition')))
+        .toEqual({ duration: 280 });
+    for (const [zoom, expected] of [[8, 0], [8.5, 0.02], [9, 0.04], [10.5, 0.15], [11.5, 0.25], [12, 0.3], [13, 0.4]]) {
+        await renderer.evaluate((map, zoom) => { map.jumpTo({ zoom }); }, zoom);
+        await expect.poll(strength).toBeCloseTo(expected, 3);
+    }
     expect(await renderer.evaluate(map => Boolean(map.getLayer('background')))).toBe(true);
     await setLayer(page, 'Terrain relief', false);
     await expect.poll(() => renderer.evaluate(map => Boolean(map.getSource('ski-terrain-dem')))).toBe(false);
+    await firstTile.dispose();
     await renderer.dispose();
 });
 
@@ -1334,6 +1618,8 @@ test('clears an old terrain relief error when a fresh source loads', async ({ pa
     await setLayer(page, 'Terrain relief', true);
     await expect.poll(() => recoveredTiles).toBeGreaterThan(0);
     await expect.poll(() => renderer.evaluate(map => map.isSourceLoaded('ski-terrain-dem'))).toBe(true);
+    await expect.poll(() => renderer.evaluate(map => map.getPaintProperty('ski-terrain-relief', 'hillshade-exaggeration-transition')))
+        .toEqual({ duration: 0 });
     await expect(error).toBeHidden();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
     await renderer.dispose();

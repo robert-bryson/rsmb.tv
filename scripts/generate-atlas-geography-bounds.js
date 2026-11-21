@@ -43,7 +43,7 @@ export function atlasGeometryBounds(geometry) {
 
 export async function generateAtlasGeographyBounds({
     fetchImpl = fetch,
-    outputPath = path.join(root, 'src/features/trips/atlas/atlasGeographyBounds.json'),
+    outputPath = path.join(root, 'shared/geography/administrativeBounds.json'),
     timeoutMs = 30_000,
 } = {}) {
     const data = { countries: {}, regions: {} };

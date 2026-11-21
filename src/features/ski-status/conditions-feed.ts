@@ -3,10 +3,12 @@ import {
     type ConditionsManifest, type ForecastSnapshot, type ReportSnapshot,
 } from './conditions';
 import { decodeConditionsJson, maxConditionsManifestBytes, maxConditionsSnapshotBytes, readConditionsBytes } from './conditions-response';
+import { skiConditionsDirectory, skiConditionsRefreshWaitMs } from '../../../shared/skiConditionsCache';
 
 const localFeed = import.meta.env.DEV && import.meta.env.VITE_SKI_CONDITIONS_LOCAL;
-const baseUrl = localFeed === '1' || localFeed === 'rockies'
-    ? new URL(localFeed === 'rockies' ? '/.cache/ski-status-rockies/' : '/.cache/ski-status/', window.location.origin).href
+const useLocalFeed = localFeed === '1' || localFeed === 'rockies';
+const baseUrl = useLocalFeed
+    ? new URL(`/${skiConditionsDirectory(localFeed === 'rockies')}/`, window.location.origin).href
     : 'https://data.rsmb.tv/ski-status/';
 
 type Snapshot<T> = { file: string; data: T };
@@ -17,8 +19,9 @@ export type ConditionsFeed = {
 };
 
 async function getFile(file: string, signal: AbortSignal, limit: number) {
+    const timeout = useLocalFeed && file === 'manifest.json' ? skiConditionsRefreshWaitMs + 5_000 : 12_000;
     const response = await fetch(new URL(file, baseUrl), {
-        signal: AbortSignal.any([signal, AbortSignal.timeout(12_000)]),
+        signal: AbortSignal.any([signal, AbortSignal.timeout(timeout)]),
         credentials: 'omit',
         redirect: 'error',
     });

@@ -22,7 +22,9 @@ export const statusLabels = {
 const terrainItem = z.strictObject({
     id: z.string().min(1), name: z.string().trim().min(1), kind: z.enum(['lift', 'trail']),
     status: z.enum(['open', 'closed', 'on-hold', 'scheduled', 'unknown']),
-    updatedAt: isoTime.optional(),
+    updatedAt: isoTime.optional(), area: z.string().trim().min(1).optional(),
+    liftType: z.string().trim().min(1).optional(), difficulty: z.string().trim().min(1).optional(),
+    groomed: z.boolean().optional(), snowmaking: z.boolean().optional(),
 });
 const terrainReport = z.strictObject({
     source: source.optional(),
@@ -30,6 +32,17 @@ const terrainReport = z.strictObject({
     items: z.array(terrainItem).min(1).refine(items => new Set(items.map(({ id }) => id)).size === items.length, 'Use unique terrain IDs'),
 });
 const areaTimeZones = new Map(skiAreas.map(area => [area.id, area.location.timeZone]));
+
+const snowLocation = z.strictObject({
+    location: z.string().trim().min(1), surface: z.string().trim().min(1).optional(),
+    baseCm: depth.optional(), overnightCm: depth.optional(), snow24HoursCm: depth.optional(),
+    snow48HoursCm: depth.optional(), snow72HoursCm: depth.optional(), snow7DaysCm: depth.optional(), seasonTotalCm: depth.optional(),
+}).refine(row => Object.entries(row).some(([field, value]) => field !== 'location' && value !== undefined));
+
+const operatorForecastDay = z.strictObject({
+    date: z.iso.date(), highC: z.number().optional(), lowC: z.number().optional(), description: z.string().trim().min(1).optional(),
+}).refine(({ highC, lowC, description }) => (highC !== undefined || lowC !== undefined || description !== undefined)
+    && (highC === undefined || lowC === undefined || highC >= lowC));
 
 const operationSchema = z.strictObject({
     areaId: skiId, source, retrievedAt: isoTime, reportedAt: isoTime.optional(), reportedOn: z.iso.date().optional(),
@@ -39,6 +52,9 @@ const operationSchema = z.strictObject({
     baseCm: depth.optional(), snowfallCm: depth.optional(), snowfallHours: z.number().positive().optional(),
     snowfallOn: z.iso.date().optional(), snowReportedOn: z.iso.date().optional(),
     snowLocation: z.string().min(1).optional(), nightOpen: z.boolean().optional(),
+    snowByLocation: z.array(snowLocation).min(1).refine(rows => new Set(rows.map(row => row.location)).size === rows.length).optional(),
+    forecastDays: z.array(operatorForecastDay).min(1).refine(rows =>
+        rows.every(({ date }, index) => index === 0 || date > rows[index - 1].date)).optional(),
     temperature: z.strictObject({ valueC: z.number(), measuredAt: isoTime, location: z.string().min(1) }).optional(),
     opensOn: z.iso.date().optional(), closedOn: z.iso.date().optional(), hours: z.string().min(1).optional(),
     terrain: terrainReport.optional(),
@@ -170,13 +186,20 @@ function operationsTime(report: ResortReport) {
 }
 
 function selectOperations(previous: ResortReport, next: ResortReport, now: number) {
-    const wasCurrent = skiDayStatus(previous, now) !== 'unknown';
-    const isCurrent = skiDayStatus(next, now) !== 'unknown';
-    if (wasCurrent !== isCurrent) return isCurrent ? next : previous;
-    // Give the operation time priority over the time of a fetch.
     const previousTime = operationsTime(previous) ?? -Infinity;
     const nextTime = operationsTime(next) ?? -Infinity;
-    if (previousTime !== nextTime) return nextTime > previousTime ? next : previous;
+    const newest = nextTime > previousTime ? next : previous;
+    const wasCurrent = skiDayStatus(previous, now) !== 'unknown';
+    const isCurrent = skiDayStatus(next, now) !== 'unknown';
+    if (wasCurrent !== isCurrent) {
+        // A newer report with a current time can withdraw the status from the same operator.
+        const currentUpdate = previous.reportedAt && next.reportedAt && previousTime !== nextTime
+            && previous.source.url === next.source.url && previous.source.license === next.source.license
+            && previous.source.exportable === next.source.exportable && !reportAgeLabel(newest, now);
+        return currentUpdate ? newest : isCurrent ? next : previous;
+    }
+    // Give the operation time priority over the time of a fetch.
+    if (previousTime !== nextTime) return newest;
     return Date.parse(next.retrievedAt) >= Date.parse(previous.retrievedAt) ? next : previous;
 }
 

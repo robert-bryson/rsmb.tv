@@ -25,6 +25,7 @@
     "bergbahnen-hohsaas-2026-schedule": "https://cdn.saas-fee.ch/fileadmin/user_upload/documents/Hohsaas_Bergbahnen/Fahrplan-Bergbahnen-Winter-26-27_EN.pdf",
     "big-sky-operating-dates": "https://www.bigskyresort.com/season-passes",
     "big-snow-american-dream": "https://www.bigsnowamericandream.com/press-room/",
+    "big-white-ski-resort-2026-schedule": "https://m.bigwhite.com/season-passes/faq",
     "blue-mountain-ontario": "https://www.bluemountain.ca/mountain/opening-day",
     "bosques-de-monterreal": "https://www.gob.mx/sectur/articulos/arteaga-coahuila",
     "brevent-flegere-2026-schedule": "https://www.chamonix.com/infos-live",
@@ -43,11 +44,14 @@
     "courmayeur-mont-blanc-2026-schedule": "https://www.courmayeur-montblanc.com/en/useful-info/access-opening-times-and-parking-3/",
     "cranmore-mountain-resort-2026-schedule": "https://www.skinh.com/resorts/cranmore-mountain-resort",
     "crans-montana-2026-schedule": "https://www.crans-montana.ch/en/?idcmt=Partenaire_news_621351bf961c389099afec0b97fb6c86",
+    "cuchara-2026-schedule": "https://cucharamountainpark.org/",
+    "cupid-valley-2026-schedule": "https://www.yukidaruma-kogen.com/winter/course.html",
     "dartmouth-skiway-2026-schedule": "https://www.skinh.com/resorts/dartmouth-skiway",
     "dodge-ridge-2026-schedule": "https://dodgeridge.com/",
     "dynaland-2026-schedule": "https://www.dynaland.co.jp/condition/",
     "engstligenalp-2026-schedule": "https://engstligenalp.ch/en/winter/operating-info-2/",
     "fernie-alpine-resort": "https://skifernie.com/discover-fernie/mountain-stats/",
+    "fernie-alpine-resort-2026-schedule": "https://skifernie.com/",
     "folgarida-marilleva-2026-schedule": "https://www.ski.it/en/info-live/slopes",
     "galtuer-2026-schedule": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/silvapark-galtuer",
     "granby-ranch-2026-schedule": "https://www.coloradoski.com/snow-report/",
@@ -62,9 +66,11 @@
     "hurricane-ridge": "https://www.nps.gov/olym/planyourvisit/hurricane-ridge-in-winter.htm",
     "ischgl-samnaun": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
     "jackson-hole-mountain-resort-2026-schedule": "https://www.jacksonhole.com/mountain-report",
+    "kicking-horse-2026-schedule": "https://kickinghorseresort.com/winter-hours/",
     "killington-2026-opening": "https://killington.com/press-releases/killington-resort-opens-november-17-kicking-off-winter-202627-in-new-england",
     "killington-hours": "https://killington.com/hours",
     "kimberley-alpine-resort": "https://skikimberley.com/discover-kimberley/mountain-stats/",
+    "kimberley-alpine-resort-2026-schedule": "https://skikimberley.com/hours/",
     "kvitfjell-2026-schedule": "https://www.alpinco.com/no/kvitfjell/apningstider",
     "lake-louise": "https://www.skilouise.com/explore-winter/winter-ski-ride/mountain-stats/",
     "lake-louise-2024-closing": "https://lamp10.skilouise.com/conditions/skilouise.pdf",
@@ -81,6 +87,7 @@
     "maiko-resort-2026-schedule": "https://www.maiko-resort.com/winter/gelande.html",
     "mammoth-mountain": "https://sc.mammothmountain.com/-/media/project/mammoth/library/pdfs/23-24_mmsa_fact-sheets_85x11.pdf?hash=A2B4F107E61D776F805B73EE16500330&rev=14788c480b3e4295aa138b5fadb0ce80",
     "mammoth-opening-2026": "https://www.mammothmountain.com/things-to-do/events/opening-day",
+    "marmot-basin-2026-opening": "https://www.skimarmot.com/new-updates/202627-season-updates/",
     "massif-du-sud-2026-schedule": "https://massifdusud.net/fr/ouvertures",
     "mayrhofen-2026-schedule": "https://intern.mayrhofen.at/fileadmin/userdaten/mitglieder-bereich/downloads/aktuelles/Infoschreiben_an_Gastgeber_zu_Pauschalwochen_neu.pdf",
     "mcintyre-ski-area-2026-schedule": "https://www.skinh.com/resorts/mcintyre-ski-area",
@@ -89,13 +96,19 @@
     "mount-cain": "https://www.mountcain.com/mountain-stats/",
     "mount-racey-ski-resort-2026-schedule": "https://yubari-resort.co.jp/weather_traffic/",
     "mt-bachelor-2026-schedule": "https://www.mtbachelor.com/the-mountain/mountain-report/",
+    "mt-holiday-2025-opening": "https://mt-holiday.com/funding/",
     "mt-hutt": "https://www.mthutt.co.nz/mountain-info",
     "mt-t": "https://tanigawadake-joch.com/en/information/20261116/",
+    "muica-snow-resort-2026-schedule": "https://niigata-kankou.or.jp/ski/detail_10700.html",
     "myoko-suginohara-ski-resort": "https://www.princehotels.co.jp/ski/myoko/",
     "nakiska-ski-area": "https://skinakiska.com/discover-nakiska/mountain-stats/",
+    "nakiska-ski-area-2026-opening": "https://skinakiska.com/blog/nakiska-ski-area-will-open-for-its-first-preview-weekend-on-saturday-november-7th/",
+    "nakiska-ski-area-2026-schedule": "https://skinakiska.com/contact-us/",
+    "nayoro-piyashiri-ski-resort-2026-schedule": "https://www.nayoro.co.jp/piyashiri/news/916/",
     "nekoma-mountain-2026-schedule": "https://www.nekoma.co.jp/liftguide/",
     "nendaz": "https://www.nendaz.ch/en/Z13927/winter-lifts-schedule",
     "ninox-snow-park-2026-schedule": "https://www.ninox.co.jp/lift/",
+    "niseko-united-2026-schedule": "https://www.niseko.ne.jp/en/lift/",
     "norquay-2024-opening": "https://www.skibig3.com/blog/mt-norquay-ski-resort-opens-for-the-24-25/",
     "norquay-2025-opening": "https://www.skibig3.com/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/",
     "norquay-2026-opening": "https://www.skibig3.com/blog/mt-norquay-welcomes-skiers-back-for-the-2627-season/",
@@ -116,6 +129,7 @@
     "powder-king-mountain-resort-2026-schedule": "https://www.powderking.com/mountain/ski-report",
     "quebec-ski-areas-2026-opening-plans": "https://maneige.ski/en/stations-et-conditions/",
     "rauriser-hochalmbahnen-2026-schedule": "https://www.hochalmbahnen.at/en/winter/ski-area/operating-times",
+    "rusutsu-resort-2026-schedule": "https://rusutsu.com/en/winter-lift-tickets/",
     "shimokura-2026-schedule": "https://www.hachimantai.co.jp/",
     "ski-santa-fe": "https://www.skisantafe.com/our-story/about",
     "ski-utah-opening-dates": "https://www.skiutah.com/blog/authors/yeti/utah-ski-resort-opening-dates",
@@ -149,6 +163,7 @@
     "waterville-valley-resort-2026-schedule": "https://www.skinh.com/resorts/waterville-valley-resort",
     "whistler-blackcomb-2026-opening": "https://news.vailresorts.com/WhistlerBlackcomb-Opening-2026",
     "whistler-winter-hours": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/hours-of-operation.aspx",
+    "whitepia-takasu-2026-schedule": "https://whitepia.jp/post-1653/",
     "zermatt-matterhorn": "https://www.matterhornparadise.ch/en/experience/skiing"
   },
   "areas": [
@@ -611,6 +626,18 @@
         "source": "big-snow-american-dream",
         "note": "Year-round"
       }
+    },
+    {
+      "areaId": "big-white-ski-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-26",
+          "closesOn": "2027-04-04",
+          "note": "Opening is weather and conditions dependent.",
+          "source": "big-white-ski-resort-2026-schedule"
+        }
+      ]
     },
     {
       "areaId": "blue-mountain-resort-on",
@@ -1120,6 +1147,29 @@
       ]
     },
     {
+      "areaId": "cuchara",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "source": "cuchara-2026-schedule",
+          "note": "Tentative opening date from Cuchara Mountain Park."
+        }
+      ]
+    },
+    {
+      "areaId": "cupid-valley",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "closesOn": "2027-03-28",
+          "source": "cupid-valley-2026-schedule",
+          "note": "The operator plans a break from March 23 through March 26."
+        }
+      ]
+    },
+    {
       "areaId": "dartmouth-skiway",
       "planned": [
         {
@@ -1180,7 +1230,15 @@
         "closesIn": 4,
         "source": "fernie-alpine-resort",
         "note": "Early December to mid-April"
-      }
+      },
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "note": "Scheduled opening is conditions dependent.",
+          "source": "fernie-alpine-resort-2026-schedule"
+        }
+      ]
     },
     {
       "areaId": "folgarida-marilleva",
@@ -1484,6 +1542,18 @@
       ]
     },
     {
+      "areaId": "kicking-horse",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "closesOn": "2027-04-11",
+          "note": "The opening is tentative and conditions dependent.",
+          "source": "kicking-horse-2026-schedule"
+        }
+      ]
+    },
+    {
       "areaId": "killington",
       "actual": [
         {
@@ -1562,7 +1632,16 @@
         "closesIn": 4,
         "source": "kimberley-alpine-resort",
         "note": "Early December to mid-April"
-      }
+      },
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "closesOn": "2027-04-04",
+          "note": "Dates are subject to weather and operations.",
+          "source": "kimberley-alpine-resort-2026-schedule"
+        }
+      ]
     },
     {
       "areaId": "kronplatz",
@@ -1902,6 +1981,21 @@
       ]
     },
     {
+      "areaId": "marmot-basin",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-21",
+          "openingTerrain": {
+            "lifts": 1,
+            "trails": 2
+          },
+          "note": "Eagle Express served Sleepy Hollow and Tranquilizer.",
+          "source": "marmot-basin-2026-opening"
+        }
+      ]
+    },
+    {
       "areaId": "massif-du-sud",
       "planned": [
         {
@@ -2123,6 +2217,17 @@
       ]
     },
     {
+      "areaId": "mt-holiday",
+      "actual": [
+        {
+          "season": "2025/26",
+          "opensOn": "2025-12-20",
+          "source": "mt-holiday-2025-opening",
+          "note": "The resort confirmed its opening date in the 2025/26 recap."
+        }
+      ]
+    },
+    {
       "areaId": "mt-hutt",
       "planned": [
         {
@@ -2193,6 +2298,17 @@
       ]
     },
     {
+      "areaId": "muica-snow-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-24",
+          "source": "muica-snow-resort-2026-schedule",
+          "note": "Tentative opening date from the Niigata tourism agency."
+        }
+      ]
+    },
+    {
       "areaId": "myoko-suginohara-ski-resort",
       "planned": [
         {
@@ -2210,7 +2326,34 @@
         "closesIn": 4,
         "source": "nakiska-ski-area",
         "note": "Early November to mid-April"
-      }
+      },
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-07",
+          "note": "First public preview opened November 7–11. The dated preview-period operator report lists skiing off Gold Chair with Olympic Chair upload and download.",
+          "source": "nakiska-ski-area-2026-opening"
+        }
+      ],
+      "planned": [
+        {
+          "season": "2026/27",
+          "closesOn": "2027-04-18",
+          "note": "Weekend previews precede the scheduled November 28 start of daily operations.",
+          "source": "nakiska-ski-area-2026-schedule"
+        }
+      ]
+    },
+    {
+      "areaId": "nayoro-piyashiri-ski-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "source": "nayoro-piyashiri-ski-resort-2026-schedule",
+          "note": "Tentative opening date from the operator."
+        }
+      ]
     },
     {
       "areaId": "nekoma-mountain",
@@ -2244,6 +2387,18 @@
           "opensOn": "2026-12-17",
           "closesOn": "2027-03-22",
           "source": "ninox-snow-park-2026-schedule"
+        }
+      ]
+    },
+    {
+      "areaId": "niseko-united",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-05-05",
+          "source": "niseko-united-2026-schedule",
+          "note": "All four areas plan to open November 28. Annupuri and Grand Hirafu run latest. Niseko Village ends April 4 and Hanazono ends April 11."
         }
       ]
     },
@@ -2494,6 +2649,18 @@
           "opensOn": "2018-12-23",
           "closesOn": "2019-03-24",
           "source": "peak-resorts-2019"
+        }
+      ]
+    },
+    {
+      "areaId": "rusutsu-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-03-31",
+          "source": "rusutsu-resort-2026-schedule",
+          "note": "The operator schedules early-season skiing from November 28 through spring skiing ending March 31. Dates depend on snow."
         }
       ]
     },
@@ -3004,6 +3171,17 @@
           "opensOn": "2026-11-20",
           "source": "whistler-blackcomb-2026-opening",
           "note": "Blackcomb opened first. Whistler Mountain was scheduled to follow on November 25."
+        }
+      ]
+    },
+    {
+      "areaId": "whitepia-takasu",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "source": "whitepia-takasu-2026-schedule",
+          "note": "Tentative opening date from the operator."
         }
       ]
     },

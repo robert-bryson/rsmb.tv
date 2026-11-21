@@ -383,6 +383,8 @@
     "nightSkiing": false,
     "terrainParks": false,
     "summitFt": 4049,
+    "highestLiftTerminalFt": 4265,
+    "lowestLiftTerminalFt": 2493,
     "statSources": [
       {
         "source": "https://www.indyskipass.com/our-resorts/amihari-onsen-ski-resort",
@@ -394,6 +396,12 @@
         "checkedOn": "2026-11-21",
         "fields": ["summitFt"],
         "note": "The operator gives 1,234 m at the head of the Todomatsu course. The published base and this point span 484 m."
+      },
+      {
+        "source": "https://www.qkamura.or.jp/sp/iwate/facilities/outdoors/",
+        "checkedOn": "2026-11-21",
+        "fields": ["highestLiftTerminalFt", "lowestLiftTerminalFt"],
+        "note": "The operator gives approximate elevations of 1,300 m at the upper station of Lift 3 and 760 m near the lower station of Lift 1."
       }
     ],
     "acres": 143,
@@ -1089,7 +1097,8 @@
         "checkedOn": "2026-11-19",
         "fields": ["trailCount"]
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "baqueira-beret",
@@ -1755,7 +1764,8 @@
         "fields": ["downhillKm", "baseFt"],
         "note": "Base elevation is the Gem Lake base. Length covers the designated alpine routes."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "bjorkliden",
@@ -4342,10 +4352,11 @@
     "liftCount": 1,
     "trailCount": 9,
     "verticalFt": 300,
-    "nightSkiing": false,
+    "nightSkiing": true,
     "terrainParks": true,
     "acres": 47,
     "baseFt": 9246,
+    "summitFt": 9546,
     "statSources": [
       {
         "source": "https://cucharamountainpark.org/pages/mountain-info",
@@ -4358,6 +4369,18 @@
         "checkedOn": "2026-11-21",
         "fields": ["grades"],
         "note": "Lift 4 ski area."
+      },
+      {
+        "source": "https://cucharamountainpark.org/pages/mountain-info",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt", "verticalFt"],
+        "note": "Chair 4 serves the current downhill area. Its 300 ft skiable drop added to the 9,246 ft base gives a 9,546 ft upper endpoint."
+      },
+      {
+        "source": "https://cucharamountainpark.org/products/26-27-night-skiing-season-pass",
+        "checkedOn": "2026-11-21",
+        "fields": ["nightSkiing"],
+        "note": "The operator offers scheduled night sessions for 2026/27."
       }
     ],
     "grades": {
@@ -4382,13 +4405,14 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/cupid-valley",
     "liftCount": 3,
     "trailCount": 12,
-    "verticalFt": 1607,
-    "nightSkiing": false,
+    "verticalFt": 1608,
+    "nightSkiing": true,
     "terrainParks": false,
     "reportUrl": "https://www.yukidaruma-kogen.com/winter.html",
     "reportCheckedOn": "2026-11-21",
     "acres": 77,
     "baseFt": 1411,
+    "summitFt": 3018,
     "grades": {
       "unit": "percent",
       "values": {
@@ -4401,7 +4425,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/cupid-valley",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "grades"]
+        "fields": ["acres", "grades"]
+      },
+      {
+        "source": "https://www.yukidaruma-kogen.com/winter/course.html",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt", "nightSkiing"],
+        "note": "The operator gives a 430 m base, 920 m summit, and 490 m vertical. The 2026/27 schedule includes four night sessions."
       }
     ]
   },
@@ -5156,6 +5186,8 @@
     "locality": "Fairmont Hot Springs",
     "website": "https://www.fairmonthotsprings.com",
     "statsUrl": "https://www.indyskipass.com/our-resorts/fairmont-hot-springs",
+    "reportUrl": "https://www.fairmonthotsprings.com/resort-webcams",
+    "reportCheckedOn": "2026-11-21",
     "liftCount": 3,
     "trailCount": 14,
     "verticalFt": 1000,
@@ -5163,6 +5195,7 @@
     "terrainParks": false,
     "acres": 88,
     "baseFt": 4200,
+    "summitFt": 5200,
     "grades": {
       "unit": "percent",
       "values": {
@@ -5175,7 +5208,7 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/fairmont-hot-springs",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "grades"]
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
       }
     ]
   },
@@ -5237,7 +5270,8 @@
       }
     },
     "statsUrl": "https://skifernie.com/discover-fernie/mountain-stats/",
-    "reportUrl": "https://skifernie.com/conditions/snow-report/"
+    "reportUrl": "https://skifernie.com/conditions/snow-report/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "folgarida-marilleva",
@@ -7607,10 +7641,12 @@
     "country": "US",
     "region": "ID",
     "locality": "Ririe",
-    "website": "https://skikelly.com/",
+    "website": "https://kellycanyonresort.com/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/kelly-canyon",
+    "reportUrl": "https://kellycanyonresort.com/ski/",
+    "reportCheckedOn": "2026-11-21",
     "liftCount": 5,
-    "trailCount": 27,
+    "trailCount": 51,
     "verticalFt": 1200,
     "nightSkiing": true,
     "terrainParks": true,
@@ -7633,6 +7669,12 @@
         "source": "https://www.indyskipass.com/our-resorts/kelly-canyon",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt", "grades"]
+      },
+      {
+        "source": "https://kellycanyonresort.com/ski/",
+        "checkedOn": "2026-11-21",
+        "fields": ["trailCount"],
+        "note": "The resort's winter page and Ski Idaho both list 51 trails."
       }
     ]
   },
@@ -7739,7 +7781,17 @@
         "Advanced": 45,
         "Expert": 15
       }
-    }
+    },
+    "reportCheckedOn": "2026-11-21",
+    "statSources": [
+      {
+        "source": "https://kickinghorseresort.com/wp-content/uploads/2025/12/KHmap25-MAP-web.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"],
+        "note": "The downloadable winter trail map prints 3,486+ skiable resort acres across five alpine bowls."
+      }
+    ],
+    "acresQualifier": "lower-bound"
   },
   {
     "id": "killington",
@@ -7806,7 +7858,8 @@
         "fields": ["trailCount"],
         "note": "The operator details 68 runs plus 12 separately listed glades."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "kimberley-nordic-club",
@@ -8187,7 +8240,8 @@
     },
     "additionalSources": [
       "https://www.skibig3.com/ski/resorts/lake-louise/"
-    ]
+    ],
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "lake-songhua-resort",
@@ -8590,16 +8644,33 @@
     "country": "US",
     "region": "ID",
     "locality": "McCall",
-    "website": "https://www.littleskihill.org/",
+    "website": "https://payettelakesskiclub.org/pages/little-ski-hill",
     "statsUrl": "https://www.indyskipass.com/our-resorts/little-ski-hill",
-    "liftCount": 4,
+    "reportUrl": "https://payettelakesskiclub.org/pages/little-ski-hill",
+    "reportCheckedOn": "2026-11-21",
+    "liftCount": 1,
     "trailCount": 14,
-    "verticalFt": 374,
+    "verticalFt": 405,
     "nightSkiing": true,
     "terrainParks": true,
     "acres": 50,
-    "additionalSources": [
-      "https://www.skiidaho.us/compare"
+    "baseFt": 5186,
+    "summitFt": 5577,
+    "highestLiftTerminalFt": 5587,
+    "lowestLiftTerminalFt": 5193,
+    "statSources": [
+      {
+        "source": "https://payettelakesskiclub.org/wp-content/uploads/2024/07/Payette-Lakes-Ski-Club_Master-Development-Plan_Final-2.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "liftCount", "highestLiftTerminalFt", "lowestLiftTerminalFt"],
+        "note": "The existing trail inventory gives the lower end of Lift Access Road and the upper end of the Terrain Park in feet. The lift inventory gives the separate terminals of the single T-bar."
+      },
+      {
+        "source": "https://www.skiidaho.us/compare",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"],
+        "note": "Ski Idaho and the resort description on Indy Pass give a published skiable vertical of 405 ft."
+      }
     ]
   },
   {
@@ -8967,7 +9038,11 @@
     "locality": "Iiyama",
     "website": "https://www.madarao.jp/",
     "statsUrl": "https://www.madarao.jp/information/14065",
+    "baseFt": 2986,
+    "summitFt": 4429,
+    "verticalFt": 1444,
     "nightSkiing": true,
+    "terrainParks": true,
     "seasonWindow": "Dec 12, 2026 – Mar 28, 2027 (planned)",
     "trailCount": 32,
     "liftCount": 10,
@@ -8977,6 +9052,17 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "trailCount"],
         "note": "Madarao sector as described by its operator."
+      },
+      {
+        "source": "https://myokotourism.com/ski-resorts/madarao-mountain-resort/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt"],
+        "note": "Myoko Tourism's 2026/27 profile gives 910 m at the base, 1,350 m at the ski area summit, and 440 m of vertical for Madarao Mountain Resort."
+      },
+      {
+        "source": "https://www.madarao.jp/en/course",
+        "checkedOn": "2026-11-21",
+        "fields": ["terrainParks"]
       }
     ],
     "reportUrl": "https://www.madarao.jp/en",
@@ -9018,15 +9104,16 @@
     "locality": "Kimberly",
     "website": "https://magicmountainresort.com/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/magic-mountain-idaho",
-    "liftCount": 4,
+    "liftCount": 3,
     "trailCount": 22,
-    "verticalFt": 800,
+    "verticalFt": 740,
     "nightSkiing": false,
     "terrainParks": false,
     "acres": 120,
     "additionalSources": [
       "https://www.skiidaho.us/compare"
     ],
+    "baseFt": 6500,
     "summitFt": 7240,
     "grades": {
       "unit": "percent",
@@ -9040,7 +9127,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/magic-mountain-idaho",
         "checkedOn": "2026-11-21",
-        "fields": ["summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://magicmountainresort.com/trails/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt", "liftCount", "trailCount", "acres"],
+        "note": "The resort's mountain trail inventory lists 22 trails, three lifts, and 740 ft of vertical."
       }
     ]
   },
@@ -9161,13 +9254,16 @@
     "locality": "Mammoth Lakes",
     "website": "https://www.mammothmountain.com/",
     "statsUrl": "https://www.mammothmountain.com/on-the-mountain/winter-trail-map",
-    "reportUrl": "https://www.mammothmountain.com/on-the-mountain/mountain-report",
+    "reportUrl": "https://www.mammothmountain.com/on-the-mountain/mountain-report#lifts-and-trails",
+    "reportCheckedOn": "2026-11-21",
     "acres": 3500,
+    "acresQualifier": "lower-bound",
     "liftCount": 25,
     "trailCount": 180,
     "baseFt": 7953,
     "summitFt": 11053,
     "verticalFt": 3100,
+    "terrainParks": true,
     "seasonWindow": "November–June",
     "grades": {
       "unit": "percent",
@@ -9179,6 +9275,18 @@
         "Extremely Difficult": 15
       }
     },
+    "statSources": [
+      {
+        "fields": ["acres", "acresQualifier", "liftCount", "trailCount", "baseFt", "summitFt", "verticalFt", "terrainParks", "seasonWindow"],
+        "source": "https://www.mammothmountain.com/-/media/project/mammoth/library/pdfs/Fact-Sheets/26-27_Marketing_MMSA_Fact-Sheets_85x11",
+        "checkedOn": "2026-11-21"
+      },
+      {
+        "fields": ["grades"],
+        "source": "https://www.mammothmountain.com/on-the-mountain/winter-trail-map",
+        "checkedOn": "2026-11-21"
+      }
+    ],
     "additionalSources": [
       "https://www.mammothmountain.com/things-to-do/activities/skiing-and-snowboarding"
     ]
@@ -9342,7 +9450,8 @@
         "Expert": 20
       }
     },
-    "reportUrl": "https://www.skimarmot.com/mountain/trail-map-lift-status/"
+    "reportUrl": "https://www.skimarmot.com/mountain/trail-map-lift-status/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "marquette-mountain",
@@ -10171,6 +10280,8 @@
     "locality": "Fairbanks",
     "website": "https://shredthemoose.com/",
     "statsUrl": "https://shredthemoose.com/",
+    "reportUrl": "https://shredthemoose.com/the-ski-report/",
+    "reportCheckedOn": "2026-11-21",
     "acres": 750,
     "liftCount": 1,
     "trailCount": 42,
@@ -10207,7 +10318,7 @@
     "website": "https://www.skimountbaldy.ca",
     "statsUrl": "https://www.indyskipass.com/our-resorts/mount-baldy-ski-area",
     "liftCount": 3,
-    "trailCount": 12,
+    "trailCount": 10,
     "verticalFt": 476,
     "nightSkiing": true,
     "terrainParks": true,
@@ -10225,6 +10336,12 @@
         "source": "https://www.indyskipass.com/our-resorts/mount-baldy-ski-area",
         "checkedOn": "2026-11-21",
         "fields": ["acres", "grades"]
+      },
+      {
+        "source": "https://www.skimountbaldy.ca/about-us",
+        "checkedOn": "2026-11-21",
+        "fields": ["trailCount", "verticalFt"],
+        "note": "The Thunder Bay operator lists ten runs and a skiable vertical of 145 m, rounded to 476 ft."
       }
     ]
   },
@@ -10908,9 +11025,9 @@
       },
       {
         "source": "https://banffnorquay.com/wp-content/uploads/2025/12/25-26_trailmap.pdf",
-        "checkedOn": "2026-11-19",
+        "checkedOn": "2026-11-21",
         "fields": ["acres", "trailCount", "verticalFt"],
-        "note": "Vertical is calculated from the trail map's 5,396–8,054 ft range. The map labels 77 named runs."
+        "note": "The map lists 190 skiable acres, 77 named runs, and a vertical drop of 1,650 ft (503 m)."
       },
       {
         "source": "https://banffnorquay.com/hours-of-operation/",
@@ -10921,9 +11038,10 @@
     ],
     "acres": 190,
     "trailCount": 77,
-    "verticalFt": 2658,
+    "verticalFt": 1650,
     "liftCount": 6,
-    "nightSkiing": true
+    "nightSkiing": true,
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "mt-pisgah",
@@ -11108,6 +11226,8 @@
     "website": "https://tanigawadake-joch.com/en/mt-t/",
     "statsUrl": "https://tanigawadake-joch.com/en/information/20261116/",
     "reportUrl": "https://tanigawadake-joch.com/en/mt-t/conditions/",
+    "reportCheckedOn": "2026-11-21",
+    "liftCount": 4,
     "seasonWindow": "Dec 19, 2026 – Apr 4, 2027 (planned)",
     "summitFt": 4930,
     "statSources": [
@@ -11115,6 +11235,12 @@
         "source": "https://tanigawadake-joch.com/en/mt-t/",
         "checkedOn": "2026-11-19",
         "fields": ["summitFt"]
+      },
+      {
+        "source": "https://tanigawadake-joch.com/mt-t/conditions/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "The lift roster names the Tanigawadake Ropeway and three paired chairlifts. The Tajirisawa entry is a ski course."
       }
     ]
   },
@@ -11160,6 +11286,7 @@
     "terrainParks": true,
     "acres": 244,
     "baseFt": 1142,
+    "summitFt": 2454,
     "grades": {
       "unit": "percent",
       "values": {
@@ -11172,7 +11299,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/muica-snow-resort",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "grades"]
+        "fields": ["acres", "grades"]
+      },
+      {
+        "source": "https://niigata-kankou.or.jp/ski/detail_10700.html",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"],
+        "note": "The Niigata tourism agency lists the ski area elevations as 348 m and 748 m."
       }
     ],
     "reportUrl": "https://www.muikamachi.com/ski/",
@@ -11279,7 +11412,7 @@
     "seasonWindow": "Early November to mid-April",
     "statsUrl": "https://skinakiska.com/discover-nakiska/mountain-stats/",
     "reportUrl": "https://skinakiska.com/conditions/snow-report/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "nayoro-piyashiri-ski-resort",
@@ -11293,11 +11426,11 @@
     "website": "https://www.nayoro.co.jp/piyashiri/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/nayoro-piyashiri-ski-resort",
     "liftCount": 3,
-    "trailCount": 12,
+    "trailCount": 13,
     "verticalFt": 1578,
     "nightSkiing": true,
-    "terrainParks": false,
-    "reportUrl": "https://www.nayoro.co.jp/piyashiri/status/",
+    "terrainParks": true,
+    "reportUrl": "https://www.nayoro.co.jp/piyashiri/",
     "reportCheckedOn": "2026-11-21",
     "baseFt": 633,
     "statSources": [
@@ -11305,6 +11438,18 @@
         "source": "https://www.indyskipass.com/our-resorts/nayoro-piyashiri-ski-resort",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt"]
+      },
+      {
+        "source": "https://www.nayoro.co.jp/piyashiri/",
+        "checkedOn": "2026-11-21",
+        "fields": ["trailCount", "liftCount"],
+        "note": "The operator's current inventory lists three lifts and 13 courses, including four tree-run areas."
+      },
+      {
+        "source": "https://www.nayoro.co.jp/piyashiri/status/",
+        "checkedOn": "2026-11-21",
+        "fields": ["terrainParks"],
+        "note": "The course guide lists a slopestyle park on General Slope 2."
       }
     ]
   },
@@ -11472,6 +11617,8 @@
     "reportUrl": "https://www.niseko.ne.jp/en/niseko-lift-status/",
     "nightSkiing": true,
     "liftCount": 27,
+    "acres": 2000,
+    "acresQualifier": "lower-bound",
     "statSources": [
       {
         "source": "https://www.niseko.ne.jp/en/niseko-lift-status/",
@@ -11484,6 +11631,12 @@
         "checkedOn": "2026-11-20",
         "fields": ["downhillKm", "trailCount", "terrainParks", "grades"],
         "note": "Brochure covers all four Niseko United resorts. Trail count sums the three published difficulty totals."
+      },
+      {
+        "source": "https://www.niseko.ne.jp/en/news/your-ultimate-guide-to-getting-lift-passes-at-niseko-united/",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "acresQualifier"],
+        "note": "Niseko United describes the four linked ski areas covered by the All Mountain Pass as over 2,000 acres."
       }
     ],
     "downhillKm": 45.2,
@@ -13892,9 +14045,17 @@
         "checkedOn": "2026-11-21",
         "fields": ["summitFt"],
         "note": "The operator identifies Mt. Isola as the highest summit of its three mountains."
+      },
+      {
+        "source": "https://www.skiing-hokkaido.com/wp/wp-content/uploads/2024/12/SKI-hokkaido2024-25-guidebook-en.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "verticalFt"],
+        "note": "The regional ski guide pairs the 994 m Mt. Isola elevation with 594 m of published vertical for Rusutsu. The corresponding base is 400 m."
       }
     ],
-    "summitFt": 3261
+    "summitFt": 3261,
+    "baseFt": 1312,
+    "verticalFt": 1949
   },
   {
     "id": "saddleback",
@@ -16490,7 +16651,7 @@
     ],
     "lowestLiftTerminalFt": 3930,
     "reportUrl": "https://www.sunpeaksresort.com/ski-ride/weather-conditions-cams/lifts-trail-status",
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-21",
     "summitFt": 6867
   },
   {
@@ -17371,7 +17532,7 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/togari-onsen-snow-resort",
     "liftCount": 4,
     "trailCount": 16,
-    "verticalFt": 2133,
+    "verticalFt": 1444,
     "nightSkiing": true,
     "terrainParks": true,
     "acres": 345.9,
@@ -17385,12 +17546,19 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/togari-onsen-snow-resort",
         "checkedOn": "2026-11-21",
-        "fields": ["baseFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.iiyama-ouendan.net/special/skiing-slope/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt"],
+        "note": "The Iiyama tourism bureau gives a 400 m base, 840 m summit, and 440 m vertical for the ski terrain. Trail counts use the operator's current layout."
       }
     ],
-    "reportUrl": "https://togari.jp/winter/gelande/",
-    "reportCheckedOn": "2026-11-20",
+    "reportUrl": "https://togari.jp/winter/",
+    "reportCheckedOn": "2026-11-21",
     "baseFt": 1312,
+    "summitFt": 2756,
     "grades": {
       "unit": "percent",
       "values": {
@@ -18485,12 +18653,13 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/whitepia-takasu",
     "liftCount": 4,
     "trailCount": 13,
-    "verticalFt": 1509,
+    "verticalFt": 1165,
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://whitepia.jp/operation/",
     "reportCheckedOn": "2026-11-20",
     "acres": 146,
+    "baseFt": 3445,
     "summitFt": 4610,
     "grades": {
       "unit": "percent",
@@ -18504,7 +18673,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/whitepia-takasu",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "summitFt", "grades"]
+        "fields": ["acres", "grades"]
+      },
+      {
+        "source": "https://tabitabigujo.com/outdoor/outdoor_spot/whitepia-takasu/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt"],
+        "note": "Gujo's visitor guide describes a ski descent from 1,405 to 1,050 m within WhitePIA. The difference is 355 m."
       }
     ]
   },

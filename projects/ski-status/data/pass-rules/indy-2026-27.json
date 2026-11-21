@@ -64,6 +64,36 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "bolton-valley-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Redeem at the Ticket Cube at the main base. The discounted third day is limited to eligible full-day ticket types.",
+      "source": "https://www.boltonvalley.com/winter/tickets-passes/indy-pass-reservation/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "burke-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Book up to the day of your visit, subject to availability. Check in at the ticket window or customer service to activate a Burke card.",
+      "source": "https://www.skiburke.com/?id=8&view=category",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "cannon-mountain",
       "products": [
         "indy-base",
@@ -149,6 +179,51 @@
       "checkedOn": "2026-11-20"
     },
     {
+      "areaId": "jay-peak-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "The issuer lists no blackout dates. Check the resort for current ticket redemption instructions.",
+      "source": "https://www.indyskipass.com/our-resorts/jay-peak-resort",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "magic-mountain-ski-area",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Reserve online with Magic Mountain in Vermont. Daily capacity applies.",
+      "source": "https://www.indyskipass.com/our-resorts/magic-mountain",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "middlebury-snowbowl",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Validate your Indy redemption at the Snowbowl ticket window on the day you ski.",
+      "source": "https://middleburysnowbowl.com/lift-tickets/",
+      "checkedOn": "2026-11-21"
+    },
+    {
       "areaId": "mt-hood-meadows",
       "products": [
         "indy-plus",
@@ -158,6 +233,59 @@
       "days": 2,
       "reservation": "check",
       "source": "https://www.skihood.com/explore/indy-pass",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "pats-peak",
+      "products": [
+        "indy-base",
+        "indy-base-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "blackouts": [
+        [
+          "2026-12-19",
+          "2027-01-03"
+        ],
+        [
+          "2027-01-16",
+          "2027-01-18"
+        ],
+        [
+          "2027-02-13",
+          "2027-02-15"
+        ]
+      ],
+      "note": "Book a date in advance and bring your ID and Indy Pass for verification.",
+      "source": "https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "pats-peak",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "Indy+ can be used during the Base blackout dates. Advance reservations still apply.",
+      "source": "https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "ragged-mountain-resort",
+      "products": [
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Check in with Guest Services when you arrive.",
+      "source": "https://www.raggedmountainresort.com/all-tickets/",
       "checkedOn": "2026-11-21"
     },
     {
@@ -210,6 +338,51 @@
       "reservation": "check",
       "note": "A discounted third day is available.",
       "source": "https://www.redlodgemountain.com/season-passes/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "saddleback",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "Reserve by 7:00 a.m. local time on the day to go straight to the lift, or redeem at the Base Lodge ticket window.",
+      "source": "https://www.saddlebackmaine.com/indy-pass/",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "saskadena-six-ski-area",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "The issuer lists no blackout dates. Check the resort for current ticket redemption instructions.",
+      "source": "https://www.indyskipass.com/our-resorts/saskadena-six-ski-area",
+      "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "smugglers-notch-resort",
+      "products": [
+        "indy-base",
+        "indy-plus",
+        "indy-base-addon",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "required",
+      "note": "The issuer lists no blackout dates and requires a resort reservation. Check current booking instructions before visiting.",
+      "source": "https://www.indyskipass.com/our-resorts/smugglers-notch-resort",
       "checkedOn": "2026-11-21"
     },
     {

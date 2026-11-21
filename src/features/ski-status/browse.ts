@@ -6,6 +6,7 @@ import {
 } from './conditions';
 import { evaluatePass, matchesPassProduct, type PassProduct } from './passRules';
 import { includesSeasonMonth, seasonViewDate, skiSeasonSchedule, typicalSkiSeason } from './seasons';
+import { matchesSkiLocation, matchesSkiLocations, skiAreaCountries, skiCountryName, skiLocationParts, type SkiLocationFilters } from './skiGeography';
 
 export type SkiUnits = 'imperial' | 'metric';
 export type PassFilter = PassFamily | 'indy-discounts';
@@ -140,30 +141,9 @@ export function readPassFilters(params: URLSearchParams, productFamily?: PassFam
     return passFilterKeys.filter(pass => selected.has(pass));
 }
 
-const countryNames = new Intl.DisplayNames('en', { type: 'region' });
-const countryPrefix = 'country:';
-
-function countryName(country: string) {
-    return countryNames.of(country) ?? country;
-}
-
-function areaCountries(area: SkiArea) {
-    return [area.country, ...(area.otherCountries ?? [])];
-}
-
 function regionName(area: SkiArea) {
-    if (area.otherCountries) return areaCountries(area).map(countryName).join(' / ');
-    return area.region ?? countryName(area.country);
-}
-
-export function formatSkiLocation(area: SkiArea) {
-    return `${area.locality}, ${regionName(area).replace(/\s*\/\s*/g, ' / ')}`;
-}
-
-export function skiRegionOptions(areas: readonly SkiArea[]) {
-    const countries = [...new Set(areas.flatMap(areaCountries))].map(code => ({ value: `${countryPrefix}${code}`, label: countryName(code) }));
-    const regions = [...new Set(areas.flatMap(area => area.region?.split('/') ?? []))].sort();
-    return { countries: countries.sort((first, second) => first.label.localeCompare(second.label)), regions };
+    if (area.otherCountries) return skiAreaCountries(area).map(skiCountryName).join(' / ');
+    return area.region ?? skiCountryName(area.country);
 }
 
 export interface SkiPassSelection {
@@ -179,6 +159,7 @@ export function selectedSkiPasses({ passes = [], product }: SkiPassSelection = {
 interface SkiAreaFilters extends SkiPassSelection {
     query?: string;
     region?: string;
+    locations?: SkiLocationFilters;
     night?: boolean;
     skiing?: SkiingFilter;
     operations?: { filter: StatusFilter; reports: Conditions['reports']; now: number };
@@ -194,13 +175,13 @@ export function matchesSkiPass(area: SkiArea, filter: PassFilter, product?: SkiP
 }
 
 export function filterSkiAreas(areas: readonly SkiArea[], {
-    query = '', region = '', passes = [], night, skiing, product, operations, seasonMonth,
+    query = '', region, locations, passes = [], night, skiing, product, operations, seasonMonth,
 }: SkiAreaFilters = {}) {
     const words = normalizeSearch(query).split(' ').filter(Boolean);
-    const country = region.startsWith(countryPrefix) ? region.slice(countryPrefix.length) : '';
     const selectedPasses = selectedSkiPasses({ passes, product });
     return areas.filter(area => {
-        if (country ? !areaCountries(area).includes(country) : region && !area.region?.split('/').includes(region)) return false;
+        if (region && !matchesSkiLocation(area, region)) return false;
+        if (locations && !matchesSkiLocations(area, locations)) return false;
         if (selectedPasses.length && !selectedPasses.some(pass => matchesSkiPass(area, pass, product))) return false;
         if (night && area.nightSkiing !== true) return false;
         if (skiing && !matchesSkiingFilter(area.skiing, skiing)) return false;
@@ -210,9 +191,10 @@ export function filterSkiAreas(areas: readonly SkiArea[], {
         }
         if (seasonMonth && !includesSeasonMonth(typicalSkiSeason(area), seasonMonth)) return false;
         if (!words.length) return true;
-        const countries = areaCountries(area);
+        const { regions, countries } = skiLocationParts(area);
         const searchable = normalizeSearch([
-            area.name, area.locality, area.region, ...countries, ...countries.map(countryName), skiingLabels[area.skiing], ...(area.aliases ?? []),
+            area.name, area.locality, area.region, ...regions.map(place => place.label), ...skiAreaCountries(area),
+            ...countries.map(place => place.label), skiingLabels[area.skiing], ...(area.aliases ?? []),
         ].join(' '));
         return words.every(word => searchable.includes(word));
     });

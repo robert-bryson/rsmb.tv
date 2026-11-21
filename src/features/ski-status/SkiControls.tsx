@@ -1,12 +1,13 @@
-import type { ReactNode, RefObject } from 'react';
+import { useRef, useState, type ReactNode, type RefObject } from 'react';
 import { passFilterKeys, passFilterOptions, skiingFilterOptions, type SkiUnits } from './browse';
 import { statusFilterLabels } from './conditions';
 import { markerLegend, markerModes, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passProducts, readSkiDate } from './passRules';
 import { skiRunLegend, skiTerrainLegend, type TerrainConvention } from './resortTerrainData';
-import { countries, indyHomeAreas, regions, toggleSkiPassFilter, writeSkiPassProduct, type SkiFilters } from './skiFilters';
+import { indyHomeAreas, skiLocationActions, skiLocationGroups, skiLocationLabels, skiLocationModes, toggleSkiPassFilter, writeSkiPassProduct, type SkiFilters } from './skiFilters';
+import type { SkiLocationFilters } from './skiGeography';
 import { seasonMonths } from './seasons';
-import { SkiIconButton } from './SkiIcon';
+import { SkiIcon, SkiIconButton } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 
 interface DialogProps {
@@ -33,6 +34,37 @@ function SkiField({ id, label, children }: { id: string; label: ReactNode; child
     return <div className="ski-field"><label htmlFor={id}>{label}</label>{children}</div>;
 }
 
+type ChangeLocationFilter = (mode: keyof SkiLocationFilters, place: string) => void;
+
+function SkiLocationFields({ locations, onChange }: { locations: SkiLocationFilters; onChange: ChangeLocationFilter }) {
+    const [place, setPlace] = useState('');
+    const select = useRef<HTMLSelectElement>(null);
+    return <fieldset className="ski-location-fields" aria-describedby="ski-location-help">
+        <legend className="font-semibold">Location</legend>
+        <p id="ski-location-help" className="text-sm text-slate-300">Match any included place. Exclusions take priority. The browser remembers exclusions you add.</p>
+        <div className="ski-location-controls">
+            <label className="sr-only" htmlFor="ski-location-filter">Choose a location</label>
+            <select ref={select} id="ski-location-filter" className="ski-input" value={place} onChange={event => setPlace(event.target.value)}>
+                <option value="">Choose a location</option>
+                {skiLocationGroups.map(group => <optgroup key={group.label} label={group.label}>
+                    {group.options.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
+                </optgroup>)}
+            </select>
+            {skiLocationModes.map(mode => <button key={mode} type="button" className="ski-control" disabled={!place || locations[mode].includes(place)}
+                onClick={() => { onChange(mode, place); select.current?.focus(); }}>{skiLocationActions[mode]}</button>)}
+        </div>
+        {skiLocationModes.some(mode => locations[mode].length > 0) && <div className="ski-location-chips" role="group" aria-label="Selected locations">
+            {skiLocationModes.flatMap(mode => locations[mode].map(value => {
+                const label = `${skiLocationActions[mode]} ${skiLocationLabels.get(value)}`;
+                return <button key={`${mode}:${value}`} type="button" className="ski-chip" aria-label={`Remove ${label}`}
+                    onClick={() => { onChange(mode, value); select.current?.focus(); }}>
+                    <span>{label}</span><SkiIcon name="close" />
+                </button>;
+            }))}
+        </div>}
+    </fieldset>;
+}
+
 interface FilterProps {
     dialog: DialogProps['dialog'];
     filters: SkiFilters;
@@ -40,12 +72,13 @@ interface FilterProps {
     units: SkiUnits;
     onShowResults: () => void;
     onUnitsChange: (units: SkiUnits) => void;
+    onChangeLocation: ChangeLocationFilter;
     setParam: (key: string, value?: string) => void;
     updateParams: (update: (params: URLSearchParams) => void) => void;
 }
 
-export function SkiFilterDialog({ dialog, filters, resultCount, units, onShowResults, onUnitsChange, setParam, updateParams }: FilterProps) {
-    const { region, passes, product, skiDate, homeArea, skiing, night, seasonMonth, status } = filters;
+export function SkiFilterDialog({ dialog, filters, resultCount, units, onShowResults, onUnitsChange, onChangeLocation, setParam, updateParams }: FilterProps) {
+    const { locations, passes, product, skiDate, homeArea, skiing, night, seasonMonth, status } = filters;
     const products = [...passProducts.values()].filter(option => !passes.length || passes.includes(option.family));
     const productFamilyHint = product && passes.length > 1 && `Product and ski date apply to ${passFilterOptions[product.family]}.`;
 
@@ -58,6 +91,7 @@ export function SkiFilterDialog({ dialog, filters, resultCount, units, onShowRes
         </button>
     }>
         <div className="ski-fields">
+            <SkiLocationFields locations={locations} onChange={onChangeLocation} />
             <fieldset className="ski-pass-options" aria-describedby="ski-pass-help">
                 <legend className="font-semibold">Passes</legend>
                 <p id="ski-pass-help" className="mb-2 text-sm text-slate-300">Match any selected pass.</p>
@@ -90,13 +124,6 @@ export function SkiFilterDialog({ dialog, filters, resultCount, units, onShowRes
                 </select>
             </SkiField>}
             {product && !skiDate && <p id="ski-date-help" className="col-span-full text-sm text-slate-300">A blank ski date uses today at each area.</p>}
-            <SkiField id="ski-region" label="Region">
-                <select id="ski-region" className="ski-input" value={region} onChange={event => setParam('region', event.target.value)}>
-                    <option value="">All regions</option>
-                    <optgroup label="Countries">{countries.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}</optgroup>
-                    <optgroup label="States and provinces">{regions.map(code => <option key={code} value={code}>{code}</option>)}</optgroup>
-                </select>
-            </SkiField>
             <SkiField id="ski-operating-status" label="Operating status">
                 <select id="ski-operating-status" className="ski-input" value={status} onChange={event => setParam('status', event.target.value)}>
                     <option value="all">Any status</option>
@@ -161,9 +188,6 @@ export function SkiLayerDialog({ dialog, colors, units, indyDiscounts, terrain, 
                         style={glyph ? { color } : { backgroundColor: color }}>{glyph}</span>}{label}
             </li>)}
         </ul>}
-        <p className="mt-3 text-sm text-slate-300">{colors === 'operatingStatus'
-            ? 'Map numbers count resorts reporting skiing today. Select a group to zoom in.'
-            : 'Map numbers count grouped resorts. Select a group to zoom in.'}</p>
         {terrainKey}
     </SkiDialog>;
 }

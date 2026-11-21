@@ -1,4 +1,5 @@
-import { useEffect, useEffectEvent, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type RefObject } from 'react';
+import { administrativeBounds, type GeographicBounds } from '../../../shared/geography/administrativeBounds';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
 import { globeOverviewZoom, projectVisibleGlobeLocation } from '../../maps/globe';
@@ -13,9 +14,10 @@ import type { MarkerMode } from './mapAppearance';
 import { skiMapAttribution } from './mapAttribution';
 import { resortFootprintLayer, resortTerrainLabel, resortTerrainSource, syncResortTerrain, visibleTerrainConventions } from './resortTerrain';
 import { resortTerrainGroups, resortTerrainMinZoom, type TerrainConvention } from './resortTerrainData';
+import { matchesSkiLocation, skiRegionName } from './skiGeography';
 import { captureSkiMapArea, encodeSkiMapArea, encodeSkiMapCamera, skiMapMaxZoom, skiMapMinZoom, type SkiMapArea } from './skiMapArea';
-import { addAreaLayers, addCountImage, addPassBadges, areaFeatures, clusterLayer, filterPassBadges, loadPassImages, markerLayers,
-    pointLayer, selectionSource, sourceId, updateClusterStyle } from './skiMapLayers';
+import { addAreaLayers, addPassBadges, addResortImages, areaFeatures, filterPassBadges, loadPassImages, loadResortImages, markerLayers,
+    pointLayer, resortIconLayer, selectionSource, sourceId } from './skiMapLayers';
 import { SkiAreaPopup } from './SkiAreaPopup';
 import { SkiIcon, SkiIconButton } from './SkiIcon';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -24,7 +26,12 @@ import './skiAreaPopup.css';
 const terrainSource = 'ski-terrain-dem';
 const terrainLayer = 'ski-terrain-relief';
 const reliefMinZoom = 8;
+const reliefExaggeration: maplibre.ExpressionSpecification = [
+    'interpolate', ['linear'], ['zoom'], reliefMinZoom, 0, 9, 0.04, 10, 0.1, 11, 0.2, 12, 0.3, 13, 0.4,
+];
 const pointZoom = 9;
+const terrainZoom = 13;
+const markerClickDelay = 300;
 const overviewCenter: [number, number] = [-100, 44];
 const providerStyle = () => cartoVectorStyleUrl('dark-matter');
 const detailStartZoom = 3;
@@ -43,6 +50,11 @@ const skiGlobeStyle: maplibre.TransformStyleFunction = (_, style) => {
     };
 };
 
+export interface SkiTerrainRequest {
+    id: string;
+    previousView?: MapCamera;
+}
+
 interface Props {
     areas: readonly SkiArea[];
     fitResults: readonly SkiArea[];
@@ -59,7 +71,9 @@ interface Props {
     searchedArea?: SkiMapArea;
     searchedAreaKey: string | null;
     initializeArea: boolean;
-    terrainRequest?: { id: string };
+    willDockDetails: boolean;
+    terrainRequest?: SkiTerrainRequest;
+    locationRequest?: { place: string };
     camera?: MapCamera;
     navigationKey: string;
     restoreHistoryCamera: boolean;
@@ -68,17 +82,21 @@ interface Props {
     onCameraChange: (value: string) => void;
     onSearchArea: (value: string) => void;
     onSelect: (id?: string, control?: HTMLElement) => void;
+    onShowTerrain: (request: SkiTerrainRequest, control: HTMLElement) => void;
+    onZoomLocation: (place: string) => void;
     onTerrainKey: (conventions: readonly TerrainConvention[]) => void;
     onOpenLayers: () => void;
 }
 
-function mapCameraValue(map: maplibre.Map) {
-    return encodeSkiMapCamera({ center: map.getCenter().toArray(), zoom: map.getZoom(), bearing: map.getBearing(), pitch: map.getPitch() });
+function readCamera(map: maplibre.Map): MapCamera {
+    return { center: map.getCenter().toArray(), zoom: map.getZoom(), bearing: map.getBearing(), pitch: map.getPitch() };
 }
 
-function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number) {
-    const bounds = skiAreaBounds(areas);
-    if (!bounds) return;
+function mapCameraValue(map: maplibre.Map) {
+    return encodeSkiMapCamera(readCamera(map));
+}
+
+function fitBounds(map: maplibre.Map, bounds: GeographicBounds, duration: number, overview?: () => maplibre.LngLatLike) {
     const { clientWidth, clientHeight } = map.getContainer();
     const padding = Math.min(46, clientWidth / 4, clientHeight / 4);
     if (!padding) return;
@@ -89,18 +107,7 @@ function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number
     }
     if (bounds[2] - bounds[0] >= 180) {
         // A single face of the globe cannot show results spread around the world.
-        let center: maplibre.LngLatLike = overviewCenter;
-        if (areas.length !== skiAreas.length) {
-            const current = map.getCenter();
-            let nearestDistance = Infinity;
-            for (const area of areas) {
-                const location = maplibre.LngLat.convert(skiAreaMapPoint(area));
-                const distance = current.distanceTo(location);
-                if (distance >= nearestDistance) continue;
-                nearestDistance = distance;
-                center = location;
-            }
-        }
+        const center = overview?.() ?? [(bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2] as const;
         const zoom = globeOverviewZoom(clientWidth, clientHeight);
         if (Math.abs(map.getZoom() - zoom) > 1e-5 || map.getCenter().distanceTo(maplibre.LngLat.convert(center)) > 0.1) {
             map.easeTo({ center, zoom, duration });
@@ -108,6 +115,32 @@ function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number
         return;
     }
     map.fitBounds(bounds, { padding, maxZoom: pointZoom, duration });
+}
+
+function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number) {
+    const bounds = skiAreaBounds(areas);
+    if (!bounds) return;
+    fitBounds(map, bounds, duration, () => {
+        if (areas.length === skiAreas.length) return overviewCenter;
+        const current = map.getCenter();
+        let center: maplibre.LngLatLike = overviewCenter;
+        let nearestDistance = Infinity;
+        for (const area of areas) {
+            const location = maplibre.LngLat.convert(skiAreaMapPoint(area));
+            const distance = current.distanceTo(location);
+            if (distance >= nearestDistance) continue;
+            nearestDistance = distance;
+            center = location;
+        }
+        return center;
+    });
+}
+
+function fitLocation(map: maplibre.Map, place: string, duration: number) {
+    const [, country, code] = place.split(':');
+    const bounds = administrativeBounds({ country, region: code && skiRegionName(country, code) });
+    if (bounds) fitBounds(map, bounds, duration);
+    else fitAreas(map, skiAreas.filter(area => matchesSkiLocation(area, place)), duration);
 }
 
 function syncTerrain(map: maplibre.Map, enabled: boolean) {
@@ -119,14 +152,14 @@ function syncTerrain(map: maplibre.Map, enabled: boolean) {
     if (map.getLayer(terrainLayer) || !map.getLayer(pointLayer)) return;
     map.addSource(terrainSource, {
         type: 'raster-dem', tiles: ['https://tiles.mapterhorn.com/{z}/{x}/{y}.webp'],
-        encoding: 'terrarium', tileSize: 512, minzoom: 8, maxzoom: 12,
+        encoding: 'terrarium', tileSize: 512, minzoom: reliefMinZoom, maxzoom: 12,
         attribution: '<a href="https://mapterhorn.com/attribution/">© Mapterhorn terrain</a>',
     });
     const firstLabel = map.getStyle().layers.find(layer => layer.type === 'symbol' && layer.source !== sourceId && layer.source !== selectionSource);
     const before = firstLabel?.id ?? (map.getLayer(resortFootprintLayer) ? resortFootprintLayer : pointLayer);
     map.addLayer({
         id: terrainLayer, type: 'hillshade', source: terrainSource, minzoom: reliefMinZoom,
-        paint: { 'hillshade-exaggeration': 0.4, 'hillshade-shadow-color': '#09090b', 'hillshade-highlight-color': '#cbd5e1' },
+        paint: { 'hillshade-exaggeration': 0, 'hillshade-shadow-color': '#09090b', 'hillshade-highlight-color': '#cbd5e1' },
     }, before);
 }
 
@@ -153,39 +186,25 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<
     return nearest;
 }
 
-function expandCluster(map: maplibre.Map, point: TooltipPoint, duration: number, isCurrent: () => boolean) {
-    const source = map.getSource<maplibre.GeoJSONSource>(sourceId);
-    if (!source || !map.getLayer(clusterLayer)) return false;
-    const cluster = map.queryRenderedFeatures([point.x, point.y], { layers: [clusterLayer] })[0];
-    if (!cluster || cluster.geometry.type !== 'Point') return false;
-    const [longitude, latitude] = cluster.geometry.coordinates;
-    const center: [number, number] = [longitude, latitude];
-    if (!projectVisibleGlobeLocation(map, center)) return false;
-    const id: unknown = cluster.properties.cluster_id;
-    if (typeof id !== 'number') return false;
-    void source.getClusterExpansionZoom(id).then(zoom => {
-        if (!isCurrent() || map.getSource(sourceId) !== source || map.isMoving()) return;
-        map.easeTo({ center, zoom: Math.max(map.getZoom() + 0.5, zoom), duration });
-    }).catch(() => { /* The source changed before the cluster could expand. */ });
-    return true;
-}
-
 export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected, colors, passSelection, statuses, conditions, terrain, resortTerrain,
-    visible, layersModified, searchedArea, searchedAreaKey, initializeArea, terrainRequest, camera, navigationKey, restoreHistoryCamera, cameraReader,
-    mapRegion, onCameraChange, onSearchArea, onSelect, onTerrainKey, onOpenLayers }: Props) {
+    visible, layersModified, searchedArea, searchedAreaKey, initializeArea, willDockDetails, terrainRequest, locationRequest, camera, navigationKey, restoreHistoryCamera,
+    cameraReader, mapRegion, onCameraChange, onSearchArea, onSelect, onShowTerrain, onZoomLocation, onTerrainKey, onOpenLayers }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
     const passImages = useRef<ReturnType<typeof loadPassImages> | undefined>(undefined);
+    const resortImages = useRef<ReturnType<typeof loadResortImages> | undefined>(undefined);
     const passLayers = useRef(false);
     const terrainPopupRef = useRef<maplibre.Popup | undefined>(undefined);
     const appliedCamera = useRef<{
         areas: readonly SkiArea[]; id?: string; key: string | null; historyKey?: string; visible: boolean;
     }>(undefined);
     const appliedTerrainRequest = useRef<Props['terrainRequest']>(undefined);
+    const terrainAnimation = useRef<SkiTerrainRequest>(undefined);
+    const appliedLocationRequest = useRef<Props['locationRequest']>(undefined);
+    const hoverDismissal = useRef<number>(undefined);
     const pinSelection = useRef<string | undefined>(undefined);
     const lastTerrainKey = useRef('');
-    const clusterRequest = useRef(0);
     const [attempt, setAttempt] = useState(0);
     const [basemap, setBasemap] = useState<BasemapState>('loading');
     const [ready, setReady] = useState(false);
@@ -194,7 +213,19 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const [terrainUnavailable, setTerrainUnavailable] = useState(false);
     const [resortTerrainUnavailable, setResortTerrainUnavailable] = useState(false);
     const [mapZoom, setMapZoom] = useState(1);
+    const [previousView, setPreviousView] = useState<MapCamera>();
     const [hovered, setHovered] = useState<SkiArea>();
+    const keepHoverOpen = useCallback(() => {
+        window.clearTimeout(hoverDismissal.current);
+        hoverDismissal.current = undefined;
+    }, []);
+    const dismissHover = useCallback(() => {
+        // Leave time for the pointer to travel from the marker into its preview.
+        hoverDismissal.current ??= window.setTimeout(() => {
+            hoverDismissal.current = undefined;
+            setHovered(undefined);
+        }, 220);
+    }, []);
     const [viewport, setViewport] = useState<string>();
     const [moving, setMoving] = useState(false);
     const [searchSuggested, setSearchSuggested] = useState(false);
@@ -209,7 +240,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     const showResortTerrain = visible && resortTerrain && terrainGroups.length > 0;
     const points = useMemo(() => areaFeatures(areas, colors, statuses, passSelection), [areas, colors, statuses, passSelection]);
     const selection = useMemo(() => areaFeatures(selected ? [selected] : [], colors, statuses, passSelection), [selected, colors, statuses, passSelection]);
-    const current = useEffectEvent(() => ({ areasById, points, selection, selected, colors, terrain, duration }));
+    const current = useEffectEvent(() => ({ areasById, points, selection, selected, colors, terrain, visible, willDockDetails }));
     const initialCamera = useEffectEvent((element: HTMLElement) => {
         if (camera) return camera;
         if (searchedArea) return { center: searchedArea.center, zoom: searchedArea.zoom };
@@ -217,6 +248,13 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         return { center: overviewCenter, zoom: globeOverviewZoom(element.clientWidth, element.clientHeight) };
     });
     const selectArea = useEffectEvent(onSelect);
+    const showTerrain = useEffectEvent(onShowTerrain);
+    const revealTerrain = useEffectEvent((map: maplibre.Map) => {
+        if (!map.getLayer(terrainLayer) || map.getPaintProperty(terrainLayer, 'hillshade-exaggeration') !== 0) return;
+        // Fade in the initial view together so tile edges stay hidden while loading.
+        map.setPaintProperty(terrainLayer, 'hillshade-exaggeration-transition', { duration });
+        map.setPaintProperty(terrainLayer, 'hillshade-exaggeration', reliefExaggeration);
+    });
     const syncResortDetails = useEffectEvent((map: maplibre.Map) => {
         const reload = showResortTerrain && resortTerrainUnavailable && !map.getSource(resortTerrainSource)
             && map.getZoom() >= resortTerrainMinZoom && Boolean(map.getLayer(pointLayer));
@@ -242,6 +280,13 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             filterPassBadges(map, data.selected);
         });
     });
+    const syncResortIcons = useEffectEvent((map: maplibre.Map) => {
+        if (colors !== 'default' || !map.getLayer(resortIconLayer)) return;
+        resortImages.current ??= loadResortImages();
+        void resortImages.current.then(images => {
+            if (mapRef.current === map && current().colors === 'default' && map.getLayer(resortIconLayer)) addResortImages(map, images);
+        });
+    });
     const syncCamera = useEffectEvent((map: maplibre.Map) => {
         const previous = appliedCamera.current;
         if (!visible) {
@@ -252,11 +297,21 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         const cameraHistoryKey = restoreHistoryCamera ? navigationKey : undefined;
         appliedCamera.current = { areas: cameraAreas, id: selected?.id, key: searchedAreaKey, historyKey: cameraHistoryKey, visible: true };
         const historyChanged = cameraHistoryKey !== undefined && cameraHistoryKey !== previous?.historyKey;
+        if (previous && historyChanged) {
+            appliedTerrainRequest.current = terrainRequest;
+            setPreviousView(undefined);
+        }
         const selectionChanged = selected?.id !== previous?.id;
         const fromPin = selectionChanged && pinSelection.current === selected?.id;
         if (selectionChanged) pinSelection.current = undefined;
         const showRequestedTerrain = !(previous && historyChanged) && terrainRequest
             && terrainRequest !== appliedTerrainRequest.current && selected?.id === terrainRequest.id;
+        const zoomToRequestedLocation = !(previous && historyChanged) && locationRequest && locationRequest !== appliedLocationRequest.current;
+        appliedLocationRequest.current = locationRequest;
+        if (zoomToRequestedLocation) {
+            fitLocation(map, locationRequest.place, previous ? duration : 0);
+            return;
+        }
         // Map movements publish their camera without reapplying it to the live map.
         if (camera && !showRequestedTerrain && (!previous || historyChanged || !previous.visible)) {
             const atTarget = mapCameraValue(map) === encodeSkiMapCamera(camera);
@@ -267,8 +322,15 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         }
         if (showRequestedTerrain) {
             appliedTerrainRequest.current = terrainRequest;
+            if (terrainAnimation.current?.id === terrainRequest.id) return;
+            const before = readCamera(map);
+            const center = selected.location.coordinates;
+            const zoom = Math.max(terrainZoom, before.zoom);
+            if (zoom - before.zoom < 1e-5 && map.getCenter().distanceTo(maplibre.LngLat.convert(center)) < 0.5) return;
+            setPreviousView(terrainRequest.previousView ?? before);
             map.resize();
-            map.easeTo({ center: selected.location.coordinates, zoom: Math.max(13, map.getZoom()), duration });
+            terrainAnimation.current = terrainRequest;
+            map.easeTo({ center, zoom, duration }, { skiTerrainRequest: terrainRequest });
         } else if (searchedArea && (historyChanged || previous?.key !== searchedAreaKey)) {
             const center = maplibre.LngLat.convert(searchedArea.center);
             if (map.getCenter().distanceTo(center) > 0.1 || Math.abs(map.getZoom() - searchedArea.zoom) > 1e-5) {
@@ -300,14 +362,10 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
         }
     });
 
-    useLayoutEffect(() => {
-        // Cluster IDs can change even when the map reuses the source object.
-        clusterRequest.current++;
-    }, [points, selection, visible]);
-
     useEffect(() => {
         let map: maplibre.Map | undefined;
         let viewportFrame: number | undefined;
+        let markerClickTimer: number | undefined;
         function queueViewport() {
             if (viewportFrame !== undefined) return;
             viewportFrame = requestAnimationFrame(() => {
@@ -343,6 +401,8 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             });
             terrainPopupRef.current = terrainPopup;
             let previousLabel: string | undefined;
+            let hasReliefTile = false;
+            let clickedMarker: string | undefined;
             const showTerrainLabel = (event: maplibre.MapMouseEvent) => {
                 const label = resortTerrainLabel(instance, event.point);
                 if (!label) {
@@ -357,6 +417,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 if (!terrainPopup.isOpen()) terrainPopup.addTo(instance);
             };
             const clearHover = () => {
+                keepHoverOpen();
                 terrainPopup.remove();
                 canvas.style.cursor = '';
                 setHovered(undefined);
@@ -376,14 +437,13 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 setBasemap(state);
                 if (state !== 'ready') setReady(false);
             });
-            instance.setMissingStyleImageResolver(id => addCountImage(instance, id));
             instance.on('style.load', () => {
-                clusterRequest.current++;
                 clearHover();
                 const data = current();
                 passLayers.current = false;
-                if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points, data.selection, data.colors);
+                if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points, data.selection);
                 syncPassBadges(instance);
+                syncResortIcons(instance);
                 syncTerrain(instance, data.terrain);
                 setTerrainUnavailable(false);
                 setResortTerrainUnavailable(false);
@@ -396,17 +456,32 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 queueViewport();
             });
             instance.on('movestart', event => {
-                clusterRequest.current++;
+                window.clearTimeout(markerClickTimer);
+                clickedMarker = undefined;
                 setMoving(true);
                 if ('originalEvent' in event && event.originalEvent) setSearchSuggested(true);
                 clearHover();
             });
-            instance.on('moveend', settleViewport);
+            instance.on('moveend', event => {
+                if ('skiTerrainRequest' in event && event.skiTerrainRequest === terrainAnimation.current) terrainAnimation.current = undefined;
+                settleViewport();
+            });
             instance.on('projectiontransition', queueViewport);
-            instance.on('idle', () => syncTerrainKey(instance));
+            instance.on('idle', () => {
+                syncTerrainKey(instance);
+                if (hasReliefTile && instance.getSource(terrainSource) && instance.isSourceLoaded(terrainSource)) revealTerrain(instance);
+            });
             instance.on('sourcedata', event => {
                 if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
-                if (event.sourceId === terrainSource && event.sourceDataType === 'metadata') setTerrainUnavailable(false);
+                if (event.sourceId === terrainSource) {
+                    if (event.sourceDataType === 'metadata') {
+                        setTerrainUnavailable(false);
+                        hasReliefTile = false;
+                    }
+                    const tile: maplibre.Tile | undefined = event.tile;
+                    hasReliefTile ||= Boolean(tile?.dem);
+                    if (hasReliefTile && event.isSourceLoaded) revealTerrain(instance);
+                }
                 if (event.sourceId === resortTerrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setResortTerrainUnavailable(false);
             });
             instance.on('webglcontextlost', () => setRendererFailed(true));
@@ -422,35 +497,62 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                 if (instance.isMoving()) return;
                 const data = current();
                 const area = closestArea(instance, event.point, data.areasById);
-                const group = instance.getLayer(clusterLayer) && instance.queryRenderedFeatures(event.point, { layers: [clusterLayer] }).length;
-                setHovered(area);
-                canvas.style.cursor = area || group ? 'pointer' : '';
-                if (area || group) terrainPopup.remove();
-                else showTerrainLabel(event);
+                canvas.style.cursor = area ? 'pointer' : '';
+                if (area) {
+                    keepHoverOpen();
+                    setHovered(area);
+                    terrainPopup.remove();
+                } else {
+                    dismissHover();
+                    showTerrainLabel(event);
+                }
             });
-            instance.on('mouseout', clearHover);
+            instance.on('mouseout', () => {
+                terrainPopup.remove();
+                canvas.style.cursor = '';
+                dismissHover();
+            });
             instance.on('click', event => {
-                const request = ++clusterRequest.current;
+                if (event.originalEvent.detail > 1) return;
+                window.clearTimeout(markerClickTimer);
+                clickedMarker = undefined;
                 if (!instance.getSource(sourceId) || !instance.isSourceLoaded(sourceId)) return;
                 clearHover();
                 const data = current();
                 const touch = 'pointerType' in event.originalEvent && event.originalEvent.pointerType === 'touch';
                 const area = closestArea(instance, event.point, data.areasById, touch ? 10 : 0);
                 if (area) {
-                    if (area.id !== data.selected?.id) pinSelection.current = area.id;
-                    selectArea(area.id, canvas);
-                } else if (expandCluster(instance, event.point, data.duration,
-                    () => clusterRequest.current === request && mapRef.current === instance)) {
-                    setSearchSuggested(true);
+                    clickedMarker = area.id;
+                    const open = () => {
+                        const latest = current();
+                        if (!latest.visible || !latest.areasById.has(area.id)) return;
+                        if (area.id !== latest.selected?.id) pinSelection.current = area.id;
+                        selectArea(area.id, canvas);
+                    };
+                    // Keep the marker under the pointer while a second click can still arrive on a narrow map.
+                    if (!touch && data.willDockDetails) markerClickTimer = window.setTimeout(open, markerClickDelay);
+                    else open();
                 } else {
                     selectArea();
                     showTerrainLabel(event);
                 }
             });
+            instance.on('dblclick', event => {
+                const { areasById } = current();
+                const area = (clickedMarker && areasById.get(clickedMarker)) || closestArea(instance, event.point, areasById);
+                clickedMarker = undefined;
+                if (!area) return;
+                event.preventDefault();
+                window.clearTimeout(markerClickTimer);
+                clearHover();
+                showTerrain({ id: area.id, previousView: readCamera(instance) }, canvas);
+            });
         });
         return () => {
             cancelAnimationFrame(frame);
             if (viewportFrame !== undefined) cancelAnimationFrame(viewportFrame);
+            window.clearTimeout(markerClickTimer);
+            keepHoverOpen();
             recoveryRef.current?.dispose();
             recoveryRef.current = null;
             terrainPopupRef.current?.remove();
@@ -459,10 +561,12 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             mapRef.current = null;
             cameraReader.current = null;
             passImages.current = undefined;
+            resortImages.current = undefined;
             passLayers.current = false;
             appliedCamera.current = undefined;
+            terrainAnimation.current = undefined;
         };
-    }, [attempt, cameraReader, mapRegion]);
+    }, [attempt, cameraReader, mapRegion, dismissHover, keepHoverOpen]);
 
     useEffect(() => {
         mapRef.current?.getSource<maplibre.GeoJSONSource>(sourceId)?.setData(points);
@@ -478,7 +582,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
             syncCamera(map);
             reportViewport(map);
         }
-    }, [camera, cameraAreas, navigationKey, restoreHistoryCamera, selected, searchedAreaKey, visible, terrainRequest]);
+    }, [camera, cameraAreas, navigationKey, restoreHistoryCamera, selected, searchedAreaKey, visible, terrainRequest, locationRequest]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -496,11 +600,14 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map?.getLayer(clusterLayer)) return;
-        updateClusterStyle(map, colors);
+        if (!map) return;
         syncPassBadges(map);
         filterPassBadges(map, selected);
     }, [colors, selected]);
+
+    useEffect(() => {
+        if (mapRef.current) syncResortIcons(mapRef.current);
+    }, [colors]);
 
     function retryMap() {
         container.current?.focus({ preventScroll: true });
@@ -532,6 +639,7 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
     return <div className="ski-map" onKeyDown={event => {
         if (event.key !== 'Escape' || (!selected && !hovered && !terrainPopupRef.current?.isOpen())) return;
         event.preventDefault();
+        keepHoverOpen();
         terrainPopupRef.current?.remove();
         setHovered(undefined);
         if (selected) {
@@ -559,11 +667,20 @@ export default function SkiStatusMap({ areas, fitResults, cameraAreas, selected,
                     aria-description={layersModified ? 'Custom map layers' : undefined}
                     onClick={onOpenLayers} />
             </div>
+            {previousView && <SkiIconButton icon="back" label="Previous view" hint="Return to previous map view" showLabel
+                className="ski-previous-view" disabled={!interactive} onClick={() => {
+                    const map = mapRef.current;
+                    if (!map) return;
+                    setPreviousView(undefined);
+                    map.getCanvas().focus({ preventScroll: true });
+                    map.easeTo({ ...previousView, duration });
+                }} />}
         </div>
         <p id="ski-map-instructions" className="sr-only">Use the arrow keys to move the map. Use the zoom buttons or plus and minus keys to zoom. Browse Results to select areas by name.</p>
         <div ref={container} tabIndex={-1} className="h-full w-full" data-testid="ski-status-map" data-map-state={state} />
         {interactive && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
-            && <SkiAreaPopup area={hovered} mapRef={mapRef} report={conditions.reports.get(hovered.id)} status={statuses.get(hovered.id) ?? 'unknown'} now={conditions.now} />}
+            && <SkiAreaPopup area={hovered} mapRef={mapRef} report={conditions.reports.get(hovered.id)} status={statuses.get(hovered.id) ?? 'unknown'}
+                now={conditions.now} onZoomLocation={onZoomLocation} onKeepOpen={keepHoverOpen} onDismiss={dismissHover} />}
         {(state !== 'ready' || showReliefError || showSkiTerrainError) && <div
             className="absolute bottom-10 left-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-slate-600 bg-[#152230] px-3 py-2 text-sm text-slate-100"
             role={failed ? 'alert' : 'status'}>

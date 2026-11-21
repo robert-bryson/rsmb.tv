@@ -1,10 +1,12 @@
 import { useState, type Ref } from 'react';
-import { conditionColumns, mountainColumns, formatElevation, formatSkiLocation, formatSkiStat, formatTemperature, type SkiUnits } from './browse';
+import { conditionColumns, mountainColumns, formatElevation, formatSkiStat, formatSnowDepth, formatTemperature, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
-import { areaForecast, localReportTime, reportAgeHours, reportAgeLabel, skiDayStatus, terrainStatusText, type Conditions, type ResortReport } from './conditions';
+import { areaForecast, isFreshReport, localReportTime, reportAgeHours, reportAgeLabel, skiDayStatus, terrainStatusText, type Conditions, type ResortReport } from './conditions';
+import { localSkiDate } from './localSkiDate';
 import { accessLabels, evaluatePass, type PassProduct } from './passRules';
 import { skiResortIcon } from './resortDetailsData';
 import { SkiIconButton } from './SkiIcon';
+import { SkiLocation } from './SkiLocation';
 import { SkiPassIcon } from './SkiPassIcon';
 import { SkiResortLinks } from './SkiResortLinks';
 import { SkiSeasonDetails } from './SkiSeasonDetails';
@@ -15,6 +17,13 @@ const passAccessNotes = { included: '', discount: ' (discount only)', listed: ' 
 const detailColumns = mountainColumns.slice(2);
 const seasonLabel = 'Published season window';
 const difficultyLabel = 'Published difficulty';
+const reportDisclosureClass = 'min-h-11 cursor-pointer py-3 text-zinc-200 hover:text-cyan-300 focus-visible:outline-2 focus-visible:outline-cyan-300';
+const snowFields = [
+    ['baseCm', 'Base depth'], ['overnightCm', 'Overnight'], ['snow24HoursCm', 'Past 24 hours'],
+    ['snow48HoursCm', 'Past 48 hours'], ['snow72HoursCm', 'Past 72 hours'], ['snow7DaysCm', 'Past 7 days'],
+    ['seasonTotalCm', 'Season total'],
+] as const;
+const forecastDayLabel = new Intl.DateTimeFormat('en', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
 const statisticLabels = new Map<string, string>([
     ...detailColumns.map(({ key, label }) => [key, label] as const),
     ['seasonWindow', seasonLabel], ['grades', difficultyLabel],
@@ -52,6 +61,7 @@ interface Props {
     sectionRef?: Ref<HTMLElement>;
     onClose: () => void;
     onShowTerrain?: () => void;
+    onZoomLocation?: (place: string) => void;
     conditions?: Conditions;
     product?: PassProduct;
     skiDate?: string;
@@ -64,10 +74,11 @@ function ReportedTerrain({ report, area, now }: { report: ResortReport; area: Sk
     const { items, source } = report.terrain;
     const sortedItems = expanded ? [...items].sort((a, b) => Number(b.status === 'open') - Number(a.status === 'open')) : [];
     return <details className="mt-2 border-t border-zinc-800" onToggle={event => setExpanded(event.currentTarget.open)}>
-        <summary className="min-h-11 cursor-pointer py-3 text-zinc-200 hover:text-cyan-300">Reported lifts and trails ({items.length})</summary>
+        <summary className={reportDisclosureClass}>Reported lifts and trails ({items.length})</summary>
         {expanded && <>
             {source && <a href={source.url} className={linkClass}>{source.name} terrain records</a>}
-            <div className="max-h-52 overflow-auto">
+            <div role="region" aria-label="Lift and trail status records" tabIndex={0}
+                className="max-h-52 overflow-auto focus-visible:outline-2 focus-visible:outline-cyan-300">
                 <table className="w-full text-left text-xs">
                     <caption className="sr-only">Reported lift and trail status</caption>
                     <thead className="sticky top-0 bg-zinc-950 text-zinc-400"><tr>
@@ -77,7 +88,13 @@ function ReportedTerrain({ report, area, now }: { report: ResortReport; area: Sk
                         {source && <th scope="col" className="py-1 font-medium">Record time</th>}
                     </tr></thead>
                     <tbody>{sortedItems.map(item => <tr key={item.id} className="border-t border-zinc-800">
-                        <th className="py-1 pr-2 font-medium" scope="row">{item.name}</th>
+                        <th className="py-1 pr-2 font-medium" scope="row">
+                            {item.name}
+                            {(item.area || item.liftType || item.difficulty || item.groomed || item.snowmaking) &&
+                                <span className="block font-normal text-zinc-400">{[
+                                    item.area, item.liftType, item.difficulty, item.groomed && 'Groomed', item.snowmaking && 'Snowmaking',
+                                ].filter(Boolean).join(' · ')}</span>}
+                        </th>
                         <td className="py-1 pr-2">{item.kind === 'lift' ? 'Lift' : 'Trail'}</td>
                         <td className="py-1 pr-2">{terrainStatusText(item, report, now)}</td>
                         {source && <td className="py-1">{item.updatedAt
@@ -89,7 +106,52 @@ function ReportedTerrain({ report, area, now }: { report: ResortReport; area: Sk
     </details>;
 }
 
-export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain, conditions, product, skiDate, homeAreaId }: Props) {
+function ReportedSnow({ locations, units, age }: { locations: NonNullable<ResortReport['snowByLocation']>; units: SkiUnits; age: string }) {
+    return <details className="mt-2 border-t border-zinc-800">
+        <summary className={reportDisclosureClass}>Snow by location{age}</summary>
+        <ul className="space-y-3 pb-2">{locations.map(location => <li key={location.location}>
+            <h3 className="mb-1 font-medium text-zinc-200">{location.location}</h3>
+            <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-2 text-xs">
+                {snowFields.map(([field, label]) => {
+                    const depth = location[field];
+                    return depth !== undefined && <div key={field}>
+                        <dt className="text-zinc-400">{label}</dt><dd>{formatSnowDepth(depth, units)}</dd>
+                    </div>;
+                })}
+                {location.surface && <div><dt className="text-zinc-400">Surface</dt><dd>{location.surface}</dd></div>}
+            </dl>
+        </li>)}</ul>
+    </details>;
+}
+
+function OperatorForecast({ report, area, units, now }: { report: ResortReport; area: SkiArea; units: SkiUnits; now: number }) {
+    if (!report.forecastDays || !area.location.timeZone || !isFreshReport(report, now)) return null;
+    const today = localSkiDate(now, area.location.timeZone);
+    const days = report.forecastDays.filter(day => day.date >= today);
+    if (!days.length) return null;
+    const temperature = (value: number | undefined) => value === undefined ? '—' : formatTemperature(value, units);
+    return <details className="border-t border-zinc-800">
+        <summary className={reportDisclosureClass}>Operator forecast</summary>
+        <table className="mb-2 w-full text-left text-xs">
+            <caption className="sr-only">Daily forecast from {report.source.name}</caption>
+            <thead className="text-zinc-400"><tr>
+                <th scope="col" className="py-1 font-medium">Day</th>
+                <th scope="col" className="py-1 font-medium">High</th>
+                <th scope="col" className="py-1 font-medium">Low</th>
+            </tr></thead>
+            <tbody>{days.map(day => <tr key={day.date} className="border-t border-zinc-800">
+                <th scope="row" className="py-1 pr-2 font-medium">
+                    <time dateTime={day.date}>{forecastDayLabel.format(Date.parse(`${day.date}T00:00:00Z`))}</time>
+                    {day.description && <span className="block font-normal text-zinc-400">{day.description}</span>}
+                </th>
+                <td className="whitespace-nowrap py-1 pr-2 tabular-nums">{temperature(day.highC)}</td>
+                <td className="whitespace-nowrap py-1 tabular-nums">{temperature(day.lowC)}</td>
+            </tr>)}</tbody>
+        </table>
+    </details>;
+}
+
+export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain, onZoomLocation, conditions, product, skiDate, homeAreaId }: Props) {
     const stats = detailColumns.flatMap(({ key, label }) => {
         const value = formatSkiStat(area, key, units);
         return value === undefined && key.startsWith('mapped') ? [] : [{ key, label, value }];
@@ -113,7 +175,7 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
                 {icon && <img className="ski-resort-icon" src={icon} width={42} height={42} alt="" />}
                 <div>
                     <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>
-                    <p className="text-sm text-zinc-300">{formatSkiLocation(area)}</p>
+                    <p className="text-sm text-zinc-300"><SkiLocation area={area} onZoom={onZoomLocation} /></p>
                 </div>
             </div>
             <SkiIconButton className="ski-quiet-button" icon="close" label="Close details" onClick={onClose} />
@@ -127,7 +189,8 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
         </div>
         {(report || forecast) && <section aria-label="Conditions summary" className="border-t border-zinc-800 py-2 text-sm">
             {report && <p>
-                <a href={report.source.url} className={linkClass}>{report.source.name} report</a>{' · '}
+                {report.source.url === officialConditions?.url ? `${report.source.name} report` :
+                    <a href={report.source.url} className={linkClass}>{report.source.name} report</a>}{' · '}
                 {report.reportedAt ? <time dateTime={report.reportedAt}>{localReportTime(report.reportedAt, area)}</time>
                     : report.reportedOn ? <time dateTime={report.reportedOn}>{report.reportedOn}</time> : 'Report time unknown'}
                 {age !== undefined && ` · ${age < 1 ? 'Less than an hour old' : `${Math.floor(age)} h old`}`}
@@ -154,7 +217,9 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
                     return value !== undefined && <div key={key}><dt className="text-zinc-400">{label}</dt><dd>{value}</dd></div>;
                 })}
             </dl>
-            {report?.terrain && conditions && <ReportedTerrain report={report} area={area} now={conditions.now} />}
+            {report?.snowByLocation && <ReportedSnow locations={report.snowByLocation} units={units} age={operationsAge} />}
+            {report?.forecastDays && <OperatorForecast report={report} area={area} units={units} now={now} />}
+            {report?.terrain && <ReportedTerrain report={report} area={area} now={now} />}
         </section>}
         <SkiSeasonDetails area={area} units={units} conditions={conditions} />
         <div className="flex flex-wrap gap-x-5 text-sm">

@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import linksData from '../../../projects/ski-status/data/resort-links.json';
 import snowData from '../../../projects/ski-status/data/snow-history.json';
-import { formatSkiLocation } from './browse';
-import { skiAreas, type SkiArea } from './catalog';
+import { formatSkiLocation } from './skiGeography';
+import { skiAreas, type SkiArea, type Skiing } from './catalog';
 import { httpsUrl, skiId } from './schemas';
 
 const label = z.string().trim().min(1);
@@ -26,8 +26,21 @@ const depth = z.strictObject({
 const snowProfiles = z.record(skiId, z.strictObject({ snowfall: snowfall.optional(), depth: depth.optional() })
     .refine(record => record.snowfall || record.depth, 'Add a snow record'));
 
+const googleMapsUrl = httpsUrl.refine(value => {
+    if (!URL.canParse(value)) return false;
+    const { origin, pathname } = new URL(value);
+    if (origin === 'https://maps.app.goo.gl') return /^\/[\w-]+$/.test(pathname);
+    if (origin === 'https://maps.google.com' && pathname === '/') return true;
+    return ['https://www.google.com', 'https://google.com', 'https://maps.google.com'].includes(origin)
+        && (pathname === '/maps' || pathname.startsWith('/maps/'));
+}, 'Use a Google Maps destination URL');
+const wikipediaTarget = label.refine(value => {
+    const [title, section, ...rest] = value.split('#');
+    return Boolean(title.trim() && title !== '.' && title !== '..' && !rest.length && (section === undefined || section.trim()));
+}, 'Use a Wikipedia title with an optional section');
 const resortLinks = z.strictObject({
-    wikipediaTitles: z.record(skiId, label.refine(title => title !== '.' && title !== '..')),
+    wikipediaTitles: z.record(skiId, wikipediaTarget),
+    googleMaps: z.record(skiId, z.strictObject({ url: googleMapsUrl, source: httpsUrl })).default({}),
     iconSources: z.record(skiId, httpsUrl),
 });
 const serviceIconIds = ['google-maps', 'wikipedia'];
@@ -37,9 +50,10 @@ export function readResortDetails(snowInput: unknown, linksInput: unknown, areas
     assets: Readonly<Record<string, string>>) {
     const areaIds = new Set(areas.map(area => area.id));
     const history = new Map(Object.entries(snowProfiles.parse(snowInput)));
-    const { wikipediaTitles, iconSources } = resortLinks.parse(linksInput);
+    const { wikipediaTitles, googleMaps, iconSources } = resortLinks.parse(linksInput);
     const articles = new Map(Object.entries(wikipediaTitles));
-    for (const id of [...history.keys(), ...articles.keys()]) {
+    const mapDestinations = new Map(Object.entries(googleMaps));
+    for (const id of [...history.keys(), ...articles.keys(), ...mapDestinations.keys()]) {
         if (!areaIds.has(id)) throw new Error(`Resort details have no ski area ${id}`);
     }
 
@@ -57,27 +71,37 @@ export function readResortDetails(snowInput: unknown, linksInput: unknown, areas
     for (const id of serviceIconIds) {
         if (!icons.has(id)) throw new Error(`Missing link icon ${id}`);
     }
-    return { history, articles, icons };
+    return { history, articles, mapDestinations, icons };
 }
 
-const { history, articles, icons } = readResortDetails(snowData, linksData, skiAreas, iconAssets);
+const { history, articles, mapDestinations, icons } = readResortDetails(snowData, linksData, skiAreas, iconAssets);
 export const skiSnowHistory: ReadonlyMap<string, z.infer<typeof snowProfiles>[string]> = history;
 
 export function skiResortIcon(id: string) {
     return icons.get(id);
 }
 
+const mapSearchCategories: Record<Skiing, string> = {
+    downhill: 'ski area', both: 'ski area', 'cross-country': 'cross-country skiing', indoor: 'indoor skiing',
+    'heli-skiing': 'heli-skiing', 'cat-skiing': 'cat skiing', 'ski-touring': 'ski touring',
+    'dry-slope': 'dry ski slope', freeride: 'freeride skiing',
+};
+
+function wikiPath(value: string) {
+    return encodeURIComponent(value.replaceAll(' ', '_'));
+}
+
 export function skiAreaExternalLinks(area: SkiArea) {
-    const nameAndPlace = `${area.name}, ${formatSkiLocation(area)}`;
-    const base = area.location.base;
-    const query = base?.kind === 'entrance' ? `${base.coordinates[1]},${base.coordinates[0]}` : nameAndPlace;
-    const mapSearch = new URLSearchParams({ api: '1', query });
-    const article = articles.get(area.id);
-    const wikiSearch = new URLSearchParams({ search: nameAndPlace });
+    const destination = mapDestinations.get(area.id);
+    const entrance = area.location.base?.kind === 'entrance' ? area.location.base.coordinates : undefined;
+    const mapQuery = entrance ? `${entrance[1]},${entrance[0]}`
+        : `${area.name}, ${mapSearchCategories[area.skiing]}, ${formatSkiLocation(area)}`;
+    const mapParameters = new URLSearchParams({ api: '1', query: mapQuery });
+    const [title, section] = articles.get(area.id)?.split('#') ?? [];
     return {
-        maps: `https://www.google.com/maps/search/?${mapSearch}`,
-        wikipedia: article ? `https://en.wikipedia.org/wiki/${encodeURIComponent(article.replaceAll(' ', '_'))}`
-            : `https://en.wikipedia.org/w/index.php?${wikiSearch}`,
-        article,
+        maps: destination?.url ?? `https://www.google.com/maps/search/?${mapParameters}`,
+        searchesMaps: !destination && !entrance,
+        wikipedia: title ? `https://en.wikipedia.org/wiki/${wikiPath(title)}${section ? `#${wikiPath(section)}` : ''}` : undefined,
+        article: section ?? title,
     };
 }

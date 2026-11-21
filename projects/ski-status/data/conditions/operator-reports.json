@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-20T17:38:00Z",
+  "generatedAt": "2026-11-21T15:30:39.784Z",
   "reports": [
     {
       "areaId": "banff-sunshine",
@@ -177,6 +177,85 @@
       "snowLocation": "Mid-mountain",
       "snowfallCm": 0,
       "snowfallHours": 24
+    },
+    {
+      "areaId": "mammoth-mountain",
+      "source": {
+        "name": "Mammoth Mountain",
+        "url": "https://www.mammothmountain.com/on-the-mountain/mountain-report#lifts-and-trails",
+        "exportable": false
+      },
+      "retrievedAt": "2026-11-21T15:30:38.890Z",
+      "reportedAt": "2026-11-21T07:22:35-08:00",
+      "reportedOn": "2026-11-21",
+      "status": "unknown",
+      "lifts": {
+        "open": 0,
+        "total": 25
+      },
+      "trails": {
+        "open": 39,
+        "total": 192
+      },
+      "baseCm": 83.82,
+      "snowfallCm": 0,
+      "snowfallHours": 24,
+      "snowLocation": "Base",
+      "snowByLocation": [
+        {
+          "location": "Base",
+          "baseCm": 83.82,
+          "overnightCm": 0,
+          "snow24HoursCm": 0,
+          "snow48HoursCm": 17.78
+        },
+        {
+          "location": "Mid Mountain",
+          "baseCm": 83.82,
+          "overnightCm": 0,
+          "snow24HoursCm": 0,
+          "snow48HoursCm": 22.86
+        },
+        {
+          "location": "Summit",
+          "baseCm": 106.68,
+          "overnightCm": 0,
+          "snow24HoursCm": 0,
+          "snow48HoursCm": 27.94
+        }
+      ],
+      "forecastDays": [
+        {
+          "date": "2026-11-21",
+          "highC": -3.89,
+          "lowC": -13.89,
+          "description": "Mostly Sunny"
+        },
+        {
+          "date": "2026-11-22",
+          "highC": -6.11,
+          "lowC": -10.56,
+          "description": "Partly Sunny then Light Snow"
+        },
+        {
+          "date": "2026-11-23",
+          "highC": -5,
+          "lowC": -10.56,
+          "description": "Mostly Sunny"
+        },
+        {
+          "date": "2026-11-24",
+          "highC": -2.78,
+          "lowC": -9.44,
+          "description": "Partly Sunny then Chance Light Snow"
+        },
+        {
+          "date": "2026-11-25",
+          "highC": -3.33,
+          "lowC": -5.56,
+          "description": "Chance Light Snow"
+        }
+      ]
     },
     {
       "areaId": "mt-norquay",

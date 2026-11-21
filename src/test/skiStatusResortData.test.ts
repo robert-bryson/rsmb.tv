@@ -10,6 +10,13 @@ const links = { wikipediaTitles: {}, iconSources };
 const measurement = { label: 'Snow course', source };
 
 describe('ski-status resort data', () => {
+    it('uses the published skiable vertical at Mt. Norquay', () => {
+        const norquay = skiAreas.find(area => area.id === 'mt-norquay');
+        expect(norquay?.verticalFt).toBe(1650);
+        expect(norquay?.statSources?.find(({ fields }) => fields.includes('verticalFt'))?.source)
+            .toMatch(/^https:\/\/banffnorquay\.com\//);
+    });
+
     it('keeps zero measurements and requires an actual value for each source', () => {
         const depth = { ...measurement, kind: 'survey', monthlyCm: { 1: 0 }, monthlySources: { 1: source } };
         const data = { resort: { snowfall: { ...measurement, annualCm: 0, annualSource: source }, depth } };
@@ -40,6 +47,18 @@ describe('ski-status resort data', () => {
         expect(() => readResortDetails({}, { ...links, wikipediaTitles: { removed: 'Some Resort' } }, areas, assets))
             .toThrow('Resort details have no ski area removed');
         expect(() => readResortDetails({}, { ...links, wikipediaTitles: { resort: '..' } }, areas, assets)).toThrow();
+        expect(() => readResortDetails({}, { ...links, wikipediaTitles: { resort: 'Resort#' } }, areas, assets)).toThrow();
+    });
+
+    it('requires a catalog ID and source for each direct Google Maps destination', () => {
+        const url = 'https://www.google.com/maps?cid=123';
+        const googleMaps = { resort: { url, source } };
+        expect(readResortDetails({}, { ...links, googleMaps }, areas, assets).mapDestinations.get('resort')).toEqual({ url, source });
+        expect(() => readResortDetails({}, { ...links, googleMaps }, [], assets)).toThrow('Resort details have no ski area resort');
+        expect(() => readResortDetails({}, { ...links, googleMaps: { resort: { url } } }, areas, assets)).toThrow();
+        expect(() => readResortDetails({}, {
+            ...links, googleMaps: { resort: { url: 'https://www.google.com/url?q=https://example.test', source } },
+        }, areas, assets)).toThrow('Use a Google Maps destination URL');
     });
 
     it('keeps operator annual snowfall and nearby station measurements attributed to their sources', () => {
@@ -69,20 +88,43 @@ describe('ski-status resort data', () => {
             .toThrow('Missing link icon google-maps');
     });
 
-    it('uses exact coordinates for a verified entrance and searches by name for a mapped lift base', () => {
+    it('uses verified entrance coordinates and labels a search by ski activity when the entrance is unverified', () => {
         const sunshine = skiAreas.find(area => area.id === 'banff-sunshine')!;
         const direct = skiAreaExternalLinks(sunshine);
         expect(new URL(direct.maps).searchParams.get('query')).toBe('51.114965,-115.763609');
+        expect(direct.searchesMaps).toBe(false);
         expect(direct.wikipedia).toBe('https://en.wikipedia.org/wiki/Banff_Sunshine');
         expect(skiResortIcon(sunshine.id)).toContain('banff-sunshine');
         expect(skiSnowHistory.get(sunshine.id)?.snowfall?.annualCm).toBe(723);
 
         const fallback = skiAreaExternalLinks({
-            ...sunshine, id: 'constructor', location: { ...sunshine.location, base: { ...sunshine.location.base!, kind: 'lift-base' } },
+            ...sunshine, id: 'constructor', name: 'Mountain', skiing: 'cross-country',
+            location: { ...sunshine.location, base: { ...sunshine.location.base!, kind: 'lift-base' } },
         });
         expect(fallback.article).toBeUndefined();
-        expect(new URL(fallback.maps).searchParams.get('query')).toContain(sunshine.name);
-        expect(new URL(fallback.wikipedia).searchParams.get('search')).toContain(sunshine.name);
+        expect(fallback.wikipedia).toBeUndefined();
+        expect(fallback.searchesMaps).toBe(true);
+        expect(new URL(fallback.maps).searchParams.get('query')).toMatch(/^Mountain, cross-country skiing, /);
         expect(skiResortIcon('constructor')).toBeUndefined();
+    });
+
+    it('links Hunter and both Crystal Mountains to their distinct ski areas', () => {
+        const linksFor = (id: string) => skiAreaExternalLinks(skiAreas.find(area => area.id === id)!);
+        const hunter = linksFor('hunter-mountain');
+        expect(hunter.searchesMaps).toBe(false);
+        expect(hunter.wikipedia).toBe('https://en.wikipedia.org/wiki/Hunter_Mountain_(ski_area)');
+        const washington = linksFor('crystal-mountain');
+        const michigan = linksFor('crystal-mountain-mi');
+        expect(washington.maps).not.toBe(michigan.maps);
+        expect(washington.wikipedia).toBe('https://en.wikipedia.org/wiki/Crystal_Mountain_(Washington)');
+        expect(michigan.wikipedia).toBe('https://en.wikipedia.org/wiki/Crystal_Mountain_(Michigan)');
+    });
+
+    it('opens the verified Whiteface ski area section of its mountain article', () => {
+        const area = skiAreas.find(area => area.id === 'whiteface')!;
+        expect(skiAreaExternalLinks(area)).toMatchObject({
+            article: 'Whiteface Mountain Ski Area',
+            wikipedia: 'https://en.wikipedia.org/wiki/Whiteface_Mountain#Whiteface_Mountain_Ski_Area',
+        });
     });
 });

@@ -1,7 +1,8 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { expect, it, vi } from 'vitest';
+import { afterEach, expect, it, vi } from 'vitest';
 import SkiStatus from '../pages/SkiStatus';
+import { loadConditionsFeed, type ConditionsFeed } from '../features/ski-status/conditions-feed';
 import { captureSkiMapArea, encodeSkiMapArea } from '../features/ski-status/skiMapArea';
 
 vi.mock('../features/ski-status/SkiStatusMap', () => ({
@@ -10,6 +11,10 @@ vi.mock('../features/ski-status/SkiStatusMap', () => ({
             ([x, y]) => [-115 + (x - 50) / 100, 41 + (50 - y) / 100])))}>Commit area in Nevada</button>
     </div>,
 }));
+
+vi.mock('../features/ski-status/conditions-feed', () => ({ loadConditionsFeed: vi.fn().mockResolvedValue({}) }));
+
+afterEach(() => { vi.useRealTimers(); localStorage.removeItem('ski-status-excluded-locations'); });
 
 it('opens the map first on a narrow screen and keeps catalog results one tap away', async () => {
     render(<MemoryRouter initialEntries={['/projects/ski-status/map']}><SkiStatus /></MemoryRouter>);
@@ -59,4 +64,44 @@ it.each([
     expect(dialog.open).toBe(false);
     expect(await screen.findByRole('button', { name: expected, pressed: true })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Whaleback Mountain' })).toBeVisible();
+});
+
+it('keeps local exclusions when a user edits the locations in a shared view', async () => {
+    const preference = 'ski-status-excluded-locations';
+    localStorage.setItem(preference, JSON.stringify(['continent:Europe']));
+    render(<MemoryRouter initialEntries={['/projects/ski-status/map?view=results&status=all&excludeRegion=country%3AJP']}><SkiStatus /></MemoryRouter>);
+    expect(screen.getByRole('button', { name: 'Remove Exclude Japan' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Remove Exclude Europe' })).toBeNull();
+
+    const dialog = document.querySelector<HTMLDialogElement>('#ski-filters')!;
+    Object.defineProperty(dialog, 'showModal', { value: () => { dialog.open = true; } });
+    fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+    const filters = within(dialog);
+    fireEvent.change(filters.getByLabelText('Choose a location'), { target: { value: 'region:US:CA' } });
+    await act(async () => { fireEvent.click(filters.getByRole('button', { name: 'Exclude' })); });
+    expect(filters.getByRole('button', { name: 'Remove Exclude California' })).toBeVisible();
+    expect(JSON.parse(localStorage.getItem(preference)!)).toEqual(['continent:Europe', 'region:US:CA']);
+
+    fireEvent.click(filters.getByRole('button', { name: 'Remove Exclude Japan' }));
+    expect(filters.queryByRole('button', { name: 'Remove Exclude Japan' })).toBeNull();
+    expect(JSON.parse(localStorage.getItem(preference)!)).toEqual(['continent:Europe', 'region:US:CA']);
+});
+
+it('waits for reports and presents the current ski areas when the feed arrives', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    const time = '2026-12-25T20:00:00Z';
+    vi.setSystemTime(new Date(time));
+    let publish!: (feed: ConditionsFeed) => void;
+    const load = vi.mocked(loadConditionsFeed);
+    load.mockReturnValueOnce(new Promise(resolve => { publish = resolve; }));
+    const { unmount } = render(<MemoryRouter initialEntries={['/projects/ski-status/map?view=results']}><SkiStatus /></MemoryRouter>);
+    expect(screen.getByText('Checking today’s resort reports…')).toBeVisible();
+    await act(async () => publish({ reports: { file: 'test-reports', data: { version: 1, generatedAt: time, reports: [{
+        areaId: 'whaleback', status: 'limited', reportedAt: time, retrievedAt: time, lifts: { open: 1 },
+        source: { name: 'Test operator', url: 'https://example.org/report', exportable: false },
+    }] } } }));
+    expect(screen.getByText('1 reporting skiing today', { exact: true })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Whaleback Mountain' })).toBeVisible();
+    unmount();
+    expect(load.mock.lastCall?.[1].aborted).toBe(true);
 });

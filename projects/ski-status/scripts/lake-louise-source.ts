@@ -1,6 +1,6 @@
 import { reportSnapshotSchema, type ResortReport } from '../../../src/features/ski-status/conditions.ts';
 import { isoTime } from '../../../src/features/ski-status/schemas.ts';
-import { conditionsXmlRoot, fetchConditionsXml } from './conditions-xml.ts';
+import { conditionsXmlNumber, conditionsXmlRoot, fetchConditionsXml } from './conditions-xml.ts';
 
 const feedUrl = 'https://lamp10.skilouise.com/app/mtnxml.php';
 const reportUrl = 'https://www.skilouise.com/snow-conditions/';
@@ -10,13 +10,6 @@ type TerrainItem = NonNullable<ResortReport['terrain']>['items'][number];
 const statuses: ReadonlyMap<string, TerrainItem['status']> = new Map([
     ['open', 'open'], ['closed', 'closed'], ['on hold', 'on-hold'], ['scheduled', 'scheduled'],
 ]);
-
-function numberField(value: string | null | undefined, minimum = 0) {
-    const clean = value?.trim();
-    if (!clean || !/^-?\d+(?:\.\d+)?$/.test(clean)) return;
-    const parsed = Number(clean);
-    return Number.isFinite(parsed) && parsed >= minimum ? parsed : undefined;
-}
 
 export function lakeLouiseReport(xml: string, retrievedAt: string) {
     const root = conditionsXmlRoot(xml, 'Lake Louise');
@@ -37,7 +30,7 @@ export function lakeLouiseReport(xml: string, retrievedAt: string) {
 
     const items: TerrainItem[] = [];
     const inventory = (kind: TerrainItem['kind'], countName: string) => {
-        const open = numberField(counts.getAttribute(countName));
+        const open = conditionsXmlNumber(counts.getAttribute(countName));
         const features = Array.from(areas.getElementsByTagName(kind));
         if (open === undefined || !features.length) throw Error(`Lake Louise omitted ${kind} counts or names`);
         const numberOpen = features.reduce((sum, feature) => {
@@ -59,10 +52,10 @@ export function lakeLouiseReport(xml: string, retrievedAt: string) {
     const snowTime = isoTime.safeParse(conditions.getElementsByTagName('resortwide').item(0)?.getAttribute('lastSnowfallUpdate')).data;
     const snowUpdatedAt = snowTime ? Date.parse(snowTime) : NaN;
     const snowReportedOn = snowUpdatedAt <= Date.parse(generatedAt) ? snowTime?.slice(0, 10) : undefined;
-    const baseCm = snowReportedOn ? numberField(mountain?.getAttribute('base')) : undefined;
-    const snowfallCm = snowReportedOn ? numberField(mountain?.getAttribute('snow24Hours')) : undefined;
+    const baseCm = snowReportedOn ? conditionsXmlNumber(mountain?.getAttribute('base')) : undefined;
+    const snowfallCm = snowReportedOn ? conditionsXmlNumber(mountain?.getAttribute('snow24Hours')) : undefined;
     const temperatureTime = isoTime.safeParse(mountain?.getAttribute('weatherTimestamp')).data;
-    const valueC = numberField(mountain?.getAttribute('temperature'), -Infinity);
+    const valueC = conditionsXmlNumber(mountain?.getAttribute('temperature'), -Infinity);
     const temperature = valueC !== undefined && temperatureTime && Date.parse(temperatureTime) <= Date.parse(retrievedAt) ?
         { valueC, measuredAt: temperatureTime, location: mountain?.getAttribute('stationName')?.trim() || 'Upper Mountain' } : undefined;
 

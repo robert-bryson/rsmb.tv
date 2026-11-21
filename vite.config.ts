@@ -10,6 +10,7 @@ import { tripContentPlugin } from './scripts/trip-content-plugin.ts'
 import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
 import { publicAssetsPlugin } from './scripts/public-assets-plugin.ts'
 import { siteSearchPlugin } from './scripts/site-search-plugin.ts'
+import { skiConditionsDevPlugin } from './scripts/ski-conditions-dev-plugin.ts'
 
 const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
@@ -17,6 +18,9 @@ export default defineConfig(({ mode, command }) => {
   const localEnv = loadEnv(mode, process.cwd(), '');
   const cartoKey = [process.env.VITE_CARTO_API_KEY, process.env.CARTO_API_KEY, localEnv.VITE_CARTO_API_KEY, localEnv.CARTO_API_KEY]
     .map(value => value?.trim()).find(Boolean) ?? '';
+  const skiConditionsMode = command === 'serve' && mode !== 'test'
+    ? process.env.VITE_SKI_CONDITIONS_LOCAL ?? localEnv.VITE_SKI_CONDITIONS_LOCAL ?? '1'
+    : '0';
   if (command === 'build' && mode !== 'trip-test' && mode !== 'test' && !cartoKey) {
     throw new Error('Set CARTO_API_KEY (a browser-restricted CARTO Basemaps key) before building the site.');
   }
@@ -26,6 +30,7 @@ export default defineConfig(({ mode, command }) => {
     __BUILD_DATE__: JSON.stringify(buildDate),
     __BUILD_REVISION__: JSON.stringify(process.env.AWS_COMMIT_ID || process.env.GITHUB_SHA || 'local'),
     'import.meta.env.VITE_CARTO_API_KEY': JSON.stringify(cartoKey),
+    'import.meta.env.VITE_SKI_CONDITIONS_LOCAL': JSON.stringify(skiConditionsMode),
   },
   plugins: [
     mdx({
@@ -37,6 +42,7 @@ export default defineConfig(({ mode, command }) => {
     tripContentPlugin(),
     siteSearchPlugin(),
     publicAssetsPlugin(),
+    skiConditionsDevPlugin(skiConditionsMode),
     tailwindcss(),
   ],
   assetsInclude: ['**/*.glb'],

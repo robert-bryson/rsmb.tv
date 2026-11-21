@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, passFilterFamily, readPassFilters, readSkiingFilter, readSkiResultsView, readSkiSort, skiAreaBounds, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiStat, passFilterFamily, readPassFilters, readSkiingFilter, readSkiResultsView, readSkiSort, skiAreaBounds, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreaMapPoint, skiAreas } from '../features/ski-status/catalog';
 import { markerAppearance, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
-import { readSkiFilters, toggleSkiPassFilter, writeSkiPassProduct } from '../features/ski-status/skiFilters';
+import { readSkiFilters, skiLocationLabels, toggleSkiPassFilter, writeSkiPassProduct } from '../features/ski-status/skiFilters';
+import { formatSkiLocation } from '../features/ski-status/skiGeography';
 
 const area = {
     id: 'test-mountain', name: 'Test Mountain', country: 'US', region: 'WA', locality: 'Test Town', acres: 100,
@@ -148,7 +149,7 @@ describe('ski-status catalog validation', () => {
         const shared = { ...area, otherCountries: ['CA'] };
         const [sharedArea] = readSkiCatalog([shared], locations, passes).areas;
         expect(sharedArea).toMatchObject(shared);
-        expect(formatSkiLocation(sharedArea)).toBe('Test Town, United States / Canada');
+        expect(formatSkiLocation(sharedArea)).toBe('Test Town, WA, United States / Canada');
         expect(filterSkiAreas([sharedArea], { region: 'country:CA' })).toEqual([sharedArea]);
         for (const otherCountries of [['US'], ['CA', 'CA']]) {
             expect(() => readSkiCatalog([{ ...area, otherCountries }], locations, passes)).toThrow('Duplicate country for test-mountain');
@@ -214,9 +215,8 @@ describe('ski-status catalog and browse', () => {
     });
 
     it('distinguishes countries from overlapping state codes in filters and displays international locations', () => {
-        const { countries, regions } = skiRegionOptions(skiAreas);
-        expect(countries).toContainEqual({ value: 'country:CA', label: 'Canada' });
-        expect(regions).toContain('CA');
+        expect(skiLocationLabels.get('country:CA')).toBe('Canada');
+        expect(skiLocationLabels.get('region:US:CA')).toBe('California');
         expect(filterSkiAreas(skiAreas, { query: 'mammoth', region: 'CA' }).map(area => area.id)).toContain('mammoth-mountain');
         expect(filterSkiAreas(skiAreas, { query: 'mammoth', region: 'country:CA' })).toEqual([]);
         const found = filterSkiAreas(skiAreas, { query: 'new zealand mt hutt', region: 'country:NZ', passes: ['ikon'] });
@@ -414,7 +414,7 @@ describe('2026/27 Indy destination coverage', () => {
     });
 
     it('finds one shared destination from either side of the national border', () => {
-        expect(skiRegionOptions(skiAreas).countries).toContainEqual({ value: 'country:DE', label: 'Germany' });
+        expect(skiLocationLabels.get('country:DE')).toBe('Germany');
         for (const region of ['country:FR', 'country:CH']) {
             const result = filterSkiAreas(skiAreas, { query: 'portes du soleil', region, passes: ['indy'] });
             expect(result.map(area => area.id)).toEqual(['portes-du-soleil']);

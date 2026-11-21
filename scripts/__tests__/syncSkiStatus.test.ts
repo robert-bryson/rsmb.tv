@@ -279,6 +279,22 @@ describe('ski-status publication', () => {
         expect((await publish(next)).coverage.forecasts).toBe(0);
     });
 
+    it('refreshes expired forecasts on a report-only run', async () => {
+        const first = await publish();
+        const inputs = options();
+        const start = Date.parse(forecast.endsAt) + 1;
+        inputs.now = () => start;
+        inputs.refreshForecasts = false;
+        inputs.fetchForecast.mockImplementation(async ({ areaId }) => ({ ...forecast, areaId,
+            startsAt: new Date(start).toISOString(), retrievedAt: new Date(start).toISOString(),
+            endsAt: new Date(start + 86_400_000).toISOString(),
+        }));
+        const refreshed = await publish(inputs);
+        expect(refreshed.manifest.forecasts).not.toBe(first.manifest.forecasts);
+        expect(refreshed.coverage.forecasts).toBe(2);
+        expect(inputs.fetchForecast).toHaveBeenCalledTimes(2);
+    });
+
     it('preserves the active manifest and history when every source fails', async () => {
         await publish();
         const previous = await readFile(join(directory, manifestName));

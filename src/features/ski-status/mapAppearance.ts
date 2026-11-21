@@ -3,7 +3,7 @@ import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './ca
 import { skiDayStatus, statusLabels, type Conditions, type ResortStatus } from './conditions';
 
 export const markerModes = {
-    default: 'Resort dots',
+    default: 'Resort icons',
     pass: 'Pass access',
     operatingStatus: 'Operating status',
     acres: 'Skiable area',
@@ -21,7 +21,7 @@ export function readMarkerMode(value: string | null): MarkerMode {
 interface LegendEntry { label: string; color: string; family?: PassFamily; multiple?: boolean; glyph?: string }
 type MarkerAppearance = { color: string; passBadge?: ReturnType<typeof passBadgeId> };
 
-const defaultColor = '#67e8f9';
+export const resortMarkerColor = '#67e8f9';
 const unknown = { color: '#a1a1aa', label: 'Unknown' };
 export const statusMarkers: Record<ResortStatus, { color: string; glyph: string }> = {
     open: { color: '#78e5ad', glyph: '✓' }, limited: { color: '#f0c478', glyph: '◆' },
@@ -78,7 +78,7 @@ export function passAccessAppearance(area: SkiArea, selection?: SkiPassSelection
 }
 
 export function markerAppearance(area: SkiArea, mode: MarkerMode, passSelection?: SkiPassSelection, conditions?: Conditions): MarkerAppearance {
-    if (mode === 'default') return { color: defaultColor };
+    if (mode === 'default') return { color: resortMarkerColor };
     if (mode === 'operatingStatus') return { color: statusMarkers[skiDayStatus(conditions?.reports.get(area.id), conditions?.now ?? 0, area.location.timeZone)].color };
     if (mode === 'pass') {
         const { color, family, multiple } = passAccessAppearance(area, passSelection);
