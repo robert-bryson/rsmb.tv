@@ -4,7 +4,7 @@ import type { Plugin } from 'vite';
 
 const reviewedSources = {
     'three-globe': 'b33b85fa0065a9bfa0e465bc2f773dc1a5a6496981b0818fd8517707a7b92501',
-    'three-render-objects': '72ffcdc853ea1b5a150e960c1c766d6581341b1441d50203a53a4028c0475e91',
+    'three-render-objects': '1cf1a6d33c2feef92e4fcd7d68083ab30dcc8438547a7aa3892d5a9bbb417e8a',
 } as const;
 
 export function specializeGlobeSource(code: string, id: string) {

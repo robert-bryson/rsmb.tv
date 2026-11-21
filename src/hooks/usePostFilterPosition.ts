@@ -15,6 +15,7 @@ export function usePostFilterPosition(open: boolean, anchorRef: RefObject<HTMLEl
         const header = layout?.querySelector<HTMLElement>(':scope > .site-header');
         let active = true;
         let frame: number | undefined;
+        let viewportResized = false;
 
         const place = () => {
             const bounds = anchor.getBoundingClientRect();
@@ -41,12 +42,29 @@ export function usePostFilterPosition(open: boolean, anchorRef: RefObject<HTMLEl
             panel.style.right = `${right}px`;
             return true;
         };
+        const keepFocusVisible = () => {
+            const focused = document.activeElement;
+            if (!(focused instanceof HTMLElement) || focused === panel || !panel.contains(focused)) return;
+
+            const bounds = focused.getBoundingClientRect();
+            const top = panel.getBoundingClientRect().top + panel.clientTop;
+            const bottom = top + panel.clientHeight;
+            if (bounds.top < top) panel.scrollTop -= Math.ceil(top - bounds.top);
+            else if (bounds.bottom > bottom) panel.scrollTop += Math.ceil(bounds.bottom - bottom);
+        };
         const schedule = () => {
             if (!active || frame !== undefined) return;
             frame = window.requestAnimationFrame(() => {
                 frame = undefined;
-                if (active && !place()) onDismiss();
+                if (!active) return;
+                if (!place()) onDismiss();
+                else if (viewportResized) keepFocusVisible();
+                viewportResized = false;
             });
+        };
+        const onViewportResize = () => {
+            viewportResized = true;
+            schedule();
         };
         if (!place()) schedule();
         const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
@@ -56,9 +74,9 @@ export function usePostFilterPosition(open: boolean, anchorRef: RefObject<HTMLEl
         const mutations = new MutationObserver(schedule);
         if (layout) mutations.observe(layout, { attributes: true, attributeFilter: ['data-header-visible', 'style'] });
         mutations.observe(panel, { childList: true, subtree: true, characterData: true });
-        window.addEventListener('resize', schedule);
+        window.addEventListener('resize', onViewportResize);
         window.addEventListener('scroll', schedule, { passive: true });
-        viewport?.addEventListener('resize', schedule);
+        viewport?.addEventListener('resize', onViewportResize);
         viewport?.addEventListener('scroll', schedule);
         header?.addEventListener('transitionend', schedule);
         return () => {
@@ -66,9 +84,9 @@ export function usePostFilterPosition(open: boolean, anchorRef: RefObject<HTMLEl
             observer?.disconnect();
             mutations.disconnect();
             if (frame !== undefined) window.cancelAnimationFrame(frame);
-            window.removeEventListener('resize', schedule);
+            window.removeEventListener('resize', onViewportResize);
             window.removeEventListener('scroll', schedule);
-            viewport?.removeEventListener('resize', schedule);
+            viewport?.removeEventListener('resize', onViewportResize);
             viewport?.removeEventListener('scroll', schedule);
             header?.removeEventListener('transitionend', schedule);
         };

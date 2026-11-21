@@ -53,9 +53,11 @@ test('a shared region selection stays visible after reopening and resizing', asy
     await page.keyboard.press('Escape');
     await expect(button).toBeFocused();
     await button.press('Enter');
-    await page.setViewportSize({ width: 320, height: 600 });
     await expect(alaska).toHaveAttribute('aria-current', 'page');
     await alaska.focus();
+    await expect(alaska).toBeInViewport({ ratio: 1 });
+    await page.setViewportSize({ width: 320, height: 400 });
+    await expect(alaska).toBeFocused();
     await expect(alaska).toBeInViewport({ ratio: 1 });
 });
 
