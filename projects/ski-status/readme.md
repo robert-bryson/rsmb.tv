@@ -7,15 +7,16 @@ Use the comparison table for mountain statistics. Open an operator link to check
 
 ## Use ski-status
 
-Open `/projects/ski-status/map`. The globe opens in **Ski today** on desktop and phones.
-Use **Ski today** to find areas with current reports of open or limited skiing. Report coverage also includes closures for the local ski day.
+Open `/projects/ski-status/map`. The map opens in **Ski today**.
+Use **Ski today** to find areas that report open or limited skiing for the local ski day.
+The report count also includes areas that report closures.
 Select **All resorts** to include all areas that match the other filters.
 
 ### Find an area
 
 - Search by name, alternative name, town, country, or skiing type. Select **Clear search** to remove the search text.
-- Select one or more pass buttons. An area matches if any selected pass gives included access. When several passes are active, **Results** shows the matching passes. Select an active pass again to remove it.
-- Open **Filters** to select a region or other criteria. The icon shows the number of additional filters. Select **Show results** to close the dialog. On a phone, this action opens **Results** from the map.
+- Select one or more pass buttons. An area matches if any selected pass gives included access. **Results** lists the matching passes if you select more than one. Select an active pass again to remove it.
+- Open **Filters** to select a region or other criteria. The icon shows the number of additional filters. Select **Show results** to close the dialog. On a phone, this opens **Results** from the map.
 - Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer. Remove other active filters from the header.
 - Select a **Pass product** to check access on a **Ski date**. This date applies to the product's pass family. A blank date uses the local date at each area. For Indy Add-On, select your **Home ski area** to exclude it.
 - Select a month under **Typical season in**. Open an area to see its season dates and sources.
@@ -25,18 +26,22 @@ Select **All resorts** to include all areas that match the other filters.
 
 - Select a marker, result, or table row to open the area details. Open **Official conditions** for the operator's report. Some areas show **Resort website and conditions**. Select **Show runs and lifts** to see the mapped terrain.
 - Open Google Maps for the visitor entrance or resort listing. Open Wikipedia for the resort article or a search by name and location.
-- In **Season and snowfall**, check the recorded, planned, or usual dates. The snow chart gives monthly snowfall or depth with its source and measurement location.
-- Select **Close details**. The app returns focus to the control that opened the panel when it is visible. Press Escape on the map or select empty space to clear the selection. Use skip links to reach search, the map, or results.
+- In **Season and snowfall**, check the recorded, scheduled, or estimated dates. The table shows each month with a measurement. The source list gives the location and period when the source supplies them.
+- Select **Close details**. If the control that opened the panel is visible, the app returns focus to it. Press Escape on the map or select empty space to clear the selection. Use skip links to reach search, the map, or results.
 - On a wide screen, the map and results appear side by side. On a phone, switch between **Map** and **Results**. Select **Compare** for the full table.
 - Select a column header to sort. Use **Previous** and **Next** to move through pages of 50 areas. **All resorts** shows mountain statistics first. The status views show report columns first. Select **Columns** to change the fields. **Export CSV** includes all matches and the selected fields with export permission.
 
-Select **Share current view** beside the result count. Use the system share menu when it opens. The app can also copy the link or show it in a dialog. The link saves the search, filters, sort order, selected area, view, map position, and layers. The browser saves units and columns.
+Select **Share current view** beside the result count. Use the system share menu when it opens. The app can copy the link or show it in a dialog.
+The link saves the search, filters, sort order, selected area, view, map position, and layers.
+The browser saves units and columns.
 
 ### Map display
 
 Pan or zoom the globe to explore. The URL updates when the map stops. Select **Search this area** to set the map area. Remove the **Map area** filter to clear it. Open a shared link to restore the map position and search area at any screen width.
 
-At globe scale, markers group nearby resorts. In operating status mode, a group number counts resorts reporting skiing today. The map uses muted groups where no resort reports skiing. Select a group to zoom in. From zoom level 3, small individual resort markers replace the groups. Operating status markers distinguish open, limited, closed, and unknown statuses with symbols and colors. A gold outline marks the selected area.
+At globe scale, the map groups nearby resorts. In the operating status layer, each number counts resorts that report skiing today.
+A gray group has no resorts that report skiing today. Select a group to zoom in.
+The map shows individual markers from zoom level 3. Symbols and colors show each area's operating status. A gold outline marks the selected area.
 
 The map uses a verified visitor entrance when one is available. It can use an inferred lift base when the mapped lifts support that location.
 **Show runs and lifts** centers the map on the terrain point.
@@ -77,33 +82,31 @@ The United States had 334 points. Canada had 72. Other countries had 177.
 The country filter also includes Germany through shared areas.
 The catalog had 126 areas with Ikon access, 98 with Epic access, 298 with included Indy access, and 34 with Mountain Collective access.
 
-All 583 areas have at least one published statistic. Of the 525 downhill areas, 178 have values for all six main comparison fields.
+All 583 areas have at least one published statistic. The catalog has 525 conventional downhill areas, including areas with Nordic trails. Of these, 289 have all six main comparison fields.
 Mapped terrain values cover 536 areas. [First-release data review](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#catalog-coverage)
 
 | Published field | Areas |
 | --- | ---: |
-| Skiable acreage | 267 |
-| Vertical drop | 457 |
-| Lift count | 475 |
-| Trail count | 501 |
-| Base elevation | 226 |
-| Summit elevation | 265 |
-| Downhill trail length | 80 |
-| Nordic trail length | 63 |
-| Highest lift terminal | 42 |
-| Lowest lift terminal | 13 |
+| Skiable acreage | 377 |
+| Vertical drop | 464 |
+| Lift count | 483 |
+| Trail count | 504 |
+| Base elevation | 394 |
+| Summit elevation | 403 |
+| Downhill trail length | 86 |
+| Nordic trail length | 64 |
+| Highest lift terminal | 43 |
+| Lowest lift terminal | 14 |
 | Night skiable acreage | 10 |
-| Difficulty breakdown | 115 |
+| Difficulty breakdown | 293 |
 | Season window | 65 |
-| Official conditions link | 496 |
-| Planned season dates | 107 |
-| Average annual snowfall | 105 |
-| Average monthly snowfall | 7 |
-| Average monthly snow depth | 32 |
+| Official conditions link | 527 |
+| Planned season dates | 139 |
+| Average annual snowfall | 165 |
+| Average monthly snowfall | 61 |
+| Monthly snow depth series | 80 |
 
-Copper Mountain’s monthly averages use the operator’s October through April measurements from the 2005/06 through 2024/25 seasons. [Copper Mountain snowfall history](https://www.coppercolorado.com/the-mountain/mountain-safety-stats/winter-mountain-stats/)
-
-The 28 USDA station series show November through April snow depth at named sites near the ski areas. Each series uses at least five consecutive winters between 2015/16 and 2024/25. Each month needed at least 90% of its daily readings, and each winter contributes equally to the averages. The chart gives the station elevation and record period. [USDA Snow Survey station index](https://wcc.sc.egov.usda.gov/nwcc/yearcount?counttype=statelist)
+Indy Pass profiles give acreage, elevations, and difficulty figures for individual areas. Use the operator or tourism authority when it gives a more precise area boundary. [Arctic Valley profile](https://www.indyskipass.com/our-resorts/arctic-valley), [Hohsaas area elevations](https://www.valais.ch/book/en/service-providers/saastal-ski-tickets)
 
 | File | Use |
 | --- | --- |
@@ -120,8 +123,9 @@ The 28 USDA station series show November through April snow depth at named sites
 
 Use the same area ID in the area, location, and pass records. Add one point per area. Add one membership per pass family.
 Put the map point's country in `country`. Put other verified countries that the same area covers in `otherCountries`. Add the state or province code where applicable. [Catalog validation](../../src/features/ski-status/catalog.ts)
+Use the area ID as the resort icon file name. Give each bundled icon a source. Keep direct article titles in the resort links file. [Resort links and icons](data/resort-links.json)
 
-Use operator fact sheets, trail maps, and lift inventories. Use regional ski associations or public tourism agencies when they describe the same area. Check which mountains, trails, and lifts each figure includes.
+Use operator fact sheets, trail maps, and lift inventories. Use regional ski associations or public tourism agencies when they describe the same area. If the figures disagree, compare what each source includes. [Measurement rules](#comparable-mountain-statistics)
 
 Record the source URL, fields, and verification date in `statSources`. List each field once. Use the note to explain conversions, calculated totals, and terrain scope.
 Set `reportCheckedOn` when you verify an official conditions link. Use `exportLicense` on a field citation when its terms permit CSV export.
@@ -136,16 +140,31 @@ Each count uses operating routes of the given activity. Segments with the same n
 
 ### Season and snowfall
 
-The sidebar uses recorded dates first. It uses the current operator report for a scheduled opening when that report is fresh.
-It then uses the nearest applicable schedule. An estimate uses recent complete seasons or the operator's published season window.
-The sidebar labels each date **Recorded**, **Scheduled**, or **Estimated**.
+The area details use recorded dates first. A current operator report can supply a scheduled opening.
+The details then use the nearest applicable schedule. An estimate uses recent complete seasons or the operator's usual season dates.
+Each date has a **Recorded**, **Scheduled**, or **Estimated** label.
 
-Monthly snowfall shows the average of the monthly totals. Snow depth shows settled snow at the measurement site. The chart gives the period and location.
-The USDA station series use the mean of the daily readings in each month. Each winter has equal weight. The Sunshine Village snow course gives early-month measurements. [USDA Snowbird station](https://wcc.sc.egov.usda.gov/nwcc/site?network=SNTL&sitenum=766&state=UT), [Alberta snow survey](https://rivers.alberta.ca/Contents/SnowPack/2016/4/aprmsc.pdf)
+The snow table shows every month with a measurement, including months outside the current season dates.
+The table starts the year in July for northern areas and in January for southern areas.
+Monthly snowfall is the average of the monthly totals. Snow depth measures settled snow at the given location.
+Each series shows its source. The app shows separate citations when the annual and monthly values use different sources.
 
-Record snowfall and snow depth in centimeters. Use month numbers `1` to `12`. Give a source for each annual or monthly series.
-Keep zero when the source reports zero. Omit the month when the source gives no value. Use `survey` or `station` for depth readings at those sites.
-Use the same area ID in the snow history and the catalog. Use the area ID as the icon file name. Record a source for every bundled icon.
+1. Use the same area ID in the snow history and the catalog.
+2. Record snow measurements in centimeters. Use month numbers `1` to `12`.
+3. Keep reported zeros. Omit a month when its value is unknown.
+4. Give each series a source. Include its measurement location and period when available.
+5. If the annual figure uses a different source, add an `annualSource` object. Set its `label` and HTTPS `source`. Add `location` and `period` when known. The reader also accepts an HTTPS URL in `annualSource`.
+
+Use `survey` for snow depth surveys. Use `station` for averages of daily station readings. Use `monthly-peak` for the average of each month's maximum snow depth.
+
+#### Snow history methods
+
+- Copper Mountain averages October through April totals from its 2005/06 through 2024/25 seasons. Mt. Baker averages November through April totals from 11 seasons, 2015/16 through 2025/26. [Copper Mountain snowfall history](https://www.coppercolorado.com/the-mountain/mountain-safety-stats/winter-mountain-stats/), [Mt. Baker snowfall archive](https://www.mtbaker.us/the-mountain/snowfall-statistics/)
+- The 28 USDA station series use at least five consecutive winters between 2015/16 and 2024/25. Each month from November through April uses at least 90% of its daily depth readings. Each winter has equal weight. The Sunshine Village snow course uses early-month measurements. [USDA Snow Survey station index](https://wcc.sc.egov.usda.gov/nwcc/yearcount?counttype=statelist), [Alberta snow survey](https://rivers.alberta.ca/Contents/SnowPack/2016/4/aprmsc.pdf)
+- The NOAA daily series use 35 U.S. stations and one station near Beito, Norway. The stations are within 4.8 km of each area. Each series uses at least five consecutive winters from November through April. Use only readings that pass NOAA quality checks. Monthly snowfall needs all daily readings. Monthly depth needs at least 90% of daily readings. Each winter has equal weight. [NOAA daily data](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily)
+- U.S. snowfall normals use the 1991–2020 period. Each month shown uses at least 20 years of readings. Match stations within 7.5 km and 200 m of the resort base or mapped low point. [U.S. Climate Normals](https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals)
+- The Canadian series use 1991–2020 normals for the Banff and Whitehorse composite weather stations. [Canadian Climate Normals](https://climate.weather.gc.ca/climate_normals/index_e.html)
+- The Japan Meteorological Agency series use 1991–2020 normals for monthly snowfall totals and maximum snow depth. Each depth value is the average of that month's maxima. [Hakuba climate normals](https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=)
 
 ### Runs and lifts at resort zoom
 
@@ -214,6 +233,14 @@ npx vitest run src/test/skiStatus*.test.* src/test/skiMapArea.test.ts src/test/s
 npm run test:ski-terrain
 ```
 
+Run the ski-status UI and data tests with coverage. Use the same command before and after a change.
+
+```bash
+npx vitest run src/test/ski*.test.* --coverage \
+  --coverage.include='src/features/ski-status/**' \
+  --coverage.include='src/pages/SkiStatus.tsx'
+```
+
 Run the browser tests for filters, resort reports, and map behavior. They check attribution downloads and terrain byte ranges.
 They use a fixed clock to check report age.
 
@@ -258,13 +285,19 @@ Export includes area identity, OpenSkiData values, and fields with verified expo
 | Skiable acres | Use the operator's published skiable area. Record which mountains or terrain the figure covers. |
 | Guided terrain | Use the published area of the terrain that the heli-ski or cat-ski operator serves. Record it in **Guided terrain**. |
 | Lifts | Use the operator's total for the same area. Include surface lifts. |
-| Elevation and vertical | Store lift terminal elevations in their own fields. Use the operator's figure for skiable vertical. If you calculate vertical, use elevations from the same skiable descent. Give the calculation in the source note. |
+| Elevation and vertical | Store lift terminal elevations in their own fields. Use the operator's published skiable vertical. If you calculate vertical, use elevations from the same skiable descent. Give the calculation in the source note. |
 | Trails | Store the total and the number for each published grade. Keep the original basis for percentages such as trail count or terrain area. |
 | Trail length | Record the published lengths of downhill and Nordic trails in their own fields. Use miles or kilometers in the app. |
 | Night skiing | Store yes, no, or unknown. Show night skiable acres when the operator publishes them. Keep a published lower bound, such as `200+` acres. Track scheduled night operations in the conditions report. |
 | Season window | Use the operator's published season window. Use **Year-round** for areas with lift access in all seasons. |
 
 Store area in acres. Store elevation in feet. Store trail length in kilometers. Give the original unit in the source note for converted values. The table uses the selected display units. [Big SNOW specifications](https://www.bigsnowamericandream.com/press-room/), [Palisades Tahoe mountain statistics and season windows](https://www.palisadestahoe.com/footer/mountain-statistics)
+
+Check the base, summit, and vertical together. If a source defines vertical for a particular descent, give that scope in the source note.
+The catalog rejects equal base and summit elevations for areas with a positive vertical drop. [Catalog validation](../../src/features/ski-status/catalog.ts)
+
+Pomerelle's operator gives an 8,762 ft summit and a 1,002 ft vertical drop. The catalog calculates a 7,760 ft base from those values.
+Pizol publishes a 1,718 m vertical between Pizolhütte and Wangs. The connecting lift reaches 2,250 m. [Pomerelle mountain data](https://www.pomerelle.com/the-mountain), [Pizol mountain data](https://pizol.com/en/company/company/)
 
 ## Inventory and data quality
 
@@ -336,7 +369,7 @@ Each checked report expires at the end of its local ski day. Alberta uses UTC−
 
 ### Opening and closing dates
 
-The season file has 161 records of actual dates across 27 areas and plans for 107 areas. Thirteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
+The season file has 161 records of actual dates across 27 areas and plans for 139 areas. Thirteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
@@ -382,7 +415,9 @@ Open Data Hub and LTS supply the Dolomiti Superski resort counts and snow data. 
 
 ## Repository and hosting design
 
-The project uses React, TypeScript, Vite, and MapLibre. The `/projects/ski-status` route opens `/projects/ski-status/map`. Keep data preparation in `projects/ski-status/`. Keep feature code in `src/features/ski-status/`. Use the shared CARTO configuration and map recovery. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Project routes](../../src/App.tsx)
+The project uses React, TypeScript, Vite, and MapLibre. The `/projects/ski-status` route opens `/projects/ski-status/map`.
+Keep data preparation in `projects/ski-status/`. Keep feature code in `src/features/ski-status/`.
+Use the shared CARTO configuration and map recovery. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Project routes](../../src/App.tsx)
 
 The map uses a GeoJSON source for resort markers. The map, results, and comparison table use the same search filters and committed map area. The app serves the PMTiles archive with its site files. It requests byte ranges from the archive at resort zoom.
 
@@ -424,16 +459,24 @@ node --import tsx/esm projects/ski-status/scripts/sync-conditions.ts --rockies-p
 VITE_SKI_CONDITIONS_LOCAL=rockies npm run dev
 ```
 
-Check all three operators at the end of the morning reporting window for seven ski days. Record the verified ski days and report times. Compare the lift and trail counts with the official reports. Use the history snapshots to review gaps and outages. The proposed release threshold is a verified status for at least 19 of 21 ski area days. The checks must show zero stale or undated reports as current. [SkiBig3 reporting window](https://www.skibig3.com/api/), [SkiBig3 terms](https://www.skibig3.com/terms-of-use/), [Norquay terms](https://banffnorquay.com/terms-conditions/)
+1. Check all three operators at the end of the morning reporting window for seven ski days.
+2. Record the verified ski days and report times.
+3. Compare the lift and trail counts with the official reports.
+4. Use the archive to review gaps and outages.
+
+The proposed release threshold is a verified status for at least 19 of 21 ski area days.
+Verify that the app counts zero stale or undated reports as current. [SkiBig3 reporting window](https://www.skibig3.com/api/), [SkiBig3 terms](https://www.skibig3.com/terms-of-use/), [Norquay terms](https://banffnorquay.com/terms-conditions/)
 
 The collector locks the local directory during a write. If a job leaves `conditions.pid.lock`, check that the process stopped. Then remove the lock file.
 
-The workflow runs on `main` when `AWS_SKI_STATUS_SYNC_ROLE_ARN` is set. It collects reports hourly. It collects forecasts every six hours. The role can read and write the `ski-status/` prefix. [Sync workflow](../../.github/workflows/sync-ski-status.yml), [OIDC setup](../../docs/github-actions-oidc.md#deploy-and-switch)
+The workflow runs on `main` when `AWS_SKI_STATUS_SYNC_ROLE_ARN` is set. It collects reports hourly and forecasts every six hours. The role can read and write the `ski-status/` prefix. [Sync workflow](../../.github/workflows/sync-ski-status.yml), [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
 
 The collector saves the snapshots and history entry before it attempts to replace `manifest.json`. If the archive write fails, the active manifest stays in use.
 The collector uses the S3 ETag to check for a concurrent update. If the ETag changes, retry with the current manifest. [S3 conditional writes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html)
 
-The manifest identifies snapshot files by SHA-256 checksum. The app checks the manifest every five minutes. It verifies each changed file before use. The app and collector allow manifests up to 64 KiB and snapshots up to 8 MiB. If a check fails, the app keeps its last valid snapshot. The app uses packaged data until it gets a valid snapshot.
+Each snapshot file name contains its SHA-256 checksum. The app checks the manifest every five minutes. It verifies each changed file before use.
+The app and collector accept manifests up to 64 KiB and snapshots up to 8 MiB.
+If a check fails, the app keeps its last valid snapshot. The app uses packaged data until it gets a valid snapshot.
 
 The collector keeps the previous data when a provider request fails. It keeps a dated operations report when a later response gives no report date. The app marks the dated report stale after the local ski day. Named terrain can update separately. `recentReports` counts reports with a known status for the area's current ski day. `reports` also counts earlier or unverified reports.
 
@@ -462,6 +505,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 | Ski terrain | Run the release validator on the hosted preview for the candidate revision. It checks for `206`, the expected `Content-Range`, and the original bytes. It opens a lift and run tooltip at Heavenly. Check the revision and `previewJobId` in the report. Confirm that `skiTerrainRanges` is greater than zero. [Release validator](../../docs/release-validation.md), [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
 | Pass products | Test shared days, reservations, access requirements, excluded products, blackout dates, and discounts. Match each included partner. Record exceptions. |
 | Discovery | Open a resort's report from **Results** on a phone. Pan the map. Check the results before and after **Search this area**. Test Back and Forward. Open a shared view at a different width. Check keyboard focus. Check the map position after a retry. |
+| Snow history | Open an area with snow measurements outside the scheduled season. Verify that the table shows those months. Verify the annual and monthly source links. Check the details at 320 pixels wide. |
 | Rockies publication | Before you enable the Rockies feed, compare its snapshots with the operator pages for seven ski days. Check the local ski-day cutoff, missing reports, closures, and partial openings. [Pilot](#conditions-publication) |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
 
@@ -503,7 +547,11 @@ Add current weather and a five-day forecast to the conditions panel. Match repor
 
 ### Access routes and webcams
 
-Start with Washington and British Columbia. Use operator directions to match each resort base to road segments. Use US 2 for Stevens Pass. Use the applicable Highway 99 segments for Whistler. Match closures, restrictions, and cameras to these roads. Use agency IDs and road geometry for each match. Show the agency's report time. Mark missing coverage as unknown. Link to agency and resort cameras. Embed feeds where the source permits it. Record parking prices, locations, and shuttles that operators publish. Consider Utah's feed for expansion. [WSDOT Traveler Information API](https://apps.wsdot.wa.gov/traffic/api/), [DriveBC Open511](https://api.open511.gov.bc.ca/help), [BC HighwayCams](https://images.drivebc.ca/bchighwaycam/pub/html/www/index.html), [UDOT API](https://www.udottraffic.utah.gov/developers/doc)
+Start with Washington and British Columbia. Use operator directions to match each base to its access road.
+Use US 2 for Stevens Pass. Use the applicable Highway 99 segments for Whistler.
+
+Match closures, restrictions, and cameras by agency road ID and geometry. Show the agency's report time. Mark missing coverage as unknown.
+Link to agency and resort cameras. Embed a feed if the source permits it. Record published parking locations, prices, and shuttle service. Consider Utah's feed for expansion. [WSDOT Traveler Information API](https://apps.wsdot.wa.gov/traffic/api/), [DriveBC Open511](https://api.open511.gov.bc.ca/help), [BC HighwayCams](https://images.drivebc.ca/bchighwaycam/pub/html/www/index.html), [UDOT API](https://www.udottraffic.utah.gov/developers/doc)
 
 ### Visited areas
 

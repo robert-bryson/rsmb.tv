@@ -167,7 +167,16 @@
     "acres": 825,
     "verticalFt": 2290,
     "statsUrl": "https://www.summitatsnoqualmie.com/alpental",
-    "reportUrl": "https://www.summitatsnoqualmie.com/alpental/mountain-report"
+    "reportUrl": "https://www.summitatsnoqualmie.com/alpental/mountain-report",
+    "liftCount": 6,
+    "statSources": [
+      {
+        "source": "https://www.summitatsnoqualmie.com/alpental/mountain-report",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Alpental lift inventory includes the learning conveyor."
+      }
+    ]
   },
   {
     "id": "alpine-valley",
@@ -324,8 +333,23 @@
         "checkedOn": "2026-11-19",
         "fields": ["summitFt"],
         "note": "Operator's course description gives the highest point of the ski slopes."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/amihari-onsen-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
       }
-    ]
+    ],
+    "acres": 143,
+    "baseFt": 2461,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 50,
+        "Advanced": 15
+      }
+    }
   },
   {
     "id": "andermatt-gemsstock",
@@ -398,8 +422,22 @@
         "source": "https://www.andestowerhills.com/downhill-conditions",
         "checkedOn": "2026-11-19",
         "fields": ["baseFt", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/andes-tower-hills",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
       }
-    ]
+    ],
+    "acres": 70,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 33,
+        "Intermediate": 34,
+        "Advanced": 33
+      }
+    }
   },
   {
     "id": "angel-fire-resort",
@@ -466,8 +504,24 @@
         "checkedOn": "2026-11-19",
         "fields": ["baseFt", "summitFt", "highestLiftTerminalFt"],
         "note": "The operator identifies the upper value as the lift summit."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/antelope-butte",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.skiantelopebutte.com/weather-reports",
+    "reportCheckedOn": "2026-11-21",
+    "acres": 500,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 26,
+        "Intermediate": 37,
+        "Advanced": 37
+      }
+    }
   },
   {
     "id": "aomori-spring-ski-resort",
@@ -495,8 +549,23 @@
         "checkedOn": "2026-11-21",
         "fields": ["lowestLiftTerminalFt", "highestLiftTerminalFt"],
         "note": "Lowest and highest terminals across the operator’s listed lifts."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/aomori-spring-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "baseFt": 1303,
+    "summitFt": 3025,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 50,
+        "Intermediate": 30,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "apex-mountain-resort",
@@ -677,7 +746,25 @@
     "verticalFt": 1400,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://arcticvalley.org/conditions/"
+    "reportUrl": "https://arcticvalley.org/conditions/",
+    "acres": 500,
+    "baseFt": 2500,
+    "summitFt": 3900,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 50,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/arctic-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "arizona-snowbowl",
@@ -734,8 +821,15 @@
         "source": "https://asessippi.com/terrain-parks/",
         "checkedOn": "2026-11-20",
         "fields": ["terrainParks"]
+      },
+      {
+        "source": "https://asessippi.com/wp-content/uploads/2022/05/2022-23-School-Package_compressed.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "The alpine lift count includes three chairlifts and the snow carpet."
       }
-    ]
+    ],
+    "liftCount": 4
   },
   {
     "id": "aspen-highlands",
@@ -818,7 +912,26 @@
     "trailCount": 35,
     "verticalFt": 3176,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "reportUrl": "https://www.badkleinkirchheim.com/skigebiet/pisten-anlagen/",
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 3566,
+    "summitFt": 6742,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 17,
+        "Intermediate": 75,
+        "Advanced": 8
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bad-kleinkirchheim",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "baldy-mountain-resort",
@@ -921,7 +1034,24 @@
     "trailCount": 122,
     "verticalFt": 3608,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 4900,
+    "summitFt": 8560,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 35,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/baqueiraberet",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "bear-basin-nordic-center",
@@ -962,7 +1092,17 @@
     "verticalFt": 510,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.bcmountainresort.com/activities/ski-snowboarding/ski-conditions/"
+    "reportUrl": "https://www.bcmountainresort.com/activities/ski-snowboarding/ski-conditions/",
+    "acres": 86,
+    "baseFt": 590,
+    "summitFt": 1100,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bear-creek",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "bear-mountain",
@@ -1146,7 +1286,24 @@
     "trailCount": 23,
     "verticalFt": 659,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 2952,
+    "summitFt": 3612,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 75,
+        "Intermediate": 25,
+        "Advanced": 0
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/beito-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "belleayre-mountain",
@@ -1199,8 +1356,31 @@
         "source": "https://www.saas-fee.ch/de/bergbahnen-hohsaas-ag",
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://www.valais.ch/book/en/service-providers/saastal-ski-tickets",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"],
+        "note": "Hohsaas skiing elevations for the Saas-Grund area."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bergbahnen-hohsaas",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "baseFt": 5115,
+    "summitFt": 10499,
+    "reportUrl": "https://snow.myswitzerland.com/snow_reports/saas-grund-175/",
+    "reportCheckedOn": "2026-11-21",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 50,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "berkshire-east-ski-resort",
@@ -1235,6 +1415,11 @@
         "checkedOn": "2026-11-20",
         "fields": ["summitFt", "grades"],
         "note": "The operator lists 18 night-skiing trails and gives the ratings of its trails."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/berkshire-east-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"]
       }
     ],
     "summitFt": 1840,
@@ -1247,7 +1432,8 @@
         "Black Diamond": 30,
         "Expert": 5
       }
-    }
+    },
+    "baseFt": 640
   },
   {
     "id": "bethel-village-trails",
@@ -1337,7 +1523,24 @@
     "verticalFt": 622,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://bigpowderhorn.net/mountain-report/"
+    "reportUrl": "https://bigpowderhorn.net/mountain-report/",
+    "acres": 253,
+    "baseFt": 1240,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 35,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/big-powderhorn",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "big-rock-mountain",
@@ -1352,7 +1555,25 @@
     "verticalFt": 920,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://bigrockmaine.com/mountain/trail-report/"
+    "reportUrl": "https://bigrockmaine.com/mountain/trail-report/",
+    "acres": 90,
+    "baseFt": 670,
+    "summitFt": 1590,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 10,
+        "Intermediate": 66,
+        "Advanced": 24
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/big-rock-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "big-sky-resort",
@@ -1446,7 +1667,24 @@
     "nightSkiing": true,
     "terrainParks": false,
     "reportUrl": "https://bjorkliden.com/snorapport-fjallstatus/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 1377,
+    "summitFt": 3018,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 47,
+        "Advanced": 13
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bjorkliden",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "black-jack-cross-country-ski-club",
@@ -1490,7 +1728,24 @@
     "verticalFt": 1380,
     "nightSkiing": false,
     "terrainParks": false,
-    "reportUrl": "https://skiblackmountain.org/mountain-report"
+    "reportUrl": "https://skiblackmountain.org/mountain-report",
+    "acres": 600,
+    "baseFt": 900,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 23,
+        "Intermediate": 40,
+        "Advanced": 37
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/black-mountain-of-maine",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "black-mountain-ski-area",
@@ -1509,7 +1764,25 @@
     "nightSkiing": false,
     "terrainParks": false,
     "reportUrl": "https://www.blackmt.com/conditions",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 140,
+    "baseFt": 1250,
+    "summitFt": 2350,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 33,
+        "Intermediate": 34,
+        "Advanced": 33
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/black-mountain-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "blue-knob-all-season-resort",
@@ -1526,7 +1799,25 @@
     "trailCount": 34,
     "verticalFt": 1068,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 300,
+    "baseFt": 2074,
+    "summitFt": 3142,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 29,
+        "Intermediate": 40,
+        "Advanced": 31
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/blue-knob-all-season-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "blue-mountain-resort",
@@ -1600,7 +1891,25 @@
     "additionalSources": [
       "https://bluewood.com/indy-pass-at-bluewood"
     ],
-    "reportUrl": "https://bluewood.com/conditions"
+    "reportUrl": "https://bluewood.com/conditions",
+    "acres": 450,
+    "baseFt": 4545,
+    "summitFt": 5665,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 45,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ski-bluewood",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "bogus-basin",
@@ -1727,7 +2036,25 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://skibwp.com/29-2/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 17,
+    "baseFt": 2260,
+    "summitFt": 2460,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bottineau-winter-park",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "bousquet-mountain-0",
@@ -1742,7 +2069,25 @@
     "verticalFt": 750,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://bousquetmountain.com/lift-trail-status/"
+    "reportUrl": "https://bousquetmountain.com/lift-trail-status/",
+    "acres": 200,
+    "baseFt": 1068,
+    "summitFt": 1818,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 17,
+        "Intermediate": 26,
+        "Advanced": 57
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bousquet-mountain-0",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "boyne-mountain",
@@ -2143,10 +2488,17 @@
         "checkedOn": "2026-11-20",
         "fields": ["summitFt"],
         "note": "The winter map identifies the Mont Brome summit at 565 m."
+      },
+      {
+        "source": "https://maneige.ski/wp-content/uploads/2023/10/Analyse-economique-de-ladaptation-aux-changements-climatiques.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"],
+        "note": "Total vertical drop in the Bromont technical profile."
       }
     ],
     "reportUrl": "https://www.bromontmontagne.com/en/detailed-conditions/",
-    "summitFt": 1854
+    "summitFt": 1854,
+    "verticalFt": 1263
   },
   {
     "id": "bruce-mound-winter-sports-area",
@@ -2162,7 +2514,17 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.travelwisconsin.com/snow-report/downhill",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 40,
+    "baseFt": 1000,
+    "summitFt": 1375,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bruce-mound-winter-sports-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "brundage-mountain-resort",
@@ -2217,7 +2579,25 @@
     "verticalFt": 500,
     "nightSkiing": true,
     "terrainParks": false,
-    "reportUrl": "https://bryceresort.com/mountain-info/conditions"
+    "reportUrl": "https://bryceresort.com/mountain-info/conditions",
+    "acres": 32,
+    "baseFt": 1250,
+    "summitFt": 1750,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 50,
+        "Advanced": 10
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bryce-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "buck-hill",
@@ -2237,8 +2617,14 @@
         "source": "https://buckhill.com/skiing-snowboarding/winter-trail-map/",
         "checkedOn": "2026-11-19",
         "fields": ["trailCount"]
+      },
+      {
+        "source": "https://www.exploreminnesota.com/sites/default/files/2021-11/22_SkiGridNEW.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"]
       }
-    ]
+    ],
+    "verticalFt": 310
   },
   {
     "id": "buffalo-ski-club",
@@ -2291,9 +2677,23 @@
         "source": "https://skiburke.com/the-mountain/skiing-riding",
         "checkedOn": "2026-11-19",
         "fields": ["acres", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/burke-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
-    "reportUrl": "https://www.skiburke.com/lift-trail-status"
+    "reportUrl": "https://www.skiburke.com/lift-trail-status",
+    "baseFt": 1210,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 8,
+        "Intermediate": 48,
+        "Advanced": 44
+      }
+    }
   },
   {
     "id": "buttermilk",
@@ -2335,8 +2735,14 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "trailCount"],
         "note": "Capacity totals from the winter status panel."
+      },
+      {
+        "source": "https://www.michigan.org/article/ski-mitten",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"]
       }
-    ]
+    ],
+    "verticalFt": 485
   },
   {
     "id": "calabogie-peaks-resort",
@@ -2354,7 +2760,25 @@
     "verticalFt": 781,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://calabogie.com/trail-status/"
+    "reportUrl": "https://calabogie.com/trail-status/",
+    "acres": 80,
+    "baseFt": 505,
+    "summitFt": 1285,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 45,
+        "Advanced": 25
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/calabogie-peaks-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "caledonia-nordic-ski-club",
@@ -2396,7 +2820,24 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://camdensnowbowl.com/current-conditions/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 105,
+    "baseFt": 216,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 60,
+        "Advanced": 10
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/camden-snow-bowl",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "camelback-mountain-resort",
@@ -2427,13 +2868,19 @@
         "checkedOn": "2026-11-20",
         "fields": ["nightSkiing", "nightAcres"],
         "note": "The operator reports night skiing on 100% of its 166-acre ski area."
+      },
+      {
+        "source": "https://www.visitpa.com/blog/post/best-ski-resorts-pennsylvania/",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"]
       }
     ],
     "trailCount": 46,
     "nightSkiing": true,
     "nightAcres": 166,
     "reportUrl": "https://www.camelbackresort.com/snow-report-conditions",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "verticalFt": 800
   },
   {
     "id": "camp-10-ski-area",
@@ -2450,7 +2897,25 @@
     "trailCount": 15,
     "verticalFt": 230,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 120,
+    "baseFt": 1509,
+    "summitFt": 1739,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/camp-10-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "camp-fortune",
@@ -2471,7 +2936,23 @@
     "additionalSources": [
       "https://campfortune.com/en/indy-pass/"
     ],
-    "reportUrl": "https://campfortune.com/en/conditions/"
+    "reportUrl": "https://campfortune.com/en/conditions/",
+    "acres": 93,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 17,
+        "Intermediate": 46,
+        "Advanced": 37
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/camp-fortune",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ]
   },
   {
     "id": "canaan-valley",
@@ -2488,7 +2969,25 @@
     "trailCount": 47,
     "verticalFt": 850,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 90,
+    "baseFt": 3430,
+    "summitFt": 4280,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 36,
+        "Advanced": 44
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/canaan-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "canmore-ski-village",
@@ -2505,7 +3004,16 @@
     "trailCount": 8,
     "verticalFt": 820,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "baseFt": 662,
+    "summitFt": 1482,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/canmore-ski-village",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "cannon-mountain",
@@ -2583,7 +3091,9 @@
         "checkedOn": "2026-11-19",
         "fields": ["nordicKm"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.cartersxcski.com/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "castle-mountain-resort",
@@ -2698,7 +3208,25 @@
       "https://catamountski.com/winter/tickets-passes/indy-pass-reservations"
     ],
     "reportUrl": "https://catamountski.com/winter/the-mountain/mountain-conditions",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 150,
+    "baseFt": 1000,
+    "summitFt": 2000,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 42,
+        "Advanced": 23
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/catamount-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "catamount-outdoor-family-center",
@@ -2729,7 +3257,25 @@
     "nightSkiing": false,
     "terrainParks": false,
     "reportUrl": "https://skicaz.com/conditions-report/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 98,
+    "baseFt": 960,
+    "summitFt": 1460,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 38,
+        "Intermediate": 31,
+        "Advanced": 31
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/cazenovia-ski-club",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "centre-vorlage",
@@ -2745,7 +3291,23 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://conditions.centrevorlage.ca/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 100,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 11,
+        "Intermediate": 48,
+        "Advanced": 41
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/centre-vorlage",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ]
   },
   {
     "id": "cervino-ski-paradise",
@@ -2799,7 +3361,25 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.chestnutmtn.com/slope-report/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 59,
+    "baseFt": 545,
+    "summitFt": 1020,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/chestnut-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "china-peak",
@@ -2863,8 +3443,16 @@
         "checkedOn": "2026-11-20",
         "fields": ["grades"],
         "note": "The operator rounds difficulty shares to whole percentages."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/christie-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
       }
-    ]
+    ],
+    "acres": 100,
+    "baseFt": 1300,
+    "summitFt": 1650
   },
   {
     "id": "civetta",
@@ -2915,7 +3503,25 @@
     "verticalFt": 425,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://coffeemillskiarea.com/pages/mountain-report-lift-status"
+    "reportUrl": "https://coffeemillskiarea.com/pages/mountain-report-lift-status",
+    "acres": 28,
+    "baseFt": 725,
+    "summitFt": 1150,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/coffee-mill-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "cooper",
@@ -2957,9 +3563,25 @@
         "source": "https://cooperspur.com/cross-country-skiing-snowshoeing/",
         "checkedOn": "2026-11-19",
         "fields": ["nordicKm"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/cooper-spur-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
       }
     ],
-    "reportUrl": "https://cooperspur.com/conditions-report/"
+    "reportUrl": "https://cooperspur.com/conditions-report/",
+    "acres": 50,
+    "baseFt": 3969,
+    "summitFt": 4400,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 70,
+        "Advanced": 10
+      }
+    }
   },
   {
     "id": "copper-mountain",
@@ -3028,10 +3650,26 @@
         "source": "https://www.coronetpeak.co.nz/mountain-info",
         "checkedOn": "2026-11-20",
         "fields": ["terrainParks"]
+      },
+      {
+        "source": "https://www.nzski.com/our-mountains",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"],
+        "note": "Whole percentages as published by NZSki."
       }
     ],
     "summitFt": 5410,
-    "terrainParks": true
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Learners": 14,
+        "Intermediate": 33,
+        "Advanced": 25,
+        "Expert": 27
+      }
+    }
   },
   {
     "id": "corralco-resort-de-montana",
@@ -3050,6 +3688,22 @@
     "terrainParks": true,
     "additionalSources": [
       "https://corralco.com/montana/mapa-de-pista/"
+    ],
+    "baseFt": 5348,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 32,
+        "Intermediate": 42,
+        "Advanced": 26
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/corralco-resort-de-montana",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
+      }
     ]
   },
   {
@@ -3094,8 +3748,22 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "downhillKm", "highestLiftTerminalFt", "nightSkiing"],
         "note": "Published totals for Corvatsch and Furtschellas. The highest terminal is the Corvatsch mountain station."
+      },
+      {
+        "source": "https://www.corvatsch-diavolezza.ch/ueber-uns",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "Upper station of the Corvatsch cable car."
+      },
+      {
+        "source": "https://www.corvatsch-diavolezza.ch/en/current-news/facilities-and-slopes?infosnow=pisten",
+        "checkedOn": "2026-11-21",
+        "fields": ["trailCount"],
+        "note": "Total for the Corvatsch sector in the operator’s piste inventory."
       }
-    ]
+    ],
+    "summitFt": 10837,
+    "trailCount": 26
   },
   {
     "id": "corviglia",
@@ -3119,8 +3787,30 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "trailCount", "downhillKm"],
         "note": "Corviglia operator's ski inventory."
+      },
+      {
+        "source": "https://www.mountains.ch/en/winter/skiing-and-snowboarding",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"],
+        "note": "Share of the 155 km of runs, calculated from 42 km blue, 79 km red, and 34 km black."
+      },
+      {
+        "source": "https://www.mountains.ch/fileadmin/user_upload/Bilddatenbank_HP/Organisation/Dokumente/Panoramakarten/web_2025_Panoramakarte_Corviglia_Winter_504x420_Karte_vorne.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"],
+        "note": "Piz Nair upper ski area."
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Blue": 27.1,
+        "Red": 51,
+        "Black": 21.9
+      }
+    },
+    "summitFt": 10030
   },
   {
     "id": "courchevel",
@@ -3264,7 +3954,17 @@
     "liftCount": 24,
     "trailCount": 61,
     "baseFt": 4905,
-    "summitFt": 10423
+    "summitFt": 10423,
+    "downhillKm": 140,
+    "verticalFt": 4921,
+    "statSources": [
+      {
+        "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000158/vailresorts-2026arsreport.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm", "verticalFt"],
+        "note": "Approximate trail length and skiable vertical from the operator's annual report."
+      }
+    ]
   },
   {
     "id": "crested-butte-mountain-resort",
@@ -3408,9 +4108,25 @@
         "source": "https://www.crystalmountain.com/",
         "checkedOn": "2026-11-19",
         "fields": ["nordicKm"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/crystal-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
       }
     ],
-    "reportUrl": "https://www.crystalmountain.com/ski/cams-conditions/mountain-report"
+    "reportUrl": "https://www.crystalmountain.com/ski/cams-conditions/mountain-report",
+    "acres": 103,
+    "baseFt": 757,
+    "summitFt": 1132,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 22,
+        "Intermediate": 48,
+        "Advanced": 30
+      }
+    }
   },
   {
     "id": "crystal-ridge",
@@ -3504,7 +4220,26 @@
     "trailCount": 12,
     "verticalFt": 1607,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "reportUrl": "https://www.yukidaruma-kogen.com/winter.html",
+    "reportCheckedOn": "2026-11-21",
+    "acres": 77,
+    "baseFt": 1411,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/cupid-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "cypress-mountain",
@@ -3549,10 +4284,24 @@
         "source": "https://www.skinh.com/resorts/dartmouth-skiway",
         "checkedOn": "2026-11-19",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/dartmouth-skiway",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
     "reportUrl": "https://www.skinh.com/resorts/dartmouth-skiway",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 700,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "deer-valley-resort",
@@ -3599,8 +4348,15 @@
         "checkedOn": "2026-11-20",
         "fields": ["summitFt"],
         "note": "The operator labels the Owl's Head summit at 752 m."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/destination-owls-head",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt"]
       }
-    ]
+    ],
+    "acres": 125,
+    "baseFt": 709
   },
   {
     "id": "detroit-mountain",
@@ -3614,7 +4370,25 @@
     "trailCount": 21,
     "verticalFt": 210,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 45,
+    "baseFt": 1335,
+    "summitFt": 1545,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 35,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/detroit-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "devil-s-head-resort",
@@ -3679,8 +4453,15 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"],
         "note": "Sum of 32 km of groomed pistes on Diavolezza and 13 km on Lagalb. The ungroomed glacier run is listed separately."
+      },
+      {
+        "source": "https://www.corvatsch-diavolezza.ch/en/current-news/facilities-and-slopes?infosnow=pisten",
+        "checkedOn": "2026-11-21",
+        "fields": ["trailCount"],
+        "note": "Total for the separate Diavolezza and Lagalb sector in the operator’s piste inventory."
       }
-    ]
+    ],
+    "trailCount": 13
   },
   {
     "id": "discovery-ski-area",
@@ -3724,8 +4505,16 @@
         "checkedOn": "2026-11-19",
         "fields": ["verticalFt"],
         "note": "The destination publishes a 1,606 m altitude difference for the Péz Ault descent."
+      },
+      {
+        "source": "https://snow.myswitzerland.com/snow_reports/disentis-130/",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm", "trailCount"],
+        "note": "Local pistes in the Disentis report."
       }
-    ]
+    ],
+    "downhillKm": 52.8,
+    "trailCount": 21
   },
   {
     "id": "dodge-ridge",
@@ -3803,10 +4592,23 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm", "baseFt", "summitFt"],
         "note": "The published altitude range and piste length cover the Contamines–Hauteluce ski area."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/domaine-skiable-des-contamines",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
     ],
     "reportUrl": "https://www.lescontamines.net/live/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 33,
+        "Intermediate": 50,
+        "Advanced": 17
+      }
+    }
   },
   {
     "id": "donner-ski-ranch",
@@ -3821,7 +4623,25 @@
     "verticalFt": 800,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://www.donnerskiranch.com/liftstatus"
+    "reportUrl": "https://www.donnerskiranch.com/liftstatus",
+    "acres": 500,
+    "baseFt": 6981,
+    "summitFt": 7781,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 26,
+        "Advanced": 49
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/donner-ski-ranch",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "dry-hill-ski-area",
@@ -3836,7 +4656,15 @@
     "verticalFt": 300,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.skidryhill.com/winter/conditions"
+    "reportUrl": "https://www.skidryhill.com/winter/conditions",
+    "acres": 42,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/dry-hill-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"]
+      }
+    ]
   },
   {
     "id": "dutch-hill-recreation-area",
@@ -3874,10 +4702,16 @@
         "checkedOn": "2026-11-20",
         "fields": ["baseFt", "summitFt", "highestLiftTerminalFt"],
         "note": "The FAQ gives the base and the top of the Beta Liner for Dynaland."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/dynaland",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"]
       }
     ],
     "reportUrl": "https://www.dynaland.co.jp/condition/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 198
   },
   {
     "id": "eagle-point",
@@ -3930,8 +4764,23 @@
         "checkedOn": "2026-11-20",
         "fields": ["summitFt"],
         "note": "Published as the peak elevation in the operator's mountain statistics."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/eaglecrest",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
       }
-    ]
+    ],
+    "acres": 640,
+    "baseFt": 1130,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    }
   },
   {
     "id": "eastman-cross-country",
@@ -4043,7 +4892,17 @@
     "trailCount": 6,
     "verticalFt": 80,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 15,
+    "baseFt": 868,
+    "summitFt": 948,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/elm-creek-park-reserve",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "enchanted-forest-xc",
@@ -4083,7 +4942,30 @@
     "trailCount": 11,
     "verticalFt": 1312,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "reportUrl": "https://engstligenalp.ch/en/winter/operating-info-2/",
+    "reportCheckedOn": "2026-11-21",
+    "downhillKm": 17.4,
+    "statSources": [
+      {
+        "source": "https://snow.myswitzerland.com/snow_reports/engstligenalp-336/",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/engstligenalp",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
+      }
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 41,
+        "Intermediate": 35,
+        "Advanced": 24
+      }
+    }
   },
   {
     "id": "fairmont-hot-springs",
@@ -4097,7 +4979,24 @@
     "trailCount": 14,
     "verticalFt": 1000,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 88,
+    "baseFt": 4200,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 60,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/fairmont-hot-springs",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "falls-creek",
@@ -4235,7 +5134,25 @@
     "trailCount": 12,
     "verticalFt": 350,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 50,
+    "baseFt": 1099,
+    "summitFt": 1443,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 45,
+        "Intermediate": 45,
+        "Advanced": 10
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/frost-fire-park",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "furano-ski-resort",
@@ -4285,8 +5202,25 @@
         "source": "https://www.galtuer.com/en/bergbahnen-galtuer/facilities/open-lifts-facilities",
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "downhillKm"]
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/silvapark-galtuer",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"],
+        "note": "The difficulty percentages use piste length."
       }
-    ]
+    ],
+    "baseFt": 5364,
+    "summitFt": 7536,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easy": 12,
+        "Medium": 60,
+        "Difficult": 28
+      }
+    }
   },
   {
     "id": "garnet-hill-xc",
@@ -4328,7 +5262,24 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.getokogen.com/winter/01trail/operation.cgi",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 2100,
+    "summitFt": 3511,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/geto-kogen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "giants-ridge",
@@ -4372,7 +5323,24 @@
     "trailCount": 20,
     "verticalFt": 2388,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "baseFt": 1247,
+    "summitFt": 3635,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 37,
+        "Intermediate": 26,
+        "Advanced": 37
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/glencoe-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "glenshee-ski-centre",
@@ -4389,7 +5357,16 @@
     "verticalFt": 1272,
     "nightSkiing": false,
     "terrainParks": false,
-    "reportUrl": "https://www.ski-glenshee.co.uk/Glenshee-Lift-Status"
+    "reportUrl": "https://www.ski-glenshee.co.uk/Glenshee-Lift-Status",
+    "baseFt": 2132,
+    "summitFt": 3404,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/glenshee-ski-centre",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "gore-mountain",
@@ -4620,7 +5597,25 @@
     "trailCount": 14,
     "verticalFt": 182,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 21,
+    "baseFt": 1463,
+    "summitFt": 1645,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/great-bear-ski-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "great-divide-ski-area",
@@ -4694,7 +5689,25 @@
       "https://www.greekpeak.net/ski-ride/indy-pass/"
     ],
     "reportUrl": "https://www.greekpeak.net/ski-ride/current-conditions/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 220,
+    "baseFt": 1148,
+    "summitFt": 2100,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 33,
+        "Advanced": 32
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/greek-peak-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "grouse-mountain",
@@ -4789,8 +5802,8 @@
     "website": "https://www.hafjell.no/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/hafjell",
     "liftCount": 18,
-    "trailCount": 30,
-    "verticalFt": 2740,
+    "trailCount": 29,
+    "verticalFt": 2835,
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.alpinco.com/no/hafjell/snorapport",
@@ -4803,10 +5816,22 @@
       {
         "source": "https://www.alpinco.com/no/hafjell/om-hafjell",
         "checkedOn": "2026-11-21",
-        "fields": ["downhillKm", "nordicKm", "highestLiftTerminalFt", "lowestLiftTerminalFt"],
-        "note": "Nordic length covers the local groomed network before the Sjusjøen connection."
+        "fields": ["liftCount", "trailCount", "verticalFt", "baseFt", "summitFt", "downhillKm", "nordicKm", "highestLiftTerminalFt", "lowestLiftTerminalFt", "grades"],
+        "note": "Lift station elevations are 195 m and 1059 m. The operator gives a vertical of 864 m. Nordic length covers the network before the Sjusjøen connection."
       }
-    ]
+    ],
+    "baseFt": 640,
+    "summitFt": 3474,
+    "grades": {
+      "unit": "count",
+      "of": "trails",
+      "values": {
+        "Green": 12,
+        "Blue": 7,
+        "Red": 9,
+        "Black": 1
+      }
+    }
   },
   {
     "id": "hakuba-47",
@@ -5138,10 +6163,24 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "trailCount", "summitFt"],
         "note": "Current operator inventory."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hatley-pointe",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
     "reportUrl": "https://hatleypointe.com/slope-report/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 4000,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 60,
+        "Advanced": 15
+      }
+    }
   },
   {
     "id": "haymaker-nordic-center",
@@ -5284,8 +6323,22 @@
         "source": "https://www.hilltopskiarea.org/the-mountain",
         "checkedOn": "2026-11-19",
         "fields": ["baseFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hilltop-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
       }
-    ]
+    ],
+    "acres": 35,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 60,
+        "Intermediate": 20,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "hintertux-glacier",
@@ -5308,8 +6361,22 @@
         "checkedOn": "2026-11-19",
         "fields": ["summitFt", "highestLiftTerminalFt"],
         "note": "Upper lift-served point at Gefrorene Wand."
+      },
+      {
+        "source": "https://www.hintertuxergletscher.at/uploads/tx_bh/5468/fin_zill_gletscher_pocketplan_25.pdf?mod=1730122598",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Glacier area base at Hintertux."
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/hintertux-glacier-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Glacier ski area."
       }
-    ]
+    ],
+    "baseFt": 4921,
+    "liftCount": 21
   },
   {
     "id": "hirugano-kogen-ski-resort",
@@ -5326,7 +6393,25 @@
     "verticalFt": 492,
     "nightSkiing": false,
     "terrainParks": false,
-    "reportUrl": "https://www.hiruganokogen.com/condition/"
+    "reportUrl": "https://www.hiruganokogen.com/condition/",
+    "acres": 75,
+    "baseFt": 2923,
+    "summitFt": 3415,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 45,
+        "Intermediate": 55,
+        "Advanced": 0
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hirugano-kogen-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "hochfuegen-hochzillertal",
@@ -5350,8 +6435,23 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "downhillKm"],
         "note": "The operator's piste total covers the combined ski area."
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/hochzillertal-hochfuegen-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"],
+        "note": "Difficulty by length of the 85.6 km of graded pistes."
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easy": 35,
+        "Medium": 48,
+        "Difficult": 17
+      }
+    }
   },
   {
     "id": "hochzeiger-bergbahnen-pitztal-ag",
@@ -5372,9 +6472,16 @@
         "source": "https://www.hochzeiger.com/de/skigebiet-hochzeiger.html",
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/hochzeiger-ski-resort-in-the-pitztal-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
       }
     ],
-    "reportUrl": "https://www.hochzeiger.com/de/pistenstatus-hochzeiger.html"
+    "reportUrl": "https://www.hochzeiger.com/de/pistenstatus-hochzeiger.html",
+    "baseFt": 4757,
+    "summitFt": 8202
   },
   {
     "id": "hockley-valley-resort",
@@ -5388,7 +6495,17 @@
     "trailCount": 13,
     "verticalFt": 374,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 30,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hockley-valley-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"]
+      }
+    ],
+    "reportUrl": "https://hockley.com/snow-conditions/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "hodaigi-mountain-resort",
@@ -5405,7 +6522,26 @@
     "trailCount": 16,
     "verticalFt": 1869,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "reportUrl": "https://hodaigi.jp/gelande-guide/",
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 2723,
+    "summitFt": 4592,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hodaigi-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "homestake-lodge",
@@ -5608,7 +6744,25 @@
     "verticalFt": 400,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.huffhills.com/snowreport"
+    "reportUrl": "https://www.huffhills.com/snowreport",
+    "acres": 70,
+    "baseFt": 1875,
+    "summitFt": 2257,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 25,
+        "Advanced": 50
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/huff-hills-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "hunt-hollow-ski-club",
@@ -5624,7 +6778,17 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.hunthollow.com/conditions",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 100,
+    "baseFt": 1000,
+    "summitFt": 2030,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hunt-hollow-ski-club",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "hunter-mountain",
@@ -5681,11 +6845,25 @@
         "checkedOn": "2026-11-20",
         "fields": ["seasonWindow"],
         "note": "National Park Service typical winter operations window. Ski lift operations depend on snow and road access."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hurricane-ridge",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
       }
     ],
     "seasonWindow": "Late November to the end of March",
     "reportUrl": "https://www.hurricaneridge.com/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 50,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    }
   },
   {
     "id": "hyland-hills",
@@ -5702,7 +6880,27 @@
     "trailCount": 13,
     "verticalFt": 175,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 29,
+    "baseFt": 900,
+    "summitFt": 1075,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 35,
+        "Advanced": 35
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/hyland-hills",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ],
+    "reportUrl": "https://www.threeriversparks.org/page/hyland-hills-ski-runs-terrain-park",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "innsbruck-region",
@@ -5900,7 +7098,22 @@
       "https://jaypeakresort.com/resort/partnerships-and-sponsors"
     ],
     "reportUrl": "https://jaypeakresort.com/skiing-riding/snow-report-maps/snow-report",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/jay-peak-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
+      }
+    ]
   },
   {
     "id": "jigatake",
@@ -6056,8 +7269,22 @@
         "checkedOn": "2026-11-20",
         "fields": ["acres", "summitFt"],
         "note": "The operator gives total course area in hectares and identifies the 1,000 m high point."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/kandatsu-snow-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
-    ]
+    ],
+    "baseFt": 1509,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    }
   },
   {
     "id": "kappl",
@@ -6078,10 +7305,17 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm", "summitFt"],
         "note": "The page gives Kappl separately from See. The summit value is the stated upper ski-area elevation."
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/kappl-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "liftCount"]
       }
     ],
     "reportUrl": "https://www.kappl-see.com/en/live-info/snow-report",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 3871,
+    "liftCount": 10
   },
   {
     "id": "kashimayari",
@@ -6184,6 +7418,23 @@
     "acres": 778,
     "additionalSources": [
       "https://www.skiidaho.us/compare"
+    ],
+    "baseFt": 5600,
+    "summitFt": 6800,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 45,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/kelly-canyon",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
     ]
   },
   {
@@ -6210,8 +7461,21 @@
         "source": "https://www.skikendall.com/trail-map",
         "checkedOn": "2026-11-19",
         "fields": ["acres", "baseFt", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/kendall-mountain-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 50,
+        "Intermediate": 17,
+        "Advanced": 33
+      }
+    }
   },
   {
     "id": "keystone-resort",
@@ -6389,9 +7653,24 @@
         "source": "https://www.skinh.com/resorts/king-pine",
         "checkedOn": "2026-11-19",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/king-pine",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
     ],
-    "reportUrl": "https://www.kingpine.com/the-mountain/snow-report/"
+    "reportUrl": "https://www.kingpine.com/the-mountain/snow-report/",
+    "baseFt": 500,
+    "summitFt": 850,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 50,
+        "Intermediate": 30,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "kirkwood-mountain-resort",
@@ -6454,6 +7733,11 @@
         "checkedOn": "2026-11-20",
         "fields": ["trailCount", "downhillKm", "terrainParks", "grades"],
         "note": "The factsheet lists 196 km of prepared pistes and separately reports ski routes."
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/kitzbuehel-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
       }
     ],
     "trailCount": 96,
@@ -6467,7 +7751,9 @@
         "Red": 32,
         "Black": 18
       }
-    }
+    },
+    "baseFt": 2625,
+    "summitFt": 6562
   },
   {
     "id": "kitzsteinhorn",
@@ -6543,7 +7829,24 @@
     "liftCount": 10,
     "verticalFt": 1709,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 4757,
+    "summitFt": 6466,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 23,
+        "Intermediate": 50,
+        "Advanced": 27
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/the-krvavec-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "kvitfjell",
@@ -6567,8 +7870,23 @@
         "checkedOn": "2026-11-21",
         "fields": ["downhillKm", "highestLiftTerminalFt"],
         "note": "Published length of alpine trails and upper lift station elevation."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/kvitfjell",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "baseFt": 607,
+    "summitFt": 3409,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 55,
+        "Intermediate": 32,
+        "Advanced": 13
+      }
+    }
   },
   {
     "id": "la-thuile-espace-san-bernardo",
@@ -6725,8 +8043,23 @@
         "source": "https://www.skirelais.com/hiver/pistes-conditions-de-neige/",
         "checkedOn": "2026-11-19",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/le-relais",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "baseFt": 672,
+    "summitFt": 1407,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 21,
+        "Intermediate": 36,
+        "Advanced": 43
+      }
+    }
   },
   {
     "id": "leavenworth-winter-sports-club",
@@ -6753,8 +8086,16 @@
         "checkedOn": "2026-11-19",
         "fields": ["nordicKm"],
         "note": "Nordic total across club venues. The Ski Hill subarea has 8 km."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/leavenworth-winter-sports-club",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
       }
-    ]
+    ],
+    "acres": 20,
+    "baseFt": 1385,
+    "summitFt": 1685
   },
   {
     "id": "lech-am-arlberg",
@@ -6792,8 +8133,30 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm", "nordicKm", "summitFt"],
         "note": "The operator reports more than 120 km of alpine pistes. Nordic total sums the Prapoutel and Le Pleynet networks."
+      },
+      {
+        "source": "https://grc.les7laux.com/medias/documents/documentation/documentation-7L20PP-FR.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"],
+        "note": "Prapoutel base."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/les-7-laux",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "reportUrl": "https://usca.les7laux.com/fr/infos-usca",
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 4429,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 49,
+        "Intermediate": 38,
+        "Advanced": 13
+      }
+    }
   },
   {
     "id": "les-houches",
@@ -6816,8 +8179,14 @@
         "checkedOn": "2026-11-19",
         "fields": ["baseFt", "summitFt", "verticalFt"],
         "note": "Published Les Houches–Saint-Gervais alpine range. Vertical is calculated from that range."
+      },
+      {
+        "source": "https://leshouches.montblancnaturalresort.com/en/horaires-tarifs",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"]
       }
-    ]
+    ],
+    "downhillKm": 55
   },
   {
     "id": "les-menuires",
@@ -6849,7 +8218,26 @@
     "trailCount": 50,
     "verticalFt": 3937,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "reportUrl": "https://www.leukerbad.ch/anlagen",
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 4265,
+    "summitFt": 8202,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 7,
+        "Intermediate": 57,
+        "Advanced": 36
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/leukerbad-torrent-ski-resort-gemmi-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "levi-ski-resort",
@@ -6867,7 +8255,24 @@
     "trailCount": 44,
     "verticalFt": 1066,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 676,
+    "summitFt": 1742,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 44,
+        "Intermediate": 46,
+        "Advanced": 10
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/levi-finland",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "liberty-mountain-resort",
@@ -6965,7 +8370,25 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.lochlomond.ca/conditions/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 70,
+    "baseFt": 699,
+    "summitFt": 1450,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/loch-lomond",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "lookout-pass",
@@ -7050,7 +8473,25 @@
     "additionalSources": [
       "https://losttrail.com/indypass/"
     ],
-    "reportUrl": "https://losttrail.com/snow-report/"
+    "reportUrl": "https://losttrail.com/snow-report/",
+    "acres": 1800,
+    "baseFt": 6400,
+    "summitFt": 8200,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/lost-trail-powder-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "lost-valley",
@@ -7068,7 +8509,25 @@
     "verticalFt": 233,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.lostvalleyski.com/trails-conditions/"
+    "reportUrl": "https://www.lostvalleyski.com/trails-conditions/",
+    "acres": 45,
+    "baseFt": 255,
+    "summitFt": 495,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 26,
+        "Intermediate": 29,
+        "Advanced": 45
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/lost-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "loup-loup-ski-bowl",
@@ -7085,7 +8544,25 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://skitheloup.org/mountain/conditions-weather/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 300,
+    "baseFt": 4020,
+    "summitFt": 5260,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 15,
+        "Advanced": 50
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "loveland-ski-area",
@@ -7268,6 +8745,22 @@
     "acres": 120,
     "additionalSources": [
       "https://www.skiidaho.us/compare"
+    ],
+    "summitFt": 7240,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/magic-mountain-idaho",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt", "grades"]
+      }
     ]
   },
   {
@@ -7325,7 +8818,24 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.maiko-resort.com/liftmap.html",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 853,
+    "summitFt": 3019,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/maiko-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mala-upa",
@@ -7338,7 +8848,26 @@
     "trailCount": 8,
     "verticalFt": 853,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 3264,
+    "summitFt": 4134,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 0,
+        "Intermediate": 39,
+        "Advanced": 61
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mala-upa",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ],
+    "reportUrl": "https://www.skimu.cz/en/zima/vleky-a-sjezdovky",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "mammoth-mountain",
@@ -7431,7 +8960,27 @@
     "trailCount": 8,
     "verticalFt": 270,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 60,
+    "baseFt": 450,
+    "summitFt": 720,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 38,
+        "Advanced": 37
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/maple-ski-ridge",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ],
+    "reportUrl": "https://www.iskiny.com/mountains/maple-ski-ridge/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "maplelag-resort",
@@ -7534,10 +9083,24 @@
         "source": "https://www.marquettemountain.com/the-mountain/trail-map/",
         "checkedOn": "2026-11-19",
         "fields": ["acres", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/marquette-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
     "reportUrl": "https://www.marquettemountain.com/the-mountain/lift-terrain-status/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 757,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 16,
+        "Intermediate": 42,
+        "Advanced": 42
+      }
+    }
   },
   {
     "id": "massanutten-resort",
@@ -7560,8 +9123,22 @@
         "source": "https://www.massresort.com/snow-sports/conditions-webcams/",
         "checkedOn": "2026-11-19",
         "fields": ["acres", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/massanutten-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
-    ]
+    ],
+    "baseFt": 1740,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 35,
+        "Advanced": 35
+      }
+    }
   },
   {
     "id": "massif-du-sud",
@@ -7580,7 +9157,24 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://massifdusud.net/fr/ouvertures",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 420,
+    "summitFt": 3002,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 14,
+        "Intermediate": 22,
+        "Advanced": 64
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/massif-du-sud",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mayrhofen",
@@ -7604,8 +9198,26 @@
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "downhillKm"],
         "note": "Mountopolis winter network, including Ahorn, Penken, Finkenberg, Rastkogel and Eggalm."
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/mayrhofen-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt", "grades"],
+        "note": "The difficulty percentages use piste length."
       }
-    ]
+    ],
+    "summitFt": 8202,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easy": 31,
+        "Medium": 49,
+        "Difficult": 20
+      }
+    },
+    "reportUrl": "https://www.mayrhofen.at/de/mountopolis/winter/pistenplan-geoeffnete-anlagen",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "mcintyre-ski-area",
@@ -7626,9 +9238,24 @@
         "source": "https://www.skinh.com/resorts/mcintyre-ski-area",
         "checkedOn": "2026-11-19",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mcintyre-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
     ],
-    "reportUrl": "https://www.mcintyreskiarea.com/mountain-report/"
+    "reportUrl": "https://www.mcintyreskiarea.com/mountain-report/",
+    "baseFt": 340,
+    "summitFt": 510,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 90,
+        "Intermediate": 10,
+        "Advanced": 0
+      }
+    }
   },
   {
     "id": "megeve",
@@ -7698,7 +9325,25 @@
       "https://middleburysnowbowl.com/lift-tickets/"
     ],
     "reportUrl": "https://middleburysnowbowl.com/conditions/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 200,
+    "baseFt": 1700,
+    "summitFt": 2720,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 21,
+        "Intermediate": 44,
+        "Advanced": 35
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/middlebury-snowbowl",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "minocqua-winter-park",
@@ -7745,12 +9390,26 @@
         "checkedOn": "2026-11-20",
         "fields": ["verticalFt", "summitFt", "trailCount"],
         "note": "Current resort figures in the expansion overview."
+      },
+      {
+        "source": "https://www.missionridge.com/news/mission-ridge-adds-more-days-longest-season-in-26-years/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"]
+      },
+      {
+        "source": "https://www.missionridge.com/news/1-24-2026-conditions-report/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "The operator lists four chairs, two rope tows, and one conveyor."
       }
     ],
     "verticalFt": 2250,
     "summitFt": 6820,
     "trailCount": 36,
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 4570,
+    "statsUrl": "https://www.missionridge.com/news/mission-ridge-adds-more-days-longest-season-in-26-years/",
+    "liftCount": 7
   },
   {
     "id": "mohawk-mountain",
@@ -7854,8 +9513,21 @@
         "checkedOn": "2026-11-21",
         "fields": ["acres", "acresQualifier", "nordicKm"],
         "note": "The operator gives more than 450 acres of downhill terrain and 8 km of cross-country trails."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mont-edouard",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 23,
+        "Intermediate": 26,
+        "Advanced": 51
+      }
+    }
   },
   {
     "id": "mont-kanasuta",
@@ -7871,7 +9543,17 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://maneige.ski/stations/centre-plein-air-mont-kanasuta/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 45,
+    "baseFt": 1109,
+    "summitFt": 1591,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mont-kanasuta",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "mont-orford",
@@ -7925,7 +9607,25 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://montrigaud.com/conditions/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 40,
+    "baseFt": 331,
+    "summitFt": 728,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 20,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mont-rigaud",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mont-ripley-ski-area",
@@ -8037,10 +9737,25 @@
         "checkedOn": "2026-11-20",
         "fields": ["nightAcres"],
         "note": "The operator offers full-mountain night skiing across its 140-acre terrain."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/montage-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
     ],
     "reportUrl": "https://www.montagemountainresorts.com/trails/",
-    "nightAcres": 140
+    "nightAcres": 140,
+    "baseFt": 960,
+    "summitFt": 1960,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 45,
+        "Advanced": 35
+      }
+    }
   },
   {
     "id": "montana-snowbowl",
@@ -8056,7 +9771,25 @@
     "nightSkiing": false,
     "terrainParks": false,
     "reportUrl": "https://www.montanasnowbowl.com/trails-report/index.php",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 2000,
+    "baseFt": 4980,
+    "summitFt": 7600,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/montana-snowbowl",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "monte-bondone",
@@ -8132,7 +9865,24 @@
     "trailCount": 42,
     "verticalFt": 1300,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "baseFt": 680,
+    "summitFt": 1987,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 10,
+        "Intermediate": 45,
+        "Advanced": 45
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/moose-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mount-baldy-ski-area",
@@ -8149,7 +9899,23 @@
     "trailCount": 12,
     "verticalFt": 476,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 200,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mount-baldy-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ]
   },
   {
     "id": "mount-bohemia",
@@ -8191,7 +9957,23 @@
     "verticalFt": 1411,
     "nightSkiing": false,
     "terrainParks": false,
-    "seasonWindow": "Early December to early April"
+    "seasonWindow": "Early December to early April",
+    "acres": 225,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 45,
+        "Advanced": 35
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mount-cain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ]
   },
   {
     "id": "mount-kato",
@@ -8209,7 +9991,25 @@
     "verticalFt": 240,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://mountkato.com/pages/public/mountain/snow-report/index.html"
+    "reportUrl": "https://mountkato.com/pages/public/mountain/snow-report/index.html",
+    "acres": 55,
+    "baseFt": 790,
+    "summitFt": 1030,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 21,
+        "Intermediate": 42,
+        "Advanced": 37
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mount-kato",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mount-racey-ski-resort",
@@ -8228,7 +10028,24 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://yubari-resort.co.jp/weather_traffic/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 977,
+    "summitFt": 2303,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mount-racey-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mount-snow",
@@ -8385,7 +10202,25 @@
     "verticalFt": 1050,
     "nightSkiing": false,
     "terrainParks": false,
-    "reportUrl": "https://www.mtabram.com/winter/mountain-report/"
+    "reportUrl": "https://www.mtabram.com/winter/mountain-report/",
+    "acres": 450,
+    "baseFt": 950,
+    "summitFt": 2000,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 42,
+        "Advanced": 23
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mt-abram",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mt-bachelor",
@@ -8524,7 +10359,22 @@
     "trailCount": 10,
     "verticalFt": 1200,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 60,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mt-eyak",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
+      }
+    ]
   },
   {
     "id": "mt-holiday",
@@ -8538,7 +10388,25 @@
     "trailCount": 12,
     "verticalFt": 200,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 45,
+    "baseFt": 240,
+    "summitFt": 440,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mt-holiday",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "mt-hood-meadows",
@@ -8573,8 +10441,21 @@
         "checkedOn": "2026-11-20",
         "fields": ["baseFt", "summitFt", "highestLiftTerminalFt", "nightAcres"],
         "note": "The operator lists the main lodge base at 5,366 ft and the separate Hood River Meadows base at 4,528 ft. The high point is the Cascade chairlift."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mt-hood-meadows",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 32,
+        "Intermediate": 40,
+        "Advanced": 28
+      }
+    }
   },
   {
     "id": "mt-hood-skibowl",
@@ -8632,8 +10513,24 @@
         "checkedOn": "2026-11-20",
         "fields": ["summitFt", "terrainParks"],
         "note": "The Summit Six serves the resort's 2,086 m top station."
+      },
+      {
+        "source": "https://www.nzski.com/our-mountains",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 11,
+        "Intermediate": 37,
+        "Advanced intermediate": 27,
+        "Advanced": 20,
+        "Park": 5
+      }
+    }
   },
   {
     "id": "mt-la-crosse",
@@ -8717,7 +10614,19 @@
     "trailCount": 7,
     "verticalFt": 325,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 15,
+    "baseFt": 1765,
+    "summitFt": 2090,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mt-pisgah",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ],
+    "reportUrl": "https://www.iskiny.com/mountains/mt-pisgah-recreation-center/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "mt-rose-ski-tahoe",
@@ -8814,8 +10723,21 @@
         "source": "https://skicalifornia.org/resorts/mt-shasta-ski-park",
         "checkedOn": "2026-11-19",
         "fields": ["summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mt-shasta",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 45,
+        "Advanced": 35
+      }
+    }
   },
   {
     "id": "mt-spokane-ski-snowboard-park",
@@ -8909,7 +10831,26 @@
     "trailCount": 12,
     "verticalFt": 1312,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 244,
+    "baseFt": 1142,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 40,
+        "Advanced": 35
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/muica-snow-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ],
+    "reportUrl": "https://www.muikamachi.com/ski/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "murray-ridge-ski-area",
@@ -8927,7 +10868,24 @@
     "verticalFt": 1675,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://www.murrayridge.com/conditions"
+    "reportUrl": "https://www.murrayridge.com/conditions",
+    "baseFt": 2935,
+    "summitFt": 4610,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 26,
+        "Intermediate": 30,
+        "Advanced": 44
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/murray-ridge-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "myoko-suginohara-ski-resort",
@@ -9012,7 +10970,17 @@
     "trailCount": 12,
     "verticalFt": 1578,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "reportUrl": "https://www.nayoro.co.jp/piyashiri/status/",
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 633,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/nayoro-piyashiri-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"]
+      }
+    ]
   },
   {
     "id": "nekoma-mountain",
@@ -9060,7 +11028,9 @@
         "fields": ["nordicKm"],
         "note": "The club reports roughly 30 km of groomed routes."
       }
-    ]
+    ],
+    "reportUrl": "https://nelsonnordicski.ca/conditions",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "nendaz",
@@ -9118,7 +11088,24 @@
     "trailCount": 2,
     "verticalFt": 709,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 49,
+    "baseFt": 1040,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 65,
+        "Intermediate": 35,
+        "Advanced": 0
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ninox-snow-park",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "niseko-united",
@@ -9222,8 +11209,21 @@
         "checkedOn": "2026-11-21",
         "fields": ["downhillKm"],
         "note": "Total groomed downhill slope length."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/norefjell-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 68,
+        "Intermediate": 20,
+        "Advanced": 12
+      }
+    }
   },
   {
     "id": "north-cascade-heli",
@@ -9312,7 +11312,25 @@
     "trailCount": 17,
     "verticalFt": 500,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 80,
+    "baseFt": 835,
+    "summitFt": 1335,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 6,
+        "Intermediate": 66,
+        "Advanced": 28
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/norway-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "nub-s-nob",
@@ -9334,7 +11352,24 @@
     "additionalSources": [
       "https://shop.nubsnob.com/tickets"
     ],
-    "reportUrl": "https://www.nubsnob.com/conditions-tables/"
+    "reportUrl": "https://www.nubsnob.com/conditions-tables/",
+    "baseFt": 925,
+    "summitFt": 1350,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 29,
+        "Intermediate": 38,
+        "Advanced": 33
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/nubs-nob-0",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "nutt-hill",
@@ -9348,7 +11383,17 @@
     "trailCount": 2,
     "verticalFt": 120,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 3,
+    "baseFt": 895,
+    "summitFt": 1015,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/nutt-hill",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "oak-hill-outdoor-center",
@@ -9377,7 +11422,25 @@
     "trailCount": 10,
     "verticalFt": 660,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 50,
+    "baseFt": 2682,
+    "summitFt": 3208,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 60,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ober-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "oberstdorf-kleinwalsertal-bergbahnen",
@@ -9403,7 +11466,16 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.ok-bergbahnen.com/en/skigebiete/status-anlagen-pisten-wege/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 2664,
+    "summitFt": 7296,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/oberstdorf-kleinwalsertal-bergbahnen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "obertauern",
@@ -9428,8 +11500,21 @@
         "checkedOn": "2026-11-20",
         "fields": ["baseFt", "summitFt", "downhillKm"],
         "note": "The official slope map lists an elevation range of 1,630 to 2,313 m and approximately 100 km of slopes."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/obertauern",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 61,
+        "Intermediate": 35,
+        "Advanced": 4
+      }
+    }
   },
   {
     "id": "okemo-mountain-resort",
@@ -9477,7 +11562,24 @@
     "verticalFt": 1273,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.okunakayamakogen.jp/winter-season/lift-status/"
+    "reportUrl": "https://www.okunakayamakogen.jp/winter-season/lift-status/",
+    "baseFt": 2132,
+    "summitFt": 3339,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/okunakayama-kogen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "onikoube-ski-resort",
@@ -9494,7 +11596,27 @@
     "trailCount": 9,
     "verticalFt": 2345,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 150,
+    "baseFt": 1116,
+    "summitFt": 3461,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 11,
+        "Intermediate": 56,
+        "Advanced": 33
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/onikoube-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ],
+    "reportUrl": "https://www.onikoube.com/snow/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "oppdal",
@@ -9512,7 +11634,24 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.alpinco.com/no/oppdal/snorapport",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 1919,
+    "summitFt": 4364,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 71,
+        "Intermediate": 13,
+        "Advanced": 16
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/oppdal",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "orcieres-merlette-1850",
@@ -9537,10 +11676,23 @@
         "checkedOn": "2026-11-20",
         "fields": ["baseFt", "summitFt"],
         "note": "The operator publishes the ski area elevation range in meters."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/orcieres-merlette-1850",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
     ],
     "reportUrl": "https://www.orcieres.com/live/ouvertures-station/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 31,
+        "Advanced": 49
+      }
+    }
   },
   {
     "id": "ordino-arcalis",
@@ -9773,7 +11925,24 @@
     "trailCount": 22,
     "verticalFt": 2395,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 4495,
+    "summitFt": 6890,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 62,
+        "Intermediate": 33,
+        "Advanced": 5
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/palcall-tsumagoi-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "palisades-tahoe",
@@ -9927,7 +12096,24 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.passpowderkeg.com/home/snow-report/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 48,
+    "summitFt": 5380,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 22,
+        "Intermediate": 30,
+        "Advanced": 48
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pass-powderkeg",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "pats-peak",
@@ -9975,7 +12161,23 @@
     "trailCount": 14,
     "verticalFt": 150,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 30,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 20,
+        "Advanced": 50
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/paul-bunyan-ski-hill",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ]
   },
   {
     "id": "paul-smiths-college-visitor-interpretive-center",
@@ -10022,7 +12224,24 @@
     "additionalSources": [
       "https://www.skiidaho.us/compare"
     ],
-    "reportUrl": "https://pebblecreekskiarea.com/snow-report"
+    "reportUrl": "https://pebblecreekskiarea.com/snow-report",
+    "baseFt": 6360,
+    "summitFt": 8560,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 19,
+        "Intermediate": 36,
+        "Advanced": 45
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pebble-creek-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "peek-n-peak",
@@ -10040,7 +12259,25 @@
     "verticalFt": 400,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.pknpk.com/conditions-report/"
+    "reportUrl": "https://www.pknpk.com/conditions-report/",
+    "acres": 105,
+    "baseFt": 1400,
+    "summitFt": 1800,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 16,
+        "Intermediate": 61,
+        "Advanced": 23
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/peek-n-peak",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "pejo-3000",
@@ -10128,7 +12365,24 @@
     "trailCount": 21,
     "verticalFt": 4295,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 2132,
+    "summitFt": 6427,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 42,
+        "Intermediate": 35,
+        "Advanced": 23
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/petzen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "phoenix-mountain",
@@ -10144,7 +12398,23 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://skiphoenix.ca/index.php/mountain-conditions/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 4147,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 19,
+        "Intermediate": 52,
+        "Advanced": 29
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/phoenix-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "pico-mountain",
@@ -10196,7 +12466,16 @@
     "trailCount": 30,
     "verticalFt": 3097,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 5790,
+    "summitFt": 8887,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pila",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "pine-mountain",
@@ -10215,7 +12494,25 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.pinemountainresort.com/skiing/snow-report/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 40,
+    "baseFt": 1148,
+    "summitFt": 1512,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 35,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pine-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "pinzolo",
@@ -10258,7 +12555,24 @@
     "trailCount": 9,
     "verticalFt": 1053,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 820,
+    "summitFt": 1902,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 50,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pippu-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "pitztal-glacier",
@@ -10288,8 +12602,23 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "downhillKm"],
         "note": "Pitztal Glacier and Rifflsee combined ski area, consistent with the existing altitude and lift figures."
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/pitztal-glacier-rifflsee-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"],
+        "note": "The difficulty percentages use piste length."
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easy": 33,
+        "Medium": 51,
+        "Difficult": 16
+      }
+    }
   },
   {
     "id": "pizol",
@@ -10304,7 +12633,38 @@
     "lowestLiftTerminalFt": 1670,
     "highestLiftTerminalFt": 7382,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "downhillKm": 51.7,
+    "reportUrl": "https://snow.myswitzerland.com/snow_reports/pizol-bad-ragaz-wangs-41/",
+    "reportCheckedOn": "2026-11-21",
+    "statSources": [
+      {
+        "source": "https://snow.myswitzerland.com/snow_reports/pizol-bad-ragaz-wangs-41/",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://pizol.com/unternehmen/unternehmen/",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "verticalFt", "lowestLiftTerminalFt", "highestLiftTerminalFt"],
+        "note": "Wangs valley station is at 509 m. The connecting lift reaches 2250 m. The published 1718 m descent starts at Pizolhütte."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pizol",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
+      }
+    ],
+    "summitFt": 7382,
+    "baseFt": 1670,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 36,
+        "Intermediate": 31,
+        "Advanced": 33
+      }
+    }
   },
   {
     "id": "plain-valley-ski-trails",
@@ -10337,7 +12697,7 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/pomerelle-mountain-resort",
     "liftCount": 3,
     "trailCount": 22,
-    "verticalFt": 998,
+    "verticalFt": 1002,
     "nightSkiing": true,
     "terrainParks": true,
     "acres": 500,
@@ -10349,9 +12709,26 @@
       {
         "source": "https://www.pomerelle.com/the-mountain",
         "checkedOn": "2026-11-21",
-        "fields": ["summitFt"]
+        "fields": ["baseFt", "summitFt", "verticalFt"],
+        "note": "Base elevation is the published 8762 ft summit minus the published 1002 ft vertical drop."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pomerelle-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "baseFt": 7760,
+    "reportUrl": "https://www.pomerelle.com/conditions",
+    "reportCheckedOn": "2026-11-21",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "pontedilegno-tonale",
@@ -10409,7 +12786,16 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://www.portesdusoleil.com/live/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 2952,
+    "summitFt": 8070,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/portes-du-soleil",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "powder-king-mountain-resort",
@@ -10479,7 +12865,23 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://powderridge.com/ski-ride/trail-map/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 60,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 45,
+        "Intermediate": 40,
+        "Advanced": 15
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/powder-ridge",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ]
   },
   {
     "id": "powder-ridge-connecticut",
@@ -10515,9 +12917,15 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "liftCount", "trailCount", "verticalFt", "nightAcres", "grades"],
         "note": "Current winter figures. The 255-acre figure describes the entire mountain property."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/powder-ridge-0",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt"]
       }
     ],
-    "reportUrl": "https://powderridgepark.com/trail-report/"
+    "reportUrl": "https://powderridgepark.com/trail-report/",
+    "summitFt": 720
   },
   {
     "id": "powderhorn-mountain-resort",
@@ -10588,7 +12996,15 @@
     "trailCount": 15,
     "verticalFt": 768,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 702,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/pyha-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"]
+      }
+    ]
   },
   {
     "id": "quarry-road-trails",
@@ -10642,6 +13058,11 @@
         "checkedOn": "2026-11-21",
         "fields": ["summitFt", "grades"],
         "note": "Highest point at Pinnacle Peak. Trail mix includes glades."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ragged-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt"]
       }
     ],
     "reportUrl": "https://www.raggedmountainresort.com/mountain-report-cams/",
@@ -10654,7 +13075,8 @@
         "Intermediate": 40,
         "Expert": 30
       }
-    }
+    },
+    "baseFt": 1000
   },
   {
     "id": "rangeley-lakes-trail-center",
@@ -10698,8 +13120,15 @@
         "checkedOn": "2026-11-20",
         "fields": ["downhillKm", "highestLiftTerminalFt"],
         "note": "The operator gives 32.5 km of groomed pistes and gondola access up to 2,175 m."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/rauriser-hochalmbahnen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
       }
-    ]
+    ],
+    "baseFt": 3179,
+    "summitFt": 7198
   },
   {
     "id": "red-lodge-mountain",
@@ -10880,7 +13309,24 @@
     "nightSkiing": true,
     "terrainParks": false,
     "reportUrl": "https://riksgransen.se/fjallstatus-snorapport/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 1706,
+    "summitFt": 2982,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 47,
+        "Intermediate": 47,
+        "Advanced": 6
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/riksgransen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "rio-pusteria-bressanone",
@@ -10927,7 +13373,15 @@
       }
     },
     "statsUrl": "https://www.skiroundtop.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.skiroundtop.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+    "reportUrl": "https://www.skiroundtop.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx",
+    "acres": 103,
+    "statSources": [
+      {
+        "source": "https://www.visitpa.com/blog/post/best-ski-resorts-pennsylvania/",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"]
+      }
+    ]
   },
   {
     "id": "ruka-ski-resort",
@@ -10954,8 +13408,15 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm", "nordicKm"],
         "note": "Nordic distance is Ruka's network within the larger Kuusamo system."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ruka-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
       }
-    ]
+    ],
+    "baseFt": 955,
+    "summitFt": 1614
   },
   {
     "id": "rusutsu-resort",
@@ -11114,7 +13575,25 @@
     "verticalFt": 650,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://www.saskadenasix.com/winter/conditions"
+    "reportUrl": "https://www.saskadenasix.com/winter/conditions",
+    "acres": 100,
+    "baseFt": 550,
+    "summitFt": 1200,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/saskadena-six-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "sasquatch-mountain-resort",
@@ -11136,7 +13615,25 @@
       "https://sasquatchmountain.ca/indy-pass/"
     ],
     "reportUrl": "https://sasquatchmountain.ca/snow-report/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 205,
+    "baseFt": 3300,
+    "summitFt": 4500,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 19,
+        "Intermediate": 34,
+        "Advanced": 47
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/sasquatch-mountain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "schmittenhoehe",
@@ -11194,7 +13691,25 @@
     "additionalSources": [
       "https://www.shantycreek.com/ski/lift-tickets-season-passes/indy-pass/"
     ],
-    "reportUrl": "https://www.shantycreek.com/ski/conditions-cams/"
+    "reportUrl": "https://www.shantycreek.com/ski/conditions-cams/",
+    "acres": 81,
+    "baseFt": 625,
+    "summitFt": 1125,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 33,
+        "Intermediate": 26,
+        "Advanced": 41
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/schuss-mountain-at-shanty-creek",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "schweitzer-mountain-resort",
@@ -11277,10 +13792,32 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm", "summitFt"],
         "note": "The page gives See separately from Kappl. The summit value is the stated upper ski-area elevation."
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/see-ski-resort-in-the-paznauntal-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "liftCount"]
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/see-ski-resort-in-the-paznauntal-valley",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"],
+        "note": "Difficulty by length of the 42.5 km of graded pistes."
       }
     ],
     "reportUrl": "https://www.kappl-see.com/en/live-info/snow-report",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 3419,
+    "liftCount": 10,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easy": 22,
+        "Medium": 59,
+        "Difficult": 19
+      }
+    }
   },
   {
     "id": "seven-springs-mountain-resort",
@@ -11325,7 +13862,25 @@
     "verticalFt": 1600,
     "nightSkiing": false,
     "terrainParks": true,
-    "reportUrl": "https://mymountaincoop.ca/shames-mountain/our-mountain/snow-report/"
+    "reportUrl": "https://mymountaincoop.ca/shames-mountain/our-mountain/snow-report/",
+    "acres": 252,
+    "baseFt": 2300,
+    "summitFt": 3900,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 60,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/shames-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "shawnee-mountain-ski-area",
@@ -11440,7 +13995,24 @@
     "trailCount": 7,
     "verticalFt": 1804,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "baseFt": 1902,
+    "summitFt": 3707,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/shimokura",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "showdown-montana",
@@ -11458,7 +14030,25 @@
     "verticalFt": 1400,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.showdownmontana.com/snow-report"
+    "reportUrl": "https://www.showdownmontana.com/snow-report",
+    "acres": 640,
+    "baseFt": 6800,
+    "summitFt": 8200,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 28,
+        "Intermediate": 44,
+        "Advanced": 28
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/showdown-montana",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "sierra-at-tahoe-ski-resort",
@@ -11515,7 +14105,23 @@
     "trailCount": 77,
     "verticalFt": 2200,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "summitFt": 6300,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/silver-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "silverstar-mountain-resort",
@@ -11651,7 +14257,25 @@
     "trailCount": 7,
     "verticalFt": 330,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 33,
+    "baseFt": 800,
+    "summitFt": 1200,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 45,
+        "Intermediate": 40,
+        "Advanced": 15
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/skaneateles-ski-club",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "skeetawk",
@@ -11666,7 +14290,24 @@
     "trailCount": 12,
     "verticalFt": 300,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 30,
+    "baseFt": 1420,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 31,
+        "Intermediate": 31,
+        "Advanced": 38
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/skeetawk",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "ski-apache",
@@ -11710,7 +14351,27 @@
     "trailCount": 18,
     "verticalFt": 650,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 26,
+    "baseFt": 550,
+    "summitFt": 1200,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 33,
+        "Intermediate": 34,
+        "Advanced": 33
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ski-big-bear",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ],
+    "reportUrl": "https://www.ski-bigbear.com/hours",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "ski-butternut",
@@ -11752,7 +14413,23 @@
     "trailCount": 58,
     "verticalFt": 1027,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 550,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 52,
+        "Advanced": 23
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ski-land",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ]
   },
   {
     "id": "ski-saint-bruno",
@@ -11767,7 +14444,25 @@
     "verticalFt": 427,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://skisaintbruno.ca/conditions-de-glisse"
+    "reportUrl": "https://skisaintbruno.ca/conditions-de-glisse",
+    "acres": 35,
+    "baseFt": 148,
+    "summitFt": 574,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 56,
+        "Intermediate": 33,
+        "Advanced": 11
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ski-saint-bruno",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "ski-santa-fe",
@@ -11823,7 +14518,17 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://skisawmill.com/ski-report/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 40,
+    "baseFt": 1700,
+    "summitFt": 2215,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ski-sawmill",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "ski-vallee-bleue",
@@ -11840,7 +14545,25 @@
     "trailCount": 52,
     "verticalFt": 350,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 42,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 30,
+        "Advanced": 45
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/ski-vallee-bleue",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
+      }
+    ],
+    "reportUrl": "https://maneige.ski/en/stations/vallee-bleue-la-station-familiale/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "skicircus-saalbach",
@@ -11888,8 +14611,17 @@
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"],
         "note": "Piste length as published by the destination. The source also lists 26.4 km measured along the fall line."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/skigebiet-heiligenblut-grossglockner",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt"]
       }
-    ]
+    ],
+    "reportUrl": "https://heiligenblut.at/bergbahnen/",
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 4268,
+    "summitFt": 9521
   },
   {
     "id": "skiwelt",
@@ -11912,10 +14644,25 @@
         "source": "https://www.skiwelt.at/",
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/skiwelt",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
     ],
     "reportUrl": "https://www.skiwelt.at/en/lift-status-winter.html",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 2034,
+    "summitFt": 6132,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 42,
+        "Advanced": 18
+      }
+    }
   },
   {
     "id": "sleepy-hollow",
@@ -11955,7 +14702,15 @@
     "trailCount": 23,
     "verticalFt": 960,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 40,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/smokey-mountain-ski-club",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres"]
+      }
+    ]
   },
   {
     "id": "smugglers-notch-resort",
@@ -11976,6 +14731,24 @@
     "terrainParks": true,
     "additionalSources": [
       "https://vermontbiz.com/news/2026/september/08/smugglers-notch-resort-joins-indy-pass"
+    ],
+    "acres": 311,
+    "baseFt": 1030,
+    "summitFt": 3640,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 17,
+        "Intermediate": 51,
+        "Advanced": 32
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/smugglers-notch-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
     ]
   },
   {
@@ -12052,7 +14825,24 @@
     "trailCount": 10,
     "verticalFt": 2505,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 198,
+    "baseFt": 1662,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 50,
+        "Advanced": 10
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/snow-resort-the-cupid-of-romance",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "snow-ridge",
@@ -12074,10 +14864,24 @@
         "source": "https://snowridge.com/trail-mapstats/",
         "checkedOn": "2026-11-19",
         "fields": ["baseFt", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/snow-ridge",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
       }
     ],
     "reportUrl": "https://snowridge.com/trail-conditions/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 150,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 11,
+        "Intermediate": 30,
+        "Advanced": 59
+      }
+    }
   },
   {
     "id": "snow-summit",
@@ -12302,7 +15106,9 @@
         "fields": ["acres", "liftCount", "trailCount", "summitFt", "verticalFt", "nightSkiing", "terrainParks"],
         "note": "Acreage sums the published terrain breakdown. Lifts and trails sum the Basin, Silver Creek and Western Territory inventories. Vertical is the Western Territory descent."
       }
-    ]
+    ],
+    "reportUrl": "https://www.snowshoemtn.com/mountain-info/mountain-report",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "snowstar",
@@ -12323,6 +15129,24 @@
     "terrainParks": true,
     "additionalSources": [
       "https://www.indyskipass.com/our-resorts/snowstar"
+    ],
+    "acres": 28,
+    "baseFt": 528,
+    "summitFt": 790,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 50,
+        "Advanced": 25
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/snowstar",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
     ]
   },
   {
@@ -12391,9 +15215,24 @@
         "source": "https://www.soelden.com/en",
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/soelden-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"],
+        "note": "The difficulty percentages use piste length."
       }
     ],
-    "downhillKm": 147.2
+    "downhillKm": 147.2,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easy": 49,
+        "Medium": 32,
+        "Difficult": 19
+      }
+    }
   },
   {
     "id": "soldier-mountain-ski-area",
@@ -12416,7 +15255,26 @@
       "https://soldiermountain.com/restrictions-policies/",
       "https://www.skiidaho.us/compare"
     ],
-    "acres": 1150
+    "acres": 1150,
+    "baseFt": 5756,
+    "summitFt": 7177,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 26,
+        "Intermediate": 34,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/soldier-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ],
+    "reportUrl": "https://soldiermountain.com/hours/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "solitude-mountain-resort",
@@ -12520,10 +15378,25 @@
         "source": "https://spiritmt.com/winter/snow-report/",
         "checkedOn": "2026-11-19",
         "fields": ["acres", "nightAcres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/spirit-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
     ],
     "acres": 175,
-    "nightAcres": 144
+    "nightAcres": 144,
+    "baseFt": 690,
+    "summitFt": 1390,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 40,
+        "Advanced": 25
+      }
+    }
   },
   {
     "id": "spring-mountain-adventures",
@@ -12541,7 +15414,17 @@
     "verticalFt": 450,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://springmountainadventures.com/conditions/"
+    "reportUrl": "https://springmountainadventures.com/conditions/",
+    "acres": 45,
+    "baseFt": 78,
+    "summitFt": 529,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/spring-mountain-adventures",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "st-anton-am-arlberg",
@@ -12584,7 +15467,24 @@
     "trailCount": 19,
     "verticalFt": 3100,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "baseFt": 2162,
+    "summitFt": 5263,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 54,
+        "Intermediate": 45,
+        "Advanced": 1
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/st-johann-in-tirol",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "station-touristique-stoneham",
@@ -12694,10 +15594,23 @@
         "source": "https://www.steinplatte.tirol/de/preise-winter.html",
         "checkedOn": "2026-11-19",
         "fields": ["trailCount", "downhillKm"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/steinplatte",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
     ],
     "reportUrl": "https://www.steinplatte.tirol/de/pistenstatus-highlights.html",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 47,
+        "Intermediate": 47,
+        "Advanced": 6
+      }
+    }
   },
   {
     "id": "stevens-pass",
@@ -12772,8 +15685,23 @@
         "source": "https://www.stoten.se/en/slopes-weather/",
         "checkedOn": "2026-11-19",
         "fields": ["downhillKm"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/stoten-i-salen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "baseFt": 1453,
+    "summitFt": 2782,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 72,
+        "Intermediate": 15,
+        "Advanced": 13
+      }
+    }
   },
   {
     "id": "stowe",
@@ -12832,8 +15760,21 @@
         "source": "https://www.strandafjellet.no/en/alpint",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/stranda-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["grades"]
       }
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 50,
+        "Intermediate": 40,
+        "Advanced": 10
+      }
+    }
   },
   {
     "id": "stratton-mountain-resort",
@@ -13146,7 +16087,25 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://skisunburst.com/our-hills/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "acres": 30,
+    "baseFt": 974,
+    "summitFt": 1171,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 17,
+        "Intermediate": 50,
+        "Advanced": 33
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/sunburst-ski-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "sundance-mountain-resort",
@@ -13209,7 +16168,25 @@
     "verticalFt": 475,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://sundownmtn.com/the-mountain/snow-report-trail-map/"
+    "reportUrl": "https://sundownmtn.com/the-mountain/snow-report-trail-map/",
+    "acres": 55,
+    "baseFt": 584,
+    "summitFt": 1059,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 60,
+        "Advanced": 10
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/sundown-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "sunlight-mountain-resort",
@@ -13256,9 +16233,23 @@
         "source": "https://swain.com/mountain/",
         "checkedOn": "2026-11-19",
         "fields": ["baseFt", "summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/swain-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
       }
     ],
-    "reportUrl": "https://swain.com/trail-report/"
+    "reportUrl": "https://swain.com/trail-report/",
+    "acres": 120,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 32,
+        "Intermediate": 37,
+        "Advanced": 31
+      }
+    }
   },
   {
     "id": "tahoe-donner-downhill-ski-resort",
@@ -13303,7 +16294,25 @@
     "trailCount": 13,
     "verticalFt": 1968,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 247,
+    "baseFt": 3117,
+    "summitFt": 5085,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 35,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/takasu-snow-park",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "tamarack-resort",
@@ -13367,7 +16376,9 @@
         "fields": ["acres", "liftCount", "trailCount", "baseFt", "summitFt", "verticalFt", "grades"],
         "note": "The independently published imperial vertical is consistent with the reported base and summit."
       }
-    ]
+    ],
+    "reportUrl": "https://www.skitaos.com/weather",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "tazawako",
@@ -13386,7 +16397,24 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://www.tazawako-ski.com/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 1896,
+    "summitFt": 3891,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 30,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/tazawako",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "telemark-nordic-center",
@@ -13472,11 +16500,25 @@
         "source": "https://skitenney.com/about/mountain-information/",
         "checkedOn": "2026-11-21",
         "fields": ["summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/tenney-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
     "reportUrl": "https://skitenney.com/snow-report/",
     "reportCheckedOn": "2026-11-21",
-    "summitFt": 2100
+    "summitFt": 2100,
+    "baseFt": 649,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 23,
+        "Intermediate": 50,
+        "Advanced": 27
+      }
+    }
   },
   {
     "id": "terry-peak",
@@ -13602,8 +16644,25 @@
         "source": "https://www.theremarkables.co.nz/mountain-info",
         "checkedOn": "2026-11-20",
         "fields": ["terrainParks"]
+      },
+      {
+        "source": "https://www.nzski.com/our-mountains",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt", "liftCount", "grades"],
+        "note": "Includes four chairlifts and three conveyors."
       }
-    ]
+    ],
+    "verticalFt": 1535,
+    "liftCount": 7,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    }
   },
   {
     "id": "the-summit-at-snoqualmie",
@@ -13635,7 +16694,26 @@
     "statsUrl": "https://www.ikonpass.com/en/destinations/thredbo/",
     "reportUrl": "https://www.thredbo.com.au/weather/weather-report",
     "acres": 1186,
-    "verticalFt": 2205
+    "verticalFt": 2205,
+    "baseFt": 4478,
+    "summitFt": 6683,
+    "lowestLiftTerminalFt": 4478,
+    "highestLiftTerminalFt": 6683,
+    "statSources": [
+      {
+        "source": "https://cdn.thredbo.com.au/wp-content/uploads/2026/05/29115602/260325-1-Winter-2026-Tear-off-Trail_lowres.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "lowestLiftTerminalFt", "highestLiftTerminalFt"],
+        "note": "Valley Terminal and the top of Karels T-Bar."
+      },
+      {
+        "source": "https://www.thredbo.com.au/about-thredbo/development/",
+        "checkedOn": "2026-11-21",
+        "fields": ["liftCount"],
+        "note": "Includes the Freddie’s Snowrunner conveyor."
+      }
+    ],
+    "liftCount": 14
   },
   {
     "id": "thrill-hills",
@@ -13649,7 +16727,24 @@
     "trailCount": 10,
     "verticalFt": 290,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 30,
+    "baseFt": 900,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 60,
+        "Advanced": 0
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/thrill-hills",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "grades"]
+      }
+    ]
   },
   {
     "id": "thyon",
@@ -13711,7 +16806,25 @@
     "nightSkiing": true,
     "terrainParks": true,
     "reportUrl": "https://www.titusmountain.com/conditions",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 380,
+    "baseFt": 825,
+    "summitFt": 2025,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 34,
+        "Intermediate": 38,
+        "Advanced": 28
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/titus-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "togakushi-ski-resort",
@@ -13730,7 +16843,24 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://www.togakusi.com/ski/course/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 4002,
+    "summitFt": 5734,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/togakushi-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "togari-onsen-snow-resort",
@@ -13755,10 +16885,24 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres"],
         "note": "The operator reports the area of its ski slopes as approximately 140 hectares."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/togari-onsen-snow-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
     "reportUrl": "https://togari.jp/winter/gelande/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "baseFt": 1312,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "trapp-family-lodge",
@@ -13792,7 +16936,25 @@
     "verticalFt": 225,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://www.treetops.com/live/"
+    "reportUrl": "https://www.treetops.com/live/",
+    "acres": 80,
+    "baseFt": 1110,
+    "summitFt": 1333,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/treetops-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "tremblant",
@@ -13856,9 +17018,23 @@
         "source": "https://trollhaugen.com/trail-map/",
         "checkedOn": "2026-11-21",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/trollhaugen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
-    "acres": 80
+    "acres": 80,
+    "baseFt": 928,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 28,
+        "Intermediate": 43,
+        "Advanced": 29
+      }
+    }
   },
   {
     "id": "tschiertschen-chur",
@@ -13874,7 +17050,34 @@
     "trailCount": 12,
     "verticalFt": 3382,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "downhillKm": 32,
+    "nordicKm": 2,
+    "reportUrl": "https://www.tschiertschen.ch/de/tschiertschen-1",
+    "reportCheckedOn": "2026-11-21",
+    "statSources": [
+      {
+        "source": "https://www.tschiertschen.ch/de/tschiertschen-1",
+        "checkedOn": "2026-11-21",
+        "fields": ["downhillKm", "nordicKm"],
+        "note": "The Nordic route supports both classic and skate skiing."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/tschiertschen-chur",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ],
+    "baseFt": 4432,
+    "summitFt": 7874,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 41,
+        "Intermediate": 45,
+        "Advanced": 14
+      }
+    }
   },
   {
     "id": "tsugaike-mountain-resort",
@@ -13950,7 +17153,25 @@
     "verticalFt": 500,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://tusseymountain.com/mountain-stats"
+    "reportUrl": "https://tusseymountain.com/mountain-stats",
+    "acres": 38,
+    "baseFt": 1302,
+    "summitFt": 1811,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 45,
+        "Advanced": 25
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/tussey-mountain",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "tyrol-basin-ski-and-snowboard",
@@ -13968,7 +17189,25 @@
     "verticalFt": 300,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://tyrolbasin.com/slope-report/"
+    "reportUrl": "https://tyrolbasin.com/slope-report/",
+    "acres": 40,
+    "baseFt": 860,
+    "summitFt": 1160,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 30,
+        "Advanced": 40
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/tyrol-basin-ski-and-snowboard",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "vail-mountain",
@@ -14059,9 +17298,25 @@
         "checkedOn": "2026-11-20",
         "fields": ["baseFt", "summitFt"],
         "note": "The operator labels 426 m as the base and 700 m as the summit. The 274 m figure is the vertical drop."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/val-direne",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "grades"]
       }
     ],
-    "summitFt": 2297
+    "summitFt": 2297,
+    "acres": 92,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 23,
+        "Intermediate": 31,
+        "Advanced": 46
+      }
+    },
+    "reportUrl": "https://maneige.ski/stations/parc-regional-de-val-direne/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "val-gardena-alpe-di-siusi",
@@ -14167,7 +17422,25 @@
     "trailCount": 54,
     "verticalFt": 230,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 50,
+    "baseFt": 774,
+    "summitFt": 1004,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 37,
+        "Intermediate": 32,
+        "Advanced": 31
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/veterans-memorial-recreation-area",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "veysonnaz",
@@ -14200,7 +17473,25 @@
     "verticalFt": 1444,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportUrl": "https://ski.washigatake.jp/condition/"
+    "reportUrl": "https://ski.washigatake.jp/condition/",
+    "acres": 136,
+    "baseFt": 2986,
+    "summitFt": 4429,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/washigatake-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "waterville-valley-resort",
@@ -14228,11 +17519,25 @@
         "source": "https://www.waterville.com/about-waterville-valley",
         "checkedOn": "2026-11-19",
         "fields": ["nordicKm"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/waterville-valley-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
     "nordicKm": 72,
     "reportUrl": "https://www.waterville.com/snow-report-maps",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 1820,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 16,
+        "Intermediate": 60,
+        "Advanced": 24
+      }
+    }
   },
   {
     "id": "welch-village",
@@ -14399,7 +17704,9 @@
         "checkedOn": "2026-11-19",
         "fields": ["nordicKm"]
       }
-    ]
+    ],
+    "reportUrl": "https://www.whitegrass.com/daily-report/",
+    "reportCheckedOn": "2026-11-21"
   },
   {
     "id": "white-pass-ski-area",
@@ -14432,8 +17739,22 @@
         "checkedOn": "2026-11-20",
         "fields": ["summitFt", "nordicKm"],
         "note": "Ski Washington lists the summit and total Nordic network length."
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/white-pass",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
-    ]
+    ],
+    "baseFt": 4500,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 60,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "white-pine-resort",
@@ -14454,10 +17775,24 @@
         "source": "https://www.whitepineresort.com/",
         "checkedOn": "2026-11-19",
         "fields": ["acres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/white-pine-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
     "reportUrl": "https://www.whitepineresort.com/plan#conditions",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-21",
+    "baseFt": 8500,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    }
   },
   {
     "id": "white-pine-touring-nordic-center",
@@ -14499,7 +17834,17 @@
     "verticalFt": 400,
     "nightSkiing": false,
     "terrainParks": false,
-    "reportUrl": "https://whitecapresort.com/winter/snow-report"
+    "reportUrl": "https://whitecapresort.com/winter/snow-report",
+    "acres": 300,
+    "baseFt": 1350,
+    "summitFt": 1750,
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/whitecap-mountains-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt"]
+      }
+    ]
   },
   {
     "id": "whiteface",
@@ -14596,7 +17941,24 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://whitepia.jp/operation/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-20",
+    "acres": 146,
+    "summitFt": 4610,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/whitepia-takasu",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "whitetail-resort",
@@ -14668,9 +18030,15 @@
         "source": "https://wildmountain.com/mountain-info/skisb-trail-map",
         "checkedOn": "2026-11-19",
         "fields": ["trailCount"]
+      },
+      {
+        "source": "https://www.exploreminnesota.com/sites/default/files/2021-11/22_SkiGridNEW.pdf",
+        "checkedOn": "2026-11-21",
+        "fields": ["verticalFt"]
       }
     ],
-    "reportUrl": "https://wildmountain.com/mountain-info/snow-report"
+    "reportUrl": "https://wildmountain.com/mountain-info/snow-report",
+    "verticalFt": 300
   },
   {
     "id": "wildcat-mountain",
@@ -14824,7 +18192,25 @@
     "trailCount": 7,
     "verticalFt": 620,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 36,
+    "baseFt": 814,
+    "summitFt": 1434,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/winter4kids",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "wintergreen-resort",
@@ -14851,9 +18237,23 @@
         "source": "https://www.wintergreenresort.com/safety-stats/",
         "checkedOn": "2026-11-19",
         "fields": ["summitFt"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/wintergreen",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"]
       }
     ],
-    "reportUrl": "https://www.wintergreenresort.com/mountain-report-cams/"
+    "reportUrl": "https://www.wintergreenresort.com/mountain-report-cams/",
+    "baseFt": 2512,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 35,
+        "Advanced": 45
+      }
+    }
   },
   {
     "id": "winterplace-ski-resort",
@@ -14899,7 +18299,24 @@
     "trailCount": 33,
     "verticalFt": 700,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "baseFt": 2415,
+    "summitFt": 3115,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/wisp",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "wolf-creek-ski-area",
@@ -14991,7 +18408,27 @@
     "trailCount": 16,
     "verticalFt": 800,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "reportUrl": "https://www.yuzawa-nakazato.com/winter/",
+    "reportCheckedOn": "2026-11-21",
+    "acres": 326,
+    "baseFt": 1503,
+    "summitFt": 2303,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 30,
+        "Advanced": 30
+      }
+    },
+    "statSources": [
+      {
+        "source": "https://www.indyskipass.com/our-resorts/yuzawa-nakazato-snow-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["acres", "baseFt", "summitFt", "grades"]
+      }
+    ]
   },
   {
     "id": "zao-onsen-ski-resort",
@@ -15065,8 +18502,24 @@
         "source": "https://www.zillertalarena.com/en/winter/ski-area/",
         "checkedOn": "2026-11-19",
         "fields": ["liftCount", "downhillKm", "summitFt"]
+      },
+      {
+        "source": "https://www.tyrol.com/activities/sport/skiing/ski-resorts/zillertal-arena-ski-resort",
+        "checkedOn": "2026-11-21",
+        "fields": ["baseFt", "grades"],
+        "note": "The difficulty percentages use piste length."
       }
-    ]
+    ],
+    "baseFt": 1903,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easy": 33,
+        "Medium": 59,
+        "Difficult": 8
+      }
+    }
   },
   {
     "id": "zuers-am-arlberg",

@@ -110,6 +110,7 @@ describe('ski-status catalog validation', () => {
         [{ trailCountQualifier: 'lower-bound' }, /Lower bound.*reported value/],
         [{ nightAcresQualifier: 'lower-bound' }, /Lower bound.*reported value/],
         [{ baseFt: 3_000, summitFt: 2_500 }, /Inverted base and summit/],
+        [{ baseFt: 3_000, summitFt: 3_000, verticalFt: 500 }, /Equal base and summit elevations with positive vertical drop/],
         [{ highestLiftTerminalFt: 3_000, lowestLiftTerminalFt: 3_100 }, /Inverted lift terminal/],
         [{ nightSkiing: false, nightAcres: 20 }, /Conflicting night skiing/],
         [{ nightSkiing: true, nightAcres: 125 }, /Night skiable acreage exceeds/],
@@ -129,6 +130,13 @@ describe('ski-status catalog validation', () => {
         const catalog = readSkiCatalog([lowerBound], locations, { ...passes, season: '2099/00' });
         expect(catalog.areas[0]).toMatchObject(lowerBound);
         expect(catalog.passSeason).toBe('2099/00');
+    });
+
+    it('accepts level terrain and does not infer a missing elevation', () => {
+        const flat = { ...area, skiing: 'cross-country', baseFt: 650, summitFt: 650, verticalFt: 0 };
+        const partial = { ...area, baseFt: 650, verticalFt: 500 };
+        expect(readSkiCatalog([flat], locations, passes).areas[0]).toMatchObject(flat);
+        expect(readSkiCatalog([partial], locations, passes).areas[0]?.summitFt).toBeUndefined();
     });
 
     it('requires map attribution and a pass season that ends in the next year', () => {
@@ -454,6 +462,17 @@ describe('2026/27 Indy destination coverage', () => {
         expect(area.verticalFt).toBe(verticalFt);
         expect(new URL(area.statsUrl!).hostname).toBe(sourceHost);
         expect(area.passes).toContainEqual(expect.objectContaining({ access: 'included', family: 'indy' }));
+    });
+
+    it.each([
+        ['pomerelle-mountain-resort', { baseFt: 7_760, summitFt: 8_762, verticalFt: 1_002 }, 'https://www.pomerelle.com/the-mountain'],
+        ['hafjell', { baseFt: 640, summitFt: 3_474, verticalFt: 2_835, trailCount: 29 }, 'https://www.alpinco.com/no/hafjell/om-hafjell'],
+        ['pizol', { baseFt: 1_670, summitFt: 7_382, verticalFt: 5_636 }, 'https://pizol.com/unternehmen/unternehmen/'],
+        ['mission-ridge', { liftCount: 7 }, 'https://www.missionridge.com/news/1-24-2026-conditions-report/'],
+    ] as const)('attributes the corrected figures for %s to its operator', (id, figures, source) => {
+        const resort = skiAreas.find(area => area.id === id);
+        expect(resort).toMatchObject(figures);
+        expect(resort?.statSources).toContainEqual(expect.objectContaining({ source, fields: expect.arrayContaining(Object.keys(figures)) }));
     });
 });
 

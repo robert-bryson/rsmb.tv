@@ -13,12 +13,13 @@ const snowSource = {
     label, source: httpsUrl, period: label.optional(), location: label.optional(),
 };
 const snowfall = z.strictObject({
-    ...snowSource, annualCm: centimetres.optional(), annualSource: httpsUrl.optional(),
+    ...snowSource, annualCm: centimetres.optional(),
+    annualSource: z.union([httpsUrl, z.strictObject(snowSource)]).optional(),
     monthlyCm: monthlyValues.optional(),
 }).refine(record => record.annualCm !== undefined || record.monthlyCm, 'Add a snowfall measurement')
     .refine(record => !record.annualSource || record.annualCm !== undefined, 'Annual source requires annual snowfall');
 const depth = z.strictObject({
-    ...snowSource, kind: z.enum(['base', 'survey', 'station']), monthlyCm: monthlyValues,
+    ...snowSource, kind: z.enum(['base', 'survey', 'station', 'monthly-peak']), monthlyCm: monthlyValues,
     monthlySources: z.record(month, httpsUrl).optional(),
 }).refine(record => Object.keys(record.monthlySources ?? {}).every(month => Object.hasOwn(record.monthlyCm, month)),
     'Monthly depth source requires a measurement');

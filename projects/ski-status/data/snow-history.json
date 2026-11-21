@@ -4,7 +4,10 @@
       "label": "Alta Ski Area",
       "source": "https://www.alta.com/weather",
       "annualCm": 1391.92,
-      "annualSource": "https://www.alta.com/stories/mid-season-report-card",
+      "annualSource": {
+        "label": "Alta Ski Area",
+        "source": "https://www.alta.com/stories/mid-season-report-card"
+      },
       "period": "Since 1980",
       "location": "Collins Study Plot",
       "monthlyCm": {
@@ -49,6 +52,20 @@
         "11": 33.6,
         "12": 74.8
       }
+    },
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00500243.dly",
+      "period": "2015/16–2023/24",
+      "location": "Alyeska, AK weather station, 82.9 m, 1.37 km from the ski area",
+      "monthlyCm": {
+        "1": 77.2,
+        "2": 75.8,
+        "3": 67.8,
+        "4": 22.1,
+        "11": 63.2,
+        "12": 101.3
+      }
     }
   },
   "angel-fire-resort": {
@@ -85,6 +102,92 @@
         "11": 35.0,
         "12": 68.3
       }
+    }
+  },
+  "arizona-snowbowl": {
+    "snowfall": {
+      "label": "Arizona Snowbowl",
+      "source": "https://www.snowbowl.ski/the-mountain/mountain-information/",
+      "annualCm": 660.4
+    }
+  },
+  "aspen-highlands": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050372.dly",
+      "period": "2015/16–2025/26",
+      "location": "Aspen 1SW, CO weather station, 2491.7 m, 3.14 km from the ski area",
+      "monthlyCm": {
+        "1": 66.4,
+        "2": 77.9,
+        "3": 77.8,
+        "4": 47.2,
+        "11": 51.1,
+        "12": 72.6
+      },
+      "annualCm": 762,
+      "annualSource": {
+        "label": "Colorado Ski Country USA",
+        "source": "https://www.coloradoski.com/resorts/aspen-highlands/"
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050372.dly",
+      "period": "2015/16–2025/26",
+      "location": "Aspen 1SW, CO weather station, 2491.7 m, 3.14 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 50.0,
+        "2": 63.9,
+        "3": 57.1,
+        "4": 13.4,
+        "11": 7.5,
+        "12": 29.0
+      }
+    }
+  },
+  "aspen-mountain": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050372.dly",
+      "period": "2015/16–2025/26",
+      "location": "Aspen 1SW, CO weather station, 2491.7 m, 2.72 km from the ski area",
+      "monthlyCm": {
+        "1": 66.4,
+        "2": 77.9,
+        "3": 77.8,
+        "4": 47.2,
+        "11": 51.1,
+        "12": 72.6
+      },
+      "annualCm": 762,
+      "annualSource": {
+        "label": "Colorado Ski Country USA",
+        "source": "https://www.coloradoski.com/resorts/aspen-mountain-2/"
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050372.dly",
+      "period": "2015/16–2025/26",
+      "location": "Aspen 1SW, CO weather station, 2491.7 m, 2.72 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 50.0,
+        "2": 63.9,
+        "3": 57.1,
+        "4": 13.4,
+        "11": 7.5,
+        "12": 29.0
+      }
+    }
+  },
+  "attitash-mountain-resort": {
+    "snowfall": {
+      "label": "Attitash Mountain Resort",
+      "source": "https://www.attitash.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 304.8
     }
   },
   "banff-sunshine": {
@@ -141,6 +244,62 @@
         "11": 11.7,
         "12": 44.8
       }
+    },
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00105708.csv",
+      "period": "1991–2020 reference period",
+      "location": "McCall, ID weather station, 1531.6 m, 7.28 km from the ski area",
+      "monthlyCm": {
+        "1": 88.6,
+        "2": 61.2,
+        "3": 39.3,
+        "4": 10.6,
+        "5": 0.9,
+        "6": 0.6,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.1,
+        "10": 5.2,
+        "11": 44.0,
+        "12": 85.0
+      },
+      "annualCm": 335.79,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00105708.csv",
+        "period": "1991–2020 reference period",
+        "location": "McCall, ID weather station, 1531.6 m, 7.28 km from the ski area"
+      }
+    }
+  },
+  "bear-mountain": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00040741.csv",
+      "period": "1991–2020 reference period",
+      "location": "Big Bear Lake, CA weather station, 2058.3 m, 5.51 km from the ski area",
+      "monthlyCm": {
+        "1": 34.1,
+        "2": 36.3,
+        "3": 29.7,
+        "4": 7.7,
+        "5": 1.4,
+        "6": 0.1,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 3.0,
+        "11": 8.7,
+        "12": 28.1
+      },
+      "annualCm": 148.84,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00040741.csv",
+        "period": "1991–2020 reference period",
+        "location": "Big Bear Lake, CA weather station, 2058.3 m, 5.51 km from the ski area"
+      }
     }
   },
   "beaver-creek-resort": {
@@ -158,6 +317,11 @@
         "11": 16.0,
         "12": 42.2
       }
+    },
+    "snowfall": {
+      "label": "Beaver Creek Resort",
+      "source": "https://www.beavercreek.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 820.42
     }
   },
   "beaver-mountain": {
@@ -165,6 +329,23 @@
       "label": "Ski Utah",
       "source": "https://www.skiutah.com/members/beaver-mountain",
       "annualCm": 1016
+    }
+  },
+  "beito-resort": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/NOE00110020.dly",
+      "period": "2015/16–2025/26",
+      "location": "Beito weather station, 754 m, 2.72 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 51.0,
+        "2": 62.6,
+        "3": 60.5,
+        "4": 27.4,
+        "11": 11.1,
+        "12": 34.8
+      }
     }
   },
   "berkshire-east-ski-resort": {
@@ -189,6 +370,11 @@
         "11": 32.5,
         "12": 61.1
       }
+    },
+    "snowfall": {
+      "label": "Big Sky Resort",
+      "source": "https://www.bigskyresort.com/mountain-info",
+      "annualCm": 1016
     }
   },
   "big-white-ski-resort": {
@@ -213,6 +399,11 @@
         "11": 18.0,
         "12": 66.0
       }
+    },
+    "snowfall": {
+      "label": "Ski Idaho",
+      "source": "https://www.skiidaho.us/compare",
+      "annualCm": 711.2
     }
   },
   "bolton-valley-resort": {
@@ -224,9 +415,74 @@
   },
   "boyne-mountain": {
     "snowfall": {
-      "label": "Boyne Mountain",
-      "source": "https://www.boynemountain.com/mountain-stats",
-      "annualCm": 355.6
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00200925.dly",
+      "period": "2015/16–2025/26",
+      "location": "Boyne Falls, MI weather station, 221.9 m, 1.49 km from the ski area",
+      "annualCm": 355.6,
+      "annualSource": {
+        "label": "Boyne Mountain Resort",
+        "source": "https://www.boynemountain.com/mountain-stats"
+      },
+      "monthlyCm": {
+        "1": 69.8,
+        "2": 53.9,
+        "3": 31.3,
+        "4": 12.1,
+        "11": 21.3,
+        "12": 68.7
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00200925.dly",
+      "period": "2015/16–2025/26",
+      "location": "Boyne Falls, MI weather station, 221.9 m, 1.49 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 16.4,
+        "2": 23.1,
+        "3": 10.0,
+        "4": 1.1,
+        "11": 1.6,
+        "12": 9.6
+      }
+    }
+  },
+  "breckenridge-ski-resort": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050909.dly",
+      "period": "2016/17–2021/22",
+      "location": "Breckenridge, CO weather station, 2925.5 m, 2.11 km from the ski area",
+      "monthlyCm": {
+        "1": 68.9,
+        "2": 67.5,
+        "3": 79.3,
+        "4": 59.8,
+        "11": 42.0,
+        "12": 78.3
+      },
+      "annualCm": 901.7,
+      "annualSource": {
+        "label": "Breckenridge Ski Resort",
+        "source": "https://www.breckenridge.com/the-mountain/about-the-mountain/mountain-info.aspx"
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050909.dly",
+      "period": "2015/16–2025/26",
+      "location": "Breckenridge, CO weather station, 2925.5 m, 2.11 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 60.3,
+        "2": 72.6,
+        "3": 74.2,
+        "4": 29.6,
+        "11": 11.3,
+        "12": 35.7
+      }
     }
   },
   "brian-head-resort": {
@@ -288,11 +544,78 @@
       "location": "Base area"
     }
   },
+  "buffalo-ski-club": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00301625.dly",
+      "period": "2015/16–2025/26",
+      "location": "Colden 1W, NY weather station, 467.9 m, 3.46 km from the ski area",
+      "monthlyCm": {
+        "1": 135.9,
+        "2": 71.9,
+        "3": 38.4,
+        "4": 17.7,
+        "11": 40.5,
+        "12": 94.8
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/US1NYER0166.dly",
+      "period": "2020/21–2025/26",
+      "location": "Boston 2.5 NE, NY weather station, 490.7 m, 2.48 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 26.1,
+        "2": 33.4,
+        "3": 9.5,
+        "4": 0.3,
+        "11": 4.6,
+        "12": 13.1
+      }
+    }
+  },
   "burke-mountain-resort": {
     "snowfall": {
       "label": "Burke Mountain Resort",
       "source": "https://skiburke.com/the-mountain/skiing-riding",
       "annualCm": 551.18
+    }
+  },
+  "buttermilk": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050372.dly",
+      "period": "2015/16–2025/26",
+      "location": "Aspen 1SW, CO weather station, 2491.7 m, 2.86 km from the ski area",
+      "monthlyCm": {
+        "1": 66.4,
+        "2": 77.9,
+        "3": 77.8,
+        "4": 47.2,
+        "11": 51.1,
+        "12": 72.6
+      },
+      "annualCm": 508,
+      "annualSource": {
+        "label": "Colorado Ski Country USA",
+        "source": "https://www.coloradoski.com/resorts/buttermilk/"
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00050372.dly",
+      "period": "2015/16–2025/26",
+      "location": "Aspen 1SW, CO weather station, 2491.7 m, 2.86 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 50.0,
+        "2": 63.9,
+        "3": 57.1,
+        "4": 13.4,
+        "11": 7.5,
+        "12": 29.0
+      }
     }
   },
   "cannon-mountain": {
@@ -323,6 +646,50 @@
       "annualCm": 812.8
     }
   },
+  "coffee-mill-ski-area": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00218552.dly",
+      "period": "2015/16–2020/21",
+      "location": "Wabasha, MN weather station, 222.5 m, 3.46 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 11.1,
+        "2": 18.4,
+        "3": 7.1,
+        "4": 1.2,
+        "11": 0.4,
+        "12": 5.3
+      }
+    },
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00218552.csv",
+      "period": "1991–2020 reference period",
+      "location": "Wabasha, MN weather station, 213.4 m, 2.77 km from the ski area",
+      "monthlyCm": {
+        "1": 24.1,
+        "2": 22.7,
+        "3": 17.8,
+        "4": 6.2,
+        "5": 0.8,
+        "6": 0.0,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 1.1,
+        "11": 5.6,
+        "12": 23.0
+      },
+      "annualCm": 101.09,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00218552.csv",
+        "period": "1991–2020 reference period",
+        "location": "Wabasha, MN weather station, 213.4 m, 2.77 km from the ski area"
+      }
+    }
+  },
   "cooper": {
     "snowfall": {
       "label": "Cooper",
@@ -335,7 +702,10 @@
       "label": "Copper Mountain Resort",
       "source": "https://www.coppercolorado.com/the-mountain/mountain-safety-stats/winter-mountain-stats/",
       "annualCm": 777.24,
-      "annualSource": "https://www.coloradoski.com/resorts/copper-mountain/",
+      "annualSource": {
+        "label": "Colorado Ski Country USA",
+        "source": "https://www.coloradoski.com/resorts/copper-mountain/"
+      },
       "period": "2005/06–2024/25",
       "monthlyCm": {
         "1": 131.32,
@@ -372,9 +742,38 @@
   },
   "cranmore-mountain-resort": {
     "snowfall": {
-      "label": "Cranmore Mountain Resort",
-      "source": "https://cranmore.com/trail-map",
-      "annualCm": 203.2
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00275995.dly",
+      "period": "2017/18–2023/24",
+      "location": "N Conway, NH weather station, 159.1 m, 2.21 km from the ski area",
+      "annualCm": 203.2,
+      "annualSource": {
+        "label": "Cranmore Mountain Resort trail map",
+        "source": "https://cranmore.com/trail-map"
+      },
+      "monthlyCm": {
+        "1": 58.5,
+        "2": 44.9,
+        "3": 40.3,
+        "4": 10.6,
+        "11": 13.4,
+        "12": 35.6
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00275995.dly",
+      "period": "2015/16–2025/26",
+      "location": "N Conway, NH weather station, 159.1 m, 2.21 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 24.8,
+        "2": 38.2,
+        "3": 20.4,
+        "4": 1.6,
+        "11": 1.3,
+        "12": 10.8
+      }
     }
   },
   "crested-butte-mountain-resort": {
@@ -391,6 +790,51 @@
         "4": 91.8,
         "11": 18.9,
         "12": 52.3
+      }
+    },
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00051959.dly",
+      "period": "2017/18–2021/22",
+      "location": "Crested Butte, CO weather station, 2702.7 m, 3 km from the ski area",
+      "monthlyCm": {
+        "1": 63.7,
+        "2": 63.2,
+        "3": 62.6,
+        "4": 17.6,
+        "11": 38.4,
+        "12": 103.7
+      }
+    }
+  },
+  "crystal-ridge": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00473391.dly",
+      "period": "2020/21–2025/26",
+      "location": "Hales Corners/Whitnall Park/Bo, WI weather station, 235.9 m, 2.19 km from the ski area",
+      "monthlyCm": {
+        "1": 35.7,
+        "2": 20.7,
+        "3": 20.2,
+        "4": 1.0,
+        "11": 9.4,
+        "12": 8.6
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00473391.dly",
+      "period": "2015/16–2025/26",
+      "location": "Hales Corners/Whitnall Park/Bo, WI weather station, 235.9 m, 2.19 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 6.9,
+        "2": 6.7,
+        "3": 1.6,
+        "4": 0.3,
+        "11": 0.6,
+        "12": 2.3
       }
     }
   },
@@ -413,6 +857,70 @@
       "label": "Ski Utah",
       "source": "https://www.skiutah.com/members/deer-valley/",
       "annualCm": 762
+    }
+  },
+  "dry-hill-ski-area": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00309000.csv",
+      "period": "1991–2020 reference period",
+      "location": "Watertown, NY weather station, 151.5 m, 5.56 km from the ski area",
+      "monthlyCm": {
+        "1": 86.3,
+        "2": 75.3,
+        "3": 34.5,
+        "4": 6.9,
+        "6": 0.0,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 1.3,
+        "11": 23.1,
+        "12": 68.2
+      },
+      "annualCm": 295.66,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00309000.csv",
+        "period": "1991–2020 reference period",
+        "location": "Watertown, NY weather station, 151.5 m, 5.56 km from the ski area"
+      }
+    }
+  },
+  "eaglecrest-ski-area": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00502610.dly",
+      "period": "2017/18–2022/23",
+      "location": "Eaglecrest Base, AK weather station, 345.6 m, 0.23 km from the ski area",
+      "monthlyCm": {
+        "1": 82.5,
+        "2": 158.4,
+        "3": 101.3,
+        "4": 33.8,
+        "11": 66.1,
+        "12": 94.3
+      },
+      "annualCm": 889,
+      "annualSource": {
+        "label": "Eaglecrest Ski Area trail map",
+        "source": "https://skieaglecrest.com/wp-content/uploads/2019/12/Map-Key-Only.pdf"
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00502610.dly",
+      "period": "2017/18–2022/23",
+      "location": "Eaglecrest Base, AK weather station, 345.6 m, 0.23 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 54.1,
+        "2": 95.3,
+        "3": 133.9,
+        "4": 112.6,
+        "11": 15.9,
+        "12": 39.8
+      }
     }
   },
   "echo-mountain": {
@@ -451,11 +959,87 @@
       "annualCm": 900
     }
   },
+  "fort-kent-outdoor-center": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00172878.dly",
+      "period": "2015/16–2020/21",
+      "location": "FT Kent, ME weather station, 185.9 m, 1.23 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 35.2,
+        "2": 55.2,
+        "3": 55.1,
+        "4": 18.3,
+        "11": 5.7,
+        "12": 19.4
+      }
+    }
+  },
+  "furano-ski-resort": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=12&block_no=0021&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Furano, Hokkaido weather station, 174 m, 3.87 km from the ski area",
+      "monthlyCm": {
+        "1": 145,
+        "2": 121,
+        "3": 110,
+        "4": 22,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 2,
+        "11": 72,
+        "12": 159
+      },
+      "annualCm": 628
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=12&block_no=0021&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Furano, Hokkaido weather station, 174 m, 3.87 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 64,
+        "2": 73,
+        "3": 71,
+        "4": 23,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 2,
+        "11": 23,
+        "12": 46
+      }
+    }
+  },
   "granby-ranch": {
     "snowfall": {
       "label": "Colorado Ski Country USA",
       "source": "https://www.coloradoski.com/resorts/granby-ranch/",
       "annualCm": 304.8
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/US1COGR0068.dly",
+      "period": "2017/18–2021/22",
+      "location": "Tabernash 2.7 NW, CO weather station, 2678 m, 3.65 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 35.7,
+        "2": 52.0,
+        "3": 51.6,
+        "4": 11.7,
+        "11": 4.6,
+        "12": 18.7
+      }
     }
   },
   "grand-targhee-resort": {
@@ -473,13 +1057,76 @@
         "11": 85.2,
         "12": 137.6
       }
+    },
+    "snowfall": {
+      "label": "Ski Idaho",
+      "source": "https://www.skiidaho.us/compare",
+      "annualCm": 1270
     }
   },
   "granite-peak": {
     "snowfall": {
-      "label": "Granite Peak",
-      "source": "https://www.skigranitepeak.com/mountain-info/trail-map-mountain-stats",
-      "annualCm": 152.4
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USW00014897.dly",
+      "period": "2017/18–2022/23",
+      "location": "Wausau Asos, WI weather station, 366.1 m, 4.68 km from the ski area",
+      "annualCm": 152.4,
+      "annualSource": {
+        "label": "Granite Peak Ski Area",
+        "source": "https://www.skigranitepeak.com/mountain-info/trail-map-mountain-stats"
+      },
+      "monthlyCm": {
+        "1": 29.6,
+        "2": 48.7,
+        "3": 24.5,
+        "4": 29.3,
+        "11": 16.4,
+        "12": 38.4
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USW00014897.dly",
+      "period": "2015/16–2025/26",
+      "location": "Wausau Asos, WI weather station, 366.1 m, 4.68 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 16.1,
+        "2": 23.8,
+        "3": 11.7,
+        "4": 1.5,
+        "11": 0.9,
+        "12": 8.7
+      }
+    }
+  },
+  "great-bear-ski-valley": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USW00014944.csv",
+      "period": "1991–2020 reference period",
+      "location": "Sioux Falls, SD weather station, 435.9 m, 5.24 km from the ski area",
+      "monthlyCm": {
+        "1": 20.2,
+        "2": 21.8,
+        "3": 18.2,
+        "4": 12.8,
+        "5": 0.3,
+        "6": 0.0,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 3.6,
+        "11": 15.8,
+        "12": 22.1
+      },
+      "annualCm": 115.06,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USW00014944.csv",
+        "period": "1991–2020 reference period",
+        "location": "Sioux Falls, SD weather station, 435.9 m, 5.24 km from the ski area"
+      }
     }
   },
   "great-divide-ski-area": {
@@ -489,11 +1136,204 @@
       "annualCm": 381
     }
   },
+  "great-glen-trails-outdoor-center": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00276818.dly",
+      "period": "2015/16–2024/25",
+      "location": "Pinkham Notch, NH weather station, 617.2 m, 4.39 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 31.2,
+        "2": 50.5,
+        "3": 39.8,
+        "4": 12.1,
+        "11": 4.9,
+        "12": 16.5
+      }
+    }
+  },
   "gunstock-mountain-resort": {
     "snowfall": {
       "label": "Gunstock Mountain Resort",
       "source": "https://www.gunstock.com/about-us/resort-stats/",
       "annualCm": 304.8
+    }
+  },
+  "hakuba-47": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 4.05 km from the ski area",
+      "monthlyCm": {
+        "1": 216,
+        "2": 174,
+        "3": 110,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 14,
+        "12": 130
+      },
+      "annualCm": 655
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 4.05 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 82,
+        "2": 97,
+        "3": 70,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 7,
+        "12": 46
+      }
+    }
+  },
+  "hakuba-goryu": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 4.53 km from the ski area",
+      "monthlyCm": {
+        "1": 216,
+        "2": 174,
+        "3": 110,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 14,
+        "12": 130
+      },
+      "annualCm": 655
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 4.53 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 82,
+        "2": 97,
+        "3": 70,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 7,
+        "12": 46
+      }
+    }
+  },
+  "hakuba-happo-one": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 3.62 km from the ski area",
+      "monthlyCm": {
+        "1": 216,
+        "2": 174,
+        "3": 110,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 14,
+        "12": 130
+      },
+      "annualCm": 655
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 3.62 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 82,
+        "2": 97,
+        "3": 70,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 7,
+        "12": 46
+      }
+    }
+  },
+  "hakuba-iwatake": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 2.1 km from the ski area",
+      "monthlyCm": {
+        "1": 216,
+        "2": 174,
+        "3": 110,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 14,
+        "12": 130
+      },
+      "annualCm": 655
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0396&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Hakuba, Nagano weather station, 703 m, 2.1 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 82,
+        "2": 97,
+        "3": 70,
+        "4": 7,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 7,
+        "12": 46
+      }
     }
   },
   "heavenly": {
@@ -518,11 +1358,120 @@
       }
     }
   },
+  "hidden-valley-resort": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00363928.dly",
+      "period": "2018/19–2025/26",
+      "location": "Hidden Valley, PA weather station, 876.6 m, 1.84 km from the ski area",
+      "monthlyCm": {
+        "1": 85.2,
+        "2": 49.5,
+        "3": 24.8,
+        "4": 13.5,
+        "11": 22.2,
+        "12": 52.4
+      },
+      "annualCm": 342.9,
+      "annualSource": {
+        "label": "Hidden Valley Resort",
+        "source": "https://www.hiddenvalleyresort.com/the-mountain/about-the-mountain/mountain-info.aspx"
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00363928.dly",
+      "period": "2018/19–2025/26",
+      "location": "Hidden Valley, PA weather station, 876.6 m, 1.84 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 15.2,
+        "2": 14.0,
+        "3": 2.3,
+        "4": 0.3,
+        "11": 1.4,
+        "12": 6.5
+      }
+    }
+  },
+  "hodaigi-mountain-resort": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=42&block_no=1222&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Fujiwara, Gunma weather station, 700 m, 3.49 km from the ski area",
+      "monthlyCm": {
+        "1": 348,
+        "2": 272,
+        "3": 183,
+        "4": 69,
+        "5": 2,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 29,
+        "12": 258
+      },
+      "annualCm": 1152
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=42&block_no=1222&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Fujiwara, Gunma weather station, 700 m, 3.49 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 166,
+        "2": 202,
+        "3": 166,
+        "4": 94,
+        "5": 4,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 13,
+        "12": 105
+      }
+    }
+  },
   "homewood-mountain-resort": {
     "snowfall": {
-      "label": "Homewood Mountain Resort",
-      "source": "https://skihomewood.com/trailmap/",
-      "annualCm": 1143
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00048760.dly",
+      "period": "2018/19–2025/26",
+      "location": "Tahoma, CA weather station, 1924.8 m, 3.78 km from the ski area",
+      "annualCm": 1143,
+      "annualSource": {
+        "label": "Homewood Mountain Resort trail map",
+        "source": "https://skihomewood.com/trailmap/"
+      },
+      "monthlyCm": {
+        "1": 96.7,
+        "2": 144.8,
+        "3": 139.4,
+        "4": 36.1,
+        "11": 34.1,
+        "12": 97.8
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00048760.dly",
+      "period": "2015/16–2025/26",
+      "location": "Tahoma, CA weather station, 1924.8 m, 3.78 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 56.5,
+        "2": 80.8,
+        "3": 92.8,
+        "4": 43.3,
+        "11": 4.7,
+        "12": 24.1
+      }
     }
   },
   "hoodoo-ski-area": {
@@ -546,6 +1495,35 @@
       "annualCm": 431.8
     }
   },
+  "hunter-mountain": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00302366.csv",
+      "period": "1991–2020 reference period",
+      "location": "East Jewett, NY weather station, 606.9 m, 6.22 km from the ski area",
+      "monthlyCm": {
+        "1": 53.0,
+        "2": 46.7,
+        "3": 46.7,
+        "4": 16.0,
+        "5": 0.6,
+        "6": 0.0,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 5.3,
+        "11": 15.5,
+        "12": 56.2
+      },
+      "annualCm": 240.03,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00302366.csv",
+        "period": "1991–2020 reference period",
+        "location": "East Jewett, NY weather station, 606.9 m, 6.22 km from the ski area"
+      }
+    }
+  },
   "hurricane-ridge": {
     "snowfall": {
       "label": "Hurricane Ridge",
@@ -567,6 +1545,50 @@
       "annualCm": 952.5
     }
   },
+  "jigatake": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0399&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Omachi, Nagano weather station, 784 m, 5.04 km from the ski area",
+      "monthlyCm": {
+        "1": 164,
+        "2": 133,
+        "3": 76,
+        "4": 5,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 6,
+        "12": 73
+      },
+      "annualCm": 454
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=48&block_no=0399&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Omachi, Nagano weather station, 784 m, 5.04 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 47,
+        "2": 54,
+        "3": 32,
+        "4": 2,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 3,
+        "12": 26
+      }
+    }
+  },
   "jiminy-peak-mountain-resort": {
     "snowfall": {
       "label": "Jiminy Peak Mountain Resort",
@@ -581,11 +1603,83 @@
       "annualCm": 635
     }
   },
+  "kandatsu-snow-resort": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=54&block_no=0544&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yuzawa, Niigata weather station, 340 m, 3.84 km from the ski area",
+      "monthlyCm": {
+        "1": 377,
+        "2": 288,
+        "3": 159,
+        "4": 20,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 12,
+        "12": 210
+      },
+      "annualCm": 1054
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=54&block_no=0544&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yuzawa, Niigata weather station, 340 m, 3.84 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 173,
+        "2": 202,
+        "3": 159,
+        "4": 52,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 6,
+        "12": 92
+      }
+    }
+  },
+  "kelly-canyon": {
+    "snowfall": {
+      "label": "Ski Idaho",
+      "source": "https://www.skiidaho.us/compare",
+      "annualCm": 508
+    }
+  },
   "kendall-mountain-ski-area": {
     "snowfall": {
-      "label": "Kendall Mountain Ski Area",
-      "source": "https://www.skikendall.com/trail-map",
-      "annualCm": 508
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00057656.dly",
+      "period": "2016/17–2021/22",
+      "location": "Silverton, CO weather station, 2830.1 m, 0.68 km from the ski area",
+      "annualCm": 508,
+      "annualSource": {
+        "label": "Kendall Mountain Ski Area trail map",
+        "source": "https://www.skikendall.com/trail-map"
+      },
+      "monthlyCm": {
+        "1": 89.6,
+        "2": 84.8,
+        "3": 94.8,
+        "4": 25.0,
+        "11": 36.9,
+        "12": 82.7
+      }
+    }
+  },
+  "keystone-resort": {
+    "snowfall": {
+      "label": "Keystone Resort",
+      "source": "https://www.keystoneresort.com/the-mountain/about-the-mountain/mountain-info",
+      "annualCm": 596.9
     }
   },
   "killington": {
@@ -611,6 +1705,13 @@
       "annualCm": 381
     }
   },
+  "kirkwood-mountain-resort": {
+    "snowfall": {
+      "label": "Kirkwood Mountain Resort",
+      "source": "https://www.kirkwood.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 899.16
+    }
+  },
   "lake-louise": {
     "snowfall": {
       "label": "Lake Louise Ski Resort",
@@ -618,11 +1719,86 @@
       "annualCm": 454
     }
   },
+  "laurel-mountain": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00364839.dly",
+      "period": "2020/21–2025/26",
+      "location": "Laurel Summit, PA weather station, 832.1 m, 2.3 km from the ski area",
+      "monthlyCm": {
+        "1": 107.9,
+        "2": 59.9,
+        "3": 26.9,
+        "4": 15.2,
+        "11": 25.0,
+        "12": 53.5
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00364839.dly",
+      "period": "2020/21–2025/26",
+      "location": "Laurel Summit, PA weather station, 832.1 m, 2.3 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 19.6,
+        "2": 17.2,
+        "3": 2.3,
+        "4": 0.4,
+        "11": 1.3,
+        "12": 6.5
+      }
+    }
+  },
   "le-massif": {
     "snowfall": {
       "label": "Le Massif de Charlevoix",
       "source": "https://www.lemassif.com/en/activities-events/charlevoix-attractions/charlevoix-ski",
       "annualCm": 545
+    }
+  },
+  "little-ski-hill": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00105708.csv",
+      "period": "1991–2020 reference period",
+      "location": "McCall, ID weather station, 1531.6 m, 6.46 km from the ski area",
+      "monthlyCm": {
+        "1": 88.6,
+        "2": 61.2,
+        "3": 39.3,
+        "4": 10.6,
+        "5": 0.9,
+        "6": 0.6,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.1,
+        "10": 5.2,
+        "11": 44.0,
+        "12": 85.0
+      },
+      "annualCm": 457.2,
+      "annualSource": {
+        "label": "Ski Idaho",
+        "source": "https://www.skiidaho.us/compare"
+      }
+    }
+  },
+  "little-switzerland": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00477796.dly",
+      "period": "2015/16–2025/26",
+      "location": "Slinger Wwtp, WI weather station, 317.6 m, 1.48 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 8.0,
+        "2": 9.4,
+        "3": 2.1,
+        "4": 0.4,
+        "11": 0.6,
+        "12": 3.1
+      }
     }
   },
   "lookout-pass": {
@@ -640,6 +1816,11 @@
         "11": 21.0,
         "12": 63.8
       }
+    },
+    "snowfall": {
+      "label": "Ski Idaho",
+      "source": "https://www.skiidaho.us/compare",
+      "annualCm": 1143
     }
   },
   "lost-trail": {
@@ -657,6 +1838,11 @@
         "11": 35.5,
         "12": 76.7
       }
+    },
+    "snowfall": {
+      "label": "Ski Idaho",
+      "source": "https://www.skiidaho.us/compare",
+      "annualCm": 762
     }
   },
   "loveland-ski-area": {
@@ -674,6 +1860,11 @@
         "11": 41.7,
         "12": 71.9
       }
+    },
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/loveland/",
+      "annualCm": 1071.88
     }
   },
   "lutsen-mountains": {
@@ -698,6 +1889,11 @@
         "11": 15.5,
         "12": 58.9
       }
+    },
+    "snowfall": {
+      "label": "Ski Idaho",
+      "source": "https://www.skiidaho.us/compare",
+      "annualCm": 584.2
     }
   },
   "magic-mountain-ski-area": {
@@ -705,6 +1901,50 @@
       "label": "Magic Mountain Ski Area",
       "source": "https://www.magicmtn.com/about-magic",
       "annualCm": 330.2
+    }
+  },
+  "maiko-resort": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=54&block_no=0544&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yuzawa, Niigata weather station, 340 m, 4.67 km from the ski area",
+      "monthlyCm": {
+        "1": 377,
+        "2": 288,
+        "3": 159,
+        "4": 20,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 12,
+        "12": 210
+      },
+      "annualCm": 1054
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=54&block_no=0544&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yuzawa, Niigata weather station, 340 m, 4.67 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 173,
+        "2": 202,
+        "3": 159,
+        "4": 52,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 6,
+        "12": 92
+      }
     }
   },
   "mammoth-mountain": {
@@ -723,7 +1963,8 @@
         "10": 15.75,
         "11": 89.66,
         "12": 154.69
-      }
+      },
+      "location": "Main Lodge at Mammoth Mountain"
     }
   },
   "marble-mountain": {
@@ -740,11 +1981,79 @@
       "annualCm": 533.4
     }
   },
+  "mcintyre-ski-area": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00275211.dly",
+      "period": "2015/16–2020/21",
+      "location": "Massabesic Lake, NH weather station, 77.1 m, 4.32 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 7.4,
+        "2": 10.3,
+        "3": 5.5,
+        "4": 0.4,
+        "11": 0.7,
+        "12": 7.2
+      }
+    }
+  },
   "monarch-mountain": {
     "snowfall": {
       "label": "Monarch Mountain",
       "source": "https://skimonarch.com/hours-stats/",
       "annualCm": 889
+    }
+  },
+  "mount-racey-ski-resort": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=15&block_no=0049&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yubari, Hokkaido weather station, 293 m, 1.72 km from the ski area",
+      "monthlyCm": {
+        "1": 225,
+        "2": 172,
+        "3": 132,
+        "4": 34,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 3,
+        "11": 84,
+        "12": 230
+      },
+      "annualCm": 872
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=15&block_no=0049&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yubari, Hokkaido weather station, 293 m, 1.72 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 117,
+        "2": 130,
+        "3": 122,
+        "4": 67,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 2,
+        "11": 33,
+        "12": 79
+      }
+    }
+  },
+  "mount-snow": {
+    "snowfall": {
+      "label": "Mount Snow",
+      "source": "https://www.mountsnow.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 381
     }
   },
   "mount-washington-alpine-resort": {
@@ -762,11 +2071,105 @@
       "period": "23-year average"
     }
   },
+  "mt-bachelor": {
+    "snowfall": {
+      "label": "Mt. Bachelor",
+      "source": "https://www.mtbachelor.com/the-mountain/resort-policies-safety/mountain-stats/",
+      "annualCm": 1021.08
+    }
+  },
   "mt-baker-ski-area": {
     "snowfall": {
       "label": "Mt. Baker Ski Area",
-      "source": "https://www.mtbaker.us/the-mountain/mountain-stats/",
-      "annualCm": 1747.52
+      "source": "https://www.mtbaker.us/the-mountain/snowfall-statistics/",
+      "annualCm": 1747.52,
+      "period": "11 completed seasons, 2015/16–2025/26",
+      "location": "Mt. Baker Ski Area operating-season totals",
+      "annualSource": {
+        "label": "Mt. Baker Ski Area mountain statistics",
+        "source": "https://www.mtbaker.us/the-mountain/mountain-stats/"
+      },
+      "monthlyCm": {
+        "1": 306.9,
+        "2": 290.8,
+        "3": 307.7,
+        "4": 137.9,
+        "11": 191.9,
+        "12": 377.8
+      }
+    }
+  },
+  "mt-holiday": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00208245.dly",
+      "period": "2018/19–2025/26",
+      "location": "Traverse City 4.7ESE, MI weather station, 245.1 m, 0.95 km from the ski area",
+      "monthlyCm": {
+        "1": 78.0,
+        "2": 63.5,
+        "3": 39.1,
+        "4": 9.1,
+        "11": 32.9,
+        "12": 59.0
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00208245.dly",
+      "period": "2018/19–2025/26",
+      "location": "Traverse City 4.7ESE, MI weather station, 245.1 m, 0.95 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 15.9,
+        "2": 23.9,
+        "3": 10.5,
+        "4": 0.1,
+        "11": 2.8,
+        "12": 8.4
+      }
+    }
+  },
+  "mt-hood-skibowl": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00353402.dly",
+      "period": "2015/16–2020/21",
+      "location": "Government Camp, OR weather station, 1213.1 m, 2.42 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 88.6,
+        "2": 88.7,
+        "3": 108.2,
+        "4": 38.0,
+        "11": 6.5,
+        "12": 50.7
+      }
+    },
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00353402.csv",
+      "period": "1991–2020 reference period",
+      "location": "Government Camp, OR weather station, 1213.1 m, 2.42 km from the ski area",
+      "monthlyCm": {
+        "1": 123.9,
+        "2": 100.3,
+        "3": 90.4,
+        "4": 44.7,
+        "5": 10.6,
+        "6": 1.4,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.4,
+        "10": 9.8,
+        "11": 77.7,
+        "12": 131.1
+      },
+      "annualCm": 762,
+      "annualSource": {
+        "label": "Mt. Hood Skibowl",
+        "source": "https://skibowl.com/about-winter/stats/"
+      }
     }
   },
   "mt-la-crosse": {
@@ -778,9 +2181,29 @@
   },
   "mt-norquay": {
     "snowfall": {
-      "label": "Mt. Norquay",
-      "source": "https://banffnorquay.com/trail-map/",
-      "annualCm": 300
+      "label": "Environment and Climate Change Canada",
+      "source": "https://climate.weather.gc.ca/climate_normals/index_e.html",
+      "period": "1991–2020 reference period",
+      "location": "Banff, AB composite weather station, 1383.7–1396.9 m, within 3.8 km of the ski area",
+      "annualCm": 300,
+      "annualSource": {
+        "label": "Mt. Norquay trail map",
+        "source": "https://banffnorquay.com/trail-map/"
+      },
+      "monthlyCm": {
+        "1": 21.2,
+        "2": 20.3,
+        "3": 25.3,
+        "4": 30.0,
+        "5": 12.3,
+        "6": 1.7,
+        "7": 0.1,
+        "8": 0.2,
+        "9": 7.9,
+        "10": 16.7,
+        "11": 25.2,
+        "12": 23.0
+      }
     }
   },
   "mt-rose-ski-tahoe": {
@@ -798,6 +2221,11 @@
         "11": 28.2,
         "12": 103.0
       }
+    },
+    "snowfall": {
+      "label": "Mt. Rose Ski Tahoe",
+      "source": "https://skirose.com/mountain-information/",
+      "annualCm": 889
     }
   },
   "mt-shasta-ski-park": {
@@ -821,11 +2249,141 @@
       "annualCm": 250
     }
   },
+  "north-cascade-heli": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00455133.dly",
+      "period": "2020/21–2025/26",
+      "location": "Mazama, WA weather station, 652.6 m, 1.03 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 61.7,
+        "2": 51.6,
+        "3": 35.9,
+        "4": 2.7,
+        "11": 9.9,
+        "12": 36.3
+      }
+    }
+  },
+  "northstar-california-resort": {
+    "snowfall": {
+      "label": "Northstar California Resort",
+      "source": "https://www.northstarcalifornia.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 889
+    }
+  },
   "nub-s-nob": {
     "snowfall": {
       "label": "Nub's Nob",
       "source": "https://www.nubsnob.com/snowmaking-grooming/",
       "annualCm": 312.42
+    }
+  },
+  "nutt-hill": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00476678.dly",
+      "period": "2015/16–2025/26",
+      "location": "Plymouth Wwtp, WI weather station, 252.4 m, 2.66 km from the ski area",
+      "monthlyCm": {
+        "1": 28.8,
+        "2": 22.2,
+        "3": 18.3,
+        "4": 6.4,
+        "11": 8.0,
+        "12": 21.4
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00476678.dly",
+      "period": "2015/16–2025/26",
+      "location": "Plymouth Wwtp, WI weather station, 252.4 m, 2.66 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 6.5,
+        "2": 7.7,
+        "3": 2.8,
+        "4": 0.4,
+        "11": 0.5,
+        "12": 3.5
+      }
+    }
+  },
+  "okunakayama-kogen": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=33&block_no=1215&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Okunakayama, Iwate weather station, 430 m, 4.47 km from the ski area",
+      "monthlyCm": {
+        "1": 156,
+        "2": 134,
+        "3": 112,
+        "4": 16,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 24,
+        "12": 133
+      },
+      "annualCm": 571
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=33&block_no=1215&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Okunakayama, Iwate weather station, 430 m, 4.47 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 66,
+        "2": 82,
+        "3": 76,
+        "4": 20,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 10,
+        "12": 42
+      }
+    }
+  },
+  "osceola-tug-hill-xc-ski-center": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00306300.dly",
+      "period": "2016/17–2020/21",
+      "location": "Osceola, NY weather station, 335.6 m, 1.34 km from the ski area",
+      "monthlyCm": {
+        "1": 136.0,
+        "2": 151.1,
+        "3": 76.5,
+        "4": 22.2,
+        "11": 65.7,
+        "12": 136.3
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00306300.dly",
+      "period": "2016/17–2020/21",
+      "location": "Osceola, NY weather station, 335.6 m, 1.34 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 29.4,
+        "2": 52.8,
+        "3": 29.0,
+        "4": 2.7,
+        "11": 7.7,
+        "12": 19.5
+      }
     }
   },
   "palisades-tahoe": {
@@ -888,6 +2446,35 @@
       "annualCm": 635
     }
   },
+  "pine-mountain": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00204090.csv",
+      "period": "1991–2020 reference period",
+      "location": "Iron Mountain–Kingsford WWTP, MI weather station, 326.4 m, 6.02 km from the ski area",
+      "monthlyCm": {
+        "1": 37.3,
+        "2": 28.4,
+        "3": 22.7,
+        "4": 18.2,
+        "5": 0.6,
+        "6": 0.0,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 1.1,
+        "11": 14.0,
+        "12": 33.1
+      },
+      "annualCm": 154.94,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00204090.csv",
+        "period": "1991–2020 reference period",
+        "location": "Iron Mountain–Kingsford WWTP, MI weather station, 326.4 m, 6.02 km from the ski area"
+      }
+    }
+  },
   "pomerelle-mountain-resort": {
     "depth": {
       "label": "USDA Natural Resources Conservation Service",
@@ -924,6 +2511,37 @@
       "annualCm": 914.4
     }
   },
+  "powder-ridge": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00214373.dly",
+      "period": "2015/16–2024/25",
+      "location": "Kimball 3N, MN weather station, 353.6 m, 1.15 km from the ski area",
+      "monthlyCm": {
+        "1": 19.0,
+        "2": 27.4,
+        "3": 21.6,
+        "4": 12.1,
+        "11": 11.0,
+        "12": 27.0
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00214373.dly",
+      "period": "2015/16–2025/26",
+      "location": "Kimball 3N, MN weather station, 353.6 m, 1.15 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 12.0,
+        "2": 13.1,
+        "3": 8.0,
+        "4": 2.0,
+        "11": 1.1,
+        "12": 7.1
+      }
+    }
+  },
   "powderhorn-mountain-resort": {
     "snowfall": {
       "label": "Powderhorn Mountain Resort",
@@ -936,6 +2554,35 @@
       "label": "Colorado Ski Country USA",
       "source": "https://www.coloradoski.com/resorts/purgatory-resort/",
       "annualCm": 660.4
+    }
+  },
+  "rangeley-lakes-trail-center": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00177037.csv",
+      "period": "1991–2020 reference period",
+      "location": "Rangeley, ME weather station, 466.3 m, 7.30 km from the ski area",
+      "monthlyCm": {
+        "1": 61.7,
+        "2": 65.2,
+        "3": 62.1,
+        "4": 22.0,
+        "5": 1.2,
+        "6": 0.0,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 5.9,
+        "11": 22.3,
+        "12": 73.0
+      },
+      "annualCm": 313.18,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00177037.csv",
+        "period": "1991–2020 reference period",
+        "location": "Rangeley, ME weather station, 466.3 m, 7.30 km from the ski area"
+      }
     }
   },
   "red-lodge-mountain": {
@@ -967,6 +2614,13 @@
       "annualCm": 760
     }
   },
+  "red-river-ski-summer-area": {
+    "snowfall": {
+      "label": "Red River Ski & Summer Area",
+      "source": "https://www.redriverskiarea.com/winter/winter-mountain/hours-stats/",
+      "annualCm": 543.56
+    }
+  },
   "saddleback": {
     "snowfall": {
       "label": "Saddleback",
@@ -996,6 +2650,42 @@
       }
     }
   },
+  "seven-springs-mountain-resort": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00363928.dly",
+      "period": "2018/19–2025/26",
+      "location": "Hidden Valley, PA weather station, 876.6 m, 4.13 km from the ski area",
+      "monthlyCm": {
+        "1": 85.2,
+        "2": 49.5,
+        "3": 24.8,
+        "4": 13.5,
+        "11": 22.2,
+        "12": 52.4
+      },
+      "annualCm": 342.9,
+      "annualSource": {
+        "label": "Seven Springs Mountain Resort",
+        "source": "https://www.7springs.com/the-mountain/about-the-mountain/mountain-info.aspx"
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00363928.dly",
+      "period": "2018/19–2025/26",
+      "location": "Hidden Valley, PA weather station, 876.6 m, 4.13 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 15.2,
+        "2": 14.0,
+        "3": 2.3,
+        "4": 0.3,
+        "11": 1.4,
+        "12": 6.5
+      }
+    }
+  },
   "shawnee-mountain-ski-area": {
     "snowfall": {
       "label": "Shawnee Mountain Ski Area",
@@ -1010,6 +2700,13 @@
       "annualCm": 609.6
     }
   },
+  "sierra-at-tahoe-ski-resort": {
+    "snowfall": {
+      "label": "Sierra-at-Tahoe Ski Resort",
+      "source": "https://skicalifornia.org/resorts/sierra-at-tahoe-resort",
+      "annualCm": 1016
+    }
+  },
   "silver-mountain-resort": {
     "snowfall": {
       "label": "Silver Mountain Resort",
@@ -1022,6 +2719,13 @@
       "label": "SilverStar Mountain Resort",
       "source": "https://www.skisilverstar.com/",
       "annualCm": 700
+    }
+  },
+  "silverton-mountain": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/silverton/",
+      "annualCm": 1016
     }
   },
   "ski-apache": {
@@ -1063,11 +2767,88 @@
       }
     }
   },
+  "smugglers-notch-resort": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00434261.dly",
+      "period": "2019/20–2023/24",
+      "location": "Jeffersonville, VT weather station, 354.5 m, 1.62 km from the ski area",
+      "monthlyCm": {
+        "1": 82.0,
+        "2": 85.4,
+        "3": 65.9,
+        "4": 24.1,
+        "11": 34.7,
+        "12": 43.7
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00434261.dly",
+      "period": "2016/17–2025/26",
+      "location": "Jeffersonville, VT weather station, 354.5 m, 1.62 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 22.2,
+        "2": 38.7,
+        "3": 28.1,
+        "4": 4.9,
+        "11": 4.9,
+        "12": 11.6
+      }
+    }
+  },
+  "snow-king-mountain": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00484910.dly",
+      "period": "2019/20–2025/26",
+      "location": "Jackson, WY weather station, 1892.8 m, 1.6 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 25.9,
+        "2": 33.9,
+        "3": 26.3,
+        "4": 4.8,
+        "11": 3.5,
+        "12": 13.0
+      }
+    }
+  },
   "snow-ridge": {
     "snowfall": {
       "label": "Snow Ridge",
       "source": "https://snowridge.com/trail-mapstats/",
       "annualCm": 584.2
+    }
+  },
+  "snow-summit": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00040741.csv",
+      "period": "1991–2020 reference period",
+      "location": "Big Bear Lake, CA weather station, 2058.3 m, 2.72 km from the ski area",
+      "monthlyCm": {
+        "1": 34.1,
+        "2": 36.3,
+        "3": 29.7,
+        "4": 7.7,
+        "5": 1.4,
+        "6": 0.1,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 3.0,
+        "11": 8.7,
+        "12": 28.1
+      },
+      "annualCm": 148.84,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00040741.csv",
+        "period": "1991–2020 reference period",
+        "location": "Big Bear Lake, CA weather station, 2058.3 m, 2.72 km from the ski area"
+      }
     }
   },
   "snowbasin-resort": {
@@ -1100,6 +2881,13 @@
       }
     }
   },
+  "snowmass": {
+    "snowfall": {
+      "label": "Colorado Ski Country USA",
+      "source": "https://www.coloradoski.com/resorts/snowmass/",
+      "annualCm": 762
+    }
+  },
   "snowy-range-ski-area": {
     "snowfall": {
       "label": "Snowy Range Ski Area",
@@ -1122,6 +2910,11 @@
         "11": 6.9,
         "12": 40.1
       }
+    },
+    "snowfall": {
+      "label": "Ski Idaho",
+      "source": "https://www.skiidaho.us/compare",
+      "annualCm": 635
     }
   },
   "solitude-mountain-resort": {
@@ -1129,6 +2922,21 @@
       "label": "Ski Utah",
       "source": "https://www.skiutah.com/members/solitude/",
       "annualCm": 1270
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00427846.dly",
+      "period": "2019/20–2025/26",
+      "location": "Silver Lake Brighton, UT weather station, 2664 m, 2.66 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 123.9,
+        "2": 151.3,
+        "3": 176.1,
+        "4": 135.8,
+        "11": 23.3,
+        "12": 65.7
+      }
     }
   },
   "steamboat-ski-resort": {
@@ -1153,14 +2961,68 @@
         "11": 20.1,
         "12": 94.0
       }
+    },
+    "snowfall": {
+      "label": "Stevens Pass",
+      "source": "https://www.stevenspass.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 1168.4
+    }
+  },
+  "stowe": {
+    "snowfall": {
+      "label": "Stowe Mountain Resort",
+      "source": "https://www.stowe.com/the-mountain/about-the-mountain/mountain-info.aspx",
+      "annualCm": 797.56
+    }
+  },
+  "stratton-mountain-resort": {
+    "snowfall": {
+      "label": "Stratton Mountain Resort",
+      "source": "https://www.stratton.com/the-mountain/mountain-statistics",
+      "annualCm": 457.2
+    }
+  },
+  "sugar-bowl-resort": {
+    "snowfall": {
+      "label": "Sugar Bowl Resort",
+      "source": "https://www.sugarbowl.com/pressroom",
+      "annualCm": 1270
     }
   },
   "sugar-mountain-resort": {
     "snowfall": {
-      "label": "Sugar Mountain Resort",
-      "source": "https://skisugar.com/sugar-mountain-stats/",
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00310506.dly",
+      "period": "2016/17–2024/25",
+      "location": "Banner Elk, NC weather station, 1136.9 m, 3.74 km from the ski area",
       "annualCm": 187.96,
-      "period": "25-year average"
+      "annualSource": {
+        "label": "Sugar Mountain Resort",
+        "source": "https://skisugar.com/sugar-mountain-stats/"
+      },
+      "monthlyCm": {
+        "1": 33.5,
+        "2": 10.1,
+        "3": 6.9,
+        "4": 0.8,
+        "11": 2.3,
+        "12": 14.8
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00310506.dly",
+      "period": "2016/17–2025/26",
+      "location": "Banner Elk, NC weather station, 1136.9 m, 3.74 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 2.7,
+        "2": 0.9,
+        "3": 0.3,
+        "4": 0.0,
+        "11": 0.1,
+        "12": 1.3
+      }
     }
   },
   "sugarbush-resort": {
@@ -1190,6 +3052,21 @@
       "label": "Ski Utah",
       "source": "https://www.skiutah.com/members/sundance",
       "annualCm": 762
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00422057.dly",
+      "period": "2017/18–2025/26",
+      "location": "Deer Creek Dam, UT weather station, 1606.3 m, 4.49 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 13.9,
+        "2": 17.1,
+        "3": 9.8,
+        "4": 1.6,
+        "11": 0.5,
+        "12": 3.6
+      }
     }
   },
   "sunlight-mountain-resort": {
@@ -1232,9 +3109,29 @@
   },
   "telluride-ski-resort": {
     "snowfall": {
-      "label": "Colorado Ski Country USA",
-      "source": "https://www.coloradoski.com/resorts/telluride/",
-      "annualCm": 711.2
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00058204.csv",
+      "period": "1991–2020 reference period",
+      "location": "Telluride 4 WNW, CO weather station, 2635.3 m, 5.87 km from the ski area",
+      "monthlyCm": {
+        "1": 59.8,
+        "2": 55.8,
+        "3": 57.7,
+        "4": 33.2,
+        "5": 12.9,
+        "6": 0.9,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 1.8,
+        "10": 13.5,
+        "11": 47.6,
+        "12": 49.1
+      },
+      "annualCm": 711.2,
+      "annualSource": {
+        "label": "Colorado Ski Country USA",
+        "source": "https://www.coloradoski.com/resorts/telluride/"
+      }
     }
   },
   "terry-peak": {
@@ -1251,6 +3148,35 @@
       "annualCm": 355.6
     }
   },
+  "the-loppet": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00215838.csv",
+      "period": "1991–2020 reference period",
+      "location": "New Hope, MN weather station, 277.4 m, 5.06 km from the ski area",
+      "monthlyCm": {
+        "1": 25.6,
+        "2": 25.6,
+        "3": 22.7,
+        "4": 12.9,
+        "5": 0.1,
+        "6": 0.0,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.0,
+        "10": 2.2,
+        "11": 17.6,
+        "12": 31.2
+      },
+      "annualCm": 137.92,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00215838.csv",
+        "period": "1991–2020 reference period",
+        "location": "New Hope, MN weather station, 277.4 m, 5.06 km from the ski area"
+      }
+    }
+  },
   "timberline-lodge-ski-area": {
     "depth": {
       "label": "USDA Natural Resources Conservation Service",
@@ -1265,6 +3191,33 @@
         "4": 319.1,
         "11": 34.2,
         "12": 110.3
+      }
+    },
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/access/USC00353402.csv",
+      "period": "1991–2020 reference period",
+      "location": "Government Camp, OR weather station, 1213.1 m, 3.21 km from the ski area",
+      "monthlyCm": {
+        "1": 123.9,
+        "2": 100.3,
+        "3": 90.4,
+        "4": 44.7,
+        "5": 10.6,
+        "6": 1.4,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 0.4,
+        "10": 9.8,
+        "11": 77.7,
+        "12": 131.1
+      },
+      "annualCm": 590.55,
+      "annualSource": {
+        "label": "NOAA National Centers for Environmental Information",
+        "source": "https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/USC00353402.csv",
+        "period": "1991–2020 reference period",
+        "location": "Government Camp, OR weather station, 1213.1 m, 3.21 km from the ski area"
       }
     }
   },
@@ -1320,11 +3273,118 @@
       }
     }
   },
+  "white-grass-ski-touring": {
+    "snowfall": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00461397.dly",
+      "period": "2015/16–2020/21",
+      "location": "Canaan Valley #2, WV weather station, 991.8 m, 4.04 km from the ski area",
+      "monthlyCm": {
+        "1": 77.4,
+        "2": 72.2,
+        "3": 45.9,
+        "4": 22.3,
+        "11": 18.7,
+        "12": 52.5
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00461397.dly",
+      "period": "2015/16–2025/26",
+      "location": "Canaan Valley #2, WV weather station, 991.8 m, 4.04 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 14.1,
+        "2": 9.9,
+        "3": 3.1,
+        "4": 0.6,
+        "11": 1.5,
+        "12": 4.1
+      }
+    }
+  },
+  "whitehorse-nordic-centre": {
+    "snowfall": {
+      "label": "Environment and Climate Change Canada",
+      "source": "https://climate.weather.gc.ca/climate_normals/index_e.html",
+      "period": "1991–2020 reference period",
+      "location": "Whitehorse, YT composite weather station, 706.2–707 m, within 3.2 km of the ski area",
+      "annualCm": 147.6,
+      "monthlyCm": {
+        "1": 28.8,
+        "2": 18.3,
+        "3": 16.1,
+        "4": 7.0,
+        "5": 2.8,
+        "6": 0.2,
+        "7": 0.0,
+        "8": 0.0,
+        "9": 3.6,
+        "10": 17.2,
+        "11": 28.4,
+        "12": 25.3
+      }
+    }
+  },
+  "wildcat-mountain": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00276818.dly",
+      "period": "2015/16–2024/25",
+      "location": "Pinkham Notch, NH weather station, 617.2 m, 1.48 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 31.2,
+        "2": 50.5,
+        "3": 39.8,
+        "4": 12.1,
+        "11": 4.9,
+        "12": 16.5
+      }
+    }
+  },
+  "willamette-pass": {
+    "snowfall": {
+      "label": "Willamette Pass",
+      "source": "https://www.willamettepass.ski/",
+      "annualCm": 1092.2
+    }
+  },
   "winter-park-resort": {
     "snowfall": {
-      "label": "Colorado Ski Country USA",
-      "source": "https://www.coloradoski.com/resorts/winter-park/",
-      "annualCm": 830.58
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00059175.dly",
+      "period": "2015/16–2025/26",
+      "location": "Winter Park, CO weather station, 2780.7 m, 2.93 km from the ski area",
+      "annualCm": 830.58,
+      "annualSource": {
+        "label": "Colorado Ski Country USA",
+        "source": "https://www.coloradoski.com/resorts/winter-park/"
+      },
+      "monthlyCm": {
+        "1": 95.6,
+        "2": 89.1,
+        "3": 99.1,
+        "4": 82.1,
+        "11": 70.8,
+        "12": 95.7
+      }
+    },
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00059175.dly",
+      "period": "2015/16–2025/26",
+      "location": "Winter Park, CO weather station, 2780.7 m, 2.93 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 78.1,
+        "2": 94.7,
+        "3": 101.1,
+        "4": 61.6,
+        "11": 20.7,
+        "12": 50.7
+      }
     }
   },
   "wolf-creek-ski-area": {
@@ -1332,6 +3392,67 @@
       "label": "Wolf Creek Ski Area",
       "source": "https://wolfcreekski.com/the-mountain/",
       "annualCm": 1092.2
+    }
+  },
+  "woodstock-nordic-center": {
+    "depth": {
+      "label": "NOAA National Centers for Environmental Information",
+      "source": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00439984.dly",
+      "period": "2015/16–2025/26",
+      "location": "Woodstock, VT weather station, 182.9 m, 2.07 km from the ski area",
+      "kind": "station",
+      "monthlyCm": {
+        "1": 13.7,
+        "2": 22.9,
+        "3": 10.4,
+        "4": 0.6,
+        "11": 0.8,
+        "12": 7.5
+      }
+    }
+  },
+  "yuzawa-nakazato-snow-resort": {
+    "snowfall": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=54&block_no=0544&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yuzawa, Niigata weather station, 340 m, 5.06 km from the ski area",
+      "monthlyCm": {
+        "1": 377,
+        "2": 288,
+        "3": 159,
+        "4": 20,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 12,
+        "12": 210
+      },
+      "annualCm": 1054
+    },
+    "depth": {
+      "label": "Japan Meteorological Agency",
+      "source": "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_ym.php?prec_no=54&block_no=0544&year=&month=&day=&view=",
+      "period": "1991–2020",
+      "location": "Yuzawa, Niigata weather station, 340 m, 5.06 km from the ski area",
+      "kind": "monthly-peak",
+      "monthlyCm": {
+        "1": 173,
+        "2": 202,
+        "3": 159,
+        "4": 52,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 6,
+        "12": 92
+      }
     }
   }
 }

@@ -198,8 +198,11 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         if (area.nightAcres !== undefined && area.acres !== undefined && !area.acresQualifier && area.nightAcres > area.acres) {
             throw new Error(`Night skiable acreage exceeds skiable acreage for ${area.id}`);
         }
-        if (area.baseFt !== undefined && area.summitFt !== undefined && area.baseFt > area.summitFt) {
-            throw new Error(`Inverted base and summit elevations for ${area.id}`);
+        if (area.baseFt !== undefined && area.summitFt !== undefined) {
+            if (area.baseFt > area.summitFt) throw new Error(`Inverted base and summit elevations for ${area.id}`);
+            if (area.baseFt === area.summitFt && (area.verticalFt ?? 0) > 0) {
+                throw new Error(`Equal base and summit elevations with positive vertical drop for ${area.id}`);
+            }
         }
         if (area.lowestLiftTerminalFt !== undefined && area.highestLiftTerminalFt !== undefined
             && area.lowestLiftTerminalFt > area.highestLiftTerminalFt) throw new Error(`Inverted lift terminal elevations for ${area.id}`);

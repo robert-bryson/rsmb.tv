@@ -470,6 +470,23 @@ test('labels past terrain counts and removes an elapsed opening date', async ({ 
     await expect(seasons.locator('time[datetime="2026-12-05"]')).toHaveCount(0);
 });
 
+test('shows pre-opening snowfall and source details on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 780 });
+    await prepare(page);
+    await page.clock.setFixedTime(new Date('2026-11-21T18:00:00Z'));
+    await page.goto(`${path}?view=results&status=all&q=aspen+highlands`);
+    await result(page, 'Aspen Highlands').click();
+    const season = resort(page, 'Aspen Highlands').getByRole('region', { name: 'Season dates' });
+    await expect(season.getByText('Dec 12', { exact: true })).toHaveAttribute('datetime', '2026-12-12');
+    const snow = season.getByRole('table', { name: 'Typical monthly snow' });
+    await expect(snow.getByRole('row', { name: /November/ })).toContainText('20.1 in');
+    const sources = season.getByRole('list', { name: 'Historical snow sources' });
+    await expect(sources.getByRole('link', { name: 'Colorado Ski Country USA' }))
+        .toHaveAttribute('href', 'https://www.coloradoski.com/resorts/aspen-highlands/');
+    await expect(sources.getByText(/Monthly snowfall totals/)).toContainText('Aspen 1SW, CO weather station');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+});
+
 test('opens the Sunshine gondola base and shows sourced season dates, snow, and resort links', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await prepare(page);

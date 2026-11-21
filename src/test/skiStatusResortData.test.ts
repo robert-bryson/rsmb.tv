@@ -23,12 +23,37 @@ describe('ski-status resort data', () => {
             .toThrow('Annual source requires annual snowfall');
     });
 
+    it('validates annual snowfall citations independently from the monthly series', () => {
+        const annualSource = { label: 'Base station', source: 'https://example.test/annual', period: '1991–2020', location: 'Visitor base' };
+        const load = (snowfall: unknown) => readResortDetails({ resort: { snowfall } }, links, areas, assets).history.get('resort')?.snowfall;
+        const monthly = { ...measurement, monthlyCm: { 1: 10 } };
+        const combined = { ...monthly, annualCm: 100, annualSource };
+        expect(load(combined)).toEqual(combined);
+        expect(() => load({ ...monthly, annualSource })).toThrow('Annual source requires annual snowfall');
+        expect(() => load({ ...combined, annualSource: { ...annualSource, source: 'http://example.test/insecure' } })).toThrow();
+        expect(() => load({ ...combined, annualSource: { ...annualSource, location: '  ' } })).toThrow();
+    });
+
     it('requires catalog IDs for snow profiles and Wikipedia articles', () => {
         const snow = { snowfall: { ...measurement, annualCm: 40 } };
         expect(() => readResortDetails({ removed: snow }, links, areas, assets)).toThrow('Resort details have no ski area removed');
         expect(() => readResortDetails({}, { ...links, wikipediaTitles: { removed: 'Some Resort' } }, areas, assets))
             .toThrow('Resort details have no ski area removed');
         expect(() => readResortDetails({}, { ...links, wikipediaTitles: { resort: '..' } }, areas, assets)).toThrow();
+    });
+
+    it('keeps operator annual snowfall and nearby station measurements attributed to their sources', () => {
+        const station = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/USC00200925.dly';
+        expect(skiSnowHistory.get('boyne-mountain')).toMatchObject({
+            snowfall: {
+                annualCm: 355.6,
+                annualSource: { label: 'Boyne Mountain Resort', source: 'https://www.boynemountain.com/mountain-stats' },
+                source: station,
+                location: expect.stringContaining('Boyne Falls, MI'),
+                monthlyCm: { 1: 69.8 },
+            },
+            depth: { kind: 'station', source: station, monthlyCm: { 1: 16.4 } },
+        });
     });
 
     it('requires one source and one file per icon and includes both service icons', () => {

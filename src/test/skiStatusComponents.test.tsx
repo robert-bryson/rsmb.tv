@@ -168,6 +168,80 @@ describe('ski-status area details', () => {
         expect(january.getByRole('link', { name: '102 cm' })).toHaveAttribute('href', expect.stringContaining('janmsc.pdf'));
     });
 
+    it('keeps measured snow months when the opening date changes', () => {
+        const aspen = skiAreas.find(area => area.id === 'aspen-highlands')!;
+        const conditions = { reports: new Map(), forecasts: new Map(), now: Date.parse('2026-11-21T18:00:00Z') };
+        const props = { area: aspen, units: 'metric', onClose: vi.fn() } as const;
+        const { rerender } = render(<SkiAreaDetails {...props} conditions={conditions} />);
+        const season = within(screen.getByRole('region', { name: 'Season dates' }));
+        expect(season.getByText('Dec 12')).toHaveAttribute('datetime', '2026-12-12');
+        const monthlyRows = () => within(season.getByRole('table', { name: 'Typical monthly snow' }))
+            .getAllByRole('rowheader').map(header => header.textContent);
+        expect(monthlyRows()).toEqual(['November', 'December', 'January', 'February', 'March', 'April']);
+        const november = within(season.getByRole('row', { name: /November/ }));
+        expect(november.getByRole('cell', { name: '51.1 cm' })).toBeVisible();
+
+        const report: ResortReport = {
+            areaId: aspen.id, status: 'season-closed', opensOn: '2026-11-28',
+            reportedAt: '2026-11-21T17:30:00Z', retrievedAt: '2026-11-21T17:40:00Z',
+            source: { name: 'Operator', url: 'https://example.test/conditions', exportable: false },
+        };
+        rerender(<SkiAreaDetails {...props} conditions={{ ...conditions, reports: new Map([[aspen.id, report]]) }} />);
+        expect(season.getByText('Nov 28')).toHaveAttribute('datetime', '2026-11-28');
+        expect(monthlyRows()).toEqual(['November', 'December', 'January', 'February', 'March', 'April']);
+    });
+
+    it('labels monthly maximum snow depth and retains observed zeroes', () => {
+        const hakuba = skiAreas.find(area => area.id === 'hakuba-happo-one')!;
+        render(<SkiAreaDetails area={hakuba} units="metric" onClose={vi.fn()} />);
+        const snow = within(screen.getByRole('table', { name: 'Typical monthly snow' }));
+        expect(snow.getByRole('columnheader', { name: 'Avg. monthly max depth' })).toBeVisible();
+        const january = within(snow.getByRole('row', { name: /January/ }));
+        expect(january.getByRole('cell', { name: '216 cm' })).toBeVisible();
+        expect(january.getByRole('cell', { name: '82 cm' })).toBeVisible();
+        const july = within(snow.getByRole('row', { name: /July/ }));
+        expect(july.getAllByRole('cell', { name: '0 cm' })).toHaveLength(2);
+        const sources = screen.getByRole('list', { name: 'Historical snow sources' });
+        expect(sources).toHaveTextContent('Average monthly maximum snow depth');
+        expect(sources).toHaveTextContent('Annual and monthly snowfall');
+        expect(sources).toHaveTextContent('Hakuba, Nagano weather station');
+    });
+
+    it('shows the annual measurement site when there is no monthly snowfall table', () => {
+        const brundage = skiAreas.find(area => area.id === 'brundage-mountain-resort')!;
+        render(<SkiAreaDetails area={brundage} units="metric" onClose={vi.fn()} />);
+        const season = within(screen.getByRole('region', { name: 'Season dates' }));
+        expect(season.queryByRole('table', { name: 'Typical monthly snow' })).toBeNull();
+        const sources = within(season.getByRole('list', { name: 'Historical snow sources' }));
+        expect(sources.getByRole('listitem')).toHaveTextContent('Annual snowfall · Brundage Mountain Resort · Base area');
+        expect(sources.getByRole('link', { name: 'Brundage Mountain Resort' })).toHaveAttribute('href', 'https://brundage.com/mountain-stats/');
+    });
+
+    it('separates an operator annual figure from nearby station measurements', () => {
+        const boyne = skiAreas.find(area => area.id === 'boyne-mountain')!;
+        render(<SkiAreaDetails area={boyne} units="metric" onClose={vi.fn()} />);
+        const season = within(screen.getByRole('region', { name: 'Season dates' }));
+        const annualSource = 'https://www.boynemountain.com/mountain-stats';
+        expect(season.getByRole('link', { name: '355.6 cm' })).toHaveAttribute('href', annualSource);
+        const sources = within(season.getByRole('list', { name: 'Historical snow sources' }));
+        const annual = sources.getByRole('link', { name: 'Boyne Mountain Resort' });
+        expect(annual).toHaveAttribute('href', annualSource);
+        expect(annual.closest('li')).toHaveTextContent(/^Annual snowfall · Boyne Mountain Resort$/);
+        expect(sources.getByText(/Monthly snowfall totals/)).toHaveTextContent('Boyne Falls, MI weather station');
+    });
+
+    it('links annual and monthly normals to their own station files', () => {
+        const snowSummit = skiAreas.find(area => area.id === 'snow-summit')!;
+        render(<SkiAreaDetails area={snowSummit} units="metric" onClose={vi.fn()} />);
+        const sources = within(screen.getByRole('list', { name: 'Historical snow sources' }));
+        for (const [label, file] of [['Annual snowfall', 'annualseasonal'], ['Monthly snowfall totals', 'monthly']]) {
+            const citation = sources.getByText(new RegExp(`^${label}`));
+            expect(citation).toHaveTextContent('Big Bear Lake, CA weather station');
+            expect(citation).toHaveTextContent('1991–2020 reference period');
+            expect(within(citation).getByRole('link')).toHaveAttribute('href', expect.stringContaining(`normals-${file}/1991-2020/access/USC00040741.csv`));
+        }
+    });
+
     it('shows stale report details and renders named terrain only while open', async () => {
         const area = skiAreas.find(area => area.id === 'alta')!;
         const report: ResortReport = {

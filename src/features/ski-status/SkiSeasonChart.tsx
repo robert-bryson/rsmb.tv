@@ -5,8 +5,13 @@ import { skiSnowHistory } from './resortDetailsData';
 import { seasonMonths, skiSeasonOutlook } from './seasons';
 
 type Boundary = ReturnType<typeof skiSeasonOutlook>['opening'];
-type Measurements = Readonly<Record<string, number>>;
-const depthLabels = { base: 'Avg. base depth', survey: 'Survey depth', station: 'Avg. station depth' };
+const northernSnowMonths = [...seasonMonths.slice(6), ...seasonMonths.slice(0, 6)];
+const depthLabels = {
+    base: { heading: 'Avg. base depth', source: 'Average snow depth' },
+    survey: { heading: 'Survey depth', source: 'Early-month snow depth' },
+    station: { heading: 'Avg. station depth', source: 'Average snow depth' },
+    'monthly-peak': { heading: 'Avg. monthly max depth', source: 'Average monthly maximum snow depth' },
+};
 
 function BoundaryDate({ label, boundary }: { label: string; boundary: Boundary }) {
     if (!boundary) return <div><dt>{label}</dt><dd className="ski-season-missing">Unknown</dd></div>;
@@ -19,12 +24,11 @@ function BoundaryDate({ label, boundary }: { label: string; boundary: Boundary }
     </div>;
 }
 
-function seasonChartMonths(season: string | undefined, opening: Boundary, closing: Boundary, snowfall?: Measurements, depth?: Measurements) {
-    const start = (opening?.month ?? (season?.includes('/') ? 7 : 1)) - 1;
+function operatingMonths(opening: Boundary, closing: Boundary) {
+    if (!opening || !closing) return [];
+    const start = opening.month - 1;
     const months = [...seasonMonths.slice(start), ...seasonMonths.slice(0, start)];
-    if (opening && closing) return months.slice(0, months.findIndex(({ month }) => month === closing.month) + 1);
-    return months.filter(({ month }) =>
-        month === opening?.month || month === closing?.month || snowfall?.[month] !== undefined || depth?.[month] !== undefined);
+    return months.slice(0, months.findIndex(({ month }) => month === closing.month) + 1);
 }
 
 function SnowValue({ value, maximum, units, source }: { value?: number; maximum: number; units: SkiUnits; source?: string }) {
@@ -45,43 +49,51 @@ function SnowSource({ data, label }: { data: { source: string; label: string; pe
 export function SkiSeasonChart({ area, date, units, conditions }: { area: SkiArea; date: string; units: SkiUnits; conditions?: Conditions }) {
     const { season, opening, closing, note } = skiSeasonOutlook(area, date, conditions);
     const { snowfall, depth } = skiSnowHistory.get(area.id) ?? {};
-    const months = seasonChartMonths(season, opening, closing, snowfall?.monthlyCm, depth?.monthlyCm);
-    const hasSnowfall = months.some(({ month }) => snowfall?.monthlyCm?.[month] !== undefined);
-    const hasDepth = months.some(({ month }) => depth?.monthlyCm[month] !== undefined);
-    const maximum = Math.max(0, ...months.flatMap(({ month }) => [snowfall?.monthlyCm?.[month] ?? 0, depth?.monthlyCm[month] ?? 0]));
+    const monthlySnowfall = snowfall?.monthlyCm;
+    const monthlyDepth = depth?.monthlyCm;
+    const year = area.location.coordinates[1] < 0 ? seasonMonths : northernSnowMonths;
+    const months = year.filter(({ month }) => monthlySnowfall?.[month] !== undefined || monthlyDepth?.[month] !== undefined);
+    const maximum = Math.max(0, ...Object.values(monthlySnowfall ?? {}), ...Object.values(monthlyDepth ?? {}));
+    const seasonRange = months.length ? [] : operatingMonths(opening, closing);
+    const annualCm = snowfall?.annualCm;
+    const annualOverride = snowfall?.annualSource;
+    const annualSource = typeof annualOverride === 'string' ? { source: annualOverride } : annualOverride ?? snowfall;
+    const sharesSnowfallSource = annualCm !== undefined && annualSource === snowfall && monthlySnowfall;
+    const separateAnnualCitation = annualCm !== undefined && annualSource && 'label' in annualSource && !sharesSnowfallSource;
 
     return <div className="ski-season-chart">
         <div className="ski-season-title">
             <h3>Season and snowfall</h3>
             {season && <span>{season}</span>}
         </div>
-        {(opening || closing || snowfall?.annualCm !== undefined) && <dl className="ski-season-metrics">
+        {(opening || closing || annualCm !== undefined) && <dl className="ski-season-metrics">
             {(opening || closing) && <><BoundaryDate label="Opening" boundary={opening} /><BoundaryDate label="Closing" boundary={closing} /></>}
-            {snowfall?.annualCm !== undefined && <div><dt>Avg. annual snowfall</dt>
-                <dd><a className="ski-season-source" href={snowfall.annualSource ?? snowfall.source}>{formatSnowDepth(snowfall.annualCm, units)}</a></dd>
+            {annualCm !== undefined && annualSource && <div><dt>Avg. annual snowfall</dt>
+                <dd><a className="ski-season-source" href={annualSource.source}>{formatSnowDepth(annualCm, units)}</a></dd>
             </div>}
         </dl>}
         {note && <p className="ski-season-note">{note}</p>}
-        {hasSnowfall || hasDepth ? <>
+        {months.length > 0 ? (
             <table className="ski-snow-table">
                 <caption className="sr-only">Typical monthly snow</caption>
-                <thead><tr><th scope="col">Month</th>{hasSnowfall && <th scope="col">Avg. snowfall</th>}
-                    {hasDepth && depth && <th scope="col">{depthLabels[depth.kind]}</th>}
+                <thead><tr><th scope="col">Month</th>{monthlySnowfall && <th scope="col">Avg. snowfall</th>}
+                    {depth && <th scope="col">{depthLabels[depth.kind].heading}</th>}
                 </tr></thead>
                 <tbody>{months.map(({ label, month }) => <tr key={month}>
                     <th scope="row">{label}</th>
-                    {hasSnowfall && <SnowValue value={snowfall?.monthlyCm?.[month]} maximum={maximum} units={units} />}
-                    {hasDepth && <SnowValue value={depth?.monthlyCm[month]} maximum={maximum} units={units} source={depth?.monthlySources?.[month]} />}
+                    {monthlySnowfall && <SnowValue value={monthlySnowfall[month]} maximum={maximum} units={units} />}
+                    {depth && <SnowValue value={depth.monthlyCm[month]} maximum={maximum} units={units} source={depth.monthlySources?.[month]} />}
                 </tr>)}</tbody>
             </table>
-            <ul className="ski-season-note" aria-label="Historical snow sources">
-                {hasSnowfall && snowfall && <SnowSource data={snowfall} label="Monthly snowfall totals" />}
-                {hasDepth && depth && <SnowSource data={depth} label={depth.kind === 'survey' ? 'Early-month snow depth' : 'Average snow depth'} />}
-            </ul>
-        </> : <>
-            {months.length > 1 && <ol className="ski-season-months" aria-label="Season months">{months.map(({ label, month }) =>
+        ) : <>
+            {seasonRange.length > 1 && <ol className="ski-season-months" aria-label="Season months">{seasonRange.map(({ label, month }) =>
                 <li key={month}><abbr title={label}>{label.slice(0, 3)}</abbr></li>)}</ol>}
             <p className="ski-season-note">{!opening && !closing ? 'Season dates and monthly snow history are unavailable.' : 'Monthly snow history is unavailable.'}</p>
         </>}
+        {(separateAnnualCitation || months.length > 0) && <ul className="ski-season-note" aria-label="Historical snow sources">
+            {separateAnnualCitation && <SnowSource data={annualSource} label="Annual snowfall" />}
+            {monthlySnowfall && <SnowSource data={snowfall} label={sharesSnowfallSource ? 'Annual and monthly snowfall' : 'Monthly snowfall totals'} />}
+            {depth && <SnowSource data={depth} label={depthLabels[depth.kind].source} />}
+        </ul>}
     </div>;
 }
