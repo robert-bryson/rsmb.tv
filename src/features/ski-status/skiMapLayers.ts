@@ -6,6 +6,7 @@ import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBa
 import type { SkiPassSelection } from './browse';
 import { passIconUrls } from './passIcons';
 import { skiResortIconCandidates } from './resortDetailsData';
+import { skiMapMaxZoom, skiMapMinZoom } from './skiMapArea';
 import type { SkiArchive } from './useSkiArchive';
 
 export const sourceId = 'ski-areas';
@@ -28,8 +29,19 @@ const resortImageSize = 20;
 const showResortIcon: ExpressionSpecification = ['==', ['get', 'markerMode'], 'default'];
 const markerBackground = '#182938';
 export const markerLayers = [selectedLayer, pointLayer, statusLayer, selectedStatusLayer, resortIconLayer, selectedResortIconLayer, passBadgeLayer, selectedPassBadgeLayer];
-const resortIconScale: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 0, 0.16, 3, 0.24, 6, 0.5, 9, 0.8, 12, 1];
-const selectedIconScale: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 0, 0.68, 5, 0.8, 9, 0.95, 12, 1];
+const resortMarkerWidths = [
+    [skiMapMinZoom, 2.5], [0, 3.2], [2, 5], [5, 16], [8, 21], [12, 25], [skiMapMaxZoom, 28],
+] as const;
+
+function markerSizeAtZoom(sizeFromWidth: (width: number) => number): ExpressionSpecification {
+    return ['interpolate', ['linear'], ['zoom'], ...resortMarkerWidths.flatMap(([zoom, width]) => [zoom, sizeFromWidth(width)])];
+}
+
+const selectedMarkerWidth = (width: number) => 11 + width * 0.7;
+const resortIconScale = markerSizeAtZoom(width => width / resortImageSize);
+const selectedIconScale = markerSizeAtZoom(width => selectedMarkerWidth(width) / resortImageSize);
+const pointRadius = markerSizeAtZoom(width => 0.5 + width * 0.24);
+const selectedRadius = markerSizeAtZoom(width => selectedMarkerWidth(width) / 2 + 0.75);
 const resortNameMinZoom = 7;
 
 export function areaFeatures(areas: readonly SkiArea[], mode: MarkerMode, statuses: ReadonlyMap<string, ResortStatus>, passes?: SkiPassSelection): FeatureCollection<Point> {
@@ -206,7 +218,7 @@ export function addAreaLayers(map: MapLibreMap, data: FeatureCollection<Point>, 
     map.addLayer({
         id: pointLayer, type: 'circle', source: sourceId,
         paint: {
-            'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 1.25, 3, 2, 6, 4, 10, 6],
+            'circle-radius': pointRadius,
             'circle-color': ['get', 'color'], 'circle-stroke-color': markerBackground,
             'circle-opacity': circleOpacity, 'circle-stroke-opacity': circleOpacity,
             'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 3, 0.5, 6, 1],
@@ -238,7 +250,7 @@ export function addAreaLayers(map: MapLibreMap, data: FeatureCollection<Point>, 
     map.addLayer({
         id: selectedLayer, type: 'circle', source: selectionSource,
         paint: {
-            'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 7, 5, 8, 9, 9.5, 12, 10],
+            'circle-radius': selectedRadius,
             'circle-color': hasResortIcons ? ['case', showResortIcon, markerBackground, ['get', 'color']] : ['get', 'color'],
             'circle-stroke-color': '#fbbf24', 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 0, 2, 10, 3],
         },

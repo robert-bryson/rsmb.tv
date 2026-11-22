@@ -68,6 +68,39 @@
     ]
   },
   {
+    "id": "ca-qc-mont-alfred-desrochers",
+    "name": "Mont Alfred-DesRochers",
+    "coordinates": [
+      -72.24289,
+      45.32398
+    ],
+    "elevationFt": 2782,
+    "locationSource": "https://toponymie.gouv.qc.ca/ct/ToposWeb/fiche.aspx?no_seq=98942",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "mont-orford",
+        "source": "https://montorford.com/upload/pdf/Carte_2025-26-FR.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ca-qc-mont-giroux",
+    "name": "Mont Giroux",
+    "coordinates": [
+      -72.22285,
+      45.30924
+    ],
+    "locationSource": "https://toponymie.gouv.qc.ca/ct/ToposWeb/Fiche.aspx?no_seq=109986",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "mont-orford",
+        "source": "https://montorford.com/upload/pdf/Carte_2025-26-FR.pdf"
+      }
+    ]
+  },
+  {
     "id": "de-moisy-peak",
     "name": "De Moisy Peak",
     "coordinates": [
@@ -932,6 +965,39 @@
     ]
   },
   {
+    "id": "us-nh-cannon-mountain",
+    "name": "Cannon Mountain",
+    "coordinates": [
+      -71.698417,
+      44.156454
+    ],
+    "elevationFt": 4080,
+    "locationSource": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/NH/NH_Franconia_20150625_TM_geo.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "cannon-mountain",
+        "source": "https://admin.cannonmt.com/publicFiles/documents/2526_Cannon_TrailMap_Digital.jpg"
+      }
+    ]
+  },
+  {
+    "id": "us-nh-mount-tecumseh",
+    "name": "Mount Tecumseh",
+    "coordinates": [
+      -71.55659,
+      43.96655
+    ],
+    "locationSource": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/NH/NH_Waterville_Valley_20210310_TM_geo.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "waterville-valley-resort",
+        "source": "https://static1.squarespace.com/static/62503704223b711a550b3e6f/t/6917892081bdec22f24afe40/1763150112862/Alpine+Trail+Map+With+Night+Ski_Brochure+Front_2526.jpg"
+      }
+    ]
+  },
+  {
     "id": "us-ny-whiteface-mountain",
     "name": "Whiteface Mountain",
     "coordinates": [
@@ -1046,6 +1112,38 @@
       {
         "areaId": "alta",
         "source": "https://res.cloudinary.com/altaskiarea/image/upload/v1793054038/resources/Maps/26_27_Alta_Trailmap_WEB.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-vt-glebe-mountain",
+    "name": "Glebe Mountain",
+    "coordinates": [
+      -72.76056,
+      43.18833
+    ],
+    "locationSource": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/VT/VT_Londonderry_20240814_TM_geo.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "magic-mountain-ski-area",
+        "source": "https://www.magicmtn.com/_files/ugd/e2e7b6_efffbd2546834defbecfb577d361982d.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-vt-worth-mountain",
+    "name": "Worth Mountain",
+    "coordinates": [
+      -72.963445,
+      43.910064
+    ],
+    "locationSource": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/VT/VT_Bread_Loaf_20150706_TM_geo.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "middlebury-snowbowl",
+        "source": "https://middleburysnowbowl.com/trail-map/"
       }
     ]
   },

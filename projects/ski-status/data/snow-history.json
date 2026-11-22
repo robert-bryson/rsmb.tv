@@ -2125,7 +2125,14 @@
         "10": 4.8,
         "11": 20.4,
         "12": 74.9
-      }
+      },
+      "annualSource": {
+        "label": "Mont SUTTON",
+        "source": "https://montsutton.com/en/technical-sheet/",
+        "location": "Mont Sutton summit, arithmetic mean of five published full-season totals",
+        "period": "2021/22–2025/26"
+      },
+      "annualCm": 523.8
     }
   },
   "mount-racey-ski-resort": {
@@ -3784,6 +3791,103 @@
       "location": "Whiteface Mountain",
       "period": "2016/17–2025/26",
       "annualCm": 494.54
+    }
+  },
+  "waterville-valley-resort": {
+    "snowfall": {
+      "label": "Waterville Valley Resort",
+      "source": "https://www.indyskipass.com/our-resorts/waterville-valley-resort",
+      "location": "Waterville Valley alpine ski area",
+      "annualCm": 317.5
+    }
+  },
+  "big-powderhorn": {
+    "snowfall": {
+      "label": "Big Powderhorn",
+      "source": "https://bigpowderhorn.net/trail-map/",
+      "location": "Big Powderhorn Mountain, approximate natural seasonal snowfall",
+      "annualCm": 508
+    }
+  },
+  "shames-mountain": {
+    "snowfall": {
+      "label": "Shames Mountain",
+      "source": "https://www.indyskipass.com/our-resorts/shames-mountain",
+      "location": "Shames Mountain ski area",
+      "annualCm": 1219.2
+    }
+  },
+  "ragged-mountain-resort": {
+    "snowfall": {
+      "label": "Ragged Mountain Resort",
+      "source": "https://www.indyskipass.com/our-resorts/ragged-mountain",
+      "location": "Ragged Mountain Resort",
+      "annualCm": 266.7
+    }
+  },
+  "mont-orford": {
+    "snowfall": {
+      "label": "Mont Orford",
+      "source": "https://montorford.com/en-ca/winter/technical-sheet/",
+      "location": "Mont-Orford ski area",
+      "period": "2021/22–2025/26, mean of five operator season totals",
+      "annualCm": 441.6
+    }
+  },
+  "snow-valley-mountain-resort": {
+    "snowfall": {
+      "label": "Snow Valley Mountain Resort",
+      "source": "https://skicalifornia.org/resorts/snow-valley-mountain-resort",
+      "location": "Snow Valley Mountain Resort",
+      "annualCm": 317.5
+    }
+  },
+  "myoko-suginohara-ski-resort": {
+    "snowfall": {
+      "label": "Myoko Suginohara Ski Resort",
+      "source": "https://www.ikonpass.com/en/destinations/myoko-suginohara-ski-resort",
+      "location": "Myoko Suginohara ski area, issuer’s published resort average",
+      "annualCm": 1340
+    }
+  },
+  "greek-peak-mountain-resort": {
+    "snowfall": {
+      "label": "Greek Peak Mountain Resort",
+      "source": "https://www.indyskipass.com/our-resorts/greek-peak-mountain-resort",
+      "location": "Greek Peak Mountain Resort",
+      "annualCm": 309.88
+    }
+  },
+  "sipapu-ski-summer-resort": {
+    "snowfall": {
+      "label": "Sipapu Ski & Summer Resort",
+      "source": "https://www.sipapu.ski/mountain-information/",
+      "location": "Sipapu downhill resort",
+      "annualCm": 469.9
+    }
+  },
+  "sasquatch-mountain-resort": {
+    "snowfall": {
+      "label": "Sasquatch Mountain Resort",
+      "source": "https://www.indyskipass.com/our-resorts/sasquatch-mountain-resort",
+      "location": "Sasquatch Mountain Resort",
+      "annualCm": 467.36
+    }
+  },
+  "middlebury-snowbowl": {
+    "snowfall": {
+      "label": "Middlebury Snowbowl",
+      "source": "https://www.indyskipass.com/our-resorts/middlebury-snowbowl",
+      "location": "Middlebury Snowbowl downhill",
+      "annualCm": 508
+    }
+  },
+  "mt-seymour": {
+    "snowfall": {
+      "label": "Mt Seymour",
+      "source": "https://mtseymour.ca/the-mountain/trail-map",
+      "location": "Mt Seymour ski area",
+      "annualCm": 1000
     }
   }
 }

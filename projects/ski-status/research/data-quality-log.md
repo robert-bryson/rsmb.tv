@@ -1531,3 +1531,209 @@ The whitespace check passed. 231 focused tests passed, including roads, resort d
 Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-39-2026-11-22T053154Z`.
 
 Hakuba Goryu leads batch 40.
+
+## Batch 40 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 352 | 356 |
+| Seasonal visitor records | 258 | 267 |
+| Verified visitor points | 73 | 74 |
+| Resorts with parking | 242 | 250 |
+| Resorts with official maps | 249 | 258 |
+| Resorts with adult fares or bounds | 126 | 129 |
+| Resorts with operator cameras | 165 | 173 |
+| 2026/27 recorded openings | 34 | 36 |
+| 2026/27 areas with planned dates | 216 | 219 |
+| Areas with Indy product rules | 80 | 81 |
+| Areas with all four Indy products | 75 | 76 |
+| Areas with winter approaches | 195 | 205 |
+| Documented winter approaches | 459 | 483 |
+| Named road crossings | 43 | 45 |
+| Verified summit records | 69 | 70 |
+| Bundled resort icons | 149 | 156 |
+| Catalog entrance pins | 64 | 65 |
+
+The whitespace check passed. 231 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 7 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Hakuba Goryu | Verified the Toomi and Iimori highway arrivals and added print maps and the free shuttle source. | Verify the final junctions and geographic mountain labels. |
+| Pitztal Glacier / Rifflsee | Documented the two valley stations, the L 16 detour and the operator-confirmed September first ski day. | Verify the glacier vertical, crossings, fares and summit positions. |
+| Sun Valley – Dollar Mountain | Confirmed the Dollar-specific statistics, Carol’s Lodge arrival and the printed Dollar and Elkhorn terrain. | Verify an exact opening day, day fare and geographic summit. |
+| Cannon Mountain | Added both I-93 approaches and the Franconia Notch crossing, with the Cannon summit and dated fare bounds. | Confirm first skiing and the signed Mittersill access. |
+| Red River Ski & Summer Area | Added both NM 38 approaches, the Bobcat Pass crossing and the November 25 plan. | Confirm first skiing, the print trail map, camera and day lot details. |
+| Seven Springs Mountain Resort | Added approaches from both Turnpike exits, parking fees, shuttle coverage and four camera views. | Retrieve map and mark originals and confirm exact statistics, the first day and fares. |
+| Pajarito Mountain | Documented Camp May Road and the December 4 plan, archived the map and verified the 280-acre downhill scope. | Verify continuous vertical, summit coordinates and first skiing. |
+| Mona Yongpyong | Verified first skiing on November 22, the Rainbow Paradise vertical and the Dragon Plaza approach. | Verify the base elevation, lift scope, summit point and new adult fare. |
+| Mountain High | Added CA 2 approaches to all three lots, parking fees, the access map and four camera views. | Check the western road, printable downhill map, updated fare and Indy terms. |
+| Snowshoe Mountain | Added the four US 219 arrivals, posted parking rates, official maps and revised December 4 plan. | Verify the eastern routes, opening dates, adult fares and direct logo. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-40-2026-11-22T054216Z`.
+
+Waterville Valley leads batch 41.
+
+## Batch 41 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 356 | 362 |
+| Seasonal visitor records | 267 | 274 |
+| Resorts with parking | 250 | 257 |
+| Resorts with official maps | 258 | 265 |
+| Resorts with adult fares or bounds | 129 | 134 |
+| Resorts with operator cameras | 173 | 180 |
+| Areas with annual snowfall | 192 | 197 |
+| 2026/27 areas with planned dates | 219 | 222 |
+| Areas with Indy product rules | 81 | 87 |
+| Areas with all four Indy products | 76 | 82 |
+| Areas with winter approaches | 205 | 215 |
+| Documented winter approaches | 483 | 500 |
+| Verified summit records | 70 | 73 |
+| Bundled resort icons | 156 | 166 |
+
+The whitespace check passed. 231 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 10 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Waterville Valley Resort | Recorded the NH 49 approach, west Tripoli Road winter exclusion, parking and four maps. | Confirm first skiing, Green Peak and the day-ticket price. |
+| Burke Mountain Resort | Verified Sherburne and Mid-Burke approaches and the operator’s five-lift, 56-run inventory. | Confirm first skiing, acreage scope and a dated fare. |
+| Big Powderhorn | Corrected the skiable vertical to 417 ft and added parking, the print map and the $99 fare. | Confirm first skiing and Indy ticket pickup. |
+| Shames Mountain | Added both BC 16 approaches, the managed gravel road, print map, cameras and C$95.22 fare. | Verify first skiing, ticket pickup and plotted backcountry entry points. |
+| Ragged Mountain Resort | Recorded both signed regional arrivals and preserved the base and alpine maps. | Check the New London connector, first skiing and the Indy Base date year. |
+| Snowy Range Ski Area | Verified the WY 130 approach, documented the seasonal through closure and added four fare tiers. | Verify first skiing and the comparable vertical. |
+| Nub's Nob | Added the Pleasantview Road approach, downhill and Nordic maps and the recorded April 5 closing. | Confirm this winter’s first skiing, current day prices and peak location. |
+| Takasu Snow Park | Added both access interchanges, paid parking, the ¥6,400 shared day fare and the combined map. | Verify first skiing, closing date, final turns and the lift-conveyor count. |
+| Mont Orford | Added both visitor arrivals, two summit points, three historical seasons and four 2026/27 fare tiers. | Verify the main geographic summit, first skiing and continuous vertical endpoints. |
+| Muica Snow Resort | Verified the Route 253 arrival, current map and season window and recorded last winter’s closing. | Verify the last turn, current first skiing, webcams and Indy pickup. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-41-2026-11-22T055001Z`.
+
+Snow Summit leads batch 42.
+
+## Batch 42 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 362 | 369 |
+| Seasonal visitor records | 274 | 282 |
+| Verified visitor points | 74 | 77 |
+| Resorts with parking | 257 | 265 |
+| Resorts with official maps | 265 | 273 |
+| Resorts with adult fares or bounds | 134 | 139 |
+| Resorts with operator cameras | 180 | 187 |
+| Areas with annual snowfall | 197 | 200 |
+| Areas with Indy product rules | 87 | 89 |
+| Areas with all four Indy products | 82 | 84 |
+| Areas with winter approaches | 215 | 225 |
+| Documented winter approaches | 500 | 526 |
+| Named road crossings | 45 | 47 |
+| Bundled resort icons | 166 | 175 |
+| Catalog entrance pins | 65 | 68 |
+
+The whitespace check passed. 231 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 9 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Snow Summit | Verified four approaches, the Onyx Summit crossing, and upper and overflow parking. | Reconcile the current public lift inventory and confirm first skiing. |
+| Snow Valley Mountain Resort | Verified Highway 18 routes, Snow Valley parking and annual snowfall. | Confirm camera restoration and first skiing. |
+| Mount Sunapee | Verified three routes to Lots 1–3, State Beach overflow and the current operator-linked winter panorama. | Reconcile 66–67 reported trails and check first skiing and the dated fare. |
+| Marble Mountain | Verified the Exit 8 approaches, added Indy rules and archived the vector map. | Confirm first skiing, the day ticket season, the lot pin and a webcam source. |
+| Mont SUTTON | Archived the current winter map, verified three historical seasons, five-season snowfall and adult fares. | Confirm the lift count, plotted summit and actual December opening. |
+| Gunstock Mountain Resort | Verified the NH 11A approaches, December 4 plan, three camera views and adult fares. | Find base elevation evidence and the full-size print map. |
+| Mount Cain | Verified both BC 19 approaches, the chain rule, lift types and the operator downhill map. | Resolve the summit and annual snowfall units, and confirm first skiing. |
+| Wildcat Mountain | Recorded north and south NH 16 approaches, Pinkham Notch, free lots and the operator panorama. | Check first skiing, the full-size PDF, summit identity and a dated fare. |
+| Myoko Suginohara Ski Resort | Confirmed the winter plan, ¥9,000 regular adult day, P1 reservation, cameras and the Japanese print map. | Confirm the revised parking charges, local road name and first skiing. |
+| Cherry Peak | Confirmed Cherry Peak’s full Indy partnership, both US 91 approaches and the published map. | Check this season’s first ski day, adult price and the geographic summit. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-42-2026-11-22T060250Z`.
+
+Greek Peak leads batch 43.
+
+## Batch 43 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Downhill areas with six comparison fields | 316 | 317 |
+| Checked conditions links | 369 | 374 |
+| Seasonal visitor records | 282 | 288 |
+| Verified visitor points | 77 | 78 |
+| Resorts with parking | 265 | 271 |
+| Resorts with official maps | 273 | 279 |
+| Resorts with adult fares or bounds | 139 | 142 |
+| Resorts with operator cameras | 187 | 193 |
+| Areas with annual snowfall | 200 | 205 |
+| 2026/27 recorded openings | 36 | 37 |
+| 2026/27 areas with planned dates | 222 | 225 |
+| Areas with Indy product rules | 89 | 92 |
+| Areas with all four Indy products | 84 | 87 |
+| Areas with winter approaches | 225 | 235 |
+| Documented winter approaches | 526 | 552 |
+| Named road crossings | 47 | 48 |
+| Verified summit records | 73 | 75 |
+| Bundled resort icons | 175 | 183 |
+| Catalog entrance pins | 68 | 69 |
+
+The whitespace check passed. 231 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 8 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Greek Peak Mountain Resort | Confirmed both NY 392 approaches, December 5 plan, annual snowfall and downhill and Nordic maps. | Confirm first skiing, shuttle times and the exact winter pin. |
+| Sipapu Ski & Summer Resort | Recorded public skiing on November 20 and verified five NM 518 approaches and the print map. | Confirm named highway crossings and lot rules. |
+| Magic Mountain Ski Area | Confirmed mapped acreage and seasonal fares, documented VT 11 access and archived the base map. | Confirm first skiing and the eastbound road crossings. |
+| Sasquatch Mountain Resort | Confirmed both Hemlock Valley routes, chains, adult rates and Indy Base dates. | Obtain the trail map originals, an official mark and first-skiing confirmation. |
+| Asessippi Ski Area & Resort | Verified both MB 83 arrivals, the four-lift inventory, and the downhill map. | Verify measured elevations, the dated fare and an official mark. |
+| Bousquet Mountain | Verified Dan Fox Drive approaches, free parking, downhill map and Indy rules. | Confirm first skiing, a single-day adult fare and camera endpoints. |
+| Granite Peak | Confirmed the Ikon transition, 200-acre minimum, US 51 access and November 28 plan. | Resolve combined acreage scope, skiable endpoints and a standalone fare. |
+| Middlebury Snowbowl | Verified both VT 125 arrivals, Middlebury Gap, Worth Mountain and the December 9 plan. | Retrieve the print PDF and confirm first lift-served skiing. |
+| Mount Baldy Ski Area | Verified the ON 527 approach, Shuniah ski elevations, official map and C$61.99 weekend fare. | Find a dated ski report and verify annual snowfall and camera evidence. |
+| Mt Seymour | Verified Mount Seymour Road, downhill and backcountry lot rules, winter plans and snowfall. | Confirm current full-mountain fares, actual opening and summit locations. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-43-2026-11-22T061607Z`.
+
+The requested 50 cases are complete. Bear Mountain leads the remaining ranked queue.
+
+## Run summary · 2026-11-22 · Batches 39–43
+
+Reviewed 50 distinct downhill resorts in five batches of 10. The review followed the ranked queue of missing road checks and dated retries. The requested limit was reached with 147 ranked cases still due. Bear Mountain is next in acreage order. November 25 is the first dated retry from this run, for Red River’s first lift-served ski day.
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Downhill areas with all six mountain statistics | 316 | 317 |
+| Areas with winter approaches | 185 | 235 |
+| Documented winter approaches | 433 | 552 |
+| Named road crossings | 42 | 48 |
+| Verified summit records | 68 | 75 |
+| Areas with verified summits | 46 | 52 |
+| Seasonal visitor records | 251 | 288 |
+| Areas with visitor lodges | 250 | 287 |
+| Areas with parking records | 235 | 271 |
+| Areas with official map records | 242 | 279 |
+| Areas with adult day fares or bounds | 125 | 142 |
+| Areas with annual snowfall | 188 | 205 |
+| Areas with operator cameras | 160 | 193 |
+| Checked conditions links | 346 | 374 |
+| Areas with 2026/27 planned dates | 216 | 225 |
+| Areas with observed 2026/27 first ski days | 34 | 37 |
+| Areas with Indy product rules | 77 | 92 |
+| Bundled resort icons | 141 | 183 |
+
+All 50 resorts gained road approach records. The six new named crossings are Onyx Summit, Franconia Notch, Pinkham Notch, Bobcat Pass, Middlebury Gap and Loup Loup Pass. The summit catalog gained seven geographic peaks.
+
+Each batch passed the whitespace check, 231 focused tests and 19 terrain and candidate tests. Chromium verified all 42 added runtime icons on the map, in Results and in resort details. The map fallback also loaded.
+
+All 61 files across the five batch snapshots matched their SHA-256 checksums.
+
+| Batch | NAS snapshot | Files |
+| --- | --- | ---: |
+| 39 | `N:\projects\ski-status\data-quality\batch-39-2026-11-22T053154Z` | 12 |
+| 40 | `N:\projects\ski-status\data-quality\batch-40-2026-11-22T054216Z` | 12 |
+| 41 | `N:\projects\ski-status\data-quality\batch-41-2026-11-22T055001Z` | 12 |
+| 42 | `N:\projects\ski-status\data-quality\batch-42-2026-11-22T060250Z` | 12 |
+| 43 | `N:\projects\ski-status\data-quality\batch-43-2026-11-22T061607Z` | 13 |
+
+The run manifest lists 54 original trail maps, 37 original marks and 74 icon variants. All 165 archived files and the manifest matched their SHA-256 checksums. The app archive index accepted the maps and variants. The 42 runtime PNGs match their archived details variants, including 5 marks reused from previous archives.
+
+`N:\projects\ski-status\assets\manifests\2026-11-22T061644Z.json`
+
+Open source issues include blocked Sasquatch and Middlebury print downloads, the Wildcat print PDF, and permission to archive Greek Peak’s alpine map. Resort follow-ups include first lift-served dates, seasonal fare or parking tables, conflicting statistics, planned shuttle service and the precise locations of some summits and entrances. Camera playback and reuse and higher-contrast marks remain open where the batch logs identify them.

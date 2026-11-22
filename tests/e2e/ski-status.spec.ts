@@ -1919,6 +1919,13 @@ test('draws overlapping pass badges on the globe and highlights a selected resor
     expect(separation).toBeLessThan(4);
     await renderer.evaluate(map => { map.jumpTo({ zoom: 3 }); });
     await expect.poll(badgeIds).toEqual(expect.arrayContaining(['alta', 'snowbird']));
+    const center = resortPoint('alta');
+    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 4.5 }); }, center);
+    await expect.poll(() => renderer.evaluate((map, center) => {
+        const { x, y } = map.project(center);
+        return map.queryRenderedFeatures([x + 8, y], { layers: ['ski-status-pass-badges'] })
+            .some(feature => feature.properties.areaId === 'alta');
+    }, center)).toBe(true);
     await page.getByRole('searchbox', { name: 'Search areas' }).fill('Alta Ski Area');
     await result(page, 'Alta Ski Area').click();
     await expect(resort(page, 'Alta Ski Area').getByRole('link', { name: 'Ikon', exact: true }).locator('img')).toBeVisible();
@@ -1930,7 +1937,7 @@ test('draws overlapping pass badges on the globe and highlights a selected resor
     await renderer.dispose();
 });
 
-test('selects a small mountain icon on the globe without changing the zoom', async ({ page }) => {
+test('keeps globe icons compact and grows them at fractional zooms', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
     const id = 'bosques-de-monterreal';
@@ -1942,6 +1949,8 @@ test('selects a small mountain icon on the globe without changing the zoom', asy
         return map.queryRenderedFeatures([point.x + offset, point.y], { layers: ['ski-area-icons'] })
             .map(feature => feature.properties.areaId);
     }, { center, offset });
+    const scale = () => evaluatedIconScale(renderer, 'ski-area-icons');
+    const zoomTo = (zoom: number) => renderer.evaluate((map, zoom) => { map.jumpTo({ zoom }); }, zoom);
     await expect.poll(() => hits(0)).toContain(id);
     expect(await hits(4)).not.toContain(id);
     const point = await renderer.evaluate((map, center) => map.project(center), center);
@@ -1950,8 +1959,13 @@ test('selects a small mountain icon on the globe without changing the zoom', asy
     await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-selected-icon'] })
         .map(feature => feature.properties.areaId))).toContain(id);
     expect(await renderer.evaluate(map => map.getZoom())).toBe(1.5);
-    await renderer.evaluate(map => { map.jumpTo({ zoom: 9 }); });
-    await expect.poll(() => hits(4)).toContain(id);
+    await zoomTo(4.25);
+    await expect.poll(scale).toBeCloseTo(0.6625, 3);
+    await zoomTo(4.75);
+    await expect.poll(scale).toBeCloseTo(0.7542, 3);
+    await expect.poll(() => hits(6)).toContain(id);
+    await zoomTo(9);
+    await expect.poll(() => hits(10)).toContain(id);
     await renderer.dispose();
 });
 
@@ -2076,6 +2090,13 @@ function evaluatedPaint(renderer: JSHandle<MapLibreMap>, layer: string, property
         const value = paint?.get(property);
         return typeof value === 'number' ? value : value?.value.kind === 'constant' ? value.value.value : undefined;
     }, { layer, property });
+}
+
+function evaluatedIconScale(renderer: JSHandle<MapLibreMap>, layer: string) {
+    return renderer.evaluate((map, layer) => {
+        const layout = map.getLayer(layer)?.layout as { get: (key: string) => { constantOr: (fallback: number) => number } } | undefined;
+        return layout?.get('icon-size').constantOr(0);
+    }, layer);
 }
 
 test('fades state and province boundaries in at the western North America zoom', async ({ page }) => {
@@ -2398,10 +2419,6 @@ test('fades peak icons in before their labels and prioritizes trail-map peaks', 
     const zoomTo = (zoom: number) => renderer.evaluate((map, camera) => { map.jumpTo(camera); }, { center, zoom });
     const peakNames = (layer: string) => renderer.evaluate((map, layer) => [...new Set(map.queryRenderedFeatures({ layers: [layer] })
         .map(feature => feature.properties.name))].sort(), layer);
-    const peakIconSize = (layer: string) => renderer.evaluate((map, layer) => {
-        const layout = map.getLayer(layer)?.layout as { get: (key: string) => { constantOr: (fallback: number) => number } } | undefined;
-        return layout?.get('icon-size').constantOr(0);
-    }, layer);
     const peakHasLabel = (layer: string, coordinates: [number, number], name: string) => renderer.evaluate((map, { layer, coordinates, name }) => {
         const { x, y } = map.project(coordinates);
         // The label sits below the triangle. Query past the icon's hit area.
@@ -2427,7 +2444,7 @@ test('fades peak icons in before their labels and prioritizes trail-map peaks', 
         for (const [offset, scale, opacity] of [[-2, 0.55, 0.28], [-1, 0.78, 0.65], [0, 1, 0.85]]) {
             await zoomTo(peak.labelZoom + offset);
             await expect.poll(() => peakNames(peak.layer)).toContain(peak.name);
-            await expect.poll(() => peakIconSize(peak.layer)).toBeCloseTo(scale * peak.size, 3);
+            await expect.poll(() => evaluatedIconScale(renderer, peak.layer)).toBeCloseTo(scale * peak.size, 3);
             await expect.poll(() => evaluatedPaint(renderer, peak.layer, 'icon-opacity')).toBeCloseTo(opacity, 3);
             await expect.poll(() => peakHasLabel(peak.layer, peak.coordinates, peak.name)).toBe(offset === 0);
             await expect.poll(() => peakText(peak.layer, peak.name)).toBe(offset === 0 ? peak.name : '');

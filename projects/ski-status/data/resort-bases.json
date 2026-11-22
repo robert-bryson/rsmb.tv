@@ -2236,12 +2236,12 @@
     },
     "sipapu-ski-summer-resort": {
       "coordinates": [
-        -105.549585,
-        36.153915
+        -105.542167,
+        36.1525
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=66934016f836f00b8955a87aedd5b2713603fdf2"
+      "name": "Sipapu ski base",
+      "source": "https://www.sipapu.ski/directions-to-sipapu/",
+      "kind": "entrance"
     },
     "ski-apache": {
       "coordinates": [
@@ -2344,21 +2344,21 @@
     },
     "snow-summit": {
       "coordinates": [
-        -116.888833,
-        34.235448
+        -116.8893284,
+        34.236566
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=553e5c0881466894501e5f56ab41ba951300fc75"
+      "name": "Snow Summit public ski base",
+      "source": "https://www.bigbearmountainresort.com/transportation",
+      "kind": "entrance"
     },
     "snow-valley-mountain-resort": {
       "coordinates": [
-        -117.035991,
-        34.224019
+        -117.0360852,
+        34.2253412
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=11f2099ea10957844765b5bea3bbb1f13fd592b7"
+      "name": "Snow Valley public ski base",
+      "source": "https://www.bigbearmountainresort.com/transportation",
+      "kind": "entrance"
     },
     "snowbasin-resort": {
       "coordinates": [
@@ -2389,12 +2389,12 @@
     },
     "snowshoe-mountain": {
       "coordinates": [
-        -79.986439,
-        38.41641
+        -79.9963,
+        38.4119
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=1facaf3d92da6719b1c7aa95f763fbeda72222b3"
+      "name": "Snowshoe Village Center",
+      "source": "https://www.snowshoemtn.com/discover-snowshoe/~/link.aspx?_id=5851DF3C59384B60981A1994B4C5D7C5&_z=z",
+      "kind": "entrance"
     },
     "snowy-range-ski-area": {
       "coordinates": [
@@ -2952,6 +2952,15 @@
       ],
       "name": "Wolf Den Day Lodge winter arrival",
       "source": "https://skitheloup.org/plan-your-visit/getting-here/",
+      "kind": "entrance"
+    },
+    "mont-sutton": {
+      "coordinates": [
+        -72.5579461,
+        45.1040466
+      ],
+      "name": "Chalet Alt. 400 m",
+      "source": "https://montsutton.com/en/contact-us/",
       "kind": "entrance"
     }
   }

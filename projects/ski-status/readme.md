@@ -121,17 +121,17 @@ The country filter also includes Germany through shared areas.
 There were 129 areas with Ikon access and 98 with Epic access.
 There were 297 areas with included Indy access and 34 with Mountain Collective access.
 
-All 588 areas have at least one published statistic. The catalog has 527 conventional downhill areas, including areas with Nordic trails. Of these, 316 have all six main comparison fields. Mapped terrain values cover 538 areas.
-There are 336 direct Wikipedia links, 18 verified Google Maps destinations, and 149 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md), [Icon index](data/runtime-icons.json)
+All 588 areas have at least one published statistic. The catalog has 527 conventional downhill areas, including areas with Nordic trails. Of these, 317 have all six main comparison fields. Mapped terrain values cover 538 areas.
+There are 336 direct Wikipedia links, 18 verified Google Maps destinations, and 183 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md), [Icon index](data/runtime-icons.json)
 
 | Published field | Areas |
 | --- | ---: |
 | Skiable acreage | 385 |
-| Vertical drop | 466 |
+| Vertical drop | 467 |
 | Lift count | 497 |
 | Trail count | 509 |
-| Base elevation | 424 |
-| Summit elevation | 433 |
+| Base elevation | 425 |
+| Summit elevation | 435 |
 | Downhill trail length | 91 |
 | Nordic trail length | 67 |
 | Highest lift terminal | 56 |
@@ -140,8 +140,8 @@ There are 336 direct Wikipedia links, 18 verified Google Maps destinations, and 
 | Difficulty breakdown | 294 |
 | Season window | 68 |
 | Official conditions link | 553 |
-| Planned season dates | 220 |
-| Average annual snowfall | 192 |
+| Planned season dates | 229 |
+| Average annual snowfall | 205 |
 | Average monthly snowfall | 65 |
 | Monthly snow depth series | 81 |
 
@@ -433,10 +433,10 @@ Use a separate access file for each local ski season. Vite checks the files and 
 The site includes the fields that **Visitor information** displays. Research notes stay in the repository.
 The panel shows map editions when the source gives them. Camera links open the published image, player, or operator page. [2026/27 resort access](research/resort-access-2026-27.json), [2026 resort access](research/resort-access-2026.json)
 
-On November 22, 2026, seasonal access records included lodge or day facility details for 257 resorts.
-There are 73 checked resort map points. These points include both entrances and lift bases.
-There are 242 resorts with parking records and 249 with official trail maps.
-There are 126 resorts with adult day prices or price bounds. There are 165 with operator cameras. [Batch coverage](research/data-quality-log.md)
+On November 22, 2026, seasonal access records included lodge or day facility details for 287 resorts.
+There are 78 checked resort map points. These points include both entrances and lift bases.
+There are 271 resorts with parking records and 279 with official trail maps.
+There are 142 resorts with adult day prices or price bounds. There are 193 with operator cameras. [Batch coverage](research/data-quality-log.md)
 
 ```text
 Follow projects/ski-status/.agents/skills/ski-status-data-quality/SKILL.md.
@@ -511,7 +511,7 @@ The 2026/27 Ikon Pass shares seven days across the four Aspen Snowmass mountains
 
 Indy Add-On access requires verification of an unrestricted home season pass. Select a home area to apply the exclusion. The app shows the requirement in the pass terms. [Indy Add-On rules](https://www.indyskipass.com/this-is-indy/how-it-works)
 
-80 Indy areas have verified product rules, including 75 with rules for all four products. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [2026/27 Indy rules](data/pass-rules/indy-2026-27.json), [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
+92 Indy areas have verified product rules, including 87 with rules for all four products. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [2026/27 Indy rules](data/pass-rules/indy-2026-27.json), [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
 
 Ski Arlberg requires a direct booking with a lodging partner. The app shows this requirement with the shared three-day allowance. [Ski Arlberg pass terms](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
@@ -534,7 +534,7 @@ Each checked report expires at the end of its local ski day. Alberta uses UTC−
 
 ### Opening and closing dates
 
-The season file has 197 records of actual dates for 63 areas. It has plans for 220 areas. 33 records include terrain or conditions from opening day. For 2026/27, 34 areas have recorded first ski days and 216 have at least one scheduled date. [Season dates and sources](data/seasons.json)
+The season file has 208 records of actual dates for 70 areas. It has plans for 229 areas. 34 records include terrain or conditions from opening day. For 2026/27, 37 areas have recorded first ski days and 225 have at least one scheduled date. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
@@ -710,7 +710,7 @@ Collect winter road approaches during each resort review. Put the roads and name
 Record the winter entrance, parking rules, and official road status links. [Road approach procedure](.agents/skills/ski-status-data-quality/SKILL.md#road-approaches)
 
 Run `npx --no-install vitest run src/test/skiStatusRoadApproaches.test.ts` after a road data change. The test checks catalog IDs, route records, sources, and pass references. [Road data checks](../../src/test/skiStatusRoadApproaches.test.ts)
-The research file has 459 approaches for 195 areas and 43 named passes. [Road approach records](research/road-approaches.json)
+The research file has 552 approaches for 235 areas and 48 named passes. [Road approach records](research/road-approaches.json)
 
 Use the rollout plan for the next corridor checks. [Driving access rollout](driving-map-plan.md)
 

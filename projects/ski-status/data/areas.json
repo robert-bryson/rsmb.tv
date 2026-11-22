@@ -933,7 +933,8 @@
         "note": "The alpine lift count includes three chairlifts and the snow carpet."
       }
     ],
-    "liftCount": 4
+    "liftCount": 4,
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "aspen-highlands",
@@ -1703,12 +1704,12 @@
     "statsUrl": "https://www.indyskipass.com/our-resorts/big-powderhorn",
     "liftCount": 10,
     "trailCount": 45,
-    "verticalFt": 622,
+    "verticalFt": 417,
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://bigpowderhorn.net/mountain-report/",
     "acres": 253,
-    "baseFt": 1240,
+    "baseFt": 1214,
     "grades": {
       "unit": "percent",
       "values": {
@@ -1721,16 +1722,18 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/big-powderhorn",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "grades"]
+        "fields": ["grades"]
       },
       {
         "source": "https://bigpowderhorn.net/trail-map/",
-        "checkedOn": "2026-11-21",
-        "fields": ["summitFt"],
-        "note": "The operator's trail map gives the summit elevation."
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "acresQualifier", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator’s current guide gives a minimum 253 skiable acres, 1,214–1,631 ft, 417 ft vertical, 45 runs and nine chairs plus a handle tow."
       }
     ],
-    "summitFt": 1631
+    "summitFt": 1631,
+    "acresQualifier": "lower-bound",
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "big-rock-mountain",
@@ -2339,9 +2342,16 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/bousquet-mountain-0",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/bousquet-mountain-0",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "trailCount", "liftCount"],
+        "note": "Issuer gives 200 acres, 1,068–1,818 ft, 750 ft vertical and 22 trails, two chairs and two carpets."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "boyne-mountain",
@@ -2953,8 +2963,8 @@
     "locality": "East Burke",
     "website": "https://www.skiburke.com/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/burke-mountain",
-    "liftCount": 4,
-    "trailCount": 54,
+    "liftCount": 5,
+    "trailCount": 56,
     "verticalFt": 2011,
     "nightSkiing": false,
     "terrainParks": true,
@@ -2973,6 +2983,12 @@
         "source": "https://www.indyskipass.com/our-resorts/burke-mountain",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "grades"]
+      },
+      {
+        "source": "https://www.skiburke.com/lift-trail-status",
+        "checkedOn": "2026-11-22",
+        "fields": ["liftCount", "trailCount"],
+        "note": "Operator report names five lifts and gives a 56-run total. Indy older inventory differs."
       }
     ],
     "reportUrl": "https://www.skiburke.com/lift-trail-status",
@@ -2984,7 +3000,8 @@
         "Intermediate": 48,
         "Advanced": 44
       }
-    }
+    },
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "buttermilk",
@@ -3349,12 +3366,6 @@
     "baseFt": 1900,
     "statSources": [
       {
-        "source": "https://www.cannonmt.com/mountain-stats",
-        "checkedOn": "2026-11-19",
-        "fields": ["baseFt"],
-        "note": "Main Cannon base. The operator lists a separate Mittersill base at 1,850 ft."
-      },
-      {
         "source": "https://www.nhstateparks.org/find-parks-trails/cannon-mountain-ski-area",
         "checkedOn": "2026-11-20",
         "fields": ["summitFt"],
@@ -3365,6 +3376,12 @@
         "checkedOn": "2026-11-20",
         "fields": ["downhillKm", "grades", "seasonWindow"],
         "note": "The Cannon and Mittersill winter facts give 25.3 total trail miles and the usual ski season."
+      },
+      {
+        "source": "https://www.cannonmt.com/mountain-stats",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "trailCount", "liftCount", "baseFt"],
+        "note": "Cannon and Mittersill stats give 287 acres, 98 trails and glades, nine lifts and a 1,900 ft Cannon base. Mittersill uses its own 1,850 ft base."
       }
     ],
     "summitFt": 4080,
@@ -3378,7 +3395,8 @@
         "Most Difficult": 33
       }
     },
-    "seasonWindow": "Late November – early to mid-April"
+    "seasonWindow": "Late November – early to mid-April",
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "carters-xc-ski-center",
@@ -3681,7 +3699,15 @@
     "verticalFt": 1265,
     "nightSkiing": true,
     "terrainParks": true,
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22",
+    "statSources": [
+      {
+        "source": "https://www.skicpr.com/mountain-stats",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "acresQualifier", "baseFt", "summitFt", "verticalFt", "liftCount"],
+        "note": "Operator reports 220+ acres. Its metric/imperial table gives a consistent 5,775–7,040 ft range and 1,265 ft vertical. The introductory paragraph reports an alternate 1,221 ft."
+      }
+    ]
   },
   {
     "id": "chestnut-mountain-resort",
@@ -6123,7 +6149,22 @@
     "additionalSources": [
       "https://www.skigranitepeak.com/discover/winter-at-granite-peak",
       "https://www.skigranitepeak.com/mountain-info/arrival-guide"
-    ]
+    ],
+    "statSources": [
+      {
+        "source": "https://www.skigranitepeak.com/discover/winter-at-granite-peak",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "acresQualifier"],
+        "note": "Operator explicitly reports at least 200 skiable acres. Separate 400 Combined Acres label does not specify the groomed, gladed and other terrain boundaries."
+      },
+      {
+        "source": "https://www.skigranitepeak.com/mountain-info/trail-map-mountain-stats",
+        "checkedOn": "2026-11-22",
+        "fields": ["verticalFt", "trailCount", "liftCount"],
+        "note": "Operator reports 700 ft vertical, 67 runs and seven lifts including two carpets."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "great-bear-ski-valley",
@@ -6235,7 +6276,7 @@
       "https://www.greekpeak.net/ski-ride/indy-pass/"
     ],
     "reportUrl": "https://www.greekpeak.net/ski-ride/current-conditions/",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "acres": 220,
     "baseFt": 1148,
     "summitFt": 2100,
@@ -6251,7 +6292,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/greek-peak-mountain-resort",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/greek-peak-mountain-resort",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Current issuer gives 220 acres, 1,148–2,100 ft, 952 ft vertical, 55 trails and eight lifts."
       }
     ]
   },
@@ -6326,7 +6373,7 @@
       }
     ],
     "reportUrl": "https://www.gunstock.com/winter/snow-report/",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "summitFt": 2300,
     "grades": {
       "unit": "percent",
@@ -6498,9 +6545,15 @@
         "checkedOn": "2026-11-21",
         "fields": ["downhillKm"],
         "note": "Sum of the resort’s listed course lengths and reported course-level mix."
+      },
+      {
+        "source": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_goryu_en",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Hakuba Valley Goryu profile gives 120 ha, 750–1,676 m, 926 m vertical, one gondola, 11 chairs and 15 courses. Map editions also show the separate Hakuba47 part."
       }
     ],
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "hakuba-happo-one",
@@ -9604,18 +9657,14 @@
     "statSources": [
       {
         "source": "https://www.magicmtn.com/about-magic",
-        "checkedOn": "2026-11-19",
-        "fields": ["baseFt", "summitFt"]
-      },
-      {
-        "source": "https://www.magicmtn.com/about-magic",
-        "checkedOn": "2026-11-19",
-        "fields": ["acres"],
-        "note": "Acreage covers the trails and glades on the operator's map."
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator publishes 205 acres of mapped trails and glades, 1,350–2,850 ft and 1,500 ft vertical. It counts three chairs, a handle tow and a conveyor and 39 listed trails plus 11 glades."
       }
     ],
     "acres": 205,
-    "reportUrl": "https://www.magicmtn.com/snow-report"
+    "reportUrl": "https://www.magicmtn.com/snow-report",
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "maiko-resort",
@@ -9853,10 +9902,12 @@
     "statSources": [
       {
         "source": "https://skimarble.com/mountain-stats/",
-        "checkedOn": "2026-11-19",
-        "fields": ["baseFt"]
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "trailCount"],
+        "note": "Operator mountain figures use 10–546 m and 536 m vertical. The 519 m figure on the panorama matches the Lightning Express lift rise."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "marmot-basin",
@@ -10158,7 +10209,7 @@
       "https://middleburysnowbowl.com/lift-tickets/"
     ],
     "reportUrl": "https://middleburysnowbowl.com/conditions/",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "acres": 200,
     "baseFt": 1700,
     "summitFt": 2720,
@@ -10174,7 +10225,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/middlebury-snowbowl",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/middlebury-snowbowl",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount"],
+        "note": "New issuer profile confirms 200 acres, 1,700–2,720 ft and 1,020 ft vertical and four lifts."
       }
     ]
   },
@@ -10290,7 +10347,29 @@
     "liftCount": 16,
     "trailCount": 28,
     "reportUrl": "https://www.yongpyong.co.kr/kor/skiNboard/slope/openStatusBoard.do",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22",
+    "statSources": [
+      {
+        "source": "https://yongpyong.co.kr/kor/skiNboard/introduce.do",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "trailCount"],
+        "note": "Operator gives 1,103,449 m² of slope area (272.67 acres), 28 slopes and a headline total of 14 lifts. The detailed status lists chairlifts and the cable car. Two conveyors appear separately."
+      },
+      {
+        "source": "https://yongpyong.co.kr/kor/skiNboard/slope/introduce.do",
+        "checkedOn": "2026-11-22",
+        "fields": ["verticalFt"],
+        "note": "Rainbow Paradise is one continuous 5,600 m descent. Operator publishes 702 m of vertical, or 2,303 ft."
+      },
+      {
+        "source": "https://www.yongpyong.co.kr/kor/skiNboard/slope/tourInfo.do",
+        "checkedOn": "2026-11-22",
+        "fields": ["summitFt"],
+        "note": "Operator places the resort’s Rainbow summit at 1,458 m (4,783 ft). The map distinguishes the higher geographic peak from the trail start."
+      }
+    ],
+    "verticalFt": 2303,
+    "summitFt": 4783
   },
   {
     "id": "monarch-mountain",
@@ -10435,7 +10514,7 @@
     "statsUrl": "https://montorford.com/upload/pdf/Carte-rando-alpine_3-janvier-2022_LR.pdf",
     "summitFt": 2789,
     "reportUrl": "https://montorford.com/en-ca/winter/conditions-ski",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "mont-rigaud",
@@ -10571,20 +10650,20 @@
     "summitFt": 2808,
     "statSources": [
       {
-        "source": "https://montsutton.com/wp-content/uploads/2023/01/TEMP_CartePistes_2026_WEB.pdf",
-        "checkedOn": "2026-11-19",
-        "fields": ["summitFt"],
-        "note": "Trail map identifies the ski area high point at 856 m."
-      },
-      {
         "source": "https://montsutton.com/faq/",
         "checkedOn": "2026-11-19",
         "fields": ["baseFt"],
         "note": "Base elevation is for the main lodge."
+      },
+      {
+        "source": "https://montsutton.com/en/technical-sheet/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "trailCount", "verticalFt", "summitFt"],
+        "note": "Operator technical sheet gives 230 acres, 60 trails and 460 m vertical. Peak on the new panorama is 856 m."
       }
     ],
     "baseFt": 1312,
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "montage-mountain",
@@ -10826,15 +10905,23 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/mount-baldy-ski-area",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/mount-baldy-ski-area",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt"],
+        "note": "Issuer gives 1,600–2,076 ft and 200 acres for the Shuniah, Ontario ski area."
       },
       {
         "source": "https://www.skimountbaldy.ca/about-us",
-        "checkedOn": "2026-11-21",
-        "fields": ["trailCount", "verticalFt"],
-        "note": "The Thunder Bay operator lists ten runs and a skiable vertical of 145 m, rounded to 476 ft."
+        "checkedOn": "2026-11-22",
+        "fields": ["trailCount", "liftCount", "verticalFt"],
+        "note": "Operator prints ten downhill runs and three lifts and publishes 145 m of vertical. Indy inventory may include additional route names."
       }
-    ]
+    ],
+    "baseFt": 1600,
+    "summitFt": 2076
   },
   {
     "id": "mount-bohemia",
@@ -10901,8 +10988,15 @@
         "source": "https://www.indyskipass.com/our-resorts/mount-cain",
         "checkedOn": "2026-11-21",
         "fields": ["acres", "grades"]
+      },
+      {
+        "source": "https://www.mountcain.com/mountain-stats/",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator reports 1,190 m base, 430 m vertical, two T-bars plus a handle tow and 21 named runs. Indy publishes 225 acres."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "mount-kato",
@@ -11091,7 +11185,8 @@
       }
     },
     "statsUrl": "https://www.mountsunapee.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.mountsunapee.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+    "reportUrl": "https://www.mountsunapee.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx",
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "mount-washington-alpine-resort",
@@ -11150,18 +11245,13 @@
     "locality": "Wrightwood",
     "website": "https://www.mthigh.com/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/mountain-high",
-    "liftCount": 14,
+    "liftCount": 12,
     "trailCount": 50,
     "verticalFt": 1600,
     "nightSkiing": true,
     "terrainParks": true,
     "acres": 270,
     "statSources": [
-      {
-        "source": "https://www.mthigh.com/site/trails-and-conditions/other/mountain-stats.html",
-        "checkedOn": "2026-11-19",
-        "fields": ["acres"]
-      },
       {
         "source": "https://skicalifornia.org/resorts/mountain-high-resort",
         "checkedOn": "2026-11-19",
@@ -11173,12 +11263,18 @@
         "checkedOn": "2026-11-19",
         "fields": ["baseFt"],
         "note": "The East Mountain descent accounts for the area's published maximum vertical."
+      },
+      {
+        "source": "https://www.mthigh.com/site/trails-and-conditions/other/mountain-stats.html",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "verticalFt", "liftCount"],
+        "note": "Operator’s ski terrain is 270 acres. It publishes 1,600 ft vertical and a 12-lift inventory. Snow-play and named resort totals use separate scopes."
       }
     ],
     "baseFt": 6600,
     "summitFt": 8200,
-    "reportUrl": "https://www.mthigh.com/site/trails-and-conditions/conditions/alpine-grooming",
-    "reportCheckedOn": "2026-11-20"
+    "reportUrl": "https://www.mthigh.com/site/trails-and-conditions/conditions/alpine-grooming/@@alpine-grooming",
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "mt-abram",
@@ -11728,7 +11824,7 @@
         "note": "Downhill terrain and lifts only. Base means the day lodge at 1,020 m. Top elevation is 1,265 m; skiable vertical is 330 m."
       }
     ],
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "mt-shasta-ski-park",
@@ -11907,7 +12003,7 @@
       }
     ],
     "reportUrl": "https://www.muikamachi.com/ski/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "murray-ridge-ski-area",
@@ -11955,7 +12051,7 @@
     "locality": "Myōkō",
     "website": "https://www.princehotels.co.jp/ski/myoko/",
     "statsUrl": "https://www.princehotels.co.jp/ski/myoko/",
-    "reportUrl": "https://www.princehotels.co.jp/ski/myoko/",
+    "reportUrl": "https://www.princehotels.co.jp/ski/myoko/winter/coursemap/",
     "acres": 222.3948433204488,
     "liftCount": 5,
     "trailCount": 16,
@@ -11986,7 +12082,8 @@
       }
     ],
     "downhillKm": 18.66,
-    "terrainParks": true
+    "terrainParks": true,
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "nakiska-ski-area",
@@ -12462,7 +12559,7 @@
     "acres": 248,
     "liftCount": 10,
     "trailCount": 53,
-    "verticalFt": 425,
+    "verticalFt": 427,
     "nightSkiing": true,
     "terrainParks": true,
     "additionalSources": [
@@ -12484,8 +12581,21 @@
         "source": "https://www.indyskipass.com/our-resorts/nubs-nob-0",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "summitFt", "grades"]
+      },
+      {
+        "source": "https://www.nubsnob.com/who-we-are/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "verticalFt", "trailCount"],
+        "note": "Operator lists its own 427 ft vertical, 248 acres and 53 runs. The area’s chair count is separate from its beginner conveyor."
+      },
+      {
+        "source": "https://www.nubsnob.com/who-we-are/",
+        "checkedOn": "2026-11-22",
+        "fields": ["liftCount"],
+        "note": "Eight chairs, one rope tow and one beginner conveyor specify ten uphill units."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "nutt-hill",
@@ -13021,11 +13131,17 @@
       {
         "source": "https://www.pajarito.ski/mountain-stats/",
         "checkedOn": "2026-11-19",
-        "fields": ["liftCount", "trailCount", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.pajarito.ski/mountain-stats/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "trailCount", "liftCount"],
+        "note": "Operator distinguishes 280 skiable acres excluding tree skiing from 750 acres of property. It lists 9,000–10,440 ft, 44 trails and six lifts, including a surface conveyor."
       }
     ],
     "reportUrl": "https://www.pajarito.ski/weather-conditions-webcams/",
-    "reportCheckedOn": "2026-11-20"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "pal-arinsal",
@@ -13839,7 +13955,8 @@
         "Medium": 51,
         "Difficult": 16
       }
-    }
+    },
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "pizol",
@@ -14349,19 +14466,20 @@
     "statSources": [
       {
         "source": "https://www.raggedmountainresort.com/about/",
-        "checkedOn": "2026-11-19",
-        "fields": ["acres"]
-      },
-      {
-        "source": "https://www.raggedmountainresort.com/about/",
         "checkedOn": "2026-11-21",
-        "fields": ["summitFt", "grades"],
+        "fields": ["grades"],
         "note": "Highest point at Pinnacle Peak. Trail mix includes glades."
       },
       {
         "source": "https://www.indyskipass.com/our-resorts/ragged-mountain",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt"]
+      },
+      {
+        "source": "https://www.raggedmountainresort.com/about/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "trailCount", "liftCount", "verticalFt", "summitFt"],
+        "note": "Operator gives 250 skiable acres, 57 trails including glades, five lifts including two carpets, 1,250 ft published vertical and 2,286 ft as the Pinnacle Peak elevation."
       }
     ],
     "reportUrl": "https://www.raggedmountainresort.com/mountain-report-cams/",
@@ -14375,7 +14493,8 @@
         "Expert": 30
       }
     },
-    "baseFt": 1000
+    "baseFt": 1000,
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "rangeley-lakes-trail-center",
@@ -14538,12 +14657,18 @@
       {
         "source": "https://www.redriverskiarea.com/winter/winter-mountain/hours-stats/",
         "checkedOn": "2026-11-19",
-        "fields": ["liftCount", "trailCount", "baseFt", "summitFt", "verticalFt", "grades"],
+        "fields": ["grades"],
         "note": "Lift count is the operator's chairlift inventory."
+      },
+      {
+        "source": "https://www.redriverskiarea.com/winter/winter-mountain/hours-stats/",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "verticalFt", "acres", "trailCount", "liftCount"],
+        "note": "Operator gives 8,750–10,350 ft, 1,600 ft skiable vertical, 285 acres, 64 trails, five chairs and two carpets."
       }
     ],
     "reportUrl": "https://www.redriverskiarea.com/winter/winter-mountain/snow-report/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "revelstoke",
@@ -14963,7 +15088,7 @@
       "https://sasquatchmountain.ca/indy-pass/"
     ],
     "reportUrl": "https://sasquatchmountain.ca/snow-report/",
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-22",
     "acres": 205,
     "baseFt": 3300,
     "summitFt": 4500,
@@ -14979,7 +15104,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/sasquatch-mountain-resort",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/sasquatch-mountain-resort",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Issuer records 205 acres, 3,300–4,500 ft, 1,200 ft vertical, 36 trails and four lifts."
       }
     ]
   },
@@ -15247,7 +15378,16 @@
     },
     "nightSkiing": true,
     "statsUrl": "https://www.7springs.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.7springs.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+    "reportUrl": "https://www.7springs.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx",
+    "statSources": [
+      {
+        "source": "https://www.7springs.com/the-mountain/about-the-mountain/trail-map.aspx",
+        "checkedOn": "2026-11-22",
+        "fields": ["trailCount", "liftCount"],
+        "note": "Operator winter trail page gives 33 slopes and trails, ten lifts and seven terrain parks."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "shames-mountain",
@@ -15278,9 +15418,16 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/shames-mountain",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/shames-mountain",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Issuer reports 252 downhill acres, 2,300–3,900 ft, 1,600 ft vertical, three lifts and 30 trails. Backcountry terrain is separately described by the operator."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "shawnee-mountain-ski-area",
@@ -15662,7 +15809,7 @@
     "locality": "Vadito",
     "website": "https://www.sipapu.ski/",
     "statsUrl": "https://www.sipapu.ski/trail-map/",
-    "reportUrl": "https://www.sipapu.ski/snow-report/",
+    "reportUrl": "https://www.sipapu.ski/the-mountain/weather-conditions-webcams/",
     "acres": 215,
     "liftCount": 6,
     "trailCount": 44,
@@ -15671,11 +15818,13 @@
     "verticalFt": 1055,
     "statSources": [
       {
-        "source": "https://www.sipapu.ski/trail-map/",
-        "checkedOn": "2026-11-19",
-        "fields": ["baseFt", "summitFt", "verticalFt"]
+        "source": "https://www.sipapu.ski/mountain-information/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "trailCount", "liftCount"],
+        "note": "Operator’s mountain sheet gives 215 acres, 8,200–9,255 ft, 1,055 ft vertical, 44 named runs and six lifts including two carpets."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "skaneateles-ski-club",
@@ -16395,7 +16544,16 @@
       }
     },
     "statsUrl": "https://www.bigbearmountainresort.com/our-mountains",
-    "reportUrl": "https://www.bigbearmountainresort.com/mountain-information"
+    "reportUrl": "https://www.bigbearmountainresort.com/mountain-information",
+    "statSources": [
+      {
+        "source": "https://www.bigbearmountainresort.com/our-mountains",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "trailCount"],
+        "note": "Operator mountain-specific column gives 7,000–8,200 ft, 1,200 ft vertical and 33 trails."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "snow-valley-mountain-resort",
@@ -16430,8 +16588,15 @@
         "source": "https://skicalifornia.org/resorts/snow-valley-mountain-resort",
         "checkedOn": "2026-11-19",
         "fields": ["liftCount"]
+      },
+      {
+        "source": "https://www.bigbearmountainresort.com/our-mountains",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "trailCount"],
+        "note": "Operator mountain-specific column gives 6,800–7,841 ft, 1,041 ft vertical and 32 trails."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "snowbasin-resort",
@@ -16609,7 +16774,7 @@
       }
     ],
     "reportUrl": "https://www.snowshoemtn.com/mountain-info/mountain-report",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "snowstar",
@@ -16669,19 +16834,20 @@
     "summitFt": 9663,
     "statSources": [
       {
-        "source": "https://snowyrangeski.com/",
-        "checkedOn": "2026-11-19",
-        "fields": ["acres", "baseFt", "summitFt"]
-      },
-      {
         "source": "https://snowyrangeski.com/lifts-and-trails-report/",
         "checkedOn": "2026-11-20",
         "fields": ["liftCount"],
         "note": "The operator's ski lift inventory lists Pioneer, The Colt, Chute, Sundance, and Virginian."
+      },
+      {
+        "source": "https://snowyrangeski.com/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "trailCount"],
+        "note": "Operator gives 250 skiable acres, 8,798 ft base, 9,663 ft summit, 30 trails and a separately published 990 ft vertical."
       }
     ],
     "reportUrl": "https://snowyrangeski.com/lifts-and-trails-report/",
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-22",
     "liftCount": 5
   },
   {
@@ -17618,7 +17784,8 @@
         "checkedOn": "2026-11-19",
         "fields": ["acres", "liftCount", "trailCount", "baseFt", "summitFt", "verticalFt", "terrainParks"]
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "sunburst-ski-area",
@@ -17847,10 +18014,10 @@
     "reportUrl": "https://www.takasu.gr.jp/condition/",
     "liftCount": 4,
     "trailCount": 13,
-    "verticalFt": 1968,
+    "verticalFt": 1969,
     "nightSkiing": false,
     "terrainParks": true,
-    "acres": 247,
+    "acres": 247.105381467165,
     "baseFt": 3117,
     "summitFt": 5085,
     "grades": {
@@ -17865,9 +18032,16 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/takasu-snow-park",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://prtimes.jp/a/?c=38757&f=d38757-32-3104d6fd1f93b673a447d89a1b27867d.pdf&r=32",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "trailCount"],
+        "note": "Operator announcement gives 1,000,000 m² of ski area, 950–1,550 m and 13 courses. The group operating table lists 600 m of vertical."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "tamarack-resort",
@@ -19171,11 +19345,6 @@
     "summitFt": 4004,
     "statSources": [
       {
-        "source": "https://www.waterville.com/mountain-stats",
-        "checkedOn": "2026-11-19",
-        "fields": ["acres", "summitFt"]
-      },
-      {
         "source": "https://www.waterville.com/about-waterville-valley",
         "checkedOn": "2026-11-19",
         "fields": ["nordicKm"]
@@ -19184,11 +19353,17 @@
         "source": "https://www.indyskipass.com/our-resorts/waterville-valley-resort",
         "checkedOn": "2026-11-21",
         "fields": ["baseFt", "grades"]
+      },
+      {
+        "source": "https://www.waterville.com/mountain-stats",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator lists 265 skiable acres, 4,004 ft Mount Tecumseh summit, 2,020 ft published vertical, 62 trails, six chairs and four surface lifts."
       }
     ],
     "nordicKm": 72,
     "reportUrl": "https://www.waterville.com/snow-report-maps",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "baseFt": 1820,
     "grades": {
       "unit": "percent",
@@ -19787,7 +19962,8 @@
       }
     },
     "statsUrl": "https://www.skiwildcat.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.skiwildcat.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+    "reportUrl": "https://www.skiwildcat.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx",
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "willamette-pass",

@@ -83,6 +83,7 @@
     "grand-targhee-resort-2026-schedule": "https://www.grandtarghee.com/the-mountain/cams-conditions/mountain-report",
     "grands-montets-2026-schedule": "https://domaineschamonix.montblancnaturalresort.com/en/area/grands-montets",
     "grandvalira-2026-schedule": "https://www.grandvalira.com/en/resort/openning-times",
+    "granite-peak-2026-schedule": "https://www.skigranitepeak.com/mountain-info/hours-of-operation",
     "great-divide-ski-area-2026-schedule": "https://www.skigd.com/hours-of-operations",
     "greek-peak-mountain-resort-2026-schedule": "https://www.greekpeak.net/hours-of-operation/",
     "gunstock-mountain-resort-2026-schedule": "https://www.skinh.com/resorts/gunstock-mountain-resort",
@@ -143,7 +144,14 @@
     "mayrhofen-2026-schedule": "https://intern.mayrhofen.at/fileadmin/userdaten/mitglieder-bereich/downloads/aktuelles/Infoschreiben_an_Gastgeber_zu_Pauschalwochen_neu.pdf",
     "mcintyre-ski-area-2026-schedule": "https://www.skinh.com/resorts/mcintyre-ski-area",
     "mission-ridge-2026-schedule": "https://www.missionridge.com/news/11-20-26-conditions-report/",
+    "mona-yongpyong-2026-observed": "https://www.yongpyong.co.kr/kor/skiNboard/slope/openStatusBoard.do",
+    "mont-orford-2023-observed": "https://montorford.com/en-ca/winter/technical-sheet/",
+    "mont-orford-2024-observed": "https://montorford.com/en-ca/winter/technical-sheet/",
+    "mont-orford-2025-observed": "https://montorford.com/en-ca/winter/technical-sheet/",
     "mont-sainte-anne": "https://mont-sainte-anne.com/en/mont-sainte-anne-mountain-statistics/",
+    "mont-sutton-2023-observed": "https://montsutton.com/en/technical-sheet/",
+    "mont-sutton-2024-observed": "https://montsutton.com/en/technical-sheet/",
+    "mont-sutton-2025-observed": "https://montsutton.com/en/technical-sheet/",
     "monterosa-ski": "https://monterosaski.eu/en/experiences/monterosa-ski-opening-dates-winter-29318",
     "mount-cain": "https://www.mountcain.com/mountain-stats/",
     "mount-racey-ski-resort-2026-schedule": "https://yubari-resort.co.jp/weather_traffic/",
@@ -153,9 +161,11 @@
     "mt-hood-meadows-2026-schedule": "https://www.skihood.com/explore/Schedule",
     "mt-hutt": "https://www.mthutt.co.nz/mountain-info",
     "mt-rose-ski-tahoe-2026-opening": "https://www.kunr.org/local-stories/2026-11-06/ski-season-kicks-off-in-lake-tahoe-as-mt-rose-opens-for-winter",
+    "mt-seymour-2026-schedule": "https://mtseymour.ca/the-mountain/hours-of-operation",
     "mt-spokane-ski-snowboard-park-2026-schedule": "https://www.mtspokane.com/lift-tickets",
     "mt-t": "https://tanigawadake-joch.com/en/information/20261116/",
-    "muica-snow-resort-2026-schedule": "https://niigata-kankou.or.jp/ski/detail_10700.html",
+    "muica-snow-resort-2025-observed": "https://www.muikamachi.com/ski/",
+    "muica-snow-resort-2026-schedule": "https://www.muikamachi.com/ski/course.php",
     "myoko-suginohara-ski-resort": "https://www.princehotels.co.jp/ski/myoko/",
     "nakiska-ski-area": "https://skinakiska.com/discover-nakiska/mountain-stats/",
     "nakiska-ski-area-2026-opening": "https://skinakiska.com/blog/nakiska-ski-area-will-open-for-its-first-preview-weekend-on-saturday-november-7th/",
@@ -170,6 +180,7 @@
     "norquay-2025-opening": "https://www.skibig3.com/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/",
     "norquay-2026-opening": "https://www.skibig3.com/blog/mt-norquay-welcomes-skiers-back-for-the-2627-season/",
     "northstar-california-resort-2026-opening": "https://news.vailresorts.com/Tahoe-Opening-Days-2026",
+    "nub-s-nob-2025-observed": "https://www.nubsnob.com/final-day-of-the-ski-season/",
     "ober-mountain-2026-opening": "https://www.obergatlinburg.com/slope-report",
     "obertauern-2026-opening": "https://www.obertauern.com/winter/liftanlagen.html",
     "obertauern-2026-schedule": "https://www.obertauern.com/en/winter/start-of-the-ski-season.html",
@@ -190,6 +201,8 @@
     "perisher-2026-closing": "https://www.perisher.com.au/perisher-news/perisher-now/1939-that-s-a-wrap-on-winter-2026",
     "perisher-2026-observed": "https://www.perisher.com.au/perisher-news/perisher-now/1887-welcome-to-winter-2026",
     "pinzolo-2026-schedule": "https://www.ski.it/en/info-live/slopes",
+    "pitztal-glacier-2026-observed": "https://www.pitztaler-gletscher.at/",
+    "pitztal-glacier-2026-schedule": "https://www.pitztaler-gletscher.at/service/betriebszeiten-winter",
     "powder-king-mountain-resort-2026-schedule": "https://www.powderking.com/mountain/ski-report",
     "powder-mountain-2026-schedule": "https://powdermountain.com/conditions",
     "purgatory-resort-2026-opening": "https://www.purgatory.ski/event/scheduled-opening-day/",
@@ -198,17 +211,21 @@
     "rauriser-hochalmbahnen-2026-schedule": "https://www.hochalmbahnen.at/en/winter/ski-area/operating-times",
     "red-lodge-mountain-2026-schedule": "https://www.redlodgemountain.com/mountain/snow-report/",
     "red-mountain-resort-2026-schedule": "https://www.redresort.com/opening-day-2026/",
+    "red-river-ski-summer-area-2026-schedule": "https://www.redriverskiarea.com/winter/tickets/thanksgiving-savings/",
     "revelstoke-2026-schedule": "https://www.revelstokemountainresort.com/",
     "rusutsu-resort-2026-schedule": "https://rusutsu.com/en/winter-lift-tickets/",
     "saddleback-2026-schedule": "https://www.saddlebackmaine.com/event/opening-day/",
+    "sasquatch-mountain-resort-2026-schedule": "https://sasquatchmountain.ca/hours/",
     "schweitzer-mountain-resort-2026-schedule": "https://www.schweitzer.com/things-to-do/events/winter-opening-day",
     "searchmont-resort-2026-schedule": "https://searchmont.com/wp-content/uploads/2026/08/8-1024x576.jpg",
+    "shames-mountain-2026-schedule": "https://mymountaincoop.ca/",
     "shiga-kogen-mountain-resort-2026-schedule": "https://www.shigakogen-ski.or.jp/ticket/",
     "shimokura-2026-schedule": "https://www.hachimantai.co.jp/",
     "showdown-montana-2026-schedule": "https://www.showdownmontana.com/events",
     "sierra-at-tahoe-ski-resort-2026-schedule": "https://sierraattahoe.com/weather-snow-report/",
     "silver-mountain-resort-2026-schedule": "https://silvermt.com/hours-of-operation/",
     "silverstar-mountain-resort-2026-schedule": "https://www.skisilverstar.com/the-mountain/hours-of-operation/mountain-hours/",
+    "sipapu-ski-summer-resort-2026-observed": "https://www.sipapu.ski/the-mountain/weather-conditions-webcams/",
     "ski-santa-fe": "https://www.skisantafe.com/our-story/about",
     "ski-utah-opening-dates": "https://www.skiutah.com/blog/authors/yeti/utah-ski-resort-opening-dates",
     "ski-vermont-opening-dates": "https://skivermont.com/opening-dates",
@@ -223,6 +240,8 @@
     "snowbird-2026-schedule": "https://www.snowbird.com/community/press-releases/whats-new-at-snowbird-2026-27/",
     "snowmass": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
     "snowriver-sector-schedules": "https://www.snowriver.com/mountain-info/hours-of-operation",
+    "snowshoe-mountain-2026-schedule": "https://www.snowshoemtn.com/things-to-do/events/snowshoe-winter-opening-day",
+    "snowy-range-ski-area-2026-schedule": "https://snowyrangeski.com/faqs-safety/",
     "soldier-mountain-ski-area-2026-schedule": "https://soldiermountain.com/hours/",
     "solitude-mountain-resort-2026-observed": "https://blog.solitudemountain.com/2026/ambers-updates-solitude-opens-for-the-26-27-winter-season/",
     "spirit-mountain-2026-schedule": "https://spiritmt.com/mountain-message/",
@@ -241,6 +260,7 @@
     "sunshine-2025-opening": "https://www.skibig3.com/blog/banff-sunshine-opening-day/",
     "sunshine-2026-opening": "https://playcanmore.com/banff-ski-conditions-this-week/",
     "sunshine-2027-closing": "https://www.skibanff.com/events/events/events-calendar/slush-cup",
+    "takasu-snow-park-2026-schedule": "https://prtimes.jp/a/?c=38757&f=d38757-32-3104d6fd1f93b673a447d89a1b27867d.pdf&r=32",
     "telluride-winter-schedule": "https://tellurideskiresort.com/ski/",
     "tenney-mountain-2026-schedule": "https://www.skinh.com/resorts/tenney-mountain",
     "the-highlands-at-harbor-springs-2026-schedule": "https://www.highlandsharborsprings.com/weekly-happenings",
@@ -1683,6 +1703,17 @@
       ]
     },
     {
+      "areaId": "granite-peak",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "source": "granite-peak-2026-schedule",
+          "note": "The current operator banner states November 28 as anticipated opening."
+        }
+      ]
+    },
+    {
       "areaId": "great-divide-ski-area",
       "planned": [
         {
@@ -2742,6 +2773,21 @@
       ]
     },
     {
+      "areaId": "mona-yongpyong",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-22",
+          "note": "November 22 local operating table shows Pink slope and the Pink and Yellow lifts open. Operator’s opening event and packages start the same day.",
+          "openingTerrain": {
+            "lifts": 2,
+            "trails": 1
+          },
+          "source": "mona-yongpyong-2026-observed"
+        }
+      ]
+    },
+    {
       "areaId": "mont-edouard",
       "planned": [
         {
@@ -2771,6 +2817,29 @@
           "opensOn": "2026-12-04",
           "source": "quebec-ski-areas-2026-opening-plans",
           "note": "Planned opening from the Québec Ski Area Association."
+        }
+      ],
+      "actual": [
+        {
+          "season": "2023/24",
+          "opensOn": "2023-12-01",
+          "closesOn": "2024-04-08",
+          "note": "Operator chronological winter statistics give both observed dates.",
+          "source": "mont-orford-2023-observed"
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-12-07",
+          "closesOn": "2025-04-21",
+          "note": "Operator chronological winter statistics give both observed dates.",
+          "source": "mont-orford-2024-observed"
+        },
+        {
+          "season": "2025/26",
+          "opensOn": "2025-12-05",
+          "closesOn": "2026-04-16",
+          "note": "Operator chronological winter statistics give both observed dates.",
+          "source": "mont-orford-2025-observed"
         }
       ]
     },
@@ -2802,6 +2871,29 @@
           "opensOn": "2026-12-05",
           "source": "quebec-ski-areas-2026-opening-plans",
           "note": "Planned opening from the Québec Ski Area Association."
+        }
+      ],
+      "actual": [
+        {
+          "season": "2023/24",
+          "opensOn": "2023-12-01",
+          "closesOn": "2024-04-14",
+          "note": "Operator technical sheet records downhill opening and closing dates.",
+          "source": "mont-sutton-2023-observed"
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-12-07",
+          "closesOn": "2025-04-20",
+          "note": "Operator technical sheet records downhill opening and closing dates.",
+          "source": "mont-sutton-2024-observed"
+        },
+        {
+          "season": "2025/26",
+          "opensOn": "2025-12-05",
+          "closesOn": "2026-04-12",
+          "note": "Operator technical sheet records downhill opening and closing dates.",
+          "source": "mont-sutton-2025-observed"
         }
       ]
     },
@@ -3005,6 +3097,18 @@
       ]
     },
     {
+      "areaId": "mt-seymour",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "closesOn": "2027-04-04",
+          "source": "mt-seymour-2026-schedule",
+          "note": "Operator marks dates anticipated, weather permitting."
+        }
+      ]
+    },
+    {
       "areaId": "mt-spokane-ski-snowboard-park",
       "planned": [
         {
@@ -3032,8 +3136,17 @@
         {
           "season": "2026/27",
           "opensOn": "2026-12-24",
+          "closesOn": "2027-03-28",
           "source": "muica-snow-resort-2026-schedule",
-          "note": "Tentative opening date from the Niigata tourism agency."
+          "note": "Operator’s published 2026/27 dates."
+        }
+      ],
+      "actual": [
+        {
+          "season": "2025/26",
+          "closesOn": "2026-03-29",
+          "note": "Operator confirms last winter closed March 29.",
+          "source": "muica-snow-resort-2025-observed"
         }
       ]
     },
@@ -3150,6 +3263,17 @@
           "openingTerrain": {
             "lifts": 5
           }
+        }
+      ]
+    },
+    {
+      "areaId": "nub-s-nob",
+      "actual": [
+        {
+          "season": "2025/26",
+          "closesOn": "2026-04-05",
+          "note": "Operator’s dated closing-day report confirms April 5.",
+          "source": "nub-s-nob-2025-observed"
         }
       ]
     },
@@ -3408,6 +3532,25 @@
       ]
     },
     {
+      "areaId": "pitztal-glacier",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-09-26",
+          "note": "Operator states that the first turns of the 2026/27 glacier season took place on September 26.",
+          "source": "pitztal-glacier-2026-observed"
+        }
+      ],
+      "planned": [
+        {
+          "season": "2026/27",
+          "closesOn": "2027-05-02",
+          "source": "pitztal-glacier-2026-schedule",
+          "note": "Operator plans to close glacier winter skiing May 2. Rifflsee’s published dates are December 12 to April 4."
+        }
+      ]
+    },
+    {
       "areaId": "powder-king-mountain-resort",
       "planned": [
         {
@@ -3482,6 +3625,17 @@
           "opensOn": "2026-12-12",
           "source": "red-mountain-resort-2026-schedule",
           "note": "Opening day is tentative and subject to snow conditions."
+        }
+      ]
+    },
+    {
+      "areaId": "red-river-ski-summer-area",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-25",
+          "source": "red-river-ski-summer-area-2026-schedule",
+          "note": "Operator’s opening-week ticket offer begins November 25, matching its operating calendar."
         }
       ]
     },
@@ -3564,6 +3718,17 @@
       ]
     },
     {
+      "areaId": "sasquatch-mountain-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-18",
+          "source": "sasquatch-mountain-resort-2026-schedule",
+          "note": "Operator’s tentative 2026/27 public opening."
+        }
+      ]
+    },
+    {
       "areaId": "schweitzer-mountain-resort",
       "planned": [
         {
@@ -3582,6 +3747,17 @@
           "closesOn": "2027-04-10",
           "source": "searchmont-resort-2026-schedule",
           "note": "April 10 is the last calendar day with lift-served ski hours. The April 11 entry labels Snowcross closing day."
+        }
+      ]
+    },
+    {
+      "areaId": "shames-mountain",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "source": "shames-mountain-2026-schedule",
+          "note": "Operator schedules opening weekend for December 12–13."
         }
       ]
     },
@@ -3647,6 +3823,17 @@
           "opensOn": "2026-11-27",
           "source": "silverstar-mountain-resort-2026-schedule",
           "note": "Tentative Alpine Opening Day."
+        }
+      ]
+    },
+    {
+      "areaId": "sipapu-ski-summer-resort",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-20",
+          "note": "Operator report announced limited lift-served skiing. Ski New Mexico dates the opening to November 20.",
+          "source": "sipapu-ski-summer-resort-2026-observed"
         }
       ]
     },
@@ -3842,6 +4029,28 @@
       ]
     },
     {
+      "areaId": "snowshoe-mountain",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "source": "snowshoe-mountain-2026-schedule",
+          "note": "The current mountain event and weekly update supersede the October blog’s November 25 target."
+        }
+      ]
+    },
+    {
+      "areaId": "snowy-range-ski-area",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "source": "snowy-range-ski-area-2026-schedule",
+          "note": "Operator’s projected 2026/27 opening date."
+        }
+      ]
+    },
+    {
       "areaId": "soldier-mountain-ski-area",
       "planned": [
         {
@@ -4000,6 +4209,18 @@
           "season": "2026/27",
           "opensOn": "2026-12-11",
           "source": "sunlight-mountain-resort-2026-schedule"
+        }
+      ]
+    },
+    {
+      "areaId": "takasu-snow-park",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "closesOn": "2027-04-25",
+          "source": "takasu-snow-park-2026-schedule",
+          "note": "Dates from the operator’s 2026/27 Takasu press sheet. Dynaland has a separate operating window."
         }
       ]
     },
