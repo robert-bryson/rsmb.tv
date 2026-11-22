@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { formatSeasonLength, formatSnowDepth, snowDepthValue, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
 import type { Conditions } from './conditions';
@@ -9,13 +9,14 @@ type Outlook = ReturnType<typeof skiSeasonOutlook>;
 type SnowProfile = NonNullable<ReturnType<typeof skiSnowHistory.get>>;
 type SnowSource = { source: string; label: string; period?: string; location?: string };
 type Citation = SnowSource & { measure: string };
-const northernSnowMonths = [...seasonMonths.slice(6), ...seasonMonths.slice(0, 6)];
+type SnowMonth = { month: number; label: string; snowfall?: number; depth?: number; depthSource?: string; inSeason: boolean };
+const northernSnowMonths = [...seasonMonths.slice(9), ...seasonMonths.slice(0, 5)];
 const snowfallHeading = 'Average monthly snowfall';
 const depthLabels = {
-    base: { heading: 'Average base depth', source: 'Average snow depth' },
-    survey: { heading: 'Survey snow depth', source: 'Early-month snow depth' },
-    station: { heading: 'Average station depth', source: 'Average snow depth' },
-    'monthly-peak': { heading: 'Average monthly maximum depth', source: 'Average monthly maximum snow depth' },
+    base: { heading: 'Average base depth', column: 'Base depth', source: 'Average snow depth' },
+    survey: { heading: 'Survey snow depth', column: 'Survey depth', source: 'Early-month snow depth' },
+    station: { heading: 'Average station depth', column: 'Station depth', source: 'Average snow depth' },
+    'monthly-peak': { heading: 'Average monthly maximum depth', column: 'Monthly max depth', source: 'Average monthly maximum snow depth' },
 };
 
 function BoundaryDate({ label, boundary }: { label: string; boundary: Outlook['opening'] }) {
@@ -47,64 +48,110 @@ function snowAxis(maximum: number) {
     return [0, middle, middle * 2] as const;
 }
 
-function MonthlySnowChart({ snowfall, depth, year, typical, units }: {
+function snowDepthPath(months: readonly SnowMonth[], height: (cm: number) => number) {
+    let connected = false;
+    return months.flatMap(({ depth }, index) => {
+        if (depth === undefined) {
+            connected = false;
+            return [];
+        }
+        const command = connected ? 'L' : 'M';
+        connected = true;
+        return [`${command}${index + 0.5} ${100 - height(depth)}`];
+    }).join(' ');
+}
+
+function MonthlySnowChart({ snowfall, depth, northern, typical, units }: {
     snowfall?: NonNullable<SnowProfile['snowfall']>['monthlyCm'];
     depth?: SnowProfile['depth'];
-    year: typeof seasonMonths;
+    northern: boolean;
     typical: Outlook['typical'];
     units: SkiUnits;
 }) {
-    const [metric, setMetric] = useState<'snowfall' | 'depth'>('snowfall');
-    const showDepth = Boolean(depth && (!snowfall || metric === 'depth'));
-    const heading = showDepth && depth ? depthLabels[depth.kind].heading : snowfallHeading;
-    const values = showDepth ? depth?.monthlyCm : snowfall;
-    if (!values) return <p className="ski-season-note">Monthly snow history is unavailable.</p>;
+    const id = useId();
+    const [selectedMonth, setSelectedMonth] = useState<number>();
+    const [hoveredMonth, setHoveredMonth] = useState<number>();
+    const year = (northern ? northernSnowMonths : seasonMonths).map(({ month, label }): SnowMonth => ({
+        month, label, snowfall: snowfall?.[month], depth: depth?.monthlyCm[month], depthSource: depth?.monthlySources?.[month],
+        inSeason: includesSeasonMonth(typical, month),
+    }));
+    const hasMeasurement = (month: SnowMonth) => month.snowfall !== undefined || month.depth !== undefined;
+    const included = year.map(month => hasMeasurement(month) || month.inSeason);
+    const first = included.indexOf(true);
+    if (first === -1) return <p className="ski-season-note">
+        {northern && (snowfall || depth) ? 'Monthly snow history is unavailable for October–May.' : 'Monthly snow history is unavailable.'}
+    </p>;
 
-    const measured = year.map(({ month }) => snowfall?.[month] !== undefined || depth?.monthlyCm[month] !== undefined);
-    const ticks = snowAxis(snowDepthValue(Math.max(...Object.values(values)), units));
-    const maximum = ticks[2];
+    const months = northern ? year : year.slice(first, included.lastIndexOf(true) + 1);
+    const hasSnow = months.some(hasMeasurement);
+    const axisPeak = Math.max(...months.map(month => Math.max(month.snowfall ?? 0, month.depth ?? 0)));
+    const ticks = snowAxis(snowDepthValue(axisPeak, units));
+    const height = (cm: number) => snowDepthValue(cm, units) / ticks[2] * 100;
+    const depthLine = snowDepthPath(months, height);
+    const initial = months.find(month => month.snowfall && month.depth) ?? months.find(hasMeasurement) ?? year[first];
+    const selected = months.find(month => month.month === selectedMonth) ?? initial;
+    const inspected = months.find(month => month.month === hoveredMonth) ?? selected;
+    const depthLabel = depthLabels[depth?.kind ?? 'base'];
     const unit = units === 'metric' ? 'cm' : 'in';
-    const months = year.slice(measured.indexOf(true), measured.lastIndexOf(true) + 1).map(({ month, label }) => {
-        const value = values[month];
-        return {
-            month, label, inSeason: includesSeasonMonth(typical, month),
-            height: value === undefined ? 0 : snowDepthValue(value, units) / maximum * 100,
-            amount: value === undefined ? undefined : formatSnowDepth(value, units),
-            source: showDepth ? depth?.monthlySources?.[month] : undefined,
-        };
-    });
+    const amount = (cm: number | undefined) => cm === undefined ? 'Unavailable' : formatSnowDepth(cm, units);
+    const seasonStatus = (month: SnowMonth) => typical ? (month.inSeason ? 'In season' : 'Outside season') : 'Unavailable';
 
-    return <figure className="ski-snow-figure">
+    return <figure className="ski-snow-figure" aria-labelledby={`${id}-heading`}>
         <figcaption className="ski-snow-heading">
-            <h4>{heading} <span className="ski-snow-unit">({unit})</span></h4>
-            {snowfall && depth && <div className="ski-segments ski-snow-metrics" role="group" aria-label="Snow chart measure">
-                <button type="button" aria-pressed={!showDepth} onClick={() => setMetric('snowfall')}>Snowfall</button>
-                <button type="button" aria-pressed={showDepth} onClick={() => setMetric('depth')}>Snow depth</button>
-            </div>}
+            <h4 id={`${id}-heading`}>Monthly snow and season <span className="ski-snow-unit">({unit})</span></h4>
+            <p id={`${id}-hint`}>Hover or select a month.</p>
         </figcaption>
-        <div className="ski-snow-plot" aria-hidden="true">
-            <div className="ski-snow-axis">{[...ticks].reverse().map(tick => <span key={tick}>{tick.toLocaleString('en-US')}</span>)}</div>
-            <div className="ski-snow-columns" data-dense={months.length > 9 || undefined}
-                style={{ gridTemplateColumns: `repeat(${months.length}, minmax(0, 1fr))` }}>
-                {months.map(({ month, label, inSeason, height, amount }) =>
-                    <div key={month} className="ski-snow-column" title={`${label} · ${amount ?? 'Unavailable'}`}>
-                        <div className="ski-snow-track">
-                            {height > 0 ? <span className="ski-snow-bar" style={{ height: `${height}%` }} />
-                                : <span className="ski-snow-empty">{amount === undefined ? '—' : '0'}</span>}
-                        </div>
-                        <span className="ski-snow-month" data-typical={inSeason || undefined}>{label.slice(0, 3)}</span>
-                    </div>)}
+        <fieldset className="ski-snow-picker" aria-describedby={`${id}-hint`}>
+            <legend className="sr-only">Chart month</legend>
+            <div className="ski-snow-plot" data-season-only={!hasSnow || undefined}>
+                {hasSnow && <div className="ski-snow-axis" aria-hidden="true">
+                    {[...ticks].reverse().map(tick => <span key={tick}>{tick.toLocaleString('en-US')}</span>)}
+                </div>}
+                <div className="ski-snow-columns" data-dense={months.length > 9 || undefined}
+                    style={{ gridTemplateColumns: `repeat(${months.length}, minmax(0, 1fr))` }}
+                    onPointerLeave={() => setHoveredMonth(undefined)}>
+                    {depthLine && <svg className="ski-snow-depth-line" viewBox={`0 0 ${months.length} 100`} preserveAspectRatio="none"
+                        aria-hidden="true" focusable="false">
+                        <path className="ski-snow-depth-outline" d={depthLine} vectorEffect="non-scaling-stroke" />
+                        <path d={depthLine} vectorEffect="non-scaling-stroke" />
+                    </svg>}
+                    {months.map(row => <label key={row.month} className="ski-snow-column" data-inspected={row === inspected || undefined}
+                        onPointerEnter={event => { if (event.pointerType !== 'touch') setHoveredMonth(row.month); }}>
+                        <input type="radio" className="sr-only" name={id} checked={row === selected} aria-label={row.label}
+                            aria-description={`${snowfallHeading} ${amount(row.snowfall)}. ${depthLabel.heading} ${amount(row.depth)}. ${typical ? seasonStatus(row) : 'Typical season unavailable'}.`}
+                            onFocus={() => setHoveredMonth(undefined)} onChange={() => { setHoveredMonth(undefined); setSelectedMonth(row.month); }} />
+                        {hasSnow && <span className="ski-snow-track" aria-hidden="true">
+                            {row.snowfall !== undefined && <span className="ski-snow-bar" data-zero={row.snowfall === 0 || undefined}
+                                style={{ height: `${height(row.snowfall)}%` }} />}
+                            {row.depth !== undefined && <span className="ski-snow-depth-point" style={{ bottom: `${height(row.depth)}%` }} />}
+                        </span>}
+                        <span className="ski-snow-month" aria-hidden="true">{row.label.slice(0, 3)}</span>
+                        {typical && <span className="ski-snow-season-track" aria-hidden="true" data-typical={row.inSeason || undefined} />}
+                    </label>)}
+                </div>
             </div>
+        </fieldset>
+        <div className="ski-snow-readout">
+            <p className="ski-snow-readout-month">{inspected.label}</p>
+            <dl>
+                <div><dt><span className="ski-snow-key" data-series="snowfall" aria-hidden="true" />{snowfallHeading}</dt><dd>{amount(inspected.snowfall)}</dd></div>
+                <div><dt><span className="ski-snow-key" data-series="depth" aria-hidden="true" />{depthLabel.heading}</dt><dd>{amount(inspected.depth)}</dd></div>
+                <div><dt><span className="ski-snow-key" data-series="season" aria-hidden="true" />Typical season</dt><dd>{seasonStatus(inspected)}</dd></div>
+            </dl>
         </div>
         <details className="ski-snow-values">
             <summary>Monthly values</summary>
             <table className="ski-snow-values-table">
-                <caption className="sr-only">{heading} ({unit})</caption>
-                <thead><tr><th scope="col">Month</th><th scope="col">Amount</th></tr></thead>
-                <tbody>{months.map(({ month, label, inSeason, amount, source }) =>
-                    <tr key={month}>
-                        <th scope="row" aria-label={inSeason ? `${label}, typical season` : undefined}>{label}</th>
-                        <td>{source && amount ? <a className="ski-season-source" href={source}>{amount}</a> : amount ?? 'Unavailable'}</td>
+                <caption className="sr-only">Monthly snow and season ({unit})</caption>
+                <thead><tr><th scope="col">Month</th><th scope="col">Snowfall</th>
+                    <th scope="col">{depthLabel.column}</th><th scope="col">Typical season</th></tr></thead>
+                <tbody>{months.map(row =>
+                    <tr key={row.month}>
+                        <th scope="row">{row.label}</th>
+                        <td>{amount(row.snowfall)}</td>
+                        <td>{row.depthSource && row.depth !== undefined
+                            ? <a className="ski-season-source" href={row.depthSource}>{amount(row.depth)}</a> : amount(row.depth)}</td>
+                        <td>{seasonStatus(row)}</td>
                     </tr>)}</tbody>
             </table>
         </details>
@@ -171,7 +218,7 @@ export function SkiSeasonChart({ area, date, units, conditions }: { area: SkiAre
         {typical ? <TypicalSeason window={typical} />
             : <p className="ski-season-note">{opening || closing ? 'Typical dates unavailable.' : 'Season dates unavailable.'}</p>}
         <MonthlySnowChart key={area.id} snowfall={snowfall?.monthlyCm} depth={depth} typical={typical} units={units}
-            year={area.location.coordinates[1] < 0 ? seasonMonths : northernSnowMonths} />
+            northern={area.location.coordinates[1] >= 0} />
         {citations.length > 0 && <SnowSources citations={citations} />}
     </div>;
 }

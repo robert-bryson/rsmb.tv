@@ -9,9 +9,9 @@ import { skiRuntimeIconFile, skiTerrainFile } from '../shared/skiAssets.ts';
 export const skiTerrainAsset = skiTerrainFile(terrain.archiveSha256);
 export const skiRuntimeFiles = new Map([
     ...Object.entries(icons).map(([file, checksum]) => [skiRuntimeIconFile(file, checksum), {
-        localFile: `runtime/${file}`, checksum,
+        localFile: `runtime/${file}`, sha256: checksum,
     }] as const),
-    [skiTerrainAsset, { localFile: skiTerrainAsset, checksum: terrain.archiveSha256 }] as const,
+    [skiTerrainAsset, { localFile: skiTerrainAsset, sha256: terrain.archiveSha256 }] as const,
 ]);
 
 export function skiAssetsRoot(configured = process.env.SKI_ASSETS_ROOT) {

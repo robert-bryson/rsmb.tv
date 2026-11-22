@@ -694,11 +694,12 @@
           "2027-06-30"
         ]
       ],
-      "reservation": "check",
+      "reservation": "none",
       "days": 7,
       "shared": "Aspen Snowmass",
-      "source": "https://www.ikonpass.com/en/compare-benefits",
-      "checkedOn": "2026-11-20"
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass",
+      "checkedOn": "2026-11-22",
+      "note": "The operator states no advance lift reservation for 2026/27. Show the pass at a ticket window."
     },
     {
       "areaId": "aspen-highlands",
@@ -732,11 +733,12 @@
           "2027-06-30"
         ]
       ],
-      "reservation": "check",
+      "reservation": "none",
       "days": 7,
       "shared": "Aspen Snowmass",
-      "source": "https://www.ikonpass.com/en/compare-benefits",
-      "checkedOn": "2026-11-20"
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass",
+      "checkedOn": "2026-11-22",
+      "note": "The operator states no advance lift reservation for 2026/27. Show the pass at a ticket window."
     },
     {
       "areaId": "aspen-mountain",
@@ -1560,11 +1562,12 @@
           "2027-06-30"
         ]
       ],
-      "reservation": "check",
+      "reservation": "none",
       "days": 7,
       "shared": "Aspen Snowmass",
-      "source": "https://www.ikonpass.com/en/compare-benefits",
-      "checkedOn": "2026-11-20"
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass",
+      "checkedOn": "2026-11-22",
+      "note": "The operator states no advance lift reservation for 2026/27. Show the pass at a ticket window."
     },
     {
       "areaId": "buttermilk",
@@ -6486,7 +6489,7 @@
           "2027-06-30"
         ]
       ],
-      "reservation": "check",
+      "reservation": "none",
       "days": 5,
       "blackouts": [
         [
@@ -6502,8 +6505,9 @@
           "2027-02-14"
         ]
       ],
-      "source": "https://www.ikonpass.com/en/compare-benefits",
-      "checkedOn": "2026-11-20"
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass",
+      "checkedOn": "2026-11-22",
+      "note": "Base access applies at Snowmass. Show the pass at a ticket window."
     },
     {
       "areaId": "snowmass",
@@ -6517,11 +6521,12 @@
           "2027-06-30"
         ]
       ],
-      "reservation": "check",
+      "reservation": "none",
       "days": 7,
       "shared": "Aspen Snowmass",
-      "source": "https://www.ikonpass.com/en/compare-benefits",
-      "checkedOn": "2026-11-20"
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass",
+      "checkedOn": "2026-11-22",
+      "note": "The operator states no advance lift reservation for 2026/27. Show the pass at a ticket window."
     },
     {
       "areaId": "snowmass",

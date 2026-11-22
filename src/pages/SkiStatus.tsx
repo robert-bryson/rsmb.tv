@@ -4,10 +4,10 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
 import {
-    defaultSkiColumns, filterSkiAreas, passFilterOptions, readSkiResultsView, readSkiSort, skiingFilterOptions, sortSkiAreas,
+    defaultSkiColumns, filterSkiAreas, filterSkiAreasInMapArea, passFilterOptions, readSkiResultsView, readSkiSort, skiingFilterOptions, sortSkiAreas,
     visibleSkiColumns, type ColumnKey, type SkiPassSelection, type SkiResultsView, type SkiSort, type SkiUnits,
 } from '../features/ski-status/browse';
-import { passFamilySchema, passNames, skiAreaMapPoint, skiAreas } from '../features/ski-status/catalog';
+import { passFamilySchema, passNames, skiAreas } from '../features/ski-status/catalog';
 import { matchesOperatingStatus, skiDayStatus, statusFilterLabels, type ResortStatus } from '../features/ski-status/conditions';
 import { readMarkerMode } from '../features/ski-status/mapAppearance';
 import { resortTerrainGroups } from '../features/ski-status/resortTerrainData';
@@ -18,12 +18,13 @@ import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
 import { SkiDialog, SkiFilterDialog } from '../features/ski-status/SkiControls';
 import { SkiIcon, SkiIconButton } from '../features/ski-status/SkiIcon';
 import { SkiPassIcon } from '../features/ski-status/SkiPassIcon';
+import { SkiProjectInfo } from '../features/ski-status/SkiProjectInfo';
 import { SkiShareButton } from '../features/ski-status/SkiShareButton';
 import type { SkiTerrainRequest } from '../features/ski-status/SkiStatusMap';
 import { readSkiFilters, skiLocationActions, skiLocationLabels, skiLocationModes, skiLocationParams,
     toggleSkiPassFilter, updateSavedSkiExclusions, writeSkiLocations, writeSkiPassProduct, type SkiStatusFilter } from '../features/ski-status/skiFilters';
 import { matchesSkiLocations, type SkiLocationFilters } from '../features/ski-status/skiGeography';
-import { readSkiMapArea, readSkiMapCamera, skiMapAreaContains } from '../features/ski-status/skiMapArea';
+import { readSkiMapArea, readSkiMapCamera } from '../features/ski-status/skiMapArea';
 import { seasonMonths } from '../features/ski-status/seasons';
 import { downloadSkiAreaCsv, skiAreaCsv } from '../features/ski-status/skiCsv';
 import { useSkiArchive } from '../features/ski-status/useSkiArchive';
@@ -34,6 +35,7 @@ import { usePersistedState } from '../hooks/usePersistedState';
 import { useSearchQuery } from '../hooks/useSearchQuery';
 import { MAPLIBRE_STYLESHEET, moduleLoader } from '../navigation/moduleLoader';
 import { staticPageMetadata } from '../utils/pageMetadata';
+import { SITE_URL } from '../utils/siteMetadata';
 import '../features/ski-status/skiStatus.css';
 
 const SkiStatusMap = lazy(moduleLoader(() => import('../features/ski-status/SkiStatusMap'), MAPLIBRE_STYLESHEET));
@@ -103,15 +105,16 @@ export default function SkiStatus() {
         [query, locations, night, skiing, seasonMonth]);
     const cameraFitKey = JSON.stringify(discoveryFilters);
     const catalogMatches = useMemo(() => filterSkiAreas(skiAreas, { ...discoveryFilters, ...passSelection }), [discoveryFilters, passSelection]);
-    const scoped = useMemo(() => {
-        if (!searchedArea) return catalogMatches;
-        const contains = skiMapAreaContains(searchedArea);
-        return catalogMatches.filter(area => contains(skiAreaMapPoint(area))
-            || (area.location.base && contains(area.location.coordinates)));
-    }, [catalogMatches, searchedArea]);
+    const scoped = useMemo(() => searchedArea ? filterSkiAreasInMapArea(catalogMatches, searchedArea) : catalogMatches,
+        [catalogMatches, searchedArea]);
     const statuses = useMemo(() => new Map(skiAreas.map(area => [area.id,
         skiDayStatus(conditions.reports.get(area.id), conditions.now, area.location.timeZone)])), [conditions.reports, conditions.now]);
-    const matching = useMemo(() => scoped.filter(area => matchesStatus(status, statuses.get(area.id) ?? 'unknown')), [scoped, status, statuses]);
+    const searchResults = useMemo(() => status === 'all' ? catalogMatches
+        : catalogMatches.filter(area => matchesStatus(status, statuses.get(area.id) ?? 'unknown')), [catalogMatches, status, statuses]);
+    const matching = useMemo(() => {
+        if (!searchedArea) return searchResults;
+        return status === 'all' ? scoped : filterSkiAreasInMapArea(searchResults, searchedArea);
+    }, [scoped, searchedArea, searchResults, status]);
     const sorted = useMemo(() => sortSkiAreas(matching, { key: sort.key, direction: sort.direction }, conditions),
         [matching, sort.key, sort.direction, conditions]);
     const currentReports = scoped.filter(area => statuses.get(area.id) !== 'unknown').length;
@@ -238,6 +241,14 @@ export default function SkiStatus() {
         }, legacyArea);
     }
 
+    function clearMapArea() {
+        updateSkiParams(params => {
+            params.delete('mapArea');
+            params.delete('inView');
+            writeVisibleCamera(params);
+        });
+    }
+
     function getShareUrl() {
         const url = new URL(location.pathname + location.hash, window.location.origin);
         const visibleCamera = showMap && cameraReader.current?.();
@@ -281,6 +292,10 @@ export default function SkiStatus() {
 
     function removeFilter(key: string, place?: string) {
         filterButton.current?.focus();
+        if (key === 'mapArea') {
+            clearMapArea();
+            return;
+        }
         if (place && (key === 'include' || key === 'exclude')) {
             toggleLocationFilter(key, place);
             return;
@@ -290,7 +305,6 @@ export default function SkiStatus() {
                 case 'product': writeSkiPassProduct(params, ''); break;
                 case 'pass': toggleSkiPassFilter(params, 'indy-discounts'); break;
                 case 'status': params.set('status', 'all'); break;
-                case 'mapArea': params.delete('inView'); params.delete('mapArea'); break;
                 default: params.delete(key);
             }
         });
@@ -306,6 +320,7 @@ export default function SkiStatus() {
     }
 
     const chips: { label: string | boolean | undefined; key: string; place?: string }[] = [
+        { label: searchedArea && 'Map area', key: 'mapArea' },
         ...skiLocationModes.flatMap(mode => locations[mode].map(place => ({
             label: `${skiLocationActions[mode]} ${skiLocationLabels.get(place)}`, key: mode, place,
         }))),
@@ -317,19 +332,22 @@ export default function SkiStatus() {
         { label: seasonMonth ? seasonMonths.find(({ month }) => month === seasonMonth)?.label : undefined, key: 'seasonMonth' },
         { label: night && 'Night skiing', key: 'night' },
         { label: status !== 'all' && status !== 'today' && statusFilterLabels[status], key: 'status' },
-        { label: searchedArea && 'Map area', key: 'mapArea' },
     ].filter(chip => Boolean(chip.label));
     const additionalFilters = chips.filter(({ key }) => key !== 'mapArea').length;
     const checkingReports = status === 'today' && scoped.length > 0 && currentReports === 0 && conditions.reportsLoading;
     const coverageText = `${currentReports} of ${scoped.length} areas have current operating reports`;
     const resultText = status === 'today' ? `${matching.length} reporting skiing today` : `${matching.length} ski ${matching.length === 1 ? 'area' : 'areas'}`;
-    let emptyMessage = 'No ski areas match these filters.';
+    let emptyMessage = searchedArea ? 'No ski areas match your filters in this map area.' : 'No ski areas match these filters.';
     if (status === 'today' && scoped.length > 0) {
         emptyMessage = currentReports > 0 ? 'No resorts in this search have reported skiing today.'
             : 'No current operating reports are available for this search.';
     }
     const emptyResults = <div className="ski-empty">
         <p>{checkingReports ? 'Checking today’s resort reports…' : emptyMessage}</p>
+        {searchedArea && <button type="button" className="ski-control" onClick={event => {
+            event.currentTarget.closest<HTMLElement>('#ski-results-pane')?.focus({ preventScroll: true });
+            clearMapArea();
+        }}>Clear map area</button>}
         {status === 'today' && <button type="button" className="ski-control" onClick={() => {
             allResortsButton.current?.focus();
             setParam('status', 'all');
@@ -345,9 +363,7 @@ export default function SkiStatus() {
         <header className="ski-header">
             <div className="ski-topbar">
                 <div className="ski-brand">
-                    <IntentLink to="/projects" aria-label="Projects" title="Back to projects">
-                        <SkiIcon name="back" /><span>Projects</span>
-                    </IntentLink>
+                    <IntentLink to={SITE_URL} title="rsmb.tv home">rsmb.tv</IntentLink>
                     <h1>ski-status</h1>
                 </div>
                 <div className="ski-page-actions">
@@ -400,6 +416,7 @@ export default function SkiStatus() {
                         <div className="ski-counts" aria-live="polite" aria-atomic="true">
                             {!checkingReports && <>
                                 <span>{resultText}</span>
+                                {searchedArea && <span className="sr-only">In the selected map area</span>}
                                 {status !== 'all' && <span className="ski-coverage">{coverageText}</span>}
                             </>}
                         </div>
@@ -414,7 +431,10 @@ export default function SkiStatus() {
                                 Clear<span> filters</span>
                             </button>}
                     </div>
-                    <SkiShareButton getUrl={getShareUrl} />
+                    <div className="ski-context-actions">
+                        <SkiShareButton getUrl={getShareUrl} />
+                        <SkiProjectInfo conditions={conditions} />
+                    </div>
                 </div>
             </div>
             {legacyArea && !showMap && <p className="text-sm text-slate-300">Open Map to set the area for this link.</p>}
@@ -433,6 +453,7 @@ export default function SkiStatus() {
                 <div className="min-h-0 flex-1">
                     {(mapOpened || showMap) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
                         <SkiStatusMap areas={status === 'today' ? scoped : matching} fitResults={matching}
+                            searchResults={searchResults} searchReportsPending={status !== 'all' && conditions.reportsLoading}
                             cameraAreas={catalogMatches} cameraFitKey={cameraFitKey}
                             selected={selected} colors={colors} units={units} passSelection={passSelection} statuses={statuses} conditions={conditions}
                             archive={archive}
@@ -442,7 +463,7 @@ export default function SkiStatus() {
                             terrainRequest={terrainRequest} locationRequest={locationRequest} willDockDetails={!wide && !detailsOpen}
                             camera={camera} navigationKey={location.key} restoreHistoryCamera={restoreHistoryCamera}
                             cameraReader={cameraReader} mapRegion={mapSection} onCameraChange={commitMapCamera}
-                            onSearchArea={commitMapArea} onSelect={selectArea} onShowTerrain={showTerrain}
+                            onSearchArea={commitMapArea} onClearArea={clearMapArea} onSelect={selectArea} onShowTerrain={showTerrain}
                             onZoomLocation={zoomToLocation} onLayerChange={setParam} />
                     </Suspense></ErrorBoundary>}
                 </div>

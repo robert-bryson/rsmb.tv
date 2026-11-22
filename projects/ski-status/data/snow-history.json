@@ -66,7 +66,14 @@
         "4": 22.1,
         "11": 63.2,
         "12": 101.3
-      }
+      },
+      "annualSource": {
+        "label": "Alyeska Resort",
+        "source": "https://www.chugachpowderguides.com/wp-content/uploads/2026/03/CPG-2027-Schedule-Rates.pdf",
+        "location": "Alyeska ski-area reference average from Chugach Powder Guides",
+        "period": "669 in published in the 2027 schedule; instrument location and averaging period unspecified"
+      },
+      "annualCm": 1699.26
     }
   },
   "angel-fire-resort": {
@@ -128,8 +135,9 @@
       },
       "annualCm": 762,
       "annualSource": {
-        "label": "Colorado Ski Country USA",
-        "source": "https://www.coloradoski.com/resorts/aspen-highlands/"
+        "label": "Aspen Highlands",
+        "source": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
+        "location": "Aspen Highlands operator annual average, 300 inches"
       }
     },
     "depth": {
@@ -2559,7 +2567,12 @@
     "snowfall": {
       "label": "Pebble Creek Ski Area",
       "source": "https://pebblecreekskiarea.com/the-mountain",
-      "annualCm": 571.5
+      "annualCm": 571.5,
+      "annualSource": {
+        "label": "Pebble Creek Ski Area",
+        "source": "https://www.indyskipass.com/our-resorts/pebble-creek-ski-area",
+        "location": "Pebble Creek ski area average, 225 inches"
+      }
     }
   },
   "pico-mountain": {
@@ -3704,6 +3717,24 @@
       "source": "https://www.skimarmot.com/mountain/mountain-stats/",
       "location": "Operator mountain-wide average, published as over 440 cm",
       "annualCm": 440
+    }
+  },
+  "bear-valley-mountain-resort": {
+    "snowfall": {
+      "label": "Bear Valley Mountain Resort",
+      "source": "https://skicalifornia.org/resorts/bear-valley-mountain-resort",
+      "location": "Ski California resort profile",
+      "period": "Published average 346 in; period and measurement elevation unlisted",
+      "annualCm": 878.84
+    }
+  },
+  "white-pass-ski-area": {
+    "snowfall": {
+      "label": "White Pass Ski Area",
+      "source": "https://www.indyskipass.com/our-resorts/white-pass",
+      "location": "White Pass ski-area issuer profile",
+      "period": "Published average 415 in; averaging period and instrument location are unspecified",
+      "annualCm": 1054.1
     }
   }
 }

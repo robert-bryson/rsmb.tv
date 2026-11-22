@@ -221,6 +221,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 Use the [ski-status task list](projects/ski-status/TODO.md) for release checks, catalog work, and planned features.
 Use the [ski-status guide](projects/ski-status/readme.md) for procedures and acceptance checks.
+See the [November 22 code review](docs/reviews/2026-11-22-ski-status-code-review.md) for fixes and verification results.
 
 ## Ride Ledger prerequisites
 

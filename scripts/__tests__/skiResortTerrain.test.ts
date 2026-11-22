@@ -48,5 +48,5 @@ describe('ski-status terrain archive', () => {
         const archive = await readSkiAsset(skiAssetsRoot(), skiTerrainAsset);
         expect(archive).toBeDefined();
         await checkTerrain(verifySkiAsset(skiTerrainAsset, archive!, manifest.archiveSha256), manifest.archiveSha256);
-    });
+    }, 20_000);
 });

@@ -12,15 +12,17 @@ interface DialogProps {
     dialog: RefObject<HTMLDialogElement | null>;
     id: string;
     title: string;
+    titleRef?: RefObject<HTMLHeadingElement | null>;
+    className?: string;
     children: ReactNode;
     footer?: ReactNode;
     onClose?: () => void;
 }
 
-export function SkiDialog({ dialog, id, title, children, footer, onClose }: DialogProps) {
-    return <dialog ref={dialog} id={id} aria-labelledby={`${id}-title`} className="ski-dialog" onClose={onClose}>
+export function SkiDialog({ dialog, id, title, titleRef, className = '', children, footer, onClose }: DialogProps) {
+    return <dialog ref={dialog} id={id} aria-labelledby={`${id}-title`} className={`ski-dialog ${className}`} onClose={onClose}>
         <div className="ski-dialog-heading">
-            <h2 id={`${id}-title`} className="text-lg font-semibold">{title}</h2>
+            <h2 ref={titleRef} id={`${id}-title`} tabIndex={titleRef ? -1 : undefined} className="text-lg font-semibold">{title}</h2>
             <SkiIconButton className="ski-quiet-button" icon="close" label="Close" onClick={() => dialog.current?.close()} />
         </div>
         <div className="ski-dialog-content">{children}</div>

@@ -29,7 +29,10 @@ const stationOpacity: ExpressionSpecification = ['interpolate', ['linear'], ['zo
 const layers: (FillLayerSpecification | LineLayerSpecification | CircleLayerSpecification)[] = [
     {
         id: resortFootprintLayer, type: 'fill', source: resortTerrainSource, 'source-layer': 'footprints', minzoom: resortTerrainMinZoom,
-        paint: { 'fill-color': '#38bdf8', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], resortTerrainMinZoom, 0.04, 10, 0.2, 11, 0.12] },
+        paint: {
+            'fill-color': '#38bdf8',
+            'fill-opacity': ['interpolate', ['linear'], ['zoom'], resortTerrainMinZoom, 0.04, 10, 0.2, 11, 0.12, runAreaMinZoom, 0],
+        },
     },
     {
         id: 'ski-resort-footprint-outline', type: 'line', source: resortTerrainSource, 'source-layer': 'footprints', minzoom: resortTerrainMinZoom,

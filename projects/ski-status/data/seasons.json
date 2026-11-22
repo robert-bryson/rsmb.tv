@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checkedOn": "2026-11-21",
+  "checkedOn": "2026-11-22",
   "sources": {
     "3-zinnen-dolomites": "https://www.dolomitisuperski.com/en/live-info/lifts",
     "alta": "https://www.alta.com/ikon",
@@ -53,6 +53,7 @@
     "courmayeur-mont-blanc-2026-schedule": "https://www.courmayeur-montblanc.com/en/useful-info/access-opening-times-and-parking-3/",
     "cranmore-mountain-resort-2026-schedule": "https://www.skinh.com/resorts/cranmore-mountain-resort",
     "crans-montana-2026-schedule": "https://www.crans-montana.ch/en/?idcmt=Partenaire_news_621351bf961c389099afec0b97fb6c86",
+    "crested-butte-mountain-resort-2026-schedule": "https://news.vailresorts.com/2026-08-18-Is-Winter-About-to-Show-Off-Vail-Resorts-Announces-2026-27-Opening-Dates-as-Super-El-Nino-Builds-Anticipation-for-Great-Powder",
     "crystal-mountain-2026-schedule": "https://www.crystalmountainresort.com/things-to-do/event-calendar/crystal-mountain-block-party",
     "cuchara-2026-schedule": "https://cucharamountainpark.org/",
     "cupid-valley-2026-schedule": "https://www.yukidaruma-kogen.com/winter/course.html",
@@ -62,6 +63,7 @@
     "dodge-ridge-2026-schedule": "https://dodgeridge.com/notifications/openingday/",
     "dynaland-2026-schedule": "https://www.dynaland.co.jp/condition/",
     "engstligenalp-2026-schedule": "https://engstligenalp.ch/en/winter/operating-info-2/",
+    "falls-creek-2026-observed": "https://www.skifalls.com.au/whats-on/latest-news/opening-weekend-at-falls-creek",
     "fernie-alpine-resort": "https://skifernie.com/discover-fernie/mountain-stats/",
     "fernie-alpine-resort-2025-observed": "https://skifernie.com/blog/eventara/?event_month=2026-04",
     "fernie-alpine-resort-2026-schedule": "https://skifernie.com/",
@@ -72,6 +74,7 @@
     "grand-targhee-resort-2026-schedule": "https://www.grandtarghee.com/the-mountain/cams-conditions/mountain-report",
     "grands-montets-2026-schedule": "https://domaineschamonix.montblancnaturalresort.com/en/area/grands-montets",
     "grandvalira-2026-schedule": "https://www.grandvalira.com/en/resort/openning-times",
+    "great-divide-ski-area-2026-schedule": "https://www.skigd.com/hours-of-operations",
     "greek-peak-mountain-resort-2026-schedule": "https://www.greekpeak.net/hours-of-operation/",
     "gunstock-mountain-resort-2026-schedule": "https://www.skinh.com/resorts/gunstock-mountain-resort",
     "hafjell-2026-schedule": "https://www.alpinco.com/en/hafjell/opening-hours-winter",
@@ -92,6 +95,7 @@
     "ischgl-samnaun": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
     "jackson-hole-mountain-resort-2026-schedule": "https://www.jacksonhole.com/events/opening-day-winter",
     "jigatake-2026-schedule": "https://www.kita-alps.jp/ski.html",
+    "june-mountain-2026-schedule": "https://www.junemountain.com/things-to-do/opening-day",
     "kashimayari-2026-schedule": "https://www.kashimayari.net/snow/tickets/",
     "keystone-resort-2026-opening": "https://news.vailresorts.com/keystone-opening-2026",
     "kicking-horse-2026-schedule": "https://kickinghorseresort.com/winter-hours/",
@@ -100,6 +104,7 @@
     "kimberley-alpine-resort": "https://skikimberley.com/discover-kimberley/mountain-stats/",
     "kimberley-alpine-resort-2026-schedule": "https://skikimberley.com/hours/",
     "kirkwood-mountain-resort-2026-schedule": "https://news.vailresorts.com/2026-11-20-Kirkwood-Mountain-Resort-to-Open-Monday%2C-Nov-23%2C-Nearly-Two-Weeks-Early-Following-Significant-Early-Season-Snowfall",
+    "kitzbuehel-2026-schedule": "https://www.kitzski.at/de/fahrplan-winter-2024-25.html",
     "kvitfjell-2026-schedule": "https://www.alpinco.com/no/kvitfjell/apningstider",
     "lake-louise": "https://www.skilouise.com/explore-winter/winter-ski-ride/mountain-stats/",
     "lake-louise-2024-closing": "https://lamp10.skilouise.com/conditions/skilouise.pdf",
@@ -127,6 +132,7 @@
     "monterosa-ski": "https://monterosaski.eu/en/experiences/monterosa-ski-opening-dates-winter-29318",
     "mount-cain": "https://www.mountcain.com/mountain-stats/",
     "mount-racey-ski-resort-2026-schedule": "https://yubari-resort.co.jp/weather_traffic/",
+    "mount-washington-alpine-resort-2026-schedule": "https://www.mountwashington.ca/event/opening-weekend/",
     "mt-bachelor-2026-schedule": "https://www.mtbachelor.com/the-mountain/mountain-report/",
     "mt-holiday-2025-opening": "https://mt-holiday.com/funding/",
     "mt-hood-meadows-2026-schedule": "https://www.skihood.com/explore/Schedule",
@@ -154,6 +160,7 @@
     "obertauern-2026-schedule": "https://www.obertauern.com/en/winter/start-of-the-ski-season.html",
     "obertauern-2027-closing": "https://www.obertauern.com/en/sunny-skiing.html",
     "oppdal-2026-schedule": "https://www.alpinco.com/en/oppdal/opening-hours",
+    "ordino-arcalis-2026-schedule": "https://www.ordinoarcalis.com/en/resort/opening-times",
     "paganella-ski-2026-schedule": "https://www.paganella.net/it",
     "pajarito-mountain-2026-schedule": "https://www.pajarito.ski/mountain-stats/",
     "pal-arinsal-2026-schedule": "https://www.palarinsal.com/es/estacion/horarios-calendario",
@@ -174,11 +181,13 @@
     "quarry-road-trails-2026-schedule": "https://quarryroad.org/rope-tow",
     "quebec-ski-areas-2026-opening-plans": "https://maneige.ski/en/stations-et-conditions/",
     "rauriser-hochalmbahnen-2026-schedule": "https://www.hochalmbahnen.at/en/winter/ski-area/operating-times",
+    "red-lodge-mountain-2026-schedule": "https://www.redlodgemountain.com/mountain/snow-report/",
     "red-mountain-resort-2026-schedule": "https://www.redresort.com/opening-day-2026/",
     "revelstoke-2026-schedule": "https://www.revelstokemountainresort.com/",
     "rusutsu-resort-2026-schedule": "https://rusutsu.com/en/winter-lift-tickets/",
     "schweitzer-mountain-resort-2026-schedule": "https://www.schweitzer.com/things-to-do/events/winter-opening-day",
     "searchmont-resort-2026-schedule": "https://searchmont.com/wp-content/uploads/2026/08/8-1024x576.jpg",
+    "shiga-kogen-mountain-resort-2026-schedule": "https://www.shigakogen-ski.or.jp/ticket/",
     "shimokura-2026-schedule": "https://www.hachimantai.co.jp/",
     "sierra-at-tahoe-ski-resort-2026-schedule": "https://sierraattahoe.com/weather-snow-report/",
     "silver-mountain-resort-2026-schedule": "https://silvermt.com/hours-of-operation/",
@@ -196,11 +205,14 @@
     "snowbird-2026-schedule": "https://www.snowbird.com/community/press-releases/whats-new-at-snowbird-2026-27/",
     "snowmass": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
     "snowriver-sector-schedules": "https://www.snowriver.com/mountain-info/hours-of-operation",
-    "soldier-mountain-ski-area-2026-schedule": "https://soldiermountain.com/restrictions-policies/",
+    "soldier-mountain-ski-area-2026-schedule": "https://soldiermountain.com/hours/",
+    "solitude-mountain-resort-2026-observed": "https://blog.solitudemountain.com/2026/ambers-updates-solitude-opens-for-the-26-27-winter-season/",
     "spirit-mountain-2026-schedule": "https://spiritmt.com/mountain-message/",
     "steamboat-ski-resort-2026-schedule": "https://www.steamboat.com/things-to-do/events/opening-day",
+    "stevens-pass-2026-schedule": "https://news.vailresorts.com/stevens-pass-winter-2026-27",
     "sugar-bowl-resort-2026-opening": "https://www.sugarbowl.com/conditions",
     "sugarloaf": "https://www.sugarloaf.com/media-room",
+    "sugarloaf-2026-schedule": "https://www.sugarloaf.com/press-releases/new-for-2027-winter",
     "sun-peaks-resort": "https://www.sunpeaksresort.com/ski-ride/the-mountain/trail-maps-stats",
     "sun-valley-bald-mountain-2026-schedule": "https://www.sunvalley.com/events/sun-valley-opening-day/",
     "sundance-mountain-resort-2026-schedule": "https://www.sundanceresort.com/mountain-report/",
@@ -214,6 +226,8 @@
     "telluride-winter-schedule": "https://tellurideskiresort.com/ski/",
     "tenney-mountain-2026-schedule": "https://www.skinh.com/resorts/tenney-mountain",
     "the-remarkables": "https://www.theremarkables.co.nz/mountain-info",
+    "thredbo-2026-observed": "https://www.thredbo.com.au/blog/2026/thank-you-winter-2026/",
+    "thredbo-2027-schedule": "https://www.thredbo.com.au/terms-conditions/winter-lift-and-season-mountain-access/",
     "togakushi-ski-resort-2026-schedule": "https://www.togakusi.com/ski/course/",
     "tsugaike-mountain-resort-2026-schedule": "https://www.tsugaike.gr.jp/archives/19253",
     "vail-mountain-2026-opening": "https://news.vailresorts.com/news-and-stories?item=123201",
@@ -1260,6 +1274,17 @@
       ]
     },
     {
+      "areaId": "crested-butte-mountain-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-25",
+          "source": "crested-butte-mountain-resort-2026-schedule",
+          "note": "Vail Resorts publicly plans a November 25 opening, subject to conditions."
+        }
+      ]
+    },
+    {
       "areaId": "crotched-mountain",
       "actual": [
         {
@@ -1424,6 +1449,20 @@
       ]
     },
     {
+      "areaId": "falls-creek",
+      "actual": [
+        {
+          "season": "2026",
+          "opensOn": "2026-06-06",
+          "note": "The June 8 recap confirms skiing on Mouse Trap during the June 6 opening weekend. The June 5 operator update dates the weekend start.",
+          "openingTerrain": {
+            "lifts": 1
+          },
+          "source": "falls-creek-2026-observed"
+        }
+      ]
+    },
+    {
       "areaId": "fernie-alpine-resort",
       "recurring": {
         "opensIn": 12,
@@ -1511,6 +1550,17 @@
           "opensOn": "2026-12-04",
           "closesOn": "2027-04-04",
           "source": "grandvalira-2026-schedule"
+        }
+      ]
+    },
+    {
+      "areaId": "great-divide-ski-area",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-27",
+          "source": "great-divide-ski-area-2026-schedule",
+          "note": "Weather-dependent first day. Regular operating plan runs through April 4 with possible snow-dependent bonus days."
         }
       ]
     },
@@ -1887,6 +1937,17 @@
       ]
     },
     {
+      "areaId": "june-mountain",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "source": "june-mountain-2026-schedule",
+          "note": "December 19 opening plan names lower lift J1 and winter kickoff at J2, weather permitting."
+        }
+      ]
+    },
+    {
       "areaId": "kashimayari",
       "planned": [
         {
@@ -1993,7 +2054,11 @@
           "season": "2026/27",
           "opensOn": "2026-11-17",
           "source": "killington-2026-opening",
-          "note": "Passholders had access November 17. General public access began November 18."
+          "note": "November 17 was passholder opening and November 18 was public opening. The November 21 Mountain Report confirms skiing continues.",
+          "openingTerrain": {
+            "lifts": 2,
+            "trails": 3
+          }
         }
       ]
     },
@@ -2023,6 +2088,18 @@
           "opensOn": "2026-11-23",
           "source": "kirkwood-mountain-resort-2026-schedule",
           "note": "The operator advanced the opening and expects 326 skiable acres with top-to-bottom terrain."
+        }
+      ]
+    },
+    {
+      "areaId": "kitzbuehel",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-07",
+          "closesOn": "2027-04-04",
+          "source": "kitzbuehel-2026-schedule",
+          "note": "Resterkogel training starts November 6 and the first published public weekend starts November 7. Final core-area operation is planned through April 4."
         }
       ]
     },
@@ -2624,6 +2701,17 @@
       ]
     },
     {
+      "areaId": "mount-washington-alpine-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-10",
+          "source": "mount-washington-alpine-resort-2026-schedule",
+          "note": "First planned lift-served access is the December 10 passholder preview. The public opener is December 11."
+        }
+      ]
+    },
+    {
       "areaId": "mt-bachelor",
       "planned": [
         {
@@ -2925,6 +3013,17 @@
       ]
     },
     {
+      "areaId": "ordino-arcalis",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-04",
+          "source": "ordino-arcalis-2026-schedule"
+        }
+      ]
+    },
+    {
       "areaId": "orelle",
       "planned": [
         {
@@ -3175,6 +3274,17 @@
       ]
     },
     {
+      "areaId": "red-lodge-mountain",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-27",
+          "source": "red-lodge-mountain-2026-schedule",
+          "note": "Dated operator snow report schedules November 27 for first skiing."
+        }
+      ]
+    },
+    {
       "areaId": "red-mountain-resort",
       "planned": [
         {
@@ -3271,6 +3381,18 @@
           "closesOn": "2027-04-10",
           "source": "searchmont-resort-2026-schedule",
           "note": "April 10 is the last calendar day with lift-served ski hours. The April 11 entry labels Snowcross closing day."
+        }
+      ]
+    },
+    {
+      "areaId": "shiga-kogen-mountain-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-21",
+          "closesOn": "2027-05-05",
+          "source": "shiga-kogen-mountain-resort-2026-schedule",
+          "note": "November 21 is the announced Yokoteyama–Shibutoge sector start. The full-network common-ticket season begins December 5."
         }
       ]
     },
@@ -3502,9 +3624,21 @@
       "planned": [
         {
           "season": "2026/27",
-          "opensOn": "2026-12-19",
+          "opensOn": "2026-11-27",
+          "closesOn": "2027-04-03",
           "source": "soldier-mountain-ski-area-2026-schedule",
-          "note": "Target opening weekend December 19–20. November 27–29, December 4–6 and December 11–13 are discretionary early weekends. Closing date is awaiting reconciliation."
+          "note": "The dedicated hours page lists conditional November 27–29 skiing, later holiday hours and a projected April 3 close. The prior restrictions text gave a December 19 date."
+        }
+      ]
+    },
+    {
+      "areaId": "solitude-mountain-resort",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-19",
+          "note": "The operator announced November 19 with Link and Easy Street. Ski Utah winter opening record corroborates the date.",
+          "source": "solitude-mountain-resort-2026-observed"
         }
       ]
     },
@@ -3558,6 +3692,17 @@
           "opensOn": "2026-11-27",
           "source": "steamboat-ski-resort-2026-schedule",
           "note": "The operator postponed the original November 21 target to November 27."
+        }
+      ]
+    },
+    {
+      "areaId": "stevens-pass",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "source": "stevens-pass-2026-schedule",
+          "note": "Current operator press kit targets December 4, weather and conditions permitting."
         }
       ]
     },
@@ -3677,6 +3822,26 @@
           "opensOn": "2027-06-19",
           "closesOn": "2027-10-10",
           "source": "the-remarkables"
+        }
+      ]
+    },
+    {
+      "areaId": "thredbo",
+      "actual": [
+        {
+          "season": "2026",
+          "opensOn": "2026-06-06",
+          "note": "The resort’s retrospective records first lift-served skiing at Friday Flat on June 6.",
+          "source": "thredbo-2026-observed"
+        }
+      ],
+      "planned": [
+        {
+          "season": "2027",
+          "opensOn": "2027-06-12",
+          "closesOn": "2027-10-04",
+          "source": "thredbo-2027-schedule",
+          "note": "Lift-access entitlement dates in Thredbo’s 2027 winter season-pass terms. Actual operations depend on conditions."
         }
       ]
     },

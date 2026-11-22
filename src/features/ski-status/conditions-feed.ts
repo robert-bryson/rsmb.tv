@@ -46,8 +46,11 @@ export async function loadConditionsFeed(previous: ConditionsFeed, signal: Abort
     const manifest = conditionsManifestSchema.parse(decodeConditionsJson(await getFile('manifest.json', signal, maxConditionsManifestBytes)));
     const updatedAt = Date.parse(manifest.updatedAt);
     const lastUpdate = previous.manifest ? Date.parse(previous.manifest.updatedAt) : -Infinity;
-    if (updatedAt < lastUpdate || (updatedAt === lastUpdate &&
-        (manifest.reports !== previous.manifest?.reports || manifest.forecasts !== previous.manifest?.forecasts))) return previous;
+    if (updatedAt < lastUpdate) throw Error('Ski conditions manifest is older than the last verified publication');
+    if (updatedAt === lastUpdate &&
+        (manifest.reports !== previous.manifest?.reports || manifest.forecasts !== previous.manifest?.forecasts)) {
+        throw Error('Ski conditions manifest changed its snapshots without a new publication time');
+    }
 
     const [reportResult, forecastResult] = await Promise.allSettled([
         loadSnapshot(manifest.reports, previous.reports, updatedAt, signal, reportSnapshotSchema.parse),

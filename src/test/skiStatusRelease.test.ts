@@ -78,6 +78,23 @@ describe('ski-status pass products', () => {
         expect(evaluatePass(product('ikon-session-4'), kappl, now, '2026-12-11').status).toBe('excluded');
     });
 
+    it('applies the Aspen Snowmass reservation and access terms to each mountain', () => {
+        const full = product('ikon-pass');
+        const base = product('ikon-base');
+        const blackout = '2026-12-28';
+        const regularDay = '2026-12-31';
+        for (const id of ['aspen-highlands', 'aspen-mountain', 'buttermilk', 'snowmass']) {
+            expect(evaluatePass(full, area(id), now, blackout)).toMatchObject({
+                status: 'included', rule: { days: 7, shared: 'Aspen Snowmass', reservation: 'none' },
+            });
+            if (id !== 'snowmass') expect(evaluatePass(base, area(id), now, regularDay).status).toBe('excluded');
+        }
+        const snowmass = area('snowmass');
+        expect(evaluatePass(base, snowmass, now, blackout).status).toBe('blackout');
+        expect(evaluatePass(base, snowmass, now, regularDay))
+            .toMatchObject({ status: 'included', rule: { days: 5, reservation: 'none' } });
+    });
+
     it('uses the separate Ikon Bonus Mountain blackout and redemption rules', () => {
         const buckHill = area('buck-hill');
         const grouse = area('grouse-mountain');

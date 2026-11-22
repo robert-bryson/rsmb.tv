@@ -7,12 +7,14 @@ import { dirname, join } from 'node:path';
 import type { Connect, ViteDevServer } from 'vite';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { skiArchiveAssetUrl, skiArchiveIndexUrl, type SkiArchiveTrailMap } from '../../shared/skiArchive.ts';
-import { skiAssetsRoute, skiAssetUrl } from '../../shared/skiAssets.ts';
+import { skiAssetsRoute, skiAssetUrl, skiTerrainFile } from '../../shared/skiAssets.ts';
 import { passIconUrls } from '../../src/features/ski-status/passIcons.ts';
 import { skiRuntimeFiles, skiTerrainAsset, verifySkiAsset } from '../ski-asset-files.ts';
 import { skiAssetsPlugin } from '../ski-assets-plugin.ts';
 
 const archive = Buffer.from('0123456789');
+const terrainDigest = createHash('sha256').update(archive).digest('hex');
+const terrainFixture = skiTerrainFile(terrainDigest);
 const pdf = Buffer.from('%PDF-1.7');
 const trailMap = 'trail-maps/test-area/undated/Trail Map.pdf';
 const fields = {
@@ -28,7 +30,8 @@ let origin: string;
 beforeAll(async () => {
     directory = await mkdtemp(join(tmpdir(), 'ski-assets-test-'));
     assetsRoot = join(directory, 'nas');
-    for (const [name, bytes] of [[skiTerrainAsset, archive], [trailMap, pdf], ['trail-maps/test-area/undated/Unlisted.pdf', pdf],
+    skiRuntimeFiles.set(terrainFixture, { localFile: terrainFixture, sha256: terrainDigest });
+    for (const [name, bytes] of [[terrainFixture, archive], [trailMap, pdf], ['trail-maps/test-area/undated/Unlisted.pdf', pdf],
         ['manifests/private.json', '{}'], ['runtime/resort-icons/unlisted.png', 'unlisted']] as const) {
         const file = join(assetsRoot, name);
         await mkdir(dirname(file), { recursive: true });
@@ -54,6 +57,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    skiRuntimeFiles.delete(terrainFixture);
     if (server?.listening) {
         server.closeAllConnections();
         await new Promise<void>(resolve => server.close(() => resolve()));
@@ -65,12 +69,11 @@ describe('NAS ski-status assets', () => {
     it('keeps all pass images in the runtime index and verifies release bytes', () => {
         for (const url of Object.values(passIconUrls)) {
             const entry = skiRuntimeFiles.get(url.slice(skiAssetsRoute.length));
-            expect(entry?.checksum).toMatch(/^[a-f0-9]{64}$/);
-            expect(url).toContain(`/${entry?.checksum}/`);
+            expect(entry?.sha256).toMatch(/^[a-f0-9]{64}$/);
+            expect(url).toContain(`/${entry?.sha256}/`);
         }
-        const checksum = createHash('sha256').update(archive).digest('hex');
-        expect(verifySkiAsset(skiTerrainAsset, archive, checksum)).toBe(archive);
-        expect(() => verifySkiAsset(skiTerrainAsset, pdf, checksum)).toThrow('SHA-256 mismatch');
+        expect(verifySkiAsset(skiTerrainAsset, archive, terrainDigest)).toBe(archive);
+        expect(() => verifySkiAsset(skiTerrainAsset, pdf, terrainDigest)).toThrow('SHA-256 mismatch');
     });
 
     it('discovers new manifest files and selects the newest available icon for each use', async () => {
@@ -145,7 +148,7 @@ describe('NAS ski-status assets', () => {
         ['bytes=7-', 'bytes 7-9/10', '789'],
         ['bytes=-2', 'bytes 8-9/10', '89'],
     ])('serves %s from the terrain archive', async (range, contentRange, bytes) => {
-        const response = await fetch(origin + skiAssetUrl(skiTerrainAsset) + '?retry=1', { headers: { Range: range } });
+        const response = await fetch(origin + skiAssetUrl(terrainFixture) + '?retry=1', { headers: { Range: range } });
         expect(response.status).toBe(206);
         expect(response.headers.get('content-range')).toBe(contentRange);
         expect(response.headers.get('accept-ranges')).toBe('bytes');
@@ -153,7 +156,7 @@ describe('NAS ski-status assets', () => {
     });
 
     it('rejects an unsatisfiable range and keeps unrelated and escaped files private', async () => {
-        const range = await fetch(origin + skiAssetUrl(skiTerrainAsset), { headers: { Range: 'bytes=20-25' } });
+        const range = await fetch(origin + skiAssetUrl(terrainFixture), { headers: { Range: 'bytes=20-25' } });
         expect(range.status).toBe(416);
         expect(range.headers.get('content-range')).toBe('bytes */10');
         for (const path of [
@@ -164,6 +167,21 @@ describe('NAS ski-status assets', () => {
         ]) {
             expect((await fetch(origin + path)).status, path).toBe(404);
         }
+    });
+
+    it('rejects a changed runtime file at its previous checksum URL', async () => {
+        const url = origin + skiAssetUrl(terrainFixture);
+        const file = join(assetsRoot, terrainFixture);
+        try {
+            await writeFile(file, Buffer.alloc(archive.length, 65));
+            expect((await fetch(url, { method: 'HEAD' })).status).toBe(404);
+            expect((await fetch(url, { headers: { Range: 'bytes=0-1' } })).status).toBe(404);
+        } finally {
+            await writeFile(file, archive);
+        }
+        const recovered = await fetch(url, { headers: { Range: 'bytes=0-1' } });
+        expect(recovered.status).toBe(206);
+        expect(await recovered.text()).toBe('01');
     });
 
     it('rejects an archive version after its file changes without changing size', async () => {

@@ -862,3 +862,241 @@ The NAS archive contains 55 original trail maps, 15 original resort marks and 30
 Open checks include regular adult full-day fares, actual ski openings, comparable terrain statistics, some base entrances and winter crossings, the latest print maps and Indy Base terms at Loveland and Montana Snowbowl. Camera and conditions reuse and runtime logo distribution still need permission evidence. The icon preview identified a need for a more readable Loveland and Mission Ridge mark on dark backgrounds and a clearer Kimberley mark at map size.
 
 Grand Targhee’s first-ski retry is due November 22. Mount Washington Alpine Resort is next in descending acreage among areas awaiting an initial review.
+
+## Batch 26 · 2026-11-21
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 281 | 285 |
+| Seasonal visitor records | 153 | 158 |
+| Verified visitor points | 65 | 68 |
+| Resorts with parking | 141 | 146 |
+| Resorts with official maps | 146 | 151 |
+| Resorts with adult fares or bounds | 88 | 90 |
+| Resorts with operator cameras | 112 | 116 |
+| Areas with annual snowfall | 183 | 185 |
+| 2026/27 areas with planned dates | 193 | 195 |
+| Areas with Indy product rules | 64 | 66 |
+| Areas with all four Indy products | 59 | 61 |
+| Areas with winter approaches | 61 | 71 |
+| Documented winter approaches | 181 | 209 |
+| Named road crossings | 27 | 31 |
+| Verified summit records | 43 | 51 |
+| Bundled resort icons | 31 | 40 |
+| Catalog entrance pins | 56 | 59 |
+
+The whitespace check passed. 214 focused tests passed, including resort data, seasons, visitor data, roads and map layers. 19 terrain and candidate tests passed. Chromium and Vite test mode verified nine indexed runtime PNGs by SHA-256 and checked them in the map, Results and details. The fallback mountain symbol loaded.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Mount Washington Alpine Resort | Verified the 1,700 acres, Alpine and Nordic maps, December 10 passholder preview, and both bases from Highway 19. | Check first skiing, adult fares, exact lot entrance points, and Indy pickup. |
+| Timberline Lodge | Added ski-area endpoints, nine lifts, both day lodges and winter maps, and four driving approaches. | Check named-trail total, exact winter entrances, first skiing, and historical depth tables. |
+| Bear Valley Mountain Resort | Confirmed opening lifts, added the signed Highway 4 approach, day-lodge pin, print map and snowfall citation. | Check standard adult fares, Indy redemption, summit labels and east-side winter closures. |
+| Sugar Bowl Resort | Confirmed passholder opening and main lodge pin. Added Old 40 approaches, three named summits, and the Royal Gorge Nordic map. | Check the public fare, current shuttle schedule, and Crow’s Peak and Nordic summit labels. |
+| Purgatory Resort | Added three US 550 routes and three named passes. Verified current carpool and lot shuttle rules. | Reconcile the post-expansion statistics and check the exact arrival pin and dated adult fare. |
+| Red Lodge Mountain | Verified the November 27 plan, eight lifts, 70 trails, Grizzly Peak and three winter approaches. | Check first skiing, current adult fare, and exact parking and camera details. |
+| Alyeska Resort | Confirmed six terrain statistics with the resort’s local tourism and ski partners, and recorded both Girdwood base approaches. | The operator site returned a browser challenge. Current report, map, icon, prices and opening details need accessible sources. |
+| Tamarack Resort | Verified all six stats, both ID 55 approaches, Village arrival, and two current pass memberships. Bundled the archived mark. | Check first skiing, adult day pricing, Indy pickup and Lone Tree Summit. |
+| Powderhorn Mountain Resort | Added six current adult rates, both CO 65 approaches, visitor records, 56 runs, and Indy rules. | Verify opening, the Wild West Express inventory and new print map, and the southern road summit. |
+| Silver Mountain Resort | Confirmed the November 27 plan, both I-90 arrivals, Gondola Village parking and two official map summits. | Confirm first skiing, the comparable base elevation and exact I-90 crossing point. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-26-2026-11-21T233216Z`.
+
+Wolf Creek Ski Area is next in descending acreage order.
+
+## Batch 27 · 2026-11-21
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 285 | 288 |
+| Seasonal visitor records | 158 | 166 |
+| Verified visitor points | 68 | 70 |
+| Resorts with parking | 146 | 153 |
+| Resorts with official maps | 151 | 159 |
+| Resorts with adult fares or bounds | 90 | 93 |
+| Resorts with operator cameras | 116 | 123 |
+| Areas with annual snowfall | 185 | 186 |
+| 2026/27 areas with planned dates | 195 | 200 |
+| Areas with winter approaches | 71 | 81 |
+| Documented winter approaches | 209 | 235 |
+| Named road crossings | 31 | 33 |
+| Verified summit records | 51 | 59 |
+| Bundled resort icons | 40 | 48 |
+| Catalog entrance pins | 59 | 61 |
+
+The whitespace check passed. 214 focused tests passed, including resort data, seasons, visitor data, roads and map layers. 19 terrain and candidate tests passed. Chromium and Vite test mode verified eight indexed runtime PNGs by SHA-256 and checked them in the map, Results and details. The fallback mountain symbol loaded.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Wolf Creek Ski Area | Confirmed all six stats and opening evidence. Verified both US 160 arrivals, Wolf Creek Pass and Alberta Peak. | Check exact skier entrance and the other illustrated summit names. |
+| Crested Butte Mountain Resort | Corrected lift-served vertical to 2,092 ft and verified the November 25 plan and Gothic Road approach. | The resort site blocked direct access to several pages. Check the current report, print map, fares, parking, and a visible official mark. |
+| Killington | Added the November 17 passholder opening, five bases, 2026/27 map and three summit points. | Check regular dated fares, individual cameras and the Sherburne Pass approach. |
+| Great Divide Ski Area | Added the $65 adult fare, November 27 plan, Mount Belmont and both I-15 approaches. | Check first skiing, precise lodge entrance and any public winter shuttle. |
+| June Mountain | Verified the December 19 plan, 2026/27 map, J1 arrival, summit, and South Junction approaches. | Check the full-day fare and the named US 395 crossing. |
+| Arapahoe Basin | Confirmed all six stats, the October 28 opening, revised weekend parking, and three US 6 arrivals. | Check dated ticket prices, entry coordinates, and East Wall peak labels. |
+| Kitzbühel | Added the 2026/27 print map, three EUR ticket rates, five approaches and four public station records. | Check the first public skiing date, comparable vertical, Pass Thurn crossing, and geographic summit points. |
+| White Pass Ski Area | Added the US 12 crossing, two approaches, an entrance pin, two adult ticket bounds and the official maps. | Check first skiing, the Indy blackout table and remaining map peak labels. |
+| Sugarloaf | Verified the developed terrain figures, two ME 27 arrivals, alpine map and named summit. Bundled the operator’s official mark. | Confirm first skiing, adult fares, and the current parking and shuttle details. |
+| Taos Ski Valley | Verified six terrain stats, two parking approaches, the linked winter map, and five camera views. | Check opening, adult ticket pricing, precise winter entrances and Kachina Peak. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-27-2026-11-21T234356Z`.
+
+Ischgl–Samnaun is next in descending acreage order.
+
+## Batch 28 · 2026-11-21
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 288 | 292 |
+| Seasonal visitor records | 166 | 173 |
+| Resorts with parking | 153 | 160 |
+| Resorts with official maps | 159 | 166 |
+| Resorts with adult fares or bounds | 93 | 95 |
+| Resorts with operator cameras | 123 | 129 |
+| 2026/27 recorded openings | 29 | 30 |
+| 2026/27 areas with planned dates | 200 | 201 |
+| Areas with Indy product rules | 66 | 67 |
+| Areas with all four Indy products | 61 | 62 |
+| Areas with winter approaches | 81 | 91 |
+| Documented winter approaches | 235 | 263 |
+| Named road crossings | 33 | 36 |
+| Verified summit records | 59 | 60 |
+| Bundled resort icons | 48 | 58 |
+
+The whitespace check passed. 229 focused tests passed, including map layers, road research and the asset suites. 19 terrain and candidate tests passed. Chromium and Vite test mode verified ten indexed runtime PNGs by SHA-256 and checked them in the map, Results and details. The fallback mountain symbol loaded.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Ischgl–Samnaun | Verified the cross-border scope, 46 lifts, season plan, three driving approaches and current map. | Recheck the omitted area-wide elevation difference against a single skiable descent. Adult fare, trail count, Spiss route and summit locations remain open. |
+| Homewood Mountain Resort | Verified 1,260 acres, 66 runs, North Base approaches and the operator map. Bundled the archived mark. | Check first skiing, the post-gondola lift inventory, and South Base winter access. |
+| Mt. Rose Ski Tahoe | Verified seven lifts, published acreage and trail bounds, four approaches and Mount Rose Summit. | Check the exact lodge arrivals and current advance full-day prices. |
+| Solitude Mountain Resort | Verified the November 19 opening, nine ski lifts, three canyon approaches, and the current parking rules and maps. | Check exact entrance points, a dated adult fare, and named summits. |
+| Thredbo | Added the June 6 actual opening, 2027 entitlement dates, winter map and three Alpine Way approaches. | Verify the 2026 last ski day, 2027 daily fare, and Dead Horse Gap road point. |
+| The Summit at Snoqualmie | Added four sector maps, six I-90/WA 906 approaches, the pass crossing, and posted parking rates. | Verify first downhill operation and comparable elevations and vertical across West, Central and East. |
+| Soldier Mountain | Reconciled the November 27 and April 3 plans and checked the US 20 approach. Bundled the resort mark. | Confirm first skiing and any dated operating report, webcam, and Indy pickup instructions. |
+| Monarch Mountain | Verified eight ski lifts, 1,146 skiable acres, three terrain maps and both US 50 approaches. Added the $69 online minimum. | Confirm opening day, dated full-day quotes, and precise lot and summit points. |
+| Stevens Pass | Verified the December 4 plan, the 14-lift inventory, US 2 arrivals and new parking rules. Bundled the official blog mark. | Check accessible current report and map originals, dated fares, and precise lot-to-pass references. |
+| Apex Mountain Resort | Added the CAD 128 adult fare, current Indy coverage, official map and two winter approaches. Adopted the linked operator map’s ski elevation and vertical. | Confirm first skiing, the signed arrival coordinates, named crossings and Indy pickup. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-28-2026-11-21T235548Z`.
+
+## Run summary · 2026-11-21 · Batches 26–28
+
+The run checked 30 resorts in order of published skiable acreage, from largest to smallest.
+After each batch of 10 resorts, the run checked the files and copied them to the project NAS.
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Areas with winter approaches | 61 | 91 |
+| Documented winter approaches | 181 | 263 |
+| Named road crossings | 27 | 36 |
+| Verified summit records | 43 | 60 |
+| Areas with verified summits | 27 | 39 |
+| Resorts with visitor lodges | 153 | 173 |
+| Verified visitor points | 65 | 70 |
+| Resorts with parking records | 141 | 160 |
+| Resorts with official map records | 146 | 166 |
+| Resorts with adult day fares or bounds | 88 | 95 |
+| Resorts with operator cameras | 112 | 129 |
+| Checked conditions links | 281 | 292 |
+| Areas with annual snowfall | 183 | 186 |
+| Areas with 2026/27 planned dates | 193 | 201 |
+| Areas with observed 2026/27 first ski days | 29 | 30 |
+| Areas with Indy product rules | 64 | 67 |
+| Areas with all six downhill comparison fields | 315 | 315 |
+| Bundled resort icons | 31 | 58 |
+| Published vertical drops | 467 | 466 |
+
+Batches 26 and 27 passed 214 focused tests each. Batch 28 passed 229, including the asset tests.
+Each batch passed the whitespace check and all 19 terrain and candidate tests.
+Vite test mode and Chromium checked all 27 new icons on the map, in **Results**, and in resort details.
+They also checked the fallback symbol on the map.
+
+All 37 batch snapshot files matched their SHA-256 checksums.
+
+| Batch | Snapshot | Files |
+| --- | --- | ---: |
+| 26 | `N:\projects\ski-status\data-quality\batch-26-2026-11-21T233216Z` | 13 |
+| 27 | `N:\projects\ski-status\data-quality\batch-27-2026-11-21T234356Z` | 12 |
+| 28 | `N:\projects\ski-status\data-quality\batch-28-2026-11-21T235548Z` | 12 |
+
+The NAS archive has 32 original trail maps, 17 original marks, and 34 icon variants from this run.
+All 83 files and the manifest matched the local SHA-256 checksums. The archive index accepted all 32 maps and 34 variants.
+All 27 runtime copies matched the archived details files.
+
+`N:\projects\ski-status\assets\manifests\2026-11-21T235617Z.json`
+
+The Alyeska, Crested Butte, and Stevens Pass sites blocked some requests.
+Check their current reports and print maps again. Find official icons for Alyeska and Crested Butte.
+Check adult fares, operating dates, elevations, entrance and crossing points, and Indy redemption terms.
+The batch removed the Ischgl–Samnaun vertical figure. A replacement needs evidence of a continuous skiable descent.
+
+Falls Creek is next among areas awaiting initial acreage review. Dated retries begin November 22.
+
+## Batch 29 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 292 | 297 |
+| Seasonal visitor records | 173 | 178 |
+| Resorts with parking | 160 | 165 |
+| Resorts with official maps | 166 | 171 |
+| Resorts with operator cameras | 129 | 131 |
+| Areas with winter approaches | 91 | 97 |
+| Documented winter approaches | 263 | 269 |
+| Bundled resort icons | 58 | 64 |
+
+The whitespace check passed. 230 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 6 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Park City Mountain | Confirmed the opening date is still to be announced and checked the two UT 224 approaches. | Check the revised opening and first skiing when the operator posts a dated report. |
+| Grand Targhee Resort | Confirmed the November 22 plan, the reported opening terrain and three winter approaches. | Use a post-opening report to verify actual skiing and terrain. |
+| Kitzbühel | Confirmed Resterkogel operations on November 21–22 and rechecked the five approach records. | Find evidence for the first public ski day and verify the Pass Thurn crossing point. |
+| Sugarloaf | Removed the superseded November 20 opening plan and checked both ME 27 approaches. | Verify the new date and first skiing when announced. |
+| Falls Creek | Added the June 6 lift-served opening, day lots, C531 winter approach, three maps and five cameras. | Verify last skiing, comparable lift-served elevations, 2027 adult pricing and Howman’s Gap. |
+| The Remarkables | Updated the lift inventory to eight and recorded the acreage minimum, two maps, parking and the SH 6 approach. | Match the published vertical to a descent and verify first and last skiing, the entrance point and a dated adult fare. |
+| Pebble Creek Ski Area | Added the $83 adult day ticket, annual snowfall, county-verified access road, map, day lodge and camera. | Verify the first ski day, Indy Base dates, redemption and the precise lodge entrance. |
+| Ordino Arcalís | Added the December 4–April 4 plan, CG-3 arrival, parking, two base facilities and the linked piste map. | Check La Coma winter driving, current adult pricing, camera views and named summit coordinates. |
+| Brighton Resort | Verified six terrain fields, November 24 plan, parking prices, Route 972, UT 190 access and day/night maps. | Verify first skiing, a dated adult fare, exact entrance and the named summit points. |
+| Aspen Highlands | Verified six terrain stats, the winter schedule, garage rates, CO 82 access, two maps and the no-reservation Ikon rule. | Verify first skiing, a dated adult quote and the named map summits. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-29-2026-11-22T004020Z`.
+
+Lookout Pass and Nakiska lead the next acreage-order batch.
+
+## Batch 30 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 297 | 303 |
+| Seasonal visitor records | 178 | 187 |
+| Resorts with parking | 165 | 173 |
+| Resorts with official maps | 171 | 180 |
+| Resorts with adult fares or bounds | 95 | 99 |
+| Resorts with operator cameras | 131 | 135 |
+| 2026/27 areas with planned dates | 201 | 202 |
+| Areas with winter approaches | 97 | 107 |
+| Documented winter approaches | 269 | 285 |
+| Named road crossings | 36 | 38 |
+| Verified summit records | 60 | 62 |
+| Bundled resort icons | 64 | 73 |
+
+The whitespace check passed. 231 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 9 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Lookout Pass Ski & Recreation Area | Added both I-90 approaches, Lookout Pass, six adult fares and the print brochure. | Verify first skiing and named summit labels. |
+| Nakiska Ski Area | Confirmed six stats and the preview opening, and added two AB 40 approaches and the Calgary bus link. | Verify the regular adult fare, any 2026/27 map revision and summit points. |
+| Lutsen Mountains | Added the two map sheets, operator webcam and approaches from both directions on MN 61. | Verify comparable elevations, first skiing and a dated fare. |
+| Mt. Baker Ski Area | Added two WA 542 base approaches, two verified peaks, three lodges, the print map and two adult fare tiers. | Verify trail count, first ski day and Panorama Dome. |
+| Shiga Kogen Mountain Resort | Added the network map, ¥9,500 common day pass, Route 292 approach and Nagano winter closure. | Reconcile the lift count and verify first public skiing, sector approaches and named peaks. |
+| Mt. Hood Skibowl | Added both US 26 base routes, the linked map, three webcam views and parking rules. | Reconcile trail counts, locate the road summit and find a downloadable official mark. |
+| Powder King Mountain Resort | Added the CAD 112 adult fare, two BC 97 approaches, the signed Pine Pass crossing and the linked map. | Verify first skiing, elevation endpoints, parking and a newer map edition. |
+| Aspen Mountain | Added the Ajax maps, downtown parking approach and webcam views, and verified the Ikon pickup and reservation rule. | Verify first skiing, a dated adult fare and precise downtown arrival. |
+| Mt Hutt | Added the current print map, lodge and car parks, and verified the winter chain and shuttle rules. | Confirm the 2026 first and last days, the named saddle and the 2027 fare. |
+| Sunday River | Added the South Ridge approach, winter and base maps, parking and three lodge records. | Confirm first skiing, the trail count scope and alternate base approaches. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-30-2026-11-22T005107Z`.
+
+Dodge Ridge and Beaver Mountain lead the next acreage-order batch.

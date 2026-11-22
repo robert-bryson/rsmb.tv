@@ -79,10 +79,14 @@ describe('ski-status client feed', () => {
         const initial = await loadConditionsFeed({}, signal);
         expect(initial.reports?.data.reports[0].status).toBe('open');
 
-        // An older CDN copy or a conflicting pointer with the same timestamp must not win.
-        for (const updatedAt of [retrievedAt, nextTime]) {
+        for (const [updatedAt, error] of [
+            [retrievedAt, 'older than the last verified publication'],
+            [nextTime, 'changed its snapshots without a new publication time'],
+        ]) {
             files.set(manifestName, JSON.stringify(manifest({ updatedAt, reports: firstFile.file })));
-            expect(await loadConditionsFeed(initial, signal)).toBe(initial);
+            read.mockClear();
+            await expect(loadConditionsFeed(initial, signal)).rejects.toThrow(error);
+            expect(read).toHaveBeenCalledTimes(1);
         }
         const futureFile = reportFile('2026-12-25T18:00:00Z');
         const updatedAt = '2026-12-25T14:00:00Z';
@@ -293,6 +297,32 @@ describe('ski-status publication', () => {
         expect(refreshed.manifest.forecasts).not.toBe(first.manifest.forecasts);
         expect(refreshed.coverage.forecasts).toBe(2);
         expect(inputs.fetchForecast).toHaveBeenCalledTimes(2);
+    });
+
+    it.each(['missing', 'expired'])('retries a %s forecast while another area still has a current forecast', async state => {
+        const nextTime = '2026-12-25T14:00:00Z';
+        const initial = options();
+        initial.fetchForecast.mockImplementation(async ({ areaId }) => {
+            if (areaId === 'alta') return forecast;
+            if (state === 'missing') return offline();
+            return { ...forecast, areaId, endsAt: nextTime };
+        });
+        await publish(initial);
+
+        const inputs = options();
+        inputs.now = () => Date.parse(nextTime);
+        inputs.refreshForecasts = false;
+        inputs.fetchReport.mockImplementation(offline);
+        const newForecast = { ...forecast, areaId: 'snowbird', startsAt: nextTime, retrievedAt: nextTime };
+        inputs.fetchForecast.mockResolvedValue(newForecast);
+        const updated = await publish(inputs);
+
+        expect(inputs.fetchForecast).toHaveBeenCalledExactlyOnceWith({ areaId: 'snowbird' },
+            state === 'expired' ? { ...forecast, areaId: 'snowbird', endsAt: nextTime } : undefined);
+        expect(updated.received).toEqual({ reports: 0, forecasts: 1 });
+        expect(updated.coverage.forecasts).toBe(2);
+        const published = JSON.parse(await readFile(join(directory, updated.manifest.forecasts!), 'utf8'));
+        expect(published.forecasts).toEqual([forecast, newForecast]);
     });
 
     it('preserves the active manifest and history when every source fails', async () => {

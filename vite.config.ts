@@ -14,8 +14,9 @@ import { skiConditionsDevPlugin } from './scripts/ski-conditions-dev-plugin.ts'
 import { skiAssetsRoot } from './scripts/ski-asset-files.ts'
 import { skiAssetsPlugin } from './scripts/ski-assets-plugin.ts'
 import { skiVisitorDataPlugin } from './scripts/ski-visitor-data-plugin.ts'
+import packageMetadata from './package.json' with { type: 'json' }
 
-const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 export default defineConfig(({ mode, command }) => {
   const localEnv = loadEnv(mode, process.cwd(), '');
@@ -31,6 +32,7 @@ export default defineConfig(({ mode, command }) => {
   base: '/',
   define: {
     __BUILD_DATE__: JSON.stringify(buildDate),
+    __BUILD_VERSION__: JSON.stringify(packageMetadata.version),
     __BUILD_REVISION__: JSON.stringify(process.env.AWS_COMMIT_ID || process.env.GITHUB_SHA || 'local'),
     'import.meta.env.VITE_CARTO_API_KEY': JSON.stringify(cartoKey),
     'import.meta.env.VITE_SKI_CONDITIONS_LOCAL': JSON.stringify(skiConditionsMode),

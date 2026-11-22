@@ -4,6 +4,7 @@ import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaList } from '../features/ski-status/SkiAreaList';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
 import { SkiColumnSettings } from '../features/ski-status/SkiColumnSettings';
+import { SkiMapAreaControl } from '../features/ski-status/SkiMapAreaControl';
 import { SkiResortLinks } from '../features/ski-status/SkiResortLinks';
 import { SkiShareButton } from '../features/ski-status/SkiShareButton';
 import { defaultSkiColumns } from '../features/ski-status/browse';
@@ -15,6 +16,43 @@ const listDefaults = {
     conditions: { reports: new Map(), forecasts: new Map(), now: 0 }, statuses: new Map(),
     units: 'imperial', sort: { key: 'name', direction: 'asc' }, onSort: vi.fn(), onSelect: vi.fn(),
 } as const;
+
+it('prevents stale area searches during a move and keeps an empty settled view actionable', () => {
+    const onSearch = vi.fn();
+    const onClear = vi.fn();
+    const control = { onSearch, onClear, areaSelected: false, areaApplied: false, moving: false, checkingReports: false };
+    const { rerender } = render(<SkiMapAreaControl {...control} />);
+    const search = screen.getByRole('button', { name: 'Search this area' });
+    expect(search).toHaveAccessibleDescription('Uses the visible map');
+    fireEvent.click(search);
+    expect(onSearch).not.toHaveBeenCalled();
+
+    rerender(<SkiMapAreaControl {...control} count={4} moving />);
+    expect(search).toHaveAttribute('aria-disabled', 'true');
+    expect(search).toHaveAccessibleDescription('Map moving…');
+    fireEvent.click(search);
+    expect(onSearch).not.toHaveBeenCalled();
+
+    rerender(<SkiMapAreaControl {...control} count={0} />);
+    expect(search).toHaveAccessibleDescription('No matches in view');
+    fireEvent.click(search);
+    expect(onSearch).toHaveBeenCalledTimes(1);
+
+    rerender(<SkiMapAreaControl {...control} count={0} areaSelected areaApplied />);
+    const applied = screen.getByRole('button', { name: 'Area applied' });
+    expect(applied).toHaveAccessibleDescription('No matches');
+    fireEvent.click(applied);
+    expect(onSearch).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole('button', { name: 'Clear map area' }));
+    expect(onClear).toHaveBeenCalledTimes(1);
+    expect(applied).toHaveFocus();
+
+    rerender(<SkiMapAreaControl {...control} count={1} areaSelected checkingReports />);
+    const update = screen.getByRole('button', { name: 'Update area' });
+    expect(update).toHaveAccessibleDescription('Checking reports…');
+    rerender(<SkiMapAreaControl {...control} count={1} areaSelected />);
+    expect(update).toHaveAccessibleDescription('1 match in view');
+});
 
 describe('ski-status results and comparison', () => {
     it('identifies same-name resorts and passes the selecting control for focus restoration', () => {
@@ -218,6 +256,8 @@ describe('ski-status column settings', () => {
 });
 
 describe('ski-status area details', () => {
+    const northernMonths = ['October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+
     function openSnowSources(scope: ReturnType<typeof within> = screen) {
         fireEvent.click(scope.getByText('Snow sources', { selector: 'summary' }));
         return within(scope.getByRole('list', { name: 'Historical snow sources' }));
@@ -231,7 +271,7 @@ describe('ski-status area details', () => {
         expect(group.getAllByRole('link')).toHaveLength(1);
     });
 
-    it('shows measured depth sources and leaves missing months empty in the selected units', () => {
+    it('shows snowfall, sourced depth, and the typical season together in the selected units', () => {
         const sunshine = skiAreas.find(area => area.id === 'banff-sunshine')!;
         render(<SkiAreaDetails area={sunshine} units="metric" onClose={vi.fn()}
             conditions={{ reports: new Map(), forecasts: new Map(), now: Date.parse('2026-11-20T18:00:00Z') }} />);
@@ -240,21 +280,24 @@ describe('ski-status area details', () => {
         expect(season.getByText('Nov 7')).toHaveAttribute('datetime', '2026-11-07');
         expect(season.getByText('May 24')).toHaveAttribute('datetime', '2027-05-24');
         expect(season.getByText('Season 2026/27')).toBeVisible();
-        expect(season.getByText('Typical season').parentElement).toHaveTextContent('Nov 8 – May 19');
+        expect(season.getByText('Typical season', { selector: 'strong' }).parentElement).toHaveTextContent('Nov 8 – May 19');
         expect(season.getByText('Typical season length').parentElement).toHaveTextContent('193 days');
         fireEvent.click(season.getByText('Monthly values', { exact: true }));
-        const snowfall = within(season.getByRole('table', { name: 'Average monthly snowfall (cm)' }));
-        expect(snowfall.getByRole('row', { name: /November, typical season/ })).toHaveTextContent('137 cm');
-
-        fireEvent.click(season.getByRole('button', { name: 'Snow depth' }));
-        const depth = within(season.getByRole('table', { name: 'Survey snow depth (cm)' }));
-        expect(within(depth.getByRole('row', { name: /November/ })).getByRole('cell', { name: 'Unavailable' })).toBeVisible();
-        expect(season.getByTitle('November · Unavailable')).toHaveTextContent('—');
-        const january = within(depth.getByRole('row', { name: /January/ }));
+        const history = within(season.getByRole('table', { name: 'Monthly snow and season (cm)' }));
+        expect(history.getByRole('columnheader', { name: 'Survey depth' })).toBeVisible();
+        const november = within(history.getByRole('row', { name: /November/ }));
+        expect(november.getByRole('cell', { name: '137 cm' })).toBeVisible();
+        expect(november.getByRole('cell', { name: 'Unavailable' })).toBeVisible();
+        expect(november.getByRole('cell', { name: 'In season' })).toBeVisible();
+        const novemberRadio = season.getByRole('radio', { name: 'November' });
+        expect(novemberRadio).toHaveAccessibleDescription('Average monthly snowfall 137 cm. Survey snow depth Unavailable. In season.');
+        expect(novemberRadio.closest('label')?.querySelector('.ski-snow-depth-point')).toBeNull();
+        expect(novemberRadio.closest('label')?.querySelector('.ski-snow-season-track')).toHaveAttribute('data-typical', 'true');
+        const january = within(history.getByRole('row', { name: /January/ }));
         expect(january.getByRole('link', { name: '102 cm' })).toHaveAttribute('href', expect.stringContaining('janmsc.pdf'));
     });
 
-    it('keeps measured snow months when the opening date changes', () => {
+    it('keeps the October–May view when the opening date changes', () => {
         const aspen = skiAreas.find(area => area.id === 'aspen-highlands')!;
         const conditions = { reports: new Map(), forecasts: new Map(), now: Date.parse('2026-11-21T18:00:00Z') };
         const props = { area: aspen, units: 'metric', onClose: vi.fn() } as const;
@@ -262,9 +305,9 @@ describe('ski-status area details', () => {
         const season = within(screen.getByRole('region', { name: 'Season dates' }));
         expect(season.getByText('Dec 12')).toHaveAttribute('datetime', '2026-12-12');
         fireEvent.click(season.getByText('Monthly values', { exact: true }));
-        const monthlyRows = () => within(season.getByRole('table', { name: 'Average monthly snowfall (cm)' }))
+        const monthlyRows = () => within(season.getByRole('table', { name: 'Monthly snow and season (cm)' }))
             .getAllByRole('rowheader').map(header => header.textContent);
-        expect(monthlyRows()).toEqual(['November', 'December', 'January', 'February', 'March', 'April']);
+        expect(monthlyRows()).toEqual(northernMonths);
         const november = within(season.getByRole('row', { name: /November/ }));
         expect(november.getByRole('cell', { name: '51.1 cm' })).toBeVisible();
 
@@ -275,46 +318,65 @@ describe('ski-status area details', () => {
         };
         rerender(<SkiAreaDetails {...props} conditions={{ ...conditions, reports: new Map([[aspen.id, report]]) }} />);
         expect(season.getByText('Nov 28')).toHaveAttribute('datetime', '2026-11-28');
-        expect(monthlyRows()).toEqual(['November', 'December', 'January', 'February', 'March', 'April']);
+        expect(monthlyRows()).toEqual(northernMonths);
     });
 
-    it('switches between zero-based scales and retains measured zeroes', () => {
+    it('uses one zero-based scale for both measures and retains measured zeroes', () => {
         const hakuba = skiAreas.find(area => area.id === 'hakuba-happo-one')!;
         const { container } = render(<SkiAreaDetails area={hakuba} units="metric" onClose={vi.fn()} />);
         fireEvent.click(screen.getByText('Monthly values', { exact: true }));
-        const snowfall = screen.getByRole('table', { name: 'Average monthly snowfall (cm)' });
-        const tickLabels = () => [...container.querySelectorAll('.ski-snow-axis span')].map(tick => Number(tick.textContent));
-        const expectMonth = (table: HTMLElement, month: string, value: string) => {
-            const row = within(table).getByRole('row', { name: new RegExp(month) });
-            expect(within(row).getByRole('cell', { name: value })).toBeVisible();
-        };
-        expect(tickLabels().at(-1)).toBe(0);
-        expectMonth(snowfall, 'January', '216 cm');
-        expectMonth(snowfall, 'July', '0 cm');
-        const july = screen.getByTitle('July · 0 cm');
-        expect(july.querySelector('.ski-snow-bar')).toBeNull();
-        expect(july).toHaveTextContent('0');
-        const depthButton = screen.getByRole('button', { name: 'Snow depth' });
-        fireEvent.click(depthButton);
-        expect(depthButton).toHaveAttribute('aria-pressed', 'true');
-        const depth = screen.getByRole('table', { name: 'Average monthly maximum depth (cm)' });
-        expect(tickLabels().at(-1)).toBe(0);
-        // The displayed snowfall and depth series use different ranges.
-        expect(tickLabels()[0]).toBeLessThan(216);
-        expectMonth(depth, 'January', '82 cm');
-        expectMonth(depth, 'July', '0 cm');
+        const history = within(screen.getByRole('table', { name: 'Monthly snow and season (cm)' }));
+        const tickLabels = [...container.querySelectorAll('.ski-snow-axis span')].map(tick => Number(tick.textContent));
+        expect(tickLabels.at(-1)).toBe(0);
+        const january = within(history.getByRole('row', { name: /January/ }));
+        expect(january.getByRole('cell', { name: '216 cm' })).toBeVisible();
+        expect(january.getByRole('cell', { name: '82 cm' })).toBeVisible();
+        const januaryColumn = screen.getByRole('radio', { name: 'January' }).closest('label');
+        expect(parseFloat(januaryColumn!.querySelector<HTMLElement>('.ski-snow-bar')!.style.height)).toBeCloseTo(216 / tickLabels[0] * 100);
+        expect(parseFloat(januaryColumn!.querySelector<HTMLElement>('.ski-snow-depth-point')!.style.bottom)).toBeCloseTo(82 / tickLabels[0] * 100);
+        const october = within(history.getByRole('row', { name: /October/ }));
+        expect(october.getAllByRole('cell', { name: '0 cm' })).toHaveLength(2);
+        const octoberColumn = screen.getByRole('radio', { name: 'October' }).closest('label');
+        expect(octoberColumn?.querySelector('.ski-snow-bar')).toHaveAttribute('data-zero', 'true');
+        expect(octoberColumn?.querySelector('.ski-snow-depth-point')).toBeInTheDocument();
         const sources = openSnowSources();
         expect(sources.getByRole('link', { name: 'Average monthly maximum snow depth' })).toBeVisible();
         expect(sources.getByRole('link', { name: 'Annual and monthly snowfall' })).toBeVisible();
         expect(sources.getByText(/Hakuba, Nagano weather station/)).toBeVisible();
     });
 
-    it('leaves a gap in the month axis when an intervening measurement is missing', () => {
+    it('keeps missing months on the axis without drawing zero measurements', () => {
         const dryHill = skiAreas.find(area => area.id === 'dry-hill-ski-area')!;
         const { container } = render(<SkiAreaDetails area={dryHill} units="metric" onClose={vi.fn()} />);
         const labels = [...container.querySelectorAll('.ski-snow-month')].map(month => month.textContent);
-        expect(labels).toEqual(['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']);
-        expect(screen.getByTitle('May · Unavailable')).toHaveTextContent('—');
+        expect(labels).toEqual(northernMonths.map(month => month.slice(0, 3)));
+        const may = screen.getByRole('radio', { name: 'May' });
+        expect(may).toHaveAccessibleDescription(/snowfall unavailable/i);
+        expect(may.closest('label')?.querySelector('.ski-snow-bar')).toBeNull();
+    });
+
+    it('shows the southern season timeline when monthly snow observations are unavailable', () => {
+        const valleNevado = skiAreas.find(area => area.id === 'valle-nevado')!;
+        const { container } = render(<SkiAreaDetails area={valleNevado} units="metric" onClose={vi.fn()} />);
+        const season = within(screen.getByRole('region', { name: 'Season dates' }));
+        expect(season.getAllByRole('radio').map(radio => radio.getAttribute('aria-label')))
+            .toEqual(['June', 'July', 'August', 'September', 'October']);
+        expect(container.querySelector('.ski-snow-axis')).toBeNull();
+        expect(container.querySelectorAll('.ski-snow-season-track[data-typical]')).toHaveLength(5);
+        expect(season.getByRole('radio', { name: 'June' })).toHaveAccessibleDescription(/snowfall unavailable.*depth unavailable.*in season/i);
+    });
+
+    it('breaks the depth line across missing measurements', () => {
+        const resort = skiAreas.find(area => area.id === 'timberline-lodge-ski-area')!;
+        const history = vi.spyOn(skiSnowHistory, 'get').mockReturnValue({ depth: {
+            label: 'Base', source: 'https://example.test/snow', kind: 'base', monthlyCm: { 11: 10, 1: 20, 2: 30 },
+        } });
+        try {
+            const { container } = render(<SkiAreaDetails area={resort} units="metric" onClose={vi.fn()} />);
+            expect(container.querySelector('.ski-snow-depth-line path')).toHaveAttribute('d', expect.stringMatching(/^M1\.5 \S+ M3\.5 \S+ L4\.5 \S+$/));
+        } finally {
+            history.mockRestore();
+        }
     });
 
     it('shows the annual measurement site when there is no monthly snowfall table', () => {

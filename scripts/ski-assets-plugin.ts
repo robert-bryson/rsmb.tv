@@ -17,8 +17,12 @@ const assetTypes = new Map([
     ['.pdf', 'application/pdf'], ['.pmtiles', 'application/octet-stream'], ['.png', 'image/png'], ['.webp', 'image/webp'],
 ]);
 const loopback = new Set(['127.0.0.1', '::1', '::ffff:127.0.0.1']);
-const maxBuildIconBytes = 1024 * 1024;
-const maxBuildTerrainBytes = 64 * 1024 * 1024;
+const maxIconBytes = 1024 * 1024;
+const maxTerrainBytes = 64 * 1024 * 1024;
+
+function runtimeAssetLimit(file: string) {
+    return file.endsWith('.pmtiles') ? maxTerrainBytes : maxIconBytes;
+}
 
 function assetFile(path: string) {
     try {
@@ -37,37 +41,37 @@ function byteRange(header: string, size: number) {
     if (Number.isSafeInteger(start) && Number.isSafeInteger(end) && start <= end) return { start, end };
 }
 
-type ArchiveChecks = WeakMap<SkiArchiveAsset, { identity: string; valid: Promise<boolean> }>;
+type AssetVersion = { sha256: string; localFile: string } | Pick<SkiArchiveAsset, 'sha256' | 'byteCount'>;
+type AssetChecks = WeakMap<AssetVersion, { identity: string; valid: Promise<boolean> }>;
 
-function archiveIdentity({ dev, ino, size, mtimeNs, ctimeNs }: BigIntStats) {
+function fileIdentity({ dev, ino, size, mtimeNs, ctimeNs }: BigIntStats) {
     return `${dev}:${ino}:${size}:${mtimeNs}:${ctimeNs}`;
 }
 
-async function checkArchiveChecksum(file: FileHandle, version: SkiArchiveAsset) {
+async function checkChecksum(file: FileHandle, size: number, sha256: string) {
     const hash = createHash('sha256');
-    const chunk = Buffer.allocUnsafe(Math.min(1024 * 1024, version.byteCount));
+    const chunk = Buffer.allocUnsafe(Math.min(1024 * 1024, size));
     let offset = 0;
-    while (offset < version.byteCount) {
-        const length = Math.min(chunk.length, version.byteCount - offset);
+    while (offset < size) {
+        const length = Math.min(chunk.length, size - offset);
         const { bytesRead } = await file.read(chunk, 0, length, offset);
         if (bytesRead === 0) return false;
         hash.update(chunk.subarray(0, bytesRead));
         offset += bytesRead;
     }
-    return hash.digest('hex') === version.sha256;
+    return hash.digest('hex') === sha256;
 }
 
-async function verifyArchive(file: FileHandle, stats: BigIntStats, version: SkiArchiveAsset, checks: ArchiveChecks) {
-    if (stats.size !== BigInt(version.byteCount)) return false;
-    const identity = archiveIdentity(stats);
+async function verifyFile(file: FileHandle, stats: BigIntStats, version: AssetVersion, checks: AssetChecks) {
+    const identity = fileIdentity(stats);
     let check = checks.get(version);
     if (check?.identity !== identity) {
-        check = { identity, valid: checkArchiveChecksum(file, version) };
+        check = { identity, valid: checkChecksum(file, Number(stats.size), version.sha256) };
         checks.set(version, check);
     }
     try {
         // Check the open file again after the checksum, then serve from the same handle.
-        return await check.valid && archiveIdentity(await file.stat({ bigint: true })) === identity;
+        return await check.valid && fileIdentity(await file.stat({ bigint: true })) === identity;
     } catch (error) {
         if (checks.get(version) === check) checks.delete(version);
         throw error;
@@ -75,12 +79,14 @@ async function verifyArchive(file: FileHandle, stats: BigIntStats, version: SkiA
 }
 
 async function serveFile(request: IncomingMessage, response: ServerResponse, path: string, type: string,
-    checks: ArchiveChecks, version?: SkiArchiveAsset) {
+    checks: AssetChecks, version: AssetVersion) {
     const file = await open(path, 'r');
     try {
         const stats = await file.stat({ bigint: true });
         const size = Number(stats.size);
-        if (!stats.isFile() || (version && !(await verifyArchive(file, stats, version, checks)))) {
+        const sizeMatches = 'byteCount' in version ? stats.size === BigInt(version.byteCount)
+            : size > 0 && size <= runtimeAssetLimit(version.localFile);
+        if (!stats.isFile() || !sizeMatches || !(await verifyFile(file, stats, version, checks))) {
             response.writeHead(404).end();
             return;
         }
@@ -113,7 +119,7 @@ async function serveFile(request: IncomingMessage, response: ServerResponse, pat
 function serveSkiAssets(root: string): Connect.NextHandleFunction {
     let archiveRequest: ReturnType<typeof readSkiArchiveIndex> | undefined;
     let archiveFiles = new Map<string, SkiArchiveAsset>();
-    const checks: ArchiveChecks = new WeakMap();
+    const checks: AssetChecks = new WeakMap();
     function refreshArchive() {
         archiveRequest ??= readSkiArchiveIndex(root).then(index => {
             archiveFiles = new Map(index.map(asset => [`${asset.relativePath}:${asset.sha256}`, asset]));
@@ -151,9 +157,9 @@ function serveSkiAssets(root: string): Connect.NextHandleFunction {
         }
         void (async () => {
             if (archiveKey && !archiveFiles.has(archiveKey)) await refreshArchive();
-            const archive = archiveKey ? archiveFiles.get(archiveKey) : undefined;
-            const path = runtime || archive ? await findSkiAsset(root, runtime?.localFile ?? file) : undefined;
-            if (path) await serveFile(request, response, path, type, checks, archive);
+            const asset = runtime ?? (archiveKey ? archiveFiles.get(archiveKey) : undefined);
+            const path = asset && await findSkiAsset(root, runtime?.localFile ?? file);
+            if (path && asset) await serveFile(request, response, path, type, checks, asset);
             else response.writeHead(404).end();
         })().catch(error => {
             if (response.destroyed) return;
@@ -175,7 +181,7 @@ function releaseAssetBase(configured: string | undefined) {
 }
 
 async function loadReleaseAsset(root: string, base: URL | undefined, file: string, localFile: string) {
-    const limit = file.endsWith('.pmtiles') ? maxBuildTerrainBytes : maxBuildIconBytes;
+    const limit = runtimeAssetLimit(file);
     const label = `Ski-status asset ${file}`;
     const path = await findSkiAsset(root, localFile);
     if (path) {
@@ -201,8 +207,8 @@ export function skiAssetsPlugin({ root, releaseUrl, includeInBuild }: { root: st
         async buildStart() {
             if (!includeInBuild) return;
             const base = releaseAssetBase(releaseUrl);
-            await Promise.all([...skiRuntimeFiles].map(async ([file, { localFile, checksum }]) => {
-                const source = verifySkiAsset(file, await loadReleaseAsset(root, base, file, localFile), checksum);
+            await Promise.all([...skiRuntimeFiles].map(async ([file, { localFile, sha256 }]) => {
+                const source = verifySkiAsset(file, await loadReleaseAsset(root, base, file, localFile), sha256);
                 this.emitFile({ type: 'asset', fileName: skiAssetUrl(file).slice(1), source });
             }));
         },

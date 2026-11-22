@@ -120,14 +120,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.2rem;
     min-height: var(--ski-target);
-    min-width: 1.5rem;
+    min-width: var(--ski-target);
     border-radius: var(--ski-radius);
     color: var(--ski-muted);
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
 }
-.ski-brand a .ski-icon { width: 0.9rem; height: 0.9rem; }
 .ski-brand a:hover { color: var(--ski-link); background-color: var(--ski-hover); }
 .ski-brand h1 { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; }
 
@@ -290,6 +288,7 @@
     gap: 0.5rem;
     min-width: 0;
 }
+.ski-context-actions { display: flex; align-items: center; flex: none; gap: 0.375rem; }
 .ski-counts {
     display: flex;
     flex-wrap: wrap;
@@ -442,6 +441,7 @@
 .ski-visitor-prices dt { color: var(--ski-muted); }
 .ski-visitor-prices dd { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .ski-season-chart {
+    --ski-season-color: #bdabf2;
     display: grid;
     gap: 0.75rem;
     border: 1px solid var(--ski-line);
@@ -466,27 +466,34 @@
     align-items: baseline;
     justify-content: space-between;
     column-gap: 0.625rem;
-    border-inline-start: 3px solid var(--ski-selected-line);
+    border-inline-start: 3px solid var(--ski-season-color);
     border-radius: 0.3rem;
     background: var(--ski-panel);
     padding: 0.375rem 0.625rem;
     font-size: 0.8125rem;
 }
 .ski-typical-season strong { margin-inline-end: 0.25rem; }
-.ski-snow-figure { min-width: 0; }
-.ski-snow-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.375rem 0.5rem; margin-bottom: 0.375rem; }
-.ski-snow-heading h4 { font-size: 0.875rem; font-weight: 650; }
-.ski-snow-metrics button { min-height: 2.25rem; padding-inline: 0.5rem; font-size: 0.75rem; }
+.ski-snow-figure {
+    --ski-snowfall-color: #86c4d7;
+    --ski-depth-color: #ffd397;
+    min-width: 0;
+}
+.ski-snow-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.125rem 0.5rem; }
+.ski-snow-heading h4 { font-size: 0.9375rem; font-weight: 650; }
+.ski-snow-heading p { color: var(--ski-muted); font-size: 0.8125rem; }
 .ski-snow-unit { color: var(--ski-muted); font-weight: 500; }
+.ski-snow-picker { min-width: 0; }
 .ski-snow-plot {
-    --ski-snow-plot-height: 8rem;
+    --ski-snow-plot-height: 8.75rem;
     display: grid;
     grid-template-columns: max-content minmax(0, 1fr);
     gap: 0.375rem;
-    margin-block: 0.75rem 0.25rem;
+    margin-block: 0.875rem 0.375rem;
     color: var(--ski-muted);
     font-variant-numeric: tabular-nums;
 }
+.ski-snow-plot[data-season-only] { grid-template-columns: minmax(0, 1fr); margin-block-start: 0.375rem; }
+.ski-snow-plot[data-season-only] .ski-snow-month { min-height: var(--ski-target); display: grid; place-items: center; }
 .ski-snow-axis {
     display: grid;
     grid-template-rows: repeat(2, minmax(0, 1fr)) 0;
@@ -496,7 +503,7 @@
 }
 .ski-snow-axis span { align-self: start; line-height: 1; transform: translateY(-50%); }
 .ski-snow-columns { position: relative; display: grid; }
-.ski-snow-columns::before {
+.ski-snow-plot:not([data-season-only]) .ski-snow-columns::before {
     content: '';
     position: absolute;
     inset: 0 0 auto;
@@ -506,6 +513,10 @@
     background: linear-gradient(transparent calc(50% - 0.5px), var(--ski-line) 50%, transparent calc(50% + 0.5px));
     pointer-events: none;
 }
+.ski-snow-column { position: relative; min-width: 0; cursor: pointer; }
+.ski-snow-column[data-inspected] { background: #b6e7f214; }
+.ski-snow-column[data-inspected] .ski-snow-month { color: var(--ski-text); text-decoration: underline; text-underline-offset: 0.2em; }
+.ski-snow-column:has(input:focus-visible) { outline: 2px solid var(--ski-link); outline-offset: -2px; }
 .ski-snow-track {
     position: relative;
     display: flex;
@@ -513,24 +524,72 @@
     justify-content: center;
     height: var(--ski-snow-plot-height);
 }
-.ski-snow-bar { width: min(66%, 2rem); border-radius: 0.2rem 0.2rem 0 0; background: #80bbc9; }
-.ski-snow-empty { padding-bottom: 0.125rem; font-size: 0.6875rem; }
+.ski-snow-bar { width: min(62%, 2rem); min-height: 1px; border-radius: 0.2rem 0.2rem 0 0; background: var(--ski-snowfall-color); }
+.ski-snow-bar[data-zero] { border-block-end: 1px dashed var(--ski-snowfall-color); background: none; }
+.ski-snow-depth-line {
+    position: absolute;
+    z-index: 1;
+    inset: 0 0 auto;
+    width: 100%;
+    height: var(--ski-snow-plot-height);
+    overflow: visible;
+    pointer-events: none;
+}
+.ski-snow-depth-line path { fill: none; stroke: var(--ski-depth-color); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ski-snow-depth-line .ski-snow-depth-outline { stroke: var(--ski-header); stroke-width: 4.5; }
+.ski-snow-depth-point {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    translate: -50% 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid var(--ski-header);
+    border-radius: 50%;
+    background: var(--ski-depth-color);
+}
+.ski-snow-column[data-inspected] .ski-snow-depth-point { width: 0.625rem; height: 0.625rem; }
 .ski-snow-month {
     display: block;
-    border-block-end: 2px solid transparent;
-    padding-block: 0.25rem 0.125rem;
+    padding-block: 0.375rem 0.25rem;
     text-align: center;
     white-space: nowrap;
     font-size: 0.75rem;
     font-weight: 600;
 }
-.ski-snow-month[data-typical] { border-block-end-color: var(--ski-selected-line); color: var(--ski-text); }
 .ski-snow-columns[data-dense] .ski-snow-month { font-size: 0.65rem; }
+.ski-snow-season-track { display: block; height: 0.25rem; margin-block: 0.125rem 0.25rem; background: var(--ski-line); }
+.ski-snow-season-track[data-typical] { background: var(--ski-season-color); }
+.ski-snow-readout {
+    padding: 0.45rem 0.625rem;
+    border: 1px solid var(--ski-line);
+    border-radius: var(--ski-radius);
+    background: var(--ski-background);
+    font-size: 0.875rem;
+}
+.ski-snow-readout-month { margin-block-end: 0.175rem; font-weight: 650; }
+.ski-snow-readout dl > div { display: flex; justify-content: space-between; align-items: baseline; gap: 0.375rem; }
+.ski-snow-readout dt { display: flex; align-items: center; gap: 0.375rem; color: var(--ski-muted); }
+.ski-snow-readout dd { flex: none; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ski-snow-key { position: relative; flex: none; width: 0.875rem; }
+.ski-snow-key[data-series="snowfall"] { height: 0.55rem; border-radius: 0.125rem 0.125rem 0 0; background: var(--ski-snowfall-color); }
+.ski-snow-key[data-series="depth"] { height: 2px; background: var(--ski-depth-color); }
+.ski-snow-key[data-series="depth"]::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: inherit;
+}
+.ski-snow-key[data-series="season"] { height: 0.25rem; background: var(--ski-season-color); }
 .ski-snow-values { font-size: 0.8125rem; }
 .ski-snow-values-table { width: 100%; border-collapse: collapse; }
 .ski-snow-values-table th { text-align: start; }
-.ski-snow-values-table :is(th, td):last-child { text-align: end; font-variant-numeric: tabular-nums; }
-.ski-snow-values-table :is(th, td) { padding-block: 0.2rem; }
+.ski-snow-values-table :is(th, td):is(:nth-child(2), :nth-child(3)) { text-align: end; font-variant-numeric: tabular-nums; }
+.ski-snow-values-table :is(th, td) { padding: 0.25rem 0.2rem; vertical-align: top; overflow-wrap: anywhere; }
 .ski-snow-values-table tbody tr { border-top: 1px solid var(--ski-line); }
 .ski-snow-values-table thead { color: var(--ski-muted); }
 .ski-snow-sources { border-top: 1px solid var(--ski-line); color: var(--ski-muted); font-size: 0.8125rem; }
@@ -595,6 +654,8 @@
 .ski-map {
     --ski-map-inset: 10px;
     --ski-compact-zoom-bottom: 3.125rem;
+    --ski-map-action-height: 3rem;
+    --ski-map-area-width: 10.5rem;
     position: relative;
     height: 100%;
     min-height: 0;
@@ -607,30 +668,51 @@
     top: var(--ski-map-inset);
     inset-inline: var(--ski-map-inset);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1fr);
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
     gap: 0.5rem;
     pointer-events: none;
 }
 .ski-map-actions .ski-control { pointer-events: auto; white-space: nowrap; }
 .ski-map-actions .ski-previous-view {
-    grid-area: 1 / 1;
+    grid-area: 2 / 1;
     justify-self: start;
     width: auto;
     padding-inline: 0.65rem;
     box-shadow: var(--ski-panel-shadow);
 }
-.ski-area-search {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: center;
-    min-width: 9.65rem;
-    border-radius: 2rem;
-    box-shadow: var(--ski-panel-shadow);
+.ski-map-area {
+    grid-area: 1 / 1;
+    justify-self: start;
+    display: flex;
+    max-inline-size: 100%;
+    border-radius: var(--ski-radius);
+    background: var(--ski-panel);
+    box-shadow: inset 0 0 0 1px var(--ski-line), var(--ski-panel-shadow);
 }
-.ski-area-search:not(.ski-primary) .ski-icon { color: var(--ski-link); }
+.ski-map-area .ski-control { border-color: transparent; background: transparent; }
+.ski-map-area .ski-area-search {
+    flex: 0 1 var(--ski-map-area-width);
+    inline-size: var(--ski-map-area-width);
+    justify-content: flex-start;
+    min-block-size: var(--ski-map-action-height);
+    padding: 0.3rem 0.6rem;
+    text-align: start;
+    white-space: normal;
+}
+.ski-area-search .ski-icon { color: var(--ski-link); }
+.ski-area-search-copy { display: grid; gap: 0.125rem; min-inline-size: 0; }
+.ski-area-search-detail { color: var(--ski-muted); font-size: 0.8125rem; font-weight: 400; }
+.ski-map-area[data-applied] .ski-area-search { color: var(--ski-text); }
+.ski-map-area:has(.ski-area-clear) .ski-area-search { border-start-end-radius: 0; border-end-end-radius: 0; }
+.ski-map-area .ski-area-clear {
+    align-self: stretch;
+    border-inline-start-color: var(--ski-line);
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+}
 .ski-map-utilities {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 1;
     justify-self: end;
     display: flex;
@@ -799,10 +881,6 @@
 .ski-status .maplibregl-canvas:focus-visible { outline-offset: -3px; }
 
 @container (max-width: 32rem) {
-    .ski-map-actions { grid-template-columns: minmax(0, 1fr) auto; }
-    .ski-map-actions .ski-previous-view { grid-row: 2; }
-    .ski-area-search { grid-column: 1; }
-    .ski-map-utilities { grid-column: 2; }
     .ski-map .maplibregl-ctrl-top-right { top: auto; bottom: var(--ski-compact-zoom-bottom); }
     .ski-map .maplibregl-ctrl-top-right .maplibregl-ctrl-group { margin-top: 0; }
 }
@@ -815,7 +893,9 @@
 }
 
 @container (max-width: 32rem) and (height > 11rem) {
-    .ski-map-actions:has(.ski-previous-view) .ski-layer-panel { --ski-layer-start: calc(2 * (var(--ski-target) + 0.5rem)); }
+    .ski-map-actions:has(.ski-previous-view) .ski-layer-panel {
+        --ski-layer-start: calc(var(--ski-map-action-height) + var(--ski-target) + 1rem);
+    }
 }
 
 @container (max-width: 22rem) {
@@ -834,6 +914,12 @@
     .ski-map .maplibregl-ctrl-top-right .maplibregl-ctrl-group button + button {
         border-top: 0;
         border-inline-start: 1px solid var(--ski-line);
+    }
+}
+
+@container (max-height: 11rem) and (min-width: 34rem) {
+    .ski-layer-panel {
+        max-inline-size: calc(100% - var(--ski-layer-end) - var(--ski-map-area-width) - var(--ski-target) - 0.5rem);
     }
 }
 
@@ -886,6 +972,66 @@
     background: var(--ski-header);
 }
 .ski-dialog-footer .ski-control { padding-inline: 1rem; }
+.ski-about-copy, .ski-admin { display: grid; gap: 0.875rem; }
+.ski-about-copy a { color: var(--ski-link); text-decoration: underline; text-underline-offset: 0.18em; }
+.ski-about-build {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--ski-line);
+    border-radius: var(--ski-radius);
+    background: var(--ski-panel);
+}
+.ski-about-build dt, .ski-admin-snapshots dt { color: var(--ski-muted); font-size: 0.875rem; }
+.ski-about-build dd { font-weight: 600; }
+.ski-admin-dialog { width: min(62rem, calc(100vw - 1.25rem)); max-height: min(52rem, calc(100dvh - 1.25rem)); }
+.ski-admin-section {
+    min-width: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--ski-line);
+    border-radius: var(--ski-radius);
+    background: var(--ski-header);
+}
+.ski-admin-section h3 { font-weight: 650; }
+.ski-admin-feed-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.ski-admin-feed-state {
+    padding: 0.2rem 0.55rem;
+    border: 1px solid currentColor;
+    border-radius: 1rem;
+    color: var(--ski-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+.ski-admin-feed-state[data-state="available"] { color: #a7f3d0; }
+.ski-admin-feed-state:is([data-state="unavailable"], [data-state="partial"]) { color: #fcd68c; }
+.ski-admin-counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; margin-block: 0.75rem 0.5rem; }
+.ski-admin-counts > div { min-width: 0; padding: 0.6rem; border-radius: var(--ski-radius); background: var(--ski-panel); }
+.ski-admin-counts dt { font-size: 0.875rem; line-height: 1.3; }
+.ski-admin-counts dd { display: grid; }
+.ski-admin-counts strong { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.ski-admin-counts small { color: var(--ski-muted); font-size: 0.8125rem; line-height: 1.4; }
+.ski-admin-note { color: var(--ski-muted); font-size: 0.875rem; }
+.ski-admin-snapshots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 0.5rem 1rem;
+    border-top: 1px solid var(--ski-line);
+    margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    font-size: 0.875rem;
+}
+.ski-admin-snapshots dd { display: flex; flex-wrap: wrap; gap: 0 0.4rem; }
+.ski-admin-snapshots dd > span { color: var(--ski-link); }
+.ski-admin-coverage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 0.75rem; }
+.ski-admin-coverage { display: grid; gap: 0.65rem; margin-top: 0.65rem; font-size: 0.875rem; }
+.ski-admin-coverage li > div { display: flex; justify-content: space-between; gap: 0.5rem; }
+.ski-admin-coverage li > div > :last-child { color: var(--ski-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ski-admin-coverage-track { display: block; height: 0.25rem; margin-top: 0.25rem; border-radius: 1rem; background: var(--ski-line); }
+.ski-admin-coverage-track > span { display: block; height: 100%; border-radius: inherit; background: var(--ski-selected-line); }
+@media (min-width: 47rem) {
+    .ski-admin-counts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 .ski-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
 .ski-fields .ski-field { display: grid; align-content: start; min-width: 0; gap: 0.25rem; }
 .ski-fields label { font-size: 0.875rem; }
@@ -914,7 +1060,6 @@
 
 @media (max-width: 55rem) {
     .ski-brand { gap: 0.25rem; }
-    .ski-brand a span { display: none; }
     .ski-brand h1 { font-size: 1.25rem; }
     .ski-pass-button { padding-inline: 0.45rem; font-size: 0.8125rem; }
     .ski-pass-button:last-child .ski-pass-name { max-width: 4.5rem; white-space: normal; text-align: start; }
@@ -1007,10 +1152,17 @@
 @media (forced-colors: active) {
     .ski-status select.ski-input { appearance: auto; padding-inline-end: 0.65rem; background-image: none; }
     .ski-segments button[aria-pressed="true"], .ski-pass-button[aria-pressed="true"], .ski-control[data-active] { border-color: Highlight; color: Highlight; }
-    .ski-pass-buttons, .ski-mode-switch, .ski-map-utilities { outline: 1px solid ButtonText; outline-offset: -1px; }
+    .ski-pass-buttons, .ski-mode-switch, .ski-map-area, .ski-map-utilities { outline: 1px solid ButtonText; outline-offset: -1px; }
     .ski-pass-check, .ski-filter-count { color: HighlightText; background: Highlight; forced-color-adjust: none; }
-    .ski-snow-bar { background: CanvasText; forced-color-adjust: none; }
+    .ski-admin-coverage-track { outline: 1px solid CanvasText; }
+    .ski-admin-coverage-track > span { background: Highlight; forced-color-adjust: none; }
+    .ski-snow-figure { --ski-snowfall-color: CanvasText; --ski-depth-color: Highlight; --ski-season-color: Highlight; }
+    :is(.ski-snow-bar, .ski-snow-depth-line, .ski-snow-depth-point, .ski-snow-season-track[data-typical], .ski-snow-key) {
+        forced-color-adjust: none;
+    }
+    .ski-snow-depth-line .ski-snow-depth-outline { stroke: Canvas; }
+    .ski-snow-depth-point { border-color: Canvas; }
+    .ski-snow-column:has(input:focus-visible) { outline-color: Highlight; }
     .ski-typical-season { border-inline-start-color: Highlight; }
-    .ski-snow-month[data-typical] { border-block-end-color: Highlight; }
     .ski-status :is(button, a, select, input, summary, [tabindex]):focus-visible { outline-color: Highlight; }
 }

@@ -13,7 +13,7 @@ const reviewedReports = reportSnapshotSchema.parse(operatorReports).reports;
 export function useSkiConditions() {
     const [now, setNow] = useState(Date.now);
     const [feed, setFeed] = useState<ConditionsFeed>({});
-    const [reportsLoading, setReportsLoading] = useState(true);
+    const [feedStatus, setFeedStatus] = useState<'checking' | 'available' | 'unavailable'>('checking');
 
     useEffect(() => {
         const controller = new AbortController();
@@ -23,16 +23,18 @@ export function useSkiConditions() {
         async function load() {
             try {
                 const next = await loadConditionsFeed(current, signal);
-                if (!signal.aborted && next !== current) {
+                if (signal.aborted) return;
+                setFeedStatus('available');
+                if (next !== current) {
                     current = next;
                     setFeed(next);
                     setNow(Date.now());
                 }
             } catch {
                 // Keep the most recent valid snapshots on provider and network failures.
+                if (!signal.aborted) setFeedStatus('unavailable');
             } finally {
                 if (!signal.aborted) {
-                    setReportsLoading(false);
                     refresh = setTimeout(() => { void load(); }, 5 * minute);
                 }
             }
@@ -60,5 +62,10 @@ export function useSkiConditions() {
         return latest;
     }, [reportData, now]);
     const forecasts = useMemo(() => new Map(forecastData.forecasts.map(forecast => [forecast.areaId, forecast])), [forecastData]);
-    return useMemo(() => ({ reports, forecasts, now, reportsLoading }), [reports, forecasts, now, reportsLoading]);
+    return useMemo(() => ({
+        reports, forecasts, now, feed, feedStatus, reportsLoading: feedStatus === 'checking',
+        reportsGeneratedAt: reportData.generatedAt, forecastsGeneratedAt: forecastData.generatedAt,
+    }), [reports, forecasts, now, feed, feedStatus, reportData.generatedAt, forecastData.generatedAt]);
 }
+
+export type SkiConditions = ReturnType<typeof useSkiConditions>;

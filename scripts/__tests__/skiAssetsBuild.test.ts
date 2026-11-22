@@ -16,7 +16,7 @@ vi.mock(import('../ski-asset-files.ts'), async original => {
     const localFile = 'runtime/pass-icons/ikon.png';
     return {
         ...await original(),
-        skiRuntimeFiles: new Map([[`runtime/pass-icons/${checksum}/ikon.png`, { localFile, checksum }]]),
+        skiRuntimeFiles: new Map([[`runtime/pass-icons/${checksum}/ikon.png`, { localFile, sha256: checksum }]]),
     };
 });
 
@@ -91,7 +91,7 @@ describe('ski-status release asset packaging', () => {
         const terrainBytes = Buffer.alloc(1024 * 1024 + 1);
         const checksum = createHash('sha256').update(terrainBytes).digest('hex');
         const file = `runtime/terrain/${checksum}/resort-terrain.pmtiles`;
-        skiRuntimeFiles.set(file, { localFile: file, checksum });
+        skiRuntimeFiles.set(file, { localFile: file, sha256: checksum });
         try {
             vi.stubGlobal('fetch', vi.fn(async (url: URL) => new Response(url.pathname.endsWith(`/${file}`) ? terrainBytes : bytes)));
             const assets = await buildAssets('https://example.test/ski/');

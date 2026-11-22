@@ -49,6 +49,132 @@
         }
       ]
     },
+    "falls-creek": {
+      "checkedOn": "2026-11-22",
+      "lodges": [
+        {
+          "name": "Accommodation Transfer Terminal",
+          "role": "Overnight arrivals, parking assignment and oversnow transfer.",
+          "source": "https://www.skifalls.com.au/discover-falls-creek/plan-your-trip/parking",
+          "checkedOn": "2026-11-22"
+        },
+        {
+          "name": "Cloud 9",
+          "role": "Public on-mountain restaurant at Halley’s Comet.",
+          "source": "https://www.skifalls.com.au/whats-on/latest-news/opening-weekend-at-falls-creek",
+          "checkedOn": "2026-11-22"
+        }
+      ],
+      "parking": [
+        {
+          "name": "The Gully, Slalom and Windy Corner day lots",
+          "location": "Falls Creek village perimeter",
+          "source": "https://www.skifalls.com.au/discover-falls-creek/plan-your-trip/parking",
+          "checkedOn": "2026-11-22",
+          "policy": "A resort entry permit is required. Overnight parking uses separate staff-assigned areas."
+        },
+        {
+          "name": "Overnight car parks",
+          "location": "Signposted transfer terminal waiting point",
+          "source": "https://www.skifalls.com.au/discover-falls-creek/plan-your-trip/parking",
+          "checkedOn": "2026-11-22",
+          "policy": "Wait for a parking allocation from Accommodation Transfer staff."
+        }
+      ],
+      "shuttle": {
+        "description": "Accommodation Transfer staff direct overnight parking, bring the driver back to the terminal by minibus and transfer guests to lodging by oversnow vehicle.",
+        "source": "https://www.skifalls.com.au/discover-falls-creek/plan-your-trip/parking",
+        "checkedOn": "2026-11-22"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Cloud 9",
+            "feedUrl": "https://www.skifalls.com.au/Portals/0/WebCams/Live/Cloud9.jpg?w=2000",
+            "format": "image"
+          },
+          {
+            "name": "Drovers",
+            "feedUrl": "https://www.skifalls.com.au/Portals/0/WebCams/Live/Drovers.jpg?w=2000",
+            "format": "image"
+          },
+          {
+            "name": "Towers",
+            "feedUrl": "https://www.skifalls.com.au/Portals/0/WebCams/Live/FALLStowers.jpg?w=2000",
+            "format": "image"
+          },
+          {
+            "name": "Main Street",
+            "feedUrl": "https://www.skifalls.com.au/Portals/0/WebCams/Live/Mainstreet.jpg?w=2000",
+            "format": "image"
+          },
+          {
+            "name": "Village",
+            "feedUrl": "https://www.skifalls.com.au/Portals/0/WebCams/Live/Village.jpg?w=2000",
+            "format": "image"
+          }
+        ],
+        "reuse": "Operator-page use. Independent embedding and rebroadcast terms remain unverified.",
+        "source": "https://www.skifalls.com.au/discover-falls-creek/conditions-maps/snow-weather-report",
+        "checkedOn": "2026-11-22"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Downhill terrain, lifts and village connections",
+          "assetUrl": "https://www.fallscreek.com.au/wp-content/uploads/sites/67/2021/08/Falls-Creek-Skiing-Snowboarding-Trail-Map-scaled.jpg",
+          "source": "https://www.fallscreek.com.au/winter-maps/",
+          "checkedOn": "2026-11-22"
+        },
+        {
+          "coverage": "Nordic trails, grades and resort links",
+          "assetUrl": "https://www.fallscreek.com.au/wp-content/uploads/sites/67/2024/10/Cross-Country-Map-2024_Final_Digital.pdf",
+          "season": "2024",
+          "source": "https://www.fallscreek.com.au/winter-maps/",
+          "checkedOn": "2026-11-22"
+        },
+        {
+          "coverage": "Village lodging directory and winter visitor facilities",
+          "assetUrl": "https://www.fallscreek.com.au/wp-content/uploads/sites/67/2023/08/Falls-Village-Map-Update-2023_FINAL.pdf",
+          "season": "2023",
+          "source": "https://www.fallscreek.com.au/winter-maps/",
+          "checkedOn": "2026-11-22"
+        }
+      ]
+    },
+    "mt-hutt": {
+      "checkedOn": "2026-11-22",
+      "lodges": [
+        {
+          "name": "Mt Hutt Base Lodge",
+          "role": "Public skier services, cafe and rentals.",
+          "source": "https://www.mthutt.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Car Parks 1–5",
+          "location": "Mt Hutt Access Road",
+          "source": "https://www.mthutt.co.nz/getting-here-guide",
+          "checkedOn": "2026-11-22",
+          "policy": "Upper lots are closest to the base. Check current closures and capacity before arrival."
+        }
+      ],
+      "shuttle": {
+        "description": "Methven Travel provides the town bus. There is a free on-mountain car park shuttle from lower lots during operation.",
+        "source": "https://www.mthutt.co.nz/getting-here-guide",
+        "checkedOn": "2026-11-22"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Current downhill terrain and base services",
+          "assetUrl": "https://www.mthutt.co.nz/_cf/h/cdn.prod.website-files.com/695d64b1a2835538730848d1/6a418f356e97ecb74d2cf81e_mh-trail-map-2026.pdf",
+          "season": "2026",
+          "source": "https://www.mthutt.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        }
+      ]
+    },
     "perisher": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -152,6 +278,117 @@
           "checkedOn": "2026-11-21"
         }
       ]
+    },
+    "the-remarkables": {
+      "checkedOn": "2026-11-22",
+      "lodges": [
+        {
+          "name": "Base Building",
+          "role": "Slope-side ticketing, rental, dining and ski school facilities.",
+          "source": "https://www.theremarkables.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Car parks 1–5",
+          "location": "The Remarkables Road",
+          "source": "https://www.theremarkables.co.nz/getting-here-guide",
+          "checkedOn": "2026-11-22",
+          "policy": "Free parking; lots 1–3 are within walking distance."
+        },
+        {
+          "name": "Premium parking",
+          "location": "Above the maintenance building",
+          "source": "https://www.theremarkables.co.nz/getting-here-guide",
+          "checkedOn": "2026-11-22",
+          "policy": "16 spaces, online advance booking required."
+        }
+      ],
+      "shuttle": {
+        "description": "Book the Queenstown ski bus in advance. Free upper-lot shuttle service depends on daily capacity.",
+        "source": "https://www.theremarkables.co.nz/getting-here-guide",
+        "checkedOn": "2026-11-22"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Downhill terrain, lifts and ski-area boundary",
+          "assetUrl": "https://www.theremarkables.co.nz/_cf/h/cdn.prod.website-files.com/69f122bc870708d57935b25d/6a5d5c7bcf0e0a9409972e05_re-2026-trail-map.pdf",
+          "season": "2026",
+          "source": "https://www.theremarkables.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        },
+        {
+          "coverage": "Ground and first-floor layout of the base building",
+          "assetUrl": "https://www.theremarkables.co.nz/_cf/h/cdn.prod.website-files.com/69f122bc870708d57935b25d/6a5d607c277c6a6e00a40398_RE_BaseArea.pdf",
+          "source": "https://www.theremarkables.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        }
+      ]
+    },
+    "thredbo": {
+      "checkedOn": "2026-11-21",
+      "lodges": [
+        {
+          "name": "Friday Flat",
+          "role": "Beginner area, Easy Does It and Gunbarrel chairs",
+          "source": "https://www.thredbo.com.au/arrival/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "name": "Valley Terminal",
+          "role": "Main resort services and lift access",
+          "source": "https://www.thredbo.com.au/arrival/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Friday Flat parking",
+          "location": "Friday Flat Drive",
+          "source": "https://www.thredbo.com.au/about-thredbo/getting-here/parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "Follow signed day and overnight allocations."
+        },
+        {
+          "name": "Village parking",
+          "location": "Near Valley Terminal",
+          "source": "https://www.thredbo.com.au/about-thredbo/getting-here/parking/",
+          "checkedOn": "2026-11-21",
+          "policy": "Operator map labels parking by day or overnight use."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Winter 2026 downhill terrain and base connections",
+          "assetUrl": "https://cdn.thredbo.com.au/wp-content/uploads/2026/05/29115602/260325-1-Winter-2026-Tear-off-Trail_lowres.pdf",
+          "season": "2026",
+          "source": "https://www.thredbo.com.au/arrival/",
+          "checkedOn": "2026-11-21"
+        },
+        {
+          "coverage": "Thredbo village winter bus route map",
+          "assetUrl": "https://cdn.thredbo.com.au/wp-content/uploads/2024/06/18155656/2024-Winter-Bus-Route-Map-A4-low-res.pdf",
+          "source": "https://www.thredbo.com.au/arrival/",
+          "checkedOn": "2026-11-21"
+        }
+      ],
+      "shuttle": {
+        "description": "Operator describes seasonal bus connections and local village stops. Consult the winter timetable.",
+        "source": "https://www.thredbo.com.au/arrival/",
+        "checkedOn": "2026-11-21"
+      },
+      "webcams": {
+        "cameras": [
+          {
+            "name": "Thredbo snow cams",
+            "view": "Operator snow camera gallery"
+          }
+        ],
+        "reuse": "Operator-page use. Independent embedding and rebroadcast terms remain unverified.",
+        "source": "https://www.thredbo.com.au/weather/snow-cams/",
+        "checkedOn": "2026-11-21"
+      }
     }
   }
 }

@@ -30,7 +30,7 @@ Select **All resorts** to include all areas that match the other filters.
 - Open **Visitor information** for trail maps, day-ticket prices, lodges, parking, shuttles, and webcams. Check the recorded season and date. Prices use local currencies. Use the source links to check current prices and access.
 - Select a state, province, or country in a resort location to focus the map on that place. The view switches to the map when necessary. The search and filters stay in effect.
 - Open Google Maps for a verified resort listing or visitor entrance. The map search uses the area's name, location, and ski activity. A Wikipedia link opens a verified article or ski area section.
-- Check the dates in **Season and snowfall**. Open **Monthly values** to read the amounts. Select **Snow depth** when that option is available. Open **Snow sources** to check the measurement sites and periods.
+- Open **Season and snowfall** to see snowfall, snow depth, and the typical ski season on one chart. Select a month to read its values. Open **Snow sources** to check the measurement sites and periods.
 - Select **Close details**. If the control that opened the panel is visible, the app returns focus to it. Press Escape on the map or select empty space to clear the selection. Use skip links to reach search, the map, or results.
 - On a wide screen, the map and results appear side by side. On a phone, switch between **Map** and **Results**. Select **Compare** for the full table.
 - **Results** shows each available resort icon next to its name. Choose a field to change the sort order. Each result shows its value for that field. If the value is missing, the result shows **Unknown**.
@@ -40,9 +40,26 @@ Select **Share current view** beside the result count. Use the system share menu
 The link saves the search, filters, sort order, selected area, view, map position, and layers.
 The browser saves units and columns.
 
+### Check build and data status
+
+Open **About** to find the site version, build date in UTC, and contact information.
+The **rsmb.tv** link opens the main site from local and hosted previews.
+Select **Open admin panel** to check catalog coverage and live conditions.
+The panel is public and read-only.
+
+The coverage counts use the full catalog. The live counts use each area's local ski day.
+The panel shows the date and source of each snapshot. **Bundled** means the build supplied the data.
+**Last verified** means a refresh failed and the app kept an earlier download.
+**Snapshot unavailable** means the manifest loaded but one of its snapshot files failed verification or download.
+
 ### Map display
 
-Pan or zoom the globe to explore. The URL updates when the map stops. Select **Search this area** to set the map area. Remove the **Map area** filter to clear it. Open a shared link to restore the map position and search area at any screen width.
+Pan or zoom the globe to explore. The map area control previews the number of matches in view.
+Select **Search this area** to apply that area to **Results** and **Compare**.
+After you move the map, select **Update area** to use the new view.
+
+Clear the area from the map control, the **Map area** filter, or the empty results panel.
+Back, Forward, and shared links restore the map position and applied area. [Map area search research](../../docs/reviews/2026-11-21-ski-status-map-area-search.md)
 
 The map draws one marker for each ski area at every zoom level. **Resort icons** puts each available logo on a contrasting background. Other areas use a mountain symbol. Icons stay small at globe scale and grow as you zoom in. Resort names fade in between zoom levels 7 and 9.5 where they have space. The operating status layer uses symbols and colors. A gold outline marks the selected area.
 
@@ -79,7 +96,7 @@ Interstates and other major highways start to fade in near zoom level 6. They ge
 
 Turn on **Snow depth** to see NOAA estimates for the contiguous United States. The layer fades in at regional zoom. It starts to fade out when resort outlines appear at zoom level 9. It is barely visible at level 13 and disappears at level 14. NOAA uses grid cells about 1 km across. Open **Layers** for depth ranges in the selected units. [NOAA Snow Analysis](https://www.nohrsc.noaa.gov/nsa/), [Snow depth service](https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer)
 
-Resort footprints start to fade in at zoom level 9. Runs and lifts start at level 11. Lift stations start at level 13. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Hover or tap a run or lift to see its mapped name and type. Open **Layers** for the difficulty key and the **Ski terrain** toggle.
+Resort footprints start to fade in at zoom level 9. Their cyan fill fades to fully transparent at level 12, where the dashed outline marks the boundary. Runs and lifts start at level 11. Lift stations start at level 13. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan marks Nordic trails. Violet marks ski touring routes. Hover or tap a run or lift to see its mapped name and type. Open **Layers** for the difficulty key and the **Ski terrain** toggle.
 
 Mountain peaks use triangle markers. Trail-map triangles appear at zoom level 8. They grow at level 9 and get names at level 10. The basemap can supply other peaks within 10 km of a catalog ski area. These peaks use the same steps at levels 10, 11, and 12. Hover or tap a triangle to see the peak name. If the source gives an elevation, the popup shows it on a second line. It rounds the elevation to the nearest whole foot or meter in your selected units. Use **Layers → Mountain peaks** to hide the markers. [Peak records](#mountain-peaks)
 
@@ -91,23 +108,23 @@ If the ski terrain fails, select **Retry ski terrain** at resort zoom. This retr
 
 ## Catalog
 
-On November 21, 2026, the catalog had 588 map points in 21 primary countries.
+On November 22, 2026, the catalog had 588 map points in 21 primary countries.
 The United States had 334 points. Canada had 77. Other countries had 177.
 The country filter also includes Germany through shared areas.
 There were 129 areas with Ikon access and 98 with Epic access.
 There were 297 areas with included Indy access and 34 with Mountain Collective access.
 
 All 588 areas have at least one published statistic. The catalog has 527 conventional downhill areas, including areas with Nordic trails. Of these, 315 have all six main comparison fields. Mapped terrain values cover 538 areas.
-There are 331 direct Wikipedia links, 12 verified Google Maps destinations, and 31 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md), [Icon index](data/runtime-icons.json)
+There are 334 direct Wikipedia links, 18 verified Google Maps destinations, and 73 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md), [Icon index](data/runtime-icons.json)
 
 | Published field | Areas |
 | --- | ---: |
 | Skiable acreage | 385 |
-| Vertical drop | 467 |
-| Lift count | 496 |
+| Vertical drop | 466 |
+| Lift count | 497 |
 | Trail count | 507 |
-| Base elevation | 423 |
-| Summit elevation | 431 |
+| Base elevation | 424 |
+| Summit elevation | 432 |
 | Downhill trail length | 91 |
 | Nordic trail length | 67 |
 | Highest lift terminal | 56 |
@@ -116,8 +133,8 @@ There are 331 direct Wikipedia links, 12 verified Google Maps destinations, and 
 | Difficulty breakdown | 294 |
 | Season window | 68 |
 | Official conditions link | 553 |
-| Planned season dates | 196 |
-| Average annual snowfall | 183 |
+| Planned season dates | 206 |
+| Average annual snowfall | 186 |
 | Average monthly snowfall | 65 |
 | Monthly snow depth series | 81 |
 
@@ -162,11 +179,11 @@ If only older records are available, the dates appear under **Last recorded seas
 The **Typical season** row gives the usual dates and their source. When enough completed seasons are available, it also gives the typical length in days.
 In **Compare**, open **Columns** and select **Typical season length** to compare and sort the values. The month filter and comparison columns use the same typical season as the details. [Date rules](#opening-and-closing-dates)
 
-The chart uses vertical bars that start at zero. Months run from left to right.
-The ski year starts in July in the north and January in the south. The chart covers the months between the first and last measurements.
-The line below the month labels marks the typical ski season. The typical dates also appear in text.
-Open **Monthly values** for the amounts in the selected units. The app rounds amounts for display. A dash in the chart marks a month with no data.
-Use **Snowfall** and **Snow depth** to change the measure. Each measure uses its own scale. [ONS axes and gridlines guide](https://service-manual.ons.gov.uk/data-visualisation/guidance/axes-and-gridlines), [W3C table headers guide](https://www.w3.org/WAI/tutorials/tables/two-headers/)
+The chart shows snowfall bars and a depth line on one scale that starts at zero. A strip below the month labels marks the months that overlap the typical ski season. Northern Hemisphere charts run from October through May. Southern Hemisphere charts follow calendar order and span the available measurements and typical season. [ONS axes and gridlines guide](https://service-manual.ons.gov.uk/data-visualisation/guidance/axes-and-gridlines)
+
+Hover or tap a month to inspect it. With a keyboard, press Tab to enter the chart. Press an arrow key to select another month.
+Open **Monthly values** for a table and links to available measurements.
+A gap in a series indicates a missing reading. Reported zeros appear at the baseline. [W3C radio group pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/), [W3C table headers guide](https://www.w3.org/WAI/tutorials/tables/two-headers/)
 
 Monthly snowfall is the average of the monthly totals. Snow depth measures settled snow at the given location.
 Open **Snow sources** for the source of each measure. Citations with the same provider, site, and period share an entry.
@@ -242,10 +259,12 @@ The importer also accepts `--assets-root`.
 - `runtime/terrain/<checksum>/resort-terrain.pmtiles` holds the archive named in the terrain index. Vite sends the byte ranges that the map requests.
 - `trail-maps/` and `resort-icons/` hold research copies. Open Vite on localhost to use these copies.
   Vite lists available files from the batch manifests. The app uses the icon previews and links to matching NAS trail maps.
-  Vite verifies the manifest's byte count and streams the file to check its SHA-256 checksum.
-  It reuses a verified checksum while the file's size, identity, and timestamps stay the same.
   When a file changes, give the new copy a different path and record it in the next manifest.
   Refresh the page after a batch saves a new manifest.
+
+Vite checks the SHA-256 checksum before it serves a runtime or research file.
+For a research file, Vite also checks the byte count in the manifest.
+Vite reuses the checksum check while the file's size, identity, and timestamps stay the same.
 
 ### Release assets
 
@@ -267,7 +286,7 @@ A missing file, a file that exceeds its limit, or a checksum error stops the bui
 
 The catalog covers the 26/27 Ikon destination list, including Europe, Asia, Oceania, and Chile. It uses separate points for the three NZSki areas, the three Grandvalira areas, and the five Valle d’Aosta areas. Each of the 12 Dolomiti Superski regions has one point. Search by group name, such as **Dolomiti Superski** or **SkiBig3**, to find its areas. The pass links give shared limits and product rules. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
 
-Ischgl / Samnaun, Galtür, Kappl, and See share seven days on the Ikon Pass or five days on the Ikon Base Pass. The date filter uses each area's published winter schedule. [Ikon access at Ischgl](https://www.ikonpass.com/en/destinations/ischgl), [Ischgl / Samnaun schedule](https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass), [Galtür schedule](https://www.galtuer.com/en/bergbahnen-galtuer/winter/ski-pass-prices-silvapark), [Kappl and See schedule](https://www.see.at/en/winter/operating-times-prices/skipass-prices-see-kappl)
+Ischgl / Samnaun, Galtür, Kappl, and See share seven Ikon Pass days. They share five Ikon Base days. The date filter uses each area's published winter schedule. [Ikon access at Ischgl](https://www.ikonpass.com/en/destinations/ischgl), [Ischgl / Samnaun schedule](https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass), [Galtür schedule](https://www.galtuer.com/en/bergbahnen-galtuer/winter/ski-pass-prices-silvapark), [Kappl and See schedule](https://www.see.at/en/winter/operating-times-prices/skipass-prices-see-kappl)
 
 ### Epic destinations
 
@@ -292,11 +311,15 @@ If the trip media path is unavailable, start Vite directly for ski-status.
 npx vite --host 127.0.0.1
 ```
 
-Run the project tests with V8 coverage. Use the same source paths for each comparison.
+Run the project tests with V8 coverage. Use the same test filters and source paths for each comparison.
 
 ```bash
-npm run test:coverage -- ski \
+npm run test:coverage -- src/test/ski scripts/__tests__/ski \
+  scripts/__tests__/syncSkiStatus.test.ts scripts/__tests__/lakeLouiseConditions.test.ts \
+  scripts/__tests__/mammothConditions.test.ts scripts/__tests__/releaseSkiTerrain.test.ts \
   --coverage.include='src/features/ski-status/**' \
+  --coverage.include='src/pages/SkiStatus.tsx' \
+  --coverage.include='projects/ski-status/scripts/*.ts' \
   --coverage.include='scripts/ski-*.ts' \
   --coverage.include='shared/ski*.ts'
 ```
@@ -345,7 +368,7 @@ Open the globe at `/projects/ski-status/map`. Open all resorts in Compare at `/p
 | Globe on mobile | 66 | 67 | 9,132 ms | 7,891 ms |
 | Globe on desktop | 65 | 67 | 2,853 ms | 1,823 ms |
 
-Compare rendered 2,009 elements on the first page, down from 50,356. Opening Compare directly skips the MapLibre download. The globe sets its projection and initial camera before drawing. It limits the canvas pixel ratio to 1.5. Chromium with Moto G4 emulation measured a drop from 3.83 seconds to 2.52 seconds for the basemap and markers to become usable.
+Compare rendered 2,009 elements on the first page, down from 50,356. Opening Compare directly skips the MapLibre download. The globe sets its projection and initial camera before drawing. It limits the canvas pixel ratio to 1.5. The Chromium test used Moto G4 emulation. The time to use the basemap and markers fell from 3.83 seconds to 2.52 seconds.
 
 Accessibility and SEO scored 100 in all six audits. Best Practices scored 96 in each run while the hosted conditions manifest returned HTTP 403. Lighthouse’s largest paint on the globe page measures visible text in the interface. [Lighthouse performance scoring](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/)
 
@@ -402,10 +425,10 @@ Use a separate access file for each local ski season. Vite checks the files and 
 The site includes the fields that **Visitor information** displays. Research notes stay in the repository.
 The panel shows map editions when the source gives them. Camera links open the published image, player, or operator page. [2026/27 resort access](research/resort-access-2026-27.json), [2026 resort access](research/resort-access-2026.json)
 
-On November 21, 2026, seasonal access records included lodge or day facility details for 153 resorts.
-There are 65 checked resort map points. These points include both entrances and lift bases.
-There are 141 resorts with parking records and 146 with official trail maps.
-There are 88 resorts with adult day prices or price bounds. There are 112 with operator cameras. [Batch coverage](research/data-quality-log.md)
+On November 22, 2026, seasonal access records included lodge or day facility details for 187 resorts.
+There are 70 checked resort map points. These points include both entrances and lift bases.
+There are 173 resorts with parking records and 180 with official trail maps.
+There are 99 resorts with adult day prices or price bounds. There are 135 with operator cameras. [Batch coverage](research/data-quality-log.md)
 
 ```text
 Follow projects/ski-status/.agents/skills/ski-status-data-quality/SKILL.md.
@@ -476,9 +499,11 @@ All Resorts includes Andermatt–Sedrun–Disentis and Crans-Montana at every du
 
 The Ikon Pass includes two separate days at each of 14 Bonus Mountains. Their blackouts are December 26–30, January 16–17, and February 13–14. The details give ticket-window or direct-to-lift instructions. Standard Ikon lift reservations are required at Deer Valley, Jackson Hole, and Loon for products with access. [Bonus Mountain terms](https://www.ikonpass.com/en/bonus-mountain-program), [Ikon reservation rules](https://www.ikonpass.com/en/how-to-use-your-ikon-pass)
 
+The 2026/27 Ikon Pass shares seven days across the four Aspen Snowmass mountains. Ikon Base gives five days at Snowmass, with blackout dates. Show your pass at a ticket window. Both products allow visits without a lift reservation. [Aspen Snowmass pass guide](https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass)
+
 Indy Add-On access requires verification of an unrestricted home season pass. Select a home area to apply the exclusion. The app shows the requirement in the pass terms. [Indy Add-On rules](https://www.indyskipass.com/this-is-indy/how-it-works)
 
-64 Indy areas have verified product rules, including 59 with rules for all four products. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [2026/27 Indy rules](data/pass-rules/indy-2026-27.json), [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
+67 Indy areas have verified product rules, including 62 with rules for all four products. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [2026/27 Indy rules](data/pass-rules/indy-2026-27.json), [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
 
 Ski Arlberg requires a direct booking with a lodging partner. The app shows this requirement with the shared three-day allowance. [Ski Arlberg pass terms](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
@@ -501,7 +526,7 @@ Each checked report expires at the end of its local ski day. Alberta uses UTC−
 
 ### Opening and closing dates
 
-The season file has 187 records of actual dates for 53 areas. It has plans for 196 areas. 29 records include terrain or conditions from opening day. For 2026/27, 29 areas have recorded first ski days and 193 have at least one scheduled date. [Season dates and sources](data/seasons.json)
+The season file has 190 records of actual dates for 56 areas. It has plans for 206 areas. 31 records include terrain or conditions from opening day. For 2026/27, 30 areas have recorded first ski days and 202 have at least one scheduled date. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
@@ -589,7 +614,9 @@ Verify each feed's terms for storage, display, and export. Limit automatic OpenS
 The local preview reads reports from `.cache/ski-status/`. A manifest request starts one collector when the cache is missing or at least one hour old. Later requests share that job. Each request waits up to 35 seconds. The collector can finish after the request returns.
 **Ski today** uses verified operating status for each resort's local ski day. Use `VITE_SKI_CONDITIONS_LOCAL=0` to check the hosted feed from a local preview.
 
-Run the collector to refresh the local files. It saves reports and forecasts under `.cache/ski-status/`. It prints the coverage counts. Use `--forecasts` to request a new forecast for each covered area. A report-only run also collects forecasts if all retained forecast periods have ended.
+Run the collector to refresh local reports and forecasts. It prints the coverage counts.
+Use `--forecasts` to request a new forecast for each covered area.
+A report-only run requests a forecast for each area with a missing or expired forecast.
 
 ```bash
 node --import tsx/esm projects/ski-status/scripts/sync-conditions.ts --forecasts
@@ -626,7 +653,8 @@ Each snapshot file name contains its SHA-256 checksum. The app checks the manife
 The app and collector accept up to 64 KiB for a manifest and 8 MiB for a snapshot.
 The collector reads one extra byte to detect a larger file. It requests that range from S3. [S3 byte ranges](https://docs.aws.amazon.com/cli/latest/reference/s3api/get-object.html)
 An oversized active manifest stops the collector. An oversized snapshot triggers a refresh of that data.
-If a file check fails, the app uses its last valid snapshot. It uses packaged data before the first valid download.
+The app rejects a manifest older than its last verified publication. A changed snapshot requires a new publication time.
+If a file check fails, the app uses its last verified snapshot. It uses bundled data before the first valid download.
 
 The collector uses the previous data when a provider request fails. A valid current operations report takes priority over an expired or unverified update. A newer timed update from the same operator can withdraw a status during the same ski day.
 The app marks a report stale after the local ski day. Named terrain can update separately.
@@ -635,7 +663,7 @@ Each item in that list uses its latest timed observation across the two reports.
 `recentReports` counts reports with a known status for the current ski day. `reports` also counts earlier or unverified reports.
 `forecasts` counts records that the app can show at the time of collection.
 
-Find archive entries under `history/YYYY-MM-DD/`. New entry names contain a UTC timestamp and the SHA-256 checksum. Older names contain only the timestamp. Each entry lists the snapshots from one collection. When two jobs run at the same time, an archive entry can refer to a collection that the active manifest never used.
+Find archive entries under `history/YYYY-MM-DD/`. New entry names contain a UTC timestamp and the SHA-256 checksum. Older names contain only the timestamp. Each entry lists the snapshots from one collection. Concurrent jobs can both write a history entry. The active manifest records the successful publication.
 
 #### Restore a previous manifest
 
@@ -660,7 +688,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 | Ski assets | Build from the HTTPS mirror. Run the release validator on the hosted preview. Check the revision and `previewJobId` in the report. Confirm that `skiTerrainRanges` is greater than zero. The validator checks the checksum, byte range responses, and both Heavenly tooltips. [Release validator](../../docs/release-validation.md), [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
 | Pass products | Test shared days, reservations, access requirements, excluded products, blackout dates, and discounts. Match each included partner. Record exceptions. |
 | Discovery | Open a resort's report from **Results** on a phone. Pan the map. Check the results before and after **Search this area**. Test Back and Forward. Open a shared view at a different width. Check keyboard focus. Check the map position after a retry. |
-| Snow history | Open an area with snow measurements outside the scheduled season. Verify that the table shows those months. Verify the annual and monthly source links. Check the details at 320 pixels wide. |
+| Snow history | Check that Northern Hemisphere charts show October through May. Inspect both measures and typical season coverage by month with a mouse, keyboard, and touch. Verify the annual and monthly source links. Check the details at 320 pixels wide. |
 | Rockies publication | Before you enable the Rockies feed, compare its snapshots with the operator pages for seven ski days. Check the local ski-day cutoff, missing reports, closures, and partial openings. [Pilot](#conditions-publication) |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
 
@@ -709,7 +737,7 @@ Collect winter road approaches as part of each resort review. Record the highway
 Show each verified pass once on the map. Show the highway and the approaches that use it. Link to the official road status. [Road approach procedure](.agents/skills/ski-status-data-quality/SKILL.md#road-approaches)
 
 Run `npx --no-install vitest run src/test/skiStatusRoadApproaches.test.ts` after a road data change. The test checks catalog IDs, route records, sources, and pass references. [Road data checks](../../src/test/skiStatusRoadApproaches.test.ts)
-The research file has 181 approaches for 61 areas and 27 named passes. [Road approach records](research/road-approaches.json)
+The research file has 285 approaches for 107 areas and 38 named passes. [Road approach records](research/road-approaches.json)
 
 Start live road status and camera coverage in Washington and British Columbia. Match closures, restrictions, and cameras by agency road ID and geometry. Show the agency's report time. Mark missing coverage as unknown.
 Link to agency and resort cameras. Embed a feed if the source permits it. Record published parking locations, prices, and shuttle service. Consider Utah's feed for expansion. [WSDOT Traveler Information API](https://apps.wsdot.wa.gov/traffic/api/), [DriveBC Open511](https://api.open511.gov.bc.ca/help), [BC HighwayCams](https://images.drivebc.ca/bchighwaycam/pub/html/www/index.html), [UDOT API](https://www.udottraffic.utah.gov/developers/doc)

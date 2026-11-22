@@ -1,5 +1,21 @@
 [
   {
+    "id": "alberta-peak",
+    "name": "Alberta Peak",
+    "coordinates": [
+      -106.7952129,
+      37.4560116
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1877459",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "wolf-creek-ski-area",
+        "source": "https://wolfcreekski.com/wp-content/uploads/2026/03/WolfCreekTrailMap_2026_small.pdf"
+      }
+    ]
+  },
+  {
     "id": "bald-mountain-deer-valley",
     "name": "Bald Mountain",
     "coordinates": [
@@ -14,6 +30,22 @@
       {
         "areaId": "deer-valley-resort",
         "source": "https://www.deervalley.com/-/media/deer-valley/skier-services/maps/DeerValleyWinterTrailMap2627"
+      }
+    ]
+  },
+  {
+    "id": "bear-mountain-killington",
+    "name": "Bear Mountain",
+    "coordinates": [
+      -72.8045464,
+      43.6075686
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1456325",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "killington",
+        "source": "https://killington.com/client_media/files/mountain_maps/KillingtonWinterTrailMap2627.pdf"
       }
     ]
   },
@@ -70,6 +102,23 @@
     ]
   },
   {
+    "id": "grizzly-peak-red-lodge",
+    "name": "Grizzly Peak",
+    "coordinates": [
+      -109.35581584,
+      45.17870686
+    ],
+    "elevationFt": 9416,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/784359",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "red-lodge-mountain",
+        "source": "https://www.redlodgemountain.com/wp-content/uploads/RLM-2025-26-Map.pdf"
+      }
+    ]
+  },
+  {
     "id": "james-peak-powder-mountain",
     "name": "James Peak",
     "coordinates": [
@@ -104,6 +153,23 @@
     ]
   },
   {
+    "id": "june-mountain",
+    "name": "June Mountain",
+    "coordinates": [
+      -119.0701438,
+      37.739932
+    ],
+    "elevationFt": 10090,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1702745",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "june-mountain",
+        "source": "https://www.junemountain.com/-/media/june/pdfs/trail-map/26-27_jmsa_trailmap_17x12_web.pdf?rev=607e4e9230754fcab6aaf443e3150e86&hash=BCF8ED"
+      }
+    ]
+  },
+  {
     "id": "jupiter-peak",
     "name": "Jupiter Peak",
     "coordinates": [
@@ -117,6 +183,39 @@
       {
         "areaId": "park-city-mountain",
         "source": "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "kellogg-peak",
+    "name": "Kellogg Peak",
+    "coordinates": [
+      -116.1284978,
+      47.4885346
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/384127",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "silver-mountain-resort",
+        "source": "https://silvermt.com/wp-content/uploads/trail-map-2026.webp"
+      }
+    ]
+  },
+  {
+    "id": "killington-peak",
+    "name": "Killington Peak",
+    "coordinates": [
+      -72.8201024,
+      43.604513
+    ],
+    "elevationFt": 4241,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1458086",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "killington",
+        "source": "https://killington.com/client_media/files/mountain_maps/KillingtonWinterTrailMap2627.pdf"
       }
     ]
   },
@@ -190,6 +289,23 @@
     ]
   },
   {
+    "id": "mount-adams",
+    "name": "Mount Adams",
+    "coordinates": [
+      -121.490769,
+      46.202421
+    ],
+    "elevationFt": 12276,
+    "locationSource": "https://www.usgs.gov/volcanoes/mount-adams",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "white-pass-ski-area",
+        "source": "https://whitepass-cdn.nyc3.cdn.digitaloceanspaces.com/11MARKETING/MARKETINGtrailMAPS/May2026V3.jpg"
+      }
+    ]
+  },
+  {
     "id": "mount-bachelor",
     "name": "Mount Bachelor",
     "coordinates": [
@@ -207,6 +323,105 @@
     ]
   },
   {
+    "id": "mount-baker",
+    "name": "Mount Baker",
+    "coordinates": [
+      -121.813,
+      48.777
+    ],
+    "elevationFt": 10781,
+    "locationSource": "https://www.usgs.gov/volcanoes/mount-baker",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "mt-baker-ski-area",
+        "source": "https://www.mtbaker.us/wp-content/uploads/2025/12/Baker_TrailMap_2025-26.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mount-belmont",
+    "name": "Mount Belmont",
+    "coordinates": [
+      -112.3312979,
+      46.7478752
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/800436",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "great-divide-ski-area",
+        "source": "https://framerusercontent.com/images/kEqK6KM0Xz61eNwBcMJ4gpb4jGY.jpg"
+      }
+    ]
+  },
+  {
+    "id": "mount-disney",
+    "name": "Mount Disney",
+    "coordinates": [
+      -120.3407566,
+      39.2946272
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/259390",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "sugar-bowl-resort",
+        "source": "https://blog.sugarbowl.com/wp-content/uploads/maps/SugarBowl_Map_sm_2526.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mount-hood",
+    "name": "Mount Hood",
+    "coordinates": [
+      -121.6957927,
+      45.37337296
+    ],
+    "elevationFt": 11245,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1143711",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "timberline-lodge-ski-area",
+        "source": "https://timberlinelodge.com/site/assets/files/6776/timberline_winter_trail_map.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mount-judah",
+    "name": "Mount Judah",
+    "coordinates": [
+      -120.31558539,
+      39.29853301
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/262032",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "sugar-bowl-resort",
+        "source": "https://blog.sugarbowl.com/wp-content/uploads/maps/SugarBowl_Map_sm_2526.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mount-lincoln-sugar-bowl",
+    "name": "Mount Lincoln",
+    "coordinates": [
+      -120.32847183,
+      39.28776604
+    ],
+    "elevationFt": 8383,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/262489",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "sugar-bowl-resort",
+        "source": "https://blog.sugarbowl.com/wp-content/uploads/maps/SugarBowl_Map_sm_2526.pdf"
+      }
+    ]
+  },
+  {
     "id": "mount-ogden",
     "name": "Mount Ogden",
     "coordinates": [
@@ -220,6 +435,23 @@
       {
         "areaId": "snowbasin-resort",
         "source": "https://www.snowbasin.com/getmedia/969afd05-b39b-4ecd-b123-6c0669d41d77/Winter-Trail-Map-2025-26-(22-5in-x-12in)-for-Ikon-reduced.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mount-shuksan",
+    "name": "Mount Shuksan",
+    "coordinates": [
+      -121.60167,
+      48.83111
+    ],
+    "elevationFt": 9127,
+    "locationSource": "https://pubs.usgs.gov/pp/1200us/report.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "mt-baker-ski-area",
+        "source": "https://www.mtbaker.us/wp-content/uploads/2025/12/Baker_TrailMap_2025-26.pdf"
       }
     ]
   },
@@ -242,6 +474,22 @@
     ]
   },
   {
+    "id": "mount-washington-bc",
+    "name": "Mount Washington",
+    "coordinates": [
+      -125.2963889,
+      49.7527778
+    ],
+    "locationSource": "https://apps.gov.bc.ca/pub/bcgnws/names/19169.html",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "mount-washington-alpine-resort",
+        "source": "https://www.mountwashington.ca/wp-content/uploads/migrated/downloads/resort/alpine-2025-trail-map.pdf"
+      }
+    ]
+  },
+  {
     "id": "murdock-peak",
     "name": "Murdock Peak",
     "coordinates": [
@@ -255,6 +503,22 @@
       {
         "areaId": "park-city-mountain",
         "source": "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "rams-head-killington",
+    "name": "Rams Head",
+    "coordinates": [
+      -72.8230553,
+      43.6253958
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1461307",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "killington",
+        "source": "https://killington.com/client_media/files/mountain_maps/KillingtonWinterTrailMap2627.pdf"
       }
     ]
   },
@@ -293,6 +557,22 @@
     ]
   },
   {
+    "id": "slide-mountain-nv",
+    "name": "Slide Mountain",
+    "coordinates": [
+      -119.8843721,
+      39.312698
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/861412",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "mt-rose-ski-tahoe",
+        "source": "https://skirose.com/wp-content/uploads/2022/06/MtROSE-slide-bowl-2023.pdf"
+      }
+    ]
+  },
+  {
     "id": "snowmass-mountain",
     "name": "Snowmass Mountain",
     "coordinates": [
@@ -306,6 +586,23 @@
       {
         "areaId": "snowmass",
         "source": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/2026-2027/2627-trail-maps/2627snowmass-map-layeredfinalweb.pdf"
+      }
+    ]
+  },
+  {
+    "id": "sugarloaf-mountain-me",
+    "name": "Sugarloaf Mountain",
+    "coordinates": [
+      -70.31333,
+      45.03169
+    ],
+    "elevationFt": 4237,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/576507",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "sugarloaf",
+        "source": "https://cdn.sanity.io/files/k8yfdmw9/sugarloaf/dfcf8f514a7b5fd6c62814f5939fd7b6ea9d24c1.pdf"
       }
     ]
   },
@@ -699,6 +996,22 @@
       {
         "areaId": "palisades-tahoe",
         "source": "https://www.palisadestahoe.com/-/media/palisades-tahoe/pdfs/trail-maps/alpine-front-side-trail.pdf?rev=d16a1e2f47a24af8991e4924d5f4f7d2"
+      }
+    ]
+  },
+  {
+    "id": "wardner-peak",
+    "name": "Wardner Peak",
+    "coordinates": [
+      -116.14319769,
+      47.49198824
+    ],
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/392834",
+    "checkedOn": "2026-11-21",
+    "trailMaps": [
+      {
+        "areaId": "silver-mountain-resort",
+        "source": "https://silvermt.com/wp-content/uploads/trail-map-2026.webp"
       }
     ]
   },

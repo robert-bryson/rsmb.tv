@@ -46,13 +46,13 @@ Use existing IDs, schemas, units, and formatting. When you add a resort, update 
 
 Check icon coverage for each resort you review. Include new candidates that qualify for the catalog. Use the resort checkpoint to resume deferred icon checks.
 
-Open the official mark. Check the press kit, favicon, Apple touch icon, or web manifest. Confirm that the mark represents the resort or its official group. Verify the terms for bundling it. Use a simple symbol on the map and a readable mark in details. Keep the original for the archive. [Icon sizes and archive](#archive-new-assets-at-the-end-of-the-run)
+Find the official mark in the press kit, favicon, Apple touch icon, or web manifest. Confirm that it represents the resort or its official group. For this personal project, skip resort logo licensing checks. Bundle one verified official mark per catalog area. Reuse a verified mark and its source from an earlier NAS manifest when available. Archive the original and both preview sizes. [Icon sizes and archive](#archive-new-assets-at-the-end-of-the-run)
 
-Save the app icon as `runtime/resort-icons/<areaId>.png` in the NAS asset folder.
-Add its SHA-256 checksum to `data/runtime-icons.json` with the key `resort-icons/<areaId>.png`.
+Use the 84 × 84 PNG as the shared runtime icon for the map, Results, and details. Save it as `runtime/resort-icons/<areaId>.png` in the NAS asset folder.
+Verify the saved file's SHA-256 checksum and add it to `data/runtime-icons.json` with the key `resort-icons/<areaId>.png`.
 Add its HTTPS source to `iconSources[areaId]` in `data/resort-links.json`.
 Run `skiStatusResortData.test.ts` to check for one source per icon.
-Check the icon on the map, in Results, and in details. Check the map's fallback symbol. [Asset folder](../../../readme.md#local-assets), [Icon registry](../../../../../src/features/ski-status/resortDetailsData.ts), [Map layers](../../../../../src/features/ski-status/skiMapLayers.ts)
+Verify the runtime file loads on the map, in Results, and in details. Use Vite's test mode or a production build to exercise the runtime files directly. Check the map's fallback symbol and record readability issues as follow-ups. [Asset folder](../../../readme.md#local-assets), [Icon registry](../../../../../src/features/ski-status/resortDetailsData.ts), [Map layers](../../../../../src/features/ski-status/skiMapLayers.ts)
 
 Add an `icon` target for each missing mark you check. When you defer a mark, record its URL and the next check. Count bundled icons before and after the batch. Use only catalog area IDs.
 

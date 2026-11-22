@@ -59,8 +59,8 @@ Set `SKI_ASSETS_BASE_URL` at app level in Amplify before the first ski-status bu
 Use an HTTPS mirror with the versioned runtime files for the candidate revision.
 Amplify uses this mirror when the NAS files are unavailable.
 The build checks each SHA-256 checksum. A missing file, a file over its size limit, or a checksum error stops the build.
-Use the asset procedure to prepare the mirror and check its files. [ski-status asset procedure](../projects/ski-status/readme.md#release-assets)
-The SPA rewrite in Terraform excludes `.pmtiles` so Amplify can serve the terrain archive. Apply that rule before you validate the hosted preview. [Rewrite configuration](../infra/main.tf), [AWS rewrite rules](https://docs.aws.amazon.com/amplify/latest/userguide/redirect-rewrite-examples.html#redirects-for-single-page-web-apps-spa)
+Follow the asset procedure to prepare the mirror. [Ski-status asset procedure](../projects/ski-status/readme.md#release-assets)
+Apply the Terraform rewrite before you validate the hosted preview. It lets Amplify serve the `.pmtiles` archive as a data file. [Rewrite configuration](../infra/main.tf), [AWS rewrite rules](https://docs.aws.amazon.com/amplify/latest/userguide/redirect-rewrite-examples.html#redirects-for-single-page-web-apps-spa)
 
 ## Activation
 

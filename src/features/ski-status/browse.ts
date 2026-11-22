@@ -7,6 +7,7 @@ import {
 import { evaluatePass, matchesPassProduct, type PassProduct } from './passRules';
 import { includesSeasonMonth, seasonViewDate, skiSeasonSchedule, typicalSkiSeason } from './seasons';
 import { matchesSkiLocation, matchesSkiLocations, skiAreaCountries, skiCountryName, skiLocationParts, type SkiLocationFilters } from './skiGeography';
+import { skiMapAreaContains, type SkiMapArea } from './skiMapArea';
 
 export type SkiUnits = 'imperial' | 'metric';
 export type PassFilter = PassFamily | 'indy-discounts';
@@ -199,6 +200,12 @@ export function filterSkiAreas(areas: readonly SkiArea[], {
         ].join(' '));
         return words.every(word => searchable.includes(word));
     });
+}
+
+export function filterSkiAreasInMapArea(areas: readonly SkiArea[], mapArea: SkiMapArea) {
+    const contains = skiMapAreaContains(mapArea);
+    return areas.filter(area => contains(skiAreaMapPoint(area))
+        || (area.location.base && contains(area.location.coordinates)));
 }
 
 export function skiAreaBounds(areas: readonly SkiArea[]): [number, number, number, number] | undefined {

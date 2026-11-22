@@ -31,8 +31,10 @@ it('commits a searched area and applies the same matches in Compare', async () =
     fireEvent.click(await screen.findByRole('button', { name: 'Commit area in Nevada' }));
     await screen.findByRole('button', { name: 'Remove Map area' });
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Compare' })); });
-    expect(screen.getByText('No ski areas match these filters.')).toBeVisible();
-    fireEvent.click(screen.getByRole('button', { name: 'Remove Map area' }));
+    const compare = screen.getByRole('region', { name: 'Compare ski areas' });
+    expect(within(compare).getByText('No ski areas match your filters in this map area.')).toBeVisible();
+    fireEvent.click(within(compare).getByRole('button', { name: 'Clear map area' }));
+    expect(compare).toHaveFocus();
     expect(await screen.findByRole('button', { name: 'Whaleback Mountain' })).toBeVisible();
 });
 

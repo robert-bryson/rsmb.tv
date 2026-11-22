@@ -42,13 +42,15 @@ async function readSnapshot<T extends { generatedAt: string }>(
 
 async function updateRows<T extends PilotArea, Row extends PilotArea>(
     areas: readonly T[], previous: Row[], fetchRow: (area: T, previous: Row | undefined) => Promise<Row>, warn: (message: string) => void,
+    needsUpdate?: (previous: Row | undefined) => boolean,
 ) {
     const lookup = new Set(areas.map(area => area.areaId));
     const rows = new Map(previous.filter(row => lookup.has(row.areaId)).map(row => [row.areaId, row]));
-    const results = await Promise.allSettled(areas.map(async area => fetchRow(area, rows.get(area.areaId))));
+    const requested = needsUpdate ? areas.filter(area => needsUpdate(rows.get(area.areaId))) : areas;
+    const results = await Promise.allSettled(requested.map(async area => fetchRow(area, rows.get(area.areaId))));
     let received = 0;
     for (const [index, result] of results.entries()) {
-        const { areaId } = areas[index];
+        const { areaId } = requested[index];
         if (result.status === 'rejected') {
             warn(`${areaId}: ${String(result.reason)}`);
         } else if (result.value.areaId === areaId) {
@@ -82,16 +84,13 @@ export async function publishConditions<T extends PilotArea>(store: ConditionsSt
         readSnapshot(store, previous?.reports, previous?.updatedAt, reportSnapshotSchema.parse, warn),
         readSnapshot(store, previous?.forecasts, previous?.updatedAt, forecastSnapshotSchema.parse, warn),
     ]);
-    const areaIds = new Set(areas.map(area => area.areaId));
     const previousReports = oldReports?.data.reports ?? [];
     const previousForecasts = oldForecasts?.data.forecasts ?? [];
-    const retainedForecasts = previousForecasts.filter(row => areaIds.has(row.areaId));
     const collectionStartedAt = now();
     const [reports, forecasts] = await Promise.all([
         updateRows(areas, previousReports, fetchReport, warn),
-        refreshForecasts || !retainedForecasts.some(row => Date.parse(row.endsAt) > collectionStartedAt)
-            ? updateRows(areas, retainedForecasts, fetchForecast, warn)
-            : { rows: retainedForecasts, received: 0 },
+        updateRows(areas, previousForecasts, fetchForecast, warn,
+            prior => refreshForecasts || !prior || !isCurrentForecast(prior, collectionStartedAt)),
     ]);
     if (!reports.received && !forecasts.received) throw Error('No valid ski conditions updates received');
     const observedAt = now();

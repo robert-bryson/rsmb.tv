@@ -166,12 +166,12 @@
     },
     "bear-valley-mountain-resort": {
       "coordinates": [
-        -120.04526,
-        38.49187
+        -120.0442661,
+        38.4926051
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=f357cc18ead38a393c55cf27921fe05913dc33e1"
+      "name": "Bear Valley Mountain Resort day lodge",
+      "source": "https://www.bearvalley.com/parking-shuttles",
+      "kind": "entrance"
     },
     "beaver-creek-resort": {
       "coordinates": [
@@ -1102,12 +1102,12 @@
     },
     "june-mountain": {
       "coordinates": [
-        -119.082496,
-        37.761682
+        -119.091,
+        37.7696
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=1f94daed2b308fa325be064eebc82535fcc3861b"
+      "name": "June Mountain lower ticket office and J1 parking",
+      "source": "https://www.junemountain.com/plan-your-trip/getting-here",
+      "kind": "entrance"
     },
     "kamui-ski-links": {
       "coordinates": [
@@ -2497,12 +2497,12 @@
     },
     "sugar-bowl-resort": {
       "coordinates": [
-        -120.33266,
-        39.304581
+        -120.3330704,
+        39.305593
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=fa95641c38a689ebebd96aa62b6ee049115fbeee"
+      "name": "Main Lodge (Mt. Judah Lodge)",
+      "source": "https://www.sugarbowl.com/directions",
+      "kind": "entrance"
     },
     "sugar-mountain-resort": {
       "coordinates": [
@@ -2925,6 +2925,24 @@
       ],
       "name": "Pal sector, La Caubella visitor approach",
       "source": "https://visitandorra.com/en/nature--sports/pal-arinsal-summer/",
+      "kind": "entrance"
+    },
+    "tamarack-resort": {
+      "coordinates": [
+        -116.123557,
+        44.6697174
+      ],
+      "name": "Tamarack Village public arrival",
+      "source": "https://tamarackidaho.com/getting-here",
+      "kind": "entrance"
+    },
+    "white-pass-ski-area": {
+      "coordinates": [
+        -121.3915844,
+        46.6370506
+      ],
+      "name": "White Pass Day Lodge and downhill parking",
+      "source": "https://skiwhitepass.com/the-mountain/getting-here-around",
       "kind": "entrance"
     }
   }

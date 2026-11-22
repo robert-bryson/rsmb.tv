@@ -64,18 +64,17 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
         expect(fs.existsSync(path.join(root, 'dist/trips/unfinished-draft.html'))).toBe(false);
         expect(fs.existsSync(path.join(root, 'dist/blog/unfinished-draft.html'))).toBe(false);
         const assets = path.join(root, 'dist/assets');
-        const scripts = fs.readdirSync(assets).filter(filename => filename.endsWith('.js'));
-        expect(scripts.length).toBeGreaterThan(0);
-        const bundledCode = scripts.map(filename => fs.readFileSync(path.join(assets, filename), 'utf8')).join('\n');
-        expect(bundledCode).toContain('Opening story paragraph.');
-        const visitorChunk = scripts.find(filename => filename.startsWith('SkiVisitorInformation-'));
-        expect(visitorChunk).toBeDefined();
-        expect(fs.readFileSync(path.join(assets, visitorChunk!), 'utf8')).toContain('Adult Niseko United All Mountain one-day pass');
-        for (const file of [visitorChunk!, `${visitorChunk}.map`]) {
-            const output = fs.readFileSync(path.join(assets, file), 'utf8');
-            expect(output).not.toContain('External embedding and rebroadcast permission');
-            expect(output).not.toContain('termsSource');
+        const scripts: string[] = [];
+        const privateVisitorData = /External embedding and rebroadcast permission|termsSource/;
+        for (const filename of fs.readdirSync(assets).filter(filename => /\.js(?:\.map)?$/.test(filename))) {
+            const output = fs.readFileSync(path.join(assets, filename), 'utf8');
+            expect(privateVisitorData.test(output), `${filename} contains nonpublic ski visitor fields`).toBe(false);
+            if (filename.endsWith('.js')) scripts.push(output);
         }
+        expect(scripts.length).toBeGreaterThan(0);
+        const bundledCode = scripts.join('\n');
+        expect(bundledCode).toContain('Opening story paragraph.');
+        expect(bundledCode).toContain('Adult Niseko United All Mountain one-day pass');
         expect(bundledCode).not.toContain('unfinished-draft');
         expect(bundledCode).not.toContain('Unfinished draft must stay private');
         expect(fs.existsSync(path.join(root, 'src/content/posts.json'))).toBe(false);

@@ -330,7 +330,10 @@
     "wolf-creek-ski-area": "Wolf Creek ski area",
     "zao-onsen-ski-resort": "Yamagata Zao Onsen Ski Resort",
     "zillertal-arena": "Zillertal Arena",
-    "zuers-am-arlberg": "Ski Arlberg"
+    "zuers-am-arlberg": "Ski Arlberg",
+    "falls-creek": "Falls Creek Alpine Resort",
+    "shiga-kogen-mountain-resort": "Shiga Kogen#Ski resorts",
+    "mt-hutt": "Mount Hutt#Ski field"
   },
   "googleMaps": {
     "bear-mountain": {
@@ -380,41 +383,107 @@
     "powder-mountain": {
       "url": "https://maps.app.goo.gl/5aCkSgJ1B1MWBKNT9",
       "source": "https://powdermountain.com/getting-to-powder"
+    },
+    "bear-valley-mountain-resort": {
+      "url": "https://www.google.com/maps/place/Bear+Valley+Mountain+Resort/@38.4926093,-120.046841,17z/data=!3m1!4b1!4m9!3m8!1s0x8099fd7f44821d43:0x147fe28c3b7a7f5b!5m2!4m1!1i2!8m2!3d38.4926051!4d-120.0442661!16zL20vMDJzank5?entry=tts&g_ep=EgoyMDI0MDkxMS4wKgBIAVAD",
+      "source": "https://www.bearvalley.com/parking-shuttles"
+    },
+    "sugar-bowl-resort": {
+      "url": "https://www.google.com/maps/place/Mt+Judah+Lodge/@39.3065239,-120.3353385,569m/data=!3m2!1e3!5s0x809be7f8322631df:0x65b652c764fd3fb4!4m5!3m4!1s0x809be7f831f944e1:0x1ef8b2f2bc2232d6!8m2!3d39.305593!4d-120.3330704?shorturl=1",
+      "source": "https://www.sugarbowl.com/directions"
+    },
+    "tamarack-resort": {
+      "url": "https://www.google.com/maps/place/850+Village+Dr,+Donnelly,+ID+83615/@44.6697212,-116.1261319,17z/data=!3m1!4b1!4m6!3m5!1s0x54a60cda41177e91:0xaca31d4bb8a1f97f!8m2!3d44.6697174!4d-116.123557!16s%2Fg%2F11gdky0485?entry=tts&g_ep=EgoyMDI2MDYxMC4wIPu8ASoASAFQAw%3D%3D&skid=53e9eb6c-8c85-4b52-a841-63d96ec88d1a",
+      "source": "https://tamarackidaho.com/getting-here"
+    },
+    "june-mountain": {
+      "url": "https://www.google.com/maps/place/37%C2%B046'10.6%22N+119%C2%B005'27.6%22W/@37.7693868,-119.0907683,16z/data=!4m5!3m4!1s0x0:0x84bb4138e14e265d!8m2!3d37.7696!4d-119.091?coh=164777&entry=tt&shorturl=1",
+      "source": "https://www.junemountain.com/plan-your-trip/getting-here"
+    },
+    "white-pass-ski-area": {
+      "url": "https://www.google.com/maps/place/White+Pass+Ski+Resort/@46.6370506,-121.3937731,17z/data=!3m2!4b1!5s0x54973b0fabf486e3:0xdf4be958f1498184!3m4!1s0x54973b0fabf486e3:0xdf4be958f1498184!8m2!3d46.6370506!4d-121.3915844",
+      "source": "https://skiwhitepass.com/the-mountain/getting-here-around"
+    },
+    "soldier-mountain-ski-area": {
+      "url": "https://www.google.com/maps?q=Soldier+Mountain,+1043+Soldier+Creek+Rd,+Fairfield,+ID+83327&ftid=0x54abe3c3b5f22b71:0x822b59b5847094b4&hl=en-US&gl=us&coh=183435&entry=gps&lucs=,47074634,47071704&g_ep=CAISBjYuODEuMRgAINeCAyoSLDQ3MDc0NjM0LDQ3MDcxNzA0QgJVUw%3D%3D&g_st=i",
+      "source": "https://soldiermountain.com/contact/"
     }
   },
   "iconSources": {
     "alta": "https://www.alta.com/icons/android-chrome-192x192.png?v=2",
+    "apex-mountain-resort": "https://apexresort.com/wp-content/uploads/2023/12/Apex-Thumbnail-Image.jpg",
+    "arapahoe-basin": "https://www.arapahoebasin.com/img/80th/ab_est1946_logo_1c_white_rgb.svg",
+    "aspen-highlands": "https://www.aspensnowmass.com/-/media/aspen-snowmass/images/mobile-apps/app-icon.png?h=126&w=126&hash=34B9CA3EDB5D9AE3261A4F276507E081",
+    "aspen-mountain": "https://www.aspensnowmass.com/-/media/aspen-snowmass/images/mobile-apps/app-icon.png?h=126&w=126&hash=34B9CA3EDB5D9AE3261A4F276507E081",
     "banff-sunshine": "https://www.skibanff.com/themes/custom/origin/images/favicon/apple-touch-icon.png",
+    "bear-valley-mountain-resort": "https://static.wixstatic.com/media/93e5c3_fc3f5c2d57564e58b568e882bd855834~mv2.png",
     "big-white-ski-resort": "https://www.bigwhite.com/sites/default/files/big-white-favicon64-w1.ico",
+    "brighton-resort": "https://cdn.sanity.io/images/8ts88bij/brighton/d4e591476cb5eaa68d1fdbaff24b8a0e0e89d64f-1024x1024.svg",
     "copper-mountain": "https://www.coppercolorado.com/favicon-32x32.png?v=af20e7df4ec9d6aad6f2bd3f23355ce2",
     "coronet-peak": "https://www.coronetpeak.co.nz/_cf/h/cdn.prod.website-files.com/69d83bba1fb7149e2578fd8b/69dc10de48dbad6b7fa1e6fd_CP.png",
     "discovery-ski-area": "https://www.skidiscovery.com/wp-content/uploads/2017/10/site-icon-ram.png",
+    "falls-creek": "https://www.skifalls.com.au/Portals/0/Icons/apple-touch-icon.png",
     "fernie-alpine-resort": "https://skifernie.com/wp-content/uploads/2018/03/cropped-FAR-favicon-512x512-192x192.png",
     "google-maps": "https://www.gstatic.com/images/branding/productlogos/maps_2025/v1/web-96dp/logo_maps_2025_color_2x_web_96dp.png",
     "grand-targhee-resort": "https://www.grandtarghee.com/themes/custom/origin/images/favicon/favicon.svg",
+    "great-divide-ski-area": "https://framerusercontent.com/images/x1xmFaWAIhXWyy6O0xnvZgIKt0.png",
     "heavenly": "https://www.skiheavenly.com/Assets/images/sites/heavenly/favicon.ico",
+    "homewood-mountain-resort": "https://skihomewood.com/wp-content/uploads/2026/06/Untitled-design-3-300x300.png",
+    "ischgl-samnaun": "https://www.ischgl.com/dist/build/android-chrome-192x192-CZpkiHcj.png",
     "jackson-hole-mountain-resort": "https://www.jacksonhole.com/icons/apple-touch-icon.png",
+    "june-mountain": "https://www.junemountain.com/public/june_mountain/images/favicon.png",
     "killington": "https://killington.com/images/favicons/apple-touch-icon.png",
     "kimberley-alpine-resort": "https://skikimberley.com/wp-content/uploads/2018/03/cropped-KAR-favicon-512x512-192x192.png",
+    "kitzbuehel": "https://www.kitzski.at/pwa/apple-icon-180.png",
     "lake-louise": "https://www.skilouise.com/wp-content/uploads/2019/07/cropped-favicon-192x192.png",
+    "lookout-pass": "https://skilookout.com/wp-content/uploads/2025/12/cropped-lookout-90-192x192.png",
     "lost-trail": "https://losttrail.com/wp-content/uploads/cropped-cropped-artboard-1_1-192x192.png",
     "loveland-ski-area": "https://skiloveland.com/wp-content/uploads/2018/12/favicon2.png",
+    "lutsen-mountains": "https://www.lutsen.com/themes/custom/lutsen/images/favicon/favicon.svg",
     "mammoth-mountain": "https://www.mammothmountain.com/apple-touch-icon.png",
     "mission-ridge": "https://www.missionridge.com/wp-content/uploads/2023/09/MR_new_favicon-500x500.png",
+    "monarch-mountain": "https://skimonarch.com/wp-content/uploads/2023/08/cropped-monarch-logo-512-1-192x192.png",
+    "mount-washington-alpine-resort": "https://www.mountwashington.ca/wp-content/uploads/2026/08/mtw_site_icon-300x300.png",
+    "mt-baker-ski-area": "https://www.mtbaker.us/wp-content/uploads/2026/08/cropped-Web-Icon-scaled-1-192x192.png",
     "mt-hood-meadows": "https://www.skihood.com/favicon-32x32.png",
+    "mt-hutt": "https://www.mthutt.co.nz/_cf/h/cdn.prod.website-files.com/695d64b1a2835538730848d1/69cb3fe99b2ee33ff7dce95d_Vector.png",
     "mt-norquay": "https://banffnorquay.com/wp-content/uploads/2020/11/Norquay-Logo-Mark.svg",
+    "mt-rose-ski-tahoe": "https://skirose.com/wp-content/uploads/2021/11/cropped-apple-touch-icon-192x192.jpg",
     "mt-spokane-ski-snowboard-park": "https://irp.cdn-website.com/d9eb3da0/site_favicon_16_1630093282192.ico",
+    "nakiska-ski-area": "https://skinakiska.com/wp-content/uploads/2018/03/cropped-NAK-favicon-512x512-192x192.png",
     "niseko-united": "https://www.niseko.ne.jp/en/favicon.ico",
+    "ordino-arcalis": "https://www.ordinoarcalis.com/themes/custom/ordinoarcalis/favicon/favicon.svg",
     "pal-arinsal": "https://www.palarinsal.com/themes/custom/palarinsal/favicon/favicon.svg",
     "palisades-tahoe": "https://www.palisadestahoe.com/public/squaw_alpine/images/favicon.png",
     "park-city-mountain": "https://www.parkcitymountain.com/Assets/images/sites/parkcity/favicon.ico",
+    "pebble-creek-ski-area": "https://pebblecreekskiarea.com/media/pjihivy5/pebble-creek-icon.png",
+    "powder-king-mountain-resort": "https://www.powderking.com/application/files/1816/3190/1765/iPhone.png",
+    "powderhorn-mountain-resort": "https://www.powderhorn.com/wp-content/uploads/2026/08/ph_site_icon-300x300.png",
+    "purgatory-resort": "https://www.purgatory.ski/wp-content/uploads/sites/2/fbrfg/apple-touch-icon.png",
+    "red-lodge-mountain": "https://www.redlodgemountain.com/wp-content/uploads/cropped-rlm-favicon-192x192.png",
     "schweitzer-mountain-resort": "https://www.schweitzer.com/public/schweitzer/images/favicon.png",
+    "shiga-kogen-mountain-resort": "https://www.shigakogen.gr.jp/manage/wp-content/uploads/2021/05/favicon.ico",
+    "silver-mountain-resort": "https://silvermt.com/wp-content/uploads/cropped-silver-snowflake-1-192x192.webp",
     "snowbird": "https://www.snowbird.com/icons/icon-512x512.png?v=8ae537c1c5dc6c110502c6c267a910e2",
+    "soldier-mountain-ski-area": "https://www.indyskipass.com/sites/default/files/2023-11/soldier_mountain_logo%20and%20word%20mark%20stacked%20-%20Tucker%20Ray.png",
+    "solitude-mountain-resort": "https://www.solitudemountain.com/public/solitude_mountain/images/favicon.png",
+    "stevens-pass": "https://s30492.pcdn.co/wp-content/uploads/2019/05/stevenspass_logo_blog_white.png",
     "stowe": "https://www.stowe.com/Assets/images/sites/stowe/favicon.ico",
+    "sugar-bowl-resort": "https://www.sugarbowl.com/favicon.svg",
+    "sugarloaf": "https://cdn.sanity.io/images/k8yfdmw9/sugarloaf/6fc5126147ed1a3812794b8b4caad75c30d8471a-1024x1024.svg",
     "sun-valley-bald-mountain": "https://www.sunvalley.com/images/favicons/favicon-32x32.png",
+    "sunday-river": "https://cdn.sanity.io/images/k8yfdmw9/sunday-river/539c107a9ff7980b78d126b5af8e7e643a46e9c3-1024x1024.svg",
+    "tamarack-resort": "https://tamarackidaho.com/favicon.ico",
+    "taos-ski-valley": "https://www.skitaos.com/favicon.ico",
+    "the-remarkables": "https://www.theremarkables.co.nz/_cf/h/cdn.prod.website-files.com/69f122bc870708d57935b25d/6a013db50fd64e6fcf034f64_Group.png",
+    "the-summit-at-snoqualmie": "https://cdn.sanity.io/images/8ts88bij/summit/ec50f576f39699cf9028793880b464b3449e03e6-1024x1024.svg",
+    "thredbo": "https://www.thredbo.com.au/wp-content/themes/thredbo-2017/favicon/android-icon-192x192.png?v=4",
+    "timberline-lodge-ski-area": "https://timberlinelodge.com/favicons/favicon.svg",
     "vail-mountain": "https://www.vail.com/Assets/images/sites/vail/favicon.ico",
     "whaleback": "https://images.squarespace-cdn.com/content/v1/651486c2cf0e630db2238cfb/a8485e36-fae8-4349-8258-b4c0410b6ce9/favicon.ico?format=100w",
     "whistler-blackcomb": "https://www.whistlerblackcomb.com/Assets/images/sites/whistlerblackcomb/favicon.ico",
-    "wikipedia": "https://en.wikipedia.org/static/favicon/wikipedia.ico"
+    "white-pass-ski-area": "https://whitepass-cdn.nyc3.cdn.digitaloceanspaces.com/icons/favicon-196x196.png",
+    "wikipedia": "https://en.wikipedia.org/static/favicon/wikipedia.ico",
+    "wolf-creek-ski-area": "https://wolfcreekski.com/wp-content/uploads/2021/08/cropped-logo_circle_1200x1200-192x192.png"
   }
 }
