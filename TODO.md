@@ -23,7 +23,7 @@ Hosted checks require a deployed build. Device checks require the named physical
 | Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
 | Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
 | Content additions | [Project content](#project-content) | Reviewed content and assets |
-| Before the ski-status release | [ski-status release tasks](projects/ski-status/TODO.md#release-checks) | Release asset mirror, hosted preview, and verified sources |
+| Before the ski-status release | [Release checks](projects/ski-status/TODO.md#release-checks) and [driving publication](projects/ski-status/TODO.md#driving-map) | Release asset mirror, hosted preview, and AWS roles |
 | Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks
@@ -219,9 +219,8 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ## ski-status
 
-Use the [ski-status task list](projects/ski-status/TODO.md) for release checks, catalog work, and planned features.
-Use the [ski-status guide](projects/ski-status/readme.md) for procedures and acceptance checks.
-See the [November 22 code review](docs/reviews/2026-11-22-ski-status-code-review.md) for fixes and verification results.
+Track release and catalog work in the project list. [Ski-status tasks](projects/ski-status/TODO.md)
+Use the project guide for procedures and acceptance checks. [Ski-status guide](projects/ski-status/readme.md)
 
 ## Ride Ledger prerequisites
 

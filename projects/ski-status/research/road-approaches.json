@@ -56,6 +56,43 @@
         ]
       }
     ],
+    "alpental": [
+      {
+        "from": "North Bend (eastbound I-90 exit 52)",
+        "to": "Alpental main lots",
+        "roads": [
+          "I-90",
+          "WA 906",
+          "Erste Strasse"
+        ],
+        "statusUrls": [
+          "https://wsdot.com/Travel/Real-time/Map/"
+        ],
+        "source": "https://www.summitatsnoqualmie.com/directions",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.wsdot.wa.gov/publications/fulltext/winter/chain-up.pdf"
+        ]
+      },
+      {
+        "from": "Cle Elum (westbound I-90 exit 53)",
+        "to": "Alpental main lots",
+        "roads": [
+          "I-90",
+          "WA 906",
+          "Erste Strasse"
+        ],
+        "statusUrls": [
+          "https://wsdot.com/Travel/Real-time/Map/"
+        ],
+        "source": "https://www.summitatsnoqualmie.com/directions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.wsdot.wa.gov/publications/fulltext/winter/chain-up.pdf"
+        ]
+      }
+    ],
     "alta": [
       {
         "from": "Little Cottonwood Canyon mouth (SR 210)",
@@ -130,6 +167,83 @@
         ]
       }
     ],
+    "angel-fire-resort": [
+      {
+        "from": "Taos",
+        "to": "Angel Fire ski base",
+        "roads": [
+          "US 64",
+          "NM 434",
+          "North Angel Fire Road"
+        ],
+        "statusUrls": [
+          "https://www.nmroads.com/"
+        ],
+        "source": "https://www.angelfireresort.com/first-time-visitors/driving-directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.angelfireresort.com/shuttles/",
+          "https://www.angelfireresort.com/wp-content/uploads/2026/11/WTR_Base-Area-Map_26-27-scaled.jpg"
+        ]
+      },
+      {
+        "from": "Cimarron",
+        "to": "Angel Fire ski base",
+        "roads": [
+          "US 64",
+          "NM 434",
+          "North Angel Fire Road"
+        ],
+        "statusUrls": [
+          "https://www.nmroads.com/"
+        ],
+        "source": "https://www.angelfireresort.com/first-time-visitors/driving-directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.angelfireresort.com/shuttles/",
+          "https://www.angelfireresort.com/wp-content/uploads/2026/11/WTR_Base-Area-Map_26-27-scaled.jpg"
+        ]
+      }
+    ],
+    "antelope-butte": [
+      {
+        "from": "Shell (eastbound US 14)",
+        "to": "Antelope Butte public base lot",
+        "roads": [
+          "US 14",
+          "Forest Service Road 244"
+        ],
+        "statusUrls": [
+          "https://www.wyoroad.info/pls/Browse/WRR.RoutesResults?SelectedRoute=US14"
+        ],
+        "source": "https://www.skiantelopebutte.com/maps",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.wyoroad.info/highway/TruckInfo/US14factsheet.pdf"
+        ]
+      },
+      {
+        "from": "Burgess Junction (westbound US 14)",
+        "to": "Antelope Butte public base lot",
+        "roads": [
+          "US 14",
+          "Forest Service Road 244"
+        ],
+        "statusUrls": [
+          "https://www.wyoroad.info/pls/Browse/WRR.RoutesResults?SelectedRoute=US14"
+        ],
+        "source": "https://www.skiantelopebutte.com/maps",
+        "checkedOn": "2026-11-22",
+        "passIds": [
+          "us-wy-granite-pass"
+        ],
+        "additionalSources": [
+          "https://www.wyoroad.info/highway/TruckInfo/US14factsheet.pdf",
+          "https://www.wyoroad.info/highway/webcameras/view?site=US14GranitePass"
+        ]
+      }
+    ],
     "apex-mountain-resort": [
       {
         "from": "Penticton (BC 97)",
@@ -163,6 +277,26 @@
         "checkedOn": "2026-11-21",
         "additionalSources": [
           "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes"
+        ]
+      }
+    ],
+    "arai-mountain-resort": [
+      {
+        "from": "Jōetsu-Takada IC",
+        "to": "Village Station day lot P1",
+        "roads": [
+          "Joshin-etsu Expressway",
+          "National Route 18",
+          "Ryozenji resort access"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://app.lottehotel.com/arai-resort/en/about/location",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://partners-pamph.jnto.go.jp/simg/pamph/664.pdf",
+          "https://snow.tohokukanko.jp/en/resorts/detail_lotte-arai-resort.html"
         ]
       }
     ],
@@ -219,6 +353,43 @@
         ]
       }
     ],
+    "arctic-valley": [
+      {
+        "from": "Glenn Highway (AK 1) Arctic Valley exit",
+        "to": "Public upper lodge lot",
+        "roads": [
+          "AK 1 (Glenn Highway)",
+          "Arctic Valley Road"
+        ],
+        "statusUrls": [
+          "https://511.alaska.gov/",
+          "https://arcticvalley.org/conditions/"
+        ],
+        "source": "https://arcticvalley.org/contact/directions-arctic-valley/",
+        "checkedOn": "2026-11-22",
+        "passIds": []
+      }
+    ],
+    "arizona-snowbowl": [
+      {
+        "from": "Flagstaff (US 180)",
+        "to": "Hart Prairie and Agassiz public bases",
+        "roads": [
+          "US 180",
+          "Forest Road 516 (Snowbowl Road)"
+        ],
+        "statusUrls": [
+          "https://www.az511.com/",
+          "https://www.snowbowl.ski/the-mountain/mountain-information/"
+        ],
+        "source": "https://www.snowbowl.ski/the-mountain/how-to-get-to-snowbowl/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.snowbowl.ski/hiking-trails/"
+        ]
+      }
+    ],
     "aspen-highlands": [
       {
         "from": "Aspen (CO 82)",
@@ -253,6 +424,50 @@
         "checkedOn": "2026-11-22",
         "additionalSources": [
           "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/2026-2027/2627-trail-maps/2627aspenmain-maplayeredfinalweb.pdf"
+        ]
+      }
+    ],
+    "baldy-mountain-resort": [
+      {
+        "from": "Oliver (BC 97)",
+        "to": "Baldy Mountain day lodge",
+        "roads": [
+          "Fairview Road",
+          "Park Drive",
+          "McKinney Road",
+          "Mount Baldy Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://baldyresort.com/mountain/#directions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/natural-resource-use/all-seasons-resorts/baldy_master_plan_-_entire_document.pdf"
+        ]
+      },
+      {
+        "from": "Osoyoos",
+        "to": "Baldy Mountain day lodge",
+        "roads": [
+          "BC 3 (Crowsnest Highway)",
+          "Canyon Road",
+          "Mount Baldy Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://baldyresort.com/mountain/#directions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/natural-resource-use/all-seasons-resorts/baldy_master_plan_-_entire_document.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Check signs for winter tire or chain requirements on designated provincial highway segments.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-22"
+          }
         ]
       }
     ],
@@ -436,6 +651,40 @@
         ]
       }
     ],
+    "beaver-mountain": [
+      {
+        "from": "Logan (eastbound US 89)",
+        "to": "Beaver Mountain day lot",
+        "roads": [
+          "US 89",
+          "UT 243"
+        ],
+        "statusUrls": [
+          "https://www.udottraffic.utah.gov/"
+        ],
+        "source": "https://www.skiutah.com/members/beaver-mountain",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://le.utah.gov/xcode/Title72/Chapter4/C72-4-S130_2020051220200512.pdf"
+        ]
+      },
+      {
+        "from": "Garden City (westbound US 89)",
+        "to": "Beaver Mountain day lot",
+        "roads": [
+          "US 89",
+          "UT 243"
+        ],
+        "statusUrls": [
+          "https://www.udottraffic.utah.gov/"
+        ],
+        "source": "https://www.skiutah.com/members/beaver-mountain",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://le.utah.gov/xcode/Title72/Chapter4/C72-4-S130_2020051220200512.pdf"
+        ]
+      }
+    ],
     "big-sky-resort": [
       {
         "from": "Bozeman",
@@ -593,6 +842,93 @@
         ]
       }
     ],
+    "black-mountain-of-maine": [
+      {
+        "from": "Rumford town center",
+        "to": "Glover Road base lodge and parking",
+        "roads": [
+          "Isthmus Road",
+          "Glover Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Maine"
+        ],
+        "source": "https://skiblackmountain.org/about-1",
+        "checkedOn": "2026-11-22",
+        "passIds": []
+      }
+    ],
+    "blue-mountain-resort-on": [
+      {
+        "from": "Collingwood via Mountain Road",
+        "to": "Village Base P2",
+        "roads": [
+          "Grey Road 19",
+          "Jozo Weider Boulevard"
+        ],
+        "statusUrls": [
+          "https://511on.ca/"
+        ],
+        "source": "https://www.bluemountain.ca/discover-blue/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.bluemountain.ca/-/media/blue-mountain/mountain-report/maps/fy26/winter/maps/bmr-fy26-winter-parking-map.pdf?hash=788BD1E61154E154731A95C575827CEE&rev=288db5ca9b114bafb1f0cec2f6138f83"
+        ]
+      },
+      {
+        "from": "Collingwood via Mountain Road",
+        "to": "South Base P1",
+        "roads": [
+          "Grey Road 19"
+        ],
+        "statusUrls": [
+          "https://511on.ca/"
+        ],
+        "source": "https://www.bluemountain.ca/discover-blue/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.bluemountain.ca/-/media/blue-mountain/mountain-report/maps/fy26/winter/maps/bmr-fy26-winter-parking-map.pdf?hash=788BD1E61154E154731A95C575827CEE&rev=288db5ca9b114bafb1f0cec2f6138f83"
+        ]
+      },
+      {
+        "from": "Collingwood via Mountain Road",
+        "to": "North Base P4",
+        "roads": [
+          "Grey Road 19"
+        ],
+        "statusUrls": [
+          "https://511on.ca/"
+        ],
+        "source": "https://www.bluemountain.ca/discover-blue/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.bluemountain.ca/-/media/blue-mountain/mountain-report/maps/fy26/winter/maps/bmr-fy26-winter-parking-map.pdf?hash=788BD1E61154E154731A95C575827CEE&rev=288db5ca9b114bafb1f0cec2f6138f83"
+        ]
+      }
+    ],
+    "bluewood": [
+      {
+        "from": "Dayton (US 12)",
+        "to": "Bluewood lodge parking",
+        "roads": [
+          "US 12",
+          "North Touchet Road (Forest Service Road 64)"
+        ],
+        "statusUrls": [
+          "https://wsdot.com/Travel/Real-time/Map/",
+          "https://bluewood.com/conditions"
+        ],
+        "source": "https://bluewood.com/travel",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://bluewood.com/wp-content/uploads/2024/06/Bluewood-MDP_20220524.pdf"
+        ]
+      }
+    ],
     "bogus-basin": [
       {
         "from": "Boise (Hill Road junction)",
@@ -640,6 +976,25 @@
         "passIds": [],
         "additionalSources": [
           "https://media.bogusbasin.org/uploads/2025/11/24193534/RGB_ParkingLotMap_2025.pdf"
+        ]
+      }
+    ],
+    "boyne-mountain": [
+      {
+        "from": "Boyne Falls (US 131)",
+        "to": "Boyne Mountain day parking",
+        "roads": [
+          "US 131",
+          "Boyne Mountain Road"
+        ],
+        "statusUrls": [
+          "https://mdotjboss.state.mi.us/MiDrive/map"
+        ],
+        "source": "https://www.boynemountain.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://cdn.sanity.io/files/ud45da4u/boyne-mountain/3f9f716dc119075c8873b29d9d8236059dd6870b.pdf"
         ]
       }
     ],
@@ -768,6 +1123,94 @@
         ]
       }
     ],
+    "bretton-woods": [
+      {
+        "from": "Twin Mountain (US 3 / US 302)",
+        "to": "Bretton Woods alpine base",
+        "roads": [
+          "US 302"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/New%20Hampshire"
+        ],
+        "source": "https://www.brettonwoods.com/faq/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.brettonwoods.com/content/uploads/2026/11/BW_AlpineTrailMap_2026-27-JustMap.pdf"
+        ]
+      },
+      {
+        "from": "Bartlett via Crawford Notch",
+        "to": "Bretton Woods alpine base",
+        "roads": [
+          "US 302"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/New%20Hampshire"
+        ],
+        "source": "https://www.brettonwoods.com/faq/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/NH/NH_Crawford_Notch_20240416_TM_geo.pdf"
+        ]
+      }
+    ],
+    "brian-head-resort": [
+      {
+        "from": "Parowan (I-15 exit 75)",
+        "to": "Navajo Ski Lodge",
+        "roads": [
+          "UT 143"
+        ],
+        "statusUrls": [
+          "https://www.udottraffic.utah.gov/"
+        ],
+        "source": "https://www.brianhead.com/getting-here/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.skiutah.com/members/brian-head/snowreport"
+        ]
+      },
+      {
+        "from": "Parowan (I-15 exit 75)",
+        "to": "Giant Steps Ski Lodge",
+        "roads": [
+          "UT 143"
+        ],
+        "statusUrls": [
+          "https://www.udottraffic.utah.gov/"
+        ],
+        "source": "https://www.brianhead.com/getting-here/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.skiutah.com/members/brian-head/snowreport"
+        ]
+      },
+      {
+        "from": "Panguitch",
+        "to": "Giant Steps Ski Lodge",
+        "roads": [
+          "UT 143"
+        ],
+        "statusUrls": [
+          "https://www.udottraffic.utah.gov/"
+        ],
+        "source": "https://www.skiutah.com/members/brian-head/snowreport",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.brianhead.com/getting-here/",
+          "https://udottraffic.utah.gov/seasonalroads"
+        ],
+        "restrictions": [
+          {
+            "description": "The Cedar Breaks connection on UT 148 is seasonally closed. Check UT 143 conditions before travel.",
+            "source": "https://udottraffic.utah.gov/seasonalroads",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
     "bridger-bowl": [
       {
         "from": "Bozeman (MT 86)",
@@ -834,6 +1277,42 @@
         ]
       }
     ],
+    "bromont-montagne-dexperiences": [
+      {
+        "from": "Bromont Boulevard",
+        "to": "Versant du Village P1/P2",
+        "roads": [
+          "Boulevard de Bromont",
+          "Rue Champlain"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://www.bromontmontagne.com/en/parking-and-shuttle/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.bromontmontagne.com/wp-content/uploads/2026/01/Carte_Ski_Web_10x6-2026-VF.pdf"
+        ]
+      },
+      {
+        "from": "Bromont",
+        "to": "Versant du Lac P5",
+        "roads": [
+          "Chemin Huntington"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://www.bromontmontagne.com/en/parking-and-shuttle/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.bromontmontagne.com/wp-content/uploads/2026/01/Carte_Ski_Web_10x6-2026-VF.pdf",
+          "https://www.bromontmontagne.com/questions-frequentes/"
+        ]
+      }
+    ],
     "brundage-mountain-resort": [
       {
         "from": "McCall (ID 55)",
@@ -872,6 +1351,56 @@
         ]
       }
     ],
+    "buttermilk": [
+      {
+        "from": "Roaring Fork Valley approach",
+        "to": "Buttermilk Main lot",
+        "roads": [
+          "CO 82"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.aspensnowmass.com/visit/parking-and-getting-around",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/2026-2027/2627-trail-maps/2627buttermilk-map-layeredfinalweb-1.pdf"
+        ]
+      },
+      {
+        "from": "Roaring Fork Valley approach",
+        "to": "West Buttermilk lot",
+        "roads": [
+          "CO 82",
+          "West Buttermilk Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.aspensnowmass.com/visit/parking-and-getting-around",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/2026-2027/2627-trail-maps/2627buttermilk-map-layeredfinalweb-1.pdf"
+        ]
+      },
+      {
+        "from": "Roaring Fork Valley approach",
+        "to": "Tiehack arrival",
+        "roads": [
+          "CO 82",
+          "Tiehack Road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.aspensnowmass.com/visit/parking-and-getting-around",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/2026-2027/2627-trail-maps/2627buttermilk-map-layeredfinalweb-1.pdf"
+        ]
+      }
+    ],
     "castle-mountain-resort": [
       {
         "from": "Pincher Creek",
@@ -907,6 +1436,58 @@
         "passIds": [],
         "additionalSources": [
           "https://www.transportation.alberta.ca/Content/docType181/Production/HwyServiceClass.pdf"
+        ]
+      }
+    ],
+    "china-peak": [
+      {
+        "from": "Shaver Lake (CA 168)",
+        "to": "China Peak Day Lodge",
+        "roads": [
+          "CA 168"
+        ],
+        "statusUrls": [
+          "https://roads.dot.ca.gov/?roadnumber=168",
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.skichinapeak.com/contact",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.skichinapeak.com/get-the-latest"
+        ]
+      }
+    ],
+    "cooper": [
+      {
+        "from": "Leadville (northbound US 24)",
+        "to": "Ski Cooper day lot",
+        "roads": [
+          "US 24",
+          "Lake County Road 29"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.skicooper.com/contact-us/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.fs.usda.gov/sites/default/files/CDT_ScenicCharacterAssessment_Feb2022.pdf"
+        ]
+      },
+      {
+        "from": "Red Cliff (southbound US 24)",
+        "to": "Ski Cooper day lot",
+        "roads": [
+          "US 24",
+          "Lake County Road 29"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.skicooper.com/contact-us/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.fs.usda.gov/sites/default/files/CDT_ScenicCharacterAssessment_Feb2022.pdf"
         ]
       }
     ],
@@ -1060,6 +1641,28 @@
         ]
       }
     ],
+    "coronet-peak": [
+      {
+        "from": "Coronet Peak access road junction",
+        "to": "Coronet Peak Base Lodge",
+        "roads": [
+          "Coronet Peak Road"
+        ],
+        "statusUrls": [
+          "https://www.journeys.nzta.govt.nz/journey-planner",
+          "https://www.coronetpeak.co.nz/weather-report"
+        ],
+        "source": "https://www.coronetpeak.co.nz/getting-here-guide",
+        "checkedOn": "2026-11-22",
+        "restrictions": [
+          {
+            "description": "Carry snow chains and consult the operator road report for fitting instructions.",
+            "source": "https://www.coronetpeak.co.nz/getting-here-guide",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
     "corralco-resort-de-montana": [
       {
         "from": "Curacautín via Malalcahuello",
@@ -1137,6 +1740,56 @@
             "description": "Chinook Pass and Cayuse Pass close seasonally. WSDOT closed them Nov 18, 2026. Winter ski access remains from the west.",
             "source": "https://apps.wsdot.wa.gov/about/news/2026/sr-410-chinook-pass-and-sr-123-cayuse-pass-close-season-wednesday-nov-18",
             "checkedOn": "2026-11-21"
+          }
+        ]
+      }
+    ],
+    "cypress-mountain": [
+      {
+        "from": "West Vancouver, Upper Levels Highway (BC 1 / BC 99 exit 8)",
+        "to": "Cypress Bowl downhill lots",
+        "roads": [
+          "BC 1 / BC 99",
+          "Cypress Bowl Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://bcparks.ca/cypress-park/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.cypressmountain.com/visitors-guide"
+        ],
+        "restrictions": [
+          {
+            "description": "Follow signed seasonal BC winter tire or chain requirements.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "West Vancouver, Upper Levels Highway (BC 1 / BC 99 exit 8)",
+        "to": "Hollyburn Nordic lots",
+        "roads": [
+          "BC 1 / BC 99",
+          "Cypress Bowl Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://bcparks.ca/cypress-park/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.cypressmountain.com/visitors-guide"
+        ],
+        "restrictions": [
+          {
+            "description": "Follow signed seasonal BC winter tire or chain requirements.",
+            "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
+            "checkedOn": "2026-11-22"
           }
         ]
       }
@@ -1231,6 +1884,61 @@
         ]
       }
     ],
+    "dodge-ridge": [
+      {
+        "from": "Sonora (eastbound CA 108)",
+        "to": "Helm Family Lodge and resort lots",
+        "roads": [
+          "CA 108",
+          "Pinecrest Lake Road",
+          "Dodge Ridge Road"
+        ],
+        "statusUrls": [
+          "https://roads.dot.ca.gov/?roadnumber=108",
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://dodgeridge.com/how-to-get-here/",
+        "checkedOn": "2026-11-22"
+      }
+    ],
+    "donner-ski-ranch": [
+      {
+        "from": "Soda Springs (I-80 exit 174)",
+        "to": "Donner Ski Ranch visitor lot",
+        "roads": [
+          "I-80",
+          "Donner Pass Road (Old US 40)"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.donnerskiranch.com/contact",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://static1.squarespace.com/static/581b7797cd0f68b05009ce5e/t/5e0fbec77d1783180d8284f0/1578090188431/Trail+Map+Jpeg.png"
+        ]
+      },
+      {
+        "from": "Truckee via westbound I-80",
+        "to": "Donner Ski Ranch visitor lot",
+        "roads": [
+          "I-80",
+          "Donner Pass Road (Old US 40)"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/"
+        ],
+        "source": "https://www.donnerskiranch.com/contact",
+        "checkedOn": "2026-11-22",
+        "passIds": [
+          "us-ca-donner-summit-i80"
+        ],
+        "additionalSources": [
+          "https://ohv.parks.ca.gov/?page_id=23055"
+        ]
+      }
+    ],
     "dryden-ski-club-nordic": [
       {
         "from": "Highway 17 / Highway 601 junction, Dryden",
@@ -1250,6 +1958,54 @@
         "checkedOn": "2026-11-21",
         "statusUrls": [
           "https://511on.ca/"
+        ]
+      }
+    ],
+    "eaglecrest-ski-area": [
+      {
+        "from": "Juneau via Douglas Island",
+        "to": "Eaglecrest main parking",
+        "roads": [
+          "North Douglas Highway",
+          "Fish Creek Road"
+        ],
+        "statusUrls": [
+          "https://511.alaska.gov/",
+          "https://skieaglecrest.com/conditions/"
+        ],
+        "source": "https://aws.state.ak.us/OnlinePublicNotices/Notices/Attachment.aspx?id=124043",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://skieaglecrest.com/visit/#here",
+          "https://skieaglecrest.com/snow-bus/"
+        ],
+        "restrictions": [
+          {
+            "description": "The operator reports that CBJ plows the road on ski days and posts 4WD, AWD, studded-tire or chain restrictions when required.",
+            "source": "https://skieaglecrest.com/conditions/",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
+    "eldora-mountain-resort": [
+      {
+        "from": "Nederland (CO 119)",
+        "to": "Eldora main parking",
+        "roads": [
+          "CO 119",
+          "Boulder County Road 130 (Eldora Road)"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://www.eldora.com/the-mountain/questions/getting-to-eldora/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://bouldercounty.gov/transportation/road-maintenance/",
+          "https://cms.eldora.com/sites/default/files/2025-11/Eldora_25.26_Alpine%20Map_Web.pdf"
         ]
       }
     ],
@@ -1357,6 +2113,172 @@
         ]
       }
     ],
+    "furano-ski-resort": [
+      {
+        "from": "Furano city regional approach",
+        "to": "Furano Ropeway base",
+        "roads": [
+          "National Route 38 / National Route 237"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.princehotels.co.jp/ski/furano/winter/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.furanotourism.com/en/static/pdf/Furano_Map_en.pdf",
+          "https://www.princehotels.co.jp/image/2026_10_top_skimap_1.jpg"
+        ]
+      },
+      {
+        "from": "Furano city regional approach",
+        "to": "Kitanomine Terminal",
+        "roads": [
+          "National Route 38 / National Route 237"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.princehotels.co.jp/ski/furano/winter/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.furanotourism.com/en/static/pdf/Furano_Map_en.pdf",
+          "https://www.princehotels.co.jp/image/2026_10_top_skimap_1.jpg"
+        ]
+      }
+    ],
+    "gore-mountain": [
+      {
+        "from": "Warrensburg (I-87 exit 23)",
+        "to": "Gore main base",
+        "roads": [
+          "I-87",
+          "US 9",
+          "NY 28",
+          "Peaceful Valley Road",
+          "Gore Mountain Access Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://goremountain.com/directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://goremountain.com/the-mountain/trail-maps/"
+        ]
+      },
+      {
+        "from": "Pottersville (I-87 exit 26)",
+        "to": "Gore main base",
+        "roads": [
+          "I-87",
+          "NY 28N",
+          "NY 28",
+          "Peaceful Valley Road",
+          "Gore Mountain Access Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://goremountain.com/directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://goremountain.com/the-mountain/trail-maps/"
+        ]
+      },
+      {
+        "from": "Chestertown (I-87 exit 25)",
+        "to": "Gore main base",
+        "roads": [
+          "I-87",
+          "NY 8",
+          "NY 28",
+          "Peaceful Valley Road",
+          "Gore Mountain Access Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://goremountain.com/directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://goremountain.com/the-mountain/trail-maps/"
+        ]
+      },
+      {
+        "from": "North Creek",
+        "to": "Ski Bowl visitor parking",
+        "roads": [
+          "Peaceful Valley Road",
+          "Ski Bowl Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://goremountain.com/the-mountain/about-the-ski-bowl/",
+        "checkedOn": "2026-11-22",
+        "passIds": []
+      }
+    ],
+    "granby-ranch": [
+      {
+        "from": "Empire (I-70 exit 232)",
+        "to": "Granby Ranch Base Lodge lot",
+        "roads": [
+          "I-70",
+          "US 40",
+          "Granby Ranch access road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://granbyranch.com/directions-granby-ranch/",
+        "checkedOn": "2026-11-22",
+        "passIds": [
+          "us-co-berthoud-pass"
+        ],
+        "additionalSources": [
+          "https://granbyranch.com/wp-content/uploads/2026/10/GRANBY-RANCH-alpine-02.8-11072025WEB.jpg"
+        ]
+      },
+      {
+        "from": "Silverthorne via Kremmling",
+        "to": "Granby Ranch Base Lodge lot",
+        "roads": [
+          "I-70",
+          "CO 9",
+          "County Road 396",
+          "13th Street",
+          "US 40",
+          "Granby Ranch access road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://granbyranch.com/directions-granby-ranch/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://granbyranch.com/wp-content/uploads/2026/10/GRANBY-RANCH-alpine-02.8-11072025WEB.jpg"
+        ]
+      },
+      {
+        "from": "CO 125 / US 40 junction",
+        "to": "Granby Ranch Base Lodge lot",
+        "roads": [
+          "US 40",
+          "Granby Ranch access road"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://granbyranch.com/directions-granby-ranch/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://granbyranch.com/wp-content/uploads/2026/10/GRANBY-RANCH-alpine-02.8-11072025WEB.jpg"
+        ]
+      }
+    ],
     "grand-targhee-resort": [
       {
         "from": "Driggs (ID 33)",
@@ -1461,6 +2383,79 @@
         "additionalSources": [
           "https://www.mdt.mt.gov/travinfo/",
           "https://www.skigd.com/first-time-visitors"
+        ]
+      }
+    ],
+    "hakuba-happo-one": [
+      {
+        "from": "Nagano IC",
+        "to": "Happo-One public base parking",
+        "roads": [
+          "National Route 18",
+          "Olympic Road"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.happo-one.jp/en/access/by-car/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.happo-one.jp/en/access/parking/",
+          "https://www.happo-one.jp/wp2019/wp-content/themes/happo-one2020/img/access/parking_map.pdf"
+        ]
+      },
+      {
+        "from": "Azumino IC",
+        "to": "Happo-One public base parking",
+        "roads": [
+          "National Route 147",
+          "National Route 148",
+          "Olympic Road"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.happo-one.jp/en/access/by-car/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.happo-one.jp/en/access/parking/",
+          "https://www.happo-one.jp/wp2019/wp-content/themes/happo-one2020/img/access/parking_map.pdf"
+        ]
+      },
+      {
+        "from": "Itoigawa IC",
+        "to": "Happo-One public base parking",
+        "roads": [
+          "National Route 148"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.happo-one.jp/en/access/by-car/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.happo-one.jp/en/access/parking/",
+          "https://www.happo-one.jp/wp2019/wp-content/themes/happo-one2020/img/access/parking_map.pdf"
+        ]
+      }
+    ],
+    "harper-mountain": [
+      {
+        "from": "Kamloops (BC 5)",
+        "to": "Harper Mountain lodge parking",
+        "roads": [
+          "BC 5",
+          "Paul Lake Road",
+          "Harper Mountain Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://harpermountain.com/directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://harpermountain.com/wp-content/uploads/2020/10/Map-Only-Web-Download.pdf",
+          "https://www.tourismkamloops.com/listings/harper_mountain/"
         ]
       }
     ],
@@ -1646,6 +2641,122 @@
         ]
       }
     ],
+    "hoodoo-ski-area": [
+      {
+        "from": "Santiam Junction (eastbound US 20)",
+        "to": "Hoodoo day lodge lots",
+        "roads": [
+          "US 20",
+          "Big Lake Road"
+        ],
+        "statusUrls": [
+          "https://www.tripcheck.com/",
+          "https://tripcheck.com/Pages/Mountain-Passes/santiam-pass"
+        ],
+        "source": "https://hoodoo.com/directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.recreation.gov/camping/campgrounds/234729"
+        ],
+        "restrictions": [
+          {
+            "description": "Check ODOT’s current Santiam Pass chain and traction restrictions for US 20.",
+            "source": "https://tripcheck.com/Pages/Mountain-Passes/santiam-pass",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "Sisters (westbound US 20)",
+        "to": "Hoodoo day lodge lots",
+        "roads": [
+          "US 20",
+          "Big Lake Road"
+        ],
+        "statusUrls": [
+          "https://www.tripcheck.com/",
+          "https://tripcheck.com/Pages/Mountain-Passes/santiam-pass"
+        ],
+        "source": "https://hoodoo.com/directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.recreation.gov/camping/campgrounds/234729"
+        ],
+        "restrictions": [
+          {
+            "description": "Check ODOT’s current Santiam Pass chain and traction restrictions for US 20.",
+            "source": "https://tripcheck.com/Pages/Mountain-Passes/santiam-pass",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
+    "hotham": [
+      {
+        "from": "Harrietville (eastbound B500)",
+        "to": "Hotham Village and Alpine Gateway",
+        "roads": [
+          "B500 (Great Alpine Road)"
+        ],
+        "statusUrls": [
+          "https://traffic.transport.vic.gov.au/",
+          "https://www.mthotham.com.au/mountain/conditions/snow-reports"
+        ],
+        "source": "https://www.mthotham.com.au/resort/access/drive",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.mthotham.com.au/Portals/0/Documents-2025/Maps/Driving%20to%20Hotham.pdf?ver=2WOxG98dwqPG-IG3YB-C9g%3D%3D"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry diamond-pattern wheel chains during the declared snow season. Fit them where directed.",
+            "source": "https://www.mthotham.com.au/resort/access/chains",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "Omeo (westbound B500)",
+        "to": "Hotham Village and Alpine Gateway",
+        "roads": [
+          "B500 (Great Alpine Road)"
+        ],
+        "statusUrls": [
+          "https://traffic.transport.vic.gov.au/",
+          "https://www.mthotham.com.au/mountain/conditions/snow-reports"
+        ],
+        "source": "https://www.mthotham.com.au/resort/access/drive",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.mthotham.com.au/Portals/0/Documents-2025/Maps/Driving%20to%20Hotham.pdf?ver=2WOxG98dwqPG-IG3YB-C9g%3D%3D"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry diamond-pattern wheel chains during the declared snow season. Fit them where directed.",
+            "source": "https://www.mthotham.com.au/resort/access/chains",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
+    "hudson-bay-mountain": [
+      {
+        "from": "Smithers",
+        "to": "Hudson Bay Mountain main base",
+        "roads": [
+          "Hudson Bay Mountain Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://www.bvnordic.ca/trails-and-facilities/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.hudsonbaymountain.com/_files/ugd/736eb6_18e11b76be004a9b9e319654db6acfd8.pdf"
+        ]
+      }
+    ],
     "ischgl-samnaun": [
       {
         "from": "Pians / Landeck (S 16)",
@@ -1760,6 +2871,76 @@
         ]
       }
     ],
+    "jay-peak-resort": [
+      {
+        "from": "Jay village (westbound VT 242)",
+        "to": "Tramside arrival",
+        "roads": [
+          "VT 242",
+          "Jay Peak Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://jaypeakresort.com/trip-planning/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://jaypeakresort.com/sites/default/files/2025-04/Base%2BHotel-Map_Website_0.pdf",
+          "https://jaypeakresort.com/first-timers-guide"
+        ]
+      },
+      {
+        "from": "Jay village (westbound VT 242)",
+        "to": "Stateside arrival",
+        "roads": [
+          "VT 242",
+          "Stateside Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://jaypeakresort.com/trip-planning/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://jaypeakresort.com/sites/default/files/2025-04/Base%2BHotel-Map_Website_0.pdf",
+          "https://jaypeakresort.com/first-timers-guide"
+        ]
+      },
+      {
+        "from": "Montgomery Center (eastbound VT 242)",
+        "to": "Tramside arrival",
+        "roads": [
+          "VT 242",
+          "Jay Peak Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://jaypeakresort.com/trip-planning/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://jaypeakresort.com/sites/default/files/2025-04/Base%2BHotel-Map_Website_0.pdf",
+          "https://jaypeakresort.com/first-timers-guide"
+        ]
+      },
+      {
+        "from": "Montgomery Center (eastbound VT 242)",
+        "to": "Stateside arrival",
+        "roads": [
+          "VT 242",
+          "Stateside Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://jaypeakresort.com/trip-planning/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://jaypeakresort.com/sites/default/files/2025-04/Base%2BHotel-Map_Website_0.pdf",
+          "https://jaypeakresort.com/first-timers-guide"
+        ]
+      }
+    ],
     "june-mountain": [
       {
         "from": "Mammoth Lakes (northbound US 395)",
@@ -1793,6 +2974,23 @@
         "additionalSources": [
           "https://dot.ca.gov/caltrans-near-me/district-9/district-9-news/2026_3_23-158-and-270-reopen",
           "https://roads.dot.ca.gov/?roadnumber=158"
+        ]
+      }
+    ],
+    "kelly-canyon": [
+      {
+        "from": "Heise near Ririe",
+        "to": "Kelly Canyon day lodge",
+        "roads": [
+          "Kelly Canyon Road"
+        ],
+        "statusUrls": [
+          "https://511.idaho.gov/"
+        ],
+        "source": "https://cityofrigby.gov/recreation/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://kellycanyonresort.com/trail-map.pdf"
         ]
       }
     ],
@@ -2339,6 +3537,55 @@
         ]
       }
     ],
+    "lake-songhua-resort": [
+      {
+        "from": "Fengman District, Jilin City",
+        "to": "Lake Songhua Resort public entrance",
+        "roads": [
+          "Qingshan Street"
+        ],
+        "source": "https://www.gojilin.gov.cn/2024/01/11/c_12249.htm",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.jl.gov.cn/szfzt/jlyhyshjjxs/dxzf/202611/t20261116_3686321.html"
+        ]
+      }
+    ],
+    "le-massif": [
+      {
+        "from": "QC 138 at summit access",
+        "to": "Chalet du Sommet",
+        "roads": [
+          "QC 138",
+          "Chemin du Massif"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://www.lemassif.com/en/the-mountain/winter/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.lemassif.com/sites/default/files/2024-11/P-7856-LeMassif-Carte%20des%20pistes%202024-WEB.pdf"
+        ]
+      },
+      {
+        "from": "Petite-Rivière-Saint-François",
+        "to": "Chalet de la Base",
+        "roads": [
+          "Rue Principale"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://www.lemassif.com/fr/montagne/hiver/comment-sy-rendre",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.lemassif.com/sites/default/files/2024-11/P-7856-LeMassif-Carte%20des%20pistes%202024-WEB.pdf"
+        ]
+      }
+    ],
     "les-7-laux": [
       {
         "from": "A41 at Brignoud",
@@ -2434,6 +3681,59 @@
         "additionalSources": [
           "https://www.mdt.mt.gov/pubinvolve/i90lookout/",
           "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/MT/MT_Lookout_Pass_20140603_TM_geo.pdf"
+        ]
+      }
+    ],
+    "loon-mountain-resort": [
+      {
+        "from": "Lincoln (I-93)",
+        "to": "Loon Octagon Lodge parking",
+        "roads": [
+          "I-93",
+          "NH 112 (Kancamagus Highway)",
+          "Loon Mountain Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/New%20Hampshire"
+        ],
+        "source": "https://www.loonmtn.com/visitors-guide/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://cdn.sanity.io/files/k8yfdmw9/loon/f7600a6bb741283b28fcb04a7e1f065111f17fe6.pdf"
+        ]
+      },
+      {
+        "from": "Lincoln (I-93)",
+        "to": "Loon Governor Adams Lodge parking",
+        "roads": [
+          "I-93",
+          "NH 112 (Kancamagus Highway)",
+          "Loon Mountain Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/New%20Hampshire"
+        ],
+        "source": "https://www.loonmtn.com/visitors-guide/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://cdn.sanity.io/files/k8yfdmw9/loon/f7600a6bb741283b28fcb04a7e1f065111f17fe6.pdf"
+        ]
+      },
+      {
+        "from": "Lincoln (NH 112)",
+        "to": "South Peak day lots",
+        "roads": [
+          "NH 112 (Main Street)"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/New%20Hampshire"
+        ],
+        "source": "https://www.loonmtn.com/visitors-guide/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://cdn.sanity.io/files/k8yfdmw9/loon/f7600a6bb741283b28fcb04a7e1f065111f17fe6.pdf"
         ]
       }
     ],
@@ -2887,6 +4187,24 @@
         ]
       }
     ],
+    "massif-du-sud": [
+      {
+        "from": "Saint-Philémon",
+        "to": "Ski station main lodge and lots",
+        "roads": [
+          "Route du Massif-du-Sud"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://massifdusud.net/fr/contact",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://massifdusud.net/fr/frequently-asked-questions"
+        ]
+      }
+    ],
     "mission-ridge": [
       {
         "from": "Wenatchee",
@@ -2965,6 +4283,47 @@
         ]
       }
     ],
+    "mont-edouard": [
+      {
+        "from": "L’Anse-Saint-Jean (QC 170)",
+        "to": "Mont-Édouard main lot",
+        "roads": [
+          "QC 170",
+          "Rue des Coteaux",
+          "Rue Dallaire"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://baliseqc.ca/hiver/explorer/saguenay-lac-saint-jean/les-sentiers-du-mont-edouard-LR0749",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.montedouard.com/fr/ski-de-fond"
+        ]
+      }
+    ],
+    "mont-sainte-anne": [
+      {
+        "from": "Beaupré (QC 138)",
+        "to": "South Main Lodge visitor lots",
+        "roads": [
+          "QC 138",
+          "QC 360 (Boulevard du Beau-Pré)"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://mont-sainte-anne.com/en/contact/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://mont-sainte-anne.com/wp-content/uploads/2020/11/sud-2.pdf",
+          "https://mont-sainte-anne.com/mise-a-jour-travaux-a-la-montagne/",
+          "https://www.parcsnaturelsquebec.org/mrc-region-03/cote-de-beaupre/station-mont-st-anne/"
+        ]
+      }
+    ],
     "montana-snowbowl": [
       {
         "from": "Missoula (I-90 Exit 101)",
@@ -2983,6 +4342,105 @@
         "passIds": [],
         "additionalSources": [
           "https://www.missoulacounty.gov/media/gmwbdlq0/grant-creek-cwpp-2024.pdf"
+        ]
+      }
+    ],
+    "moose-mountain-ski-resort": [
+      {
+        "from": "Fairbanks",
+        "to": "Moose Mountain day lodge",
+        "roads": [
+          "Goldstream Road",
+          "Murphy Dome Road",
+          "Spinach Creek Road",
+          "Moose Mountain Road"
+        ],
+        "statusUrls": [
+          "https://511.alaska.gov/"
+        ],
+        "source": "https://www.explorefairbanks.com/listing/moose-mountain-ski-area/11216/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://shredthemoose.com/"
+        ]
+      }
+    ],
+    "mount-bohemia": [
+      {
+        "from": "Hancock (US 41 north)",
+        "to": "Mount Bohemia Basecamp entrance",
+        "roads": [
+          "US 41",
+          "Lac La Belle Road"
+        ],
+        "statusUrls": [
+          "https://mdotjboss.state.mi.us/MiDrive/map"
+        ],
+        "source": "https://www.mtbohemia.com/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.visitkeweenaw.com/outdoors/winter-activities/mount-bohemia/"
+        ]
+      }
+    ],
+    "mount-snow": [
+      {
+        "from": "West Dover (VT 100)",
+        "to": "Mount Snow Main Base Area",
+        "roads": [
+          "VT 100",
+          "South Access Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.mountsnow.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mountsnow.com/-/media/mt-snow/files/trail-maps/base-area-map_pdf.ashx",
+          "https://www.doververmont.com/media/7241"
+        ]
+      },
+      {
+        "from": "West Dover (VT 100)",
+        "to": "Mount Snow Main Base Area (north entrance)",
+        "roads": [
+          "VT 100",
+          "North Access Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.mountsnow.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mountsnow.com/-/media/mt-snow/files/trail-maps/base-area-map_pdf.ashx",
+          "https://www.doververmont.com/media/7241"
+        ]
+      },
+      {
+        "from": "West Dover (VT 100)",
+        "to": "Carinthia Base Lodge",
+        "roads": [
+          "VT 100",
+          "South Access Road",
+          "Handle Road",
+          "Carinthia Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.mountsnow.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://scene7.vailresorts.com/is/image/vailresorts/MountSnowBaseArea2324?hei=1242&resMode=sharp2&wid=1920",
+          "https://www.mountsnow.com/-/aemasset/sitecore/mount-snow/maps/20241227_SO_winter-uphill_map_001.pdf",
+          "https://www.doververmont.com/media/7241"
         ]
       }
     ],
@@ -3088,6 +4546,76 @@
         ]
       }
     ],
+    "mt-abram": [
+      {
+        "from": "Oxford (ME 26 northbound)",
+        "to": "Mainside lot",
+        "roads": [
+          "ME 26",
+          "Howe Hill Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Maine"
+        ],
+        "source": "https://www.mtabram.com/about/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mtabram.com/wp-content/uploads/2025/12/trail-map-winter-digital-resize-scaled-1.webp"
+        ]
+      },
+      {
+        "from": "Oxford (ME 26 northbound)",
+        "to": "Westside lot",
+        "roads": [
+          "ME 26",
+          "Howe Hill Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Maine"
+        ],
+        "source": "https://www.mtabram.com/about/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mtabram.com/wp-content/uploads/2025/12/trail-map-winter-digital-resize-scaled-1.webp"
+        ]
+      },
+      {
+        "from": "Bethel (ME 26 southbound)",
+        "to": "Mainside lot",
+        "roads": [
+          "ME 26",
+          "Howe Hill Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Maine"
+        ],
+        "source": "https://www.mtabram.com/about/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mtabram.com/wp-content/uploads/2025/12/trail-map-winter-digital-resize-scaled-1.webp"
+        ]
+      },
+      {
+        "from": "Bethel (ME 26 southbound)",
+        "to": "Westside lot",
+        "roads": [
+          "ME 26",
+          "Howe Hill Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Maine"
+        ],
+        "source": "https://www.mtabram.com/about/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.mtabram.com/wp-content/uploads/2025/12/trail-map-winter-digital-resize-scaled-1.webp"
+        ]
+      }
+    ],
     "mt-bachelor": [
       {
         "from": "Bend",
@@ -3171,6 +4699,31 @@
         "passIds": [],
         "additionalSources": [
           "https://www.mtbaker.us/getting-here/getting-here-with-parking/"
+        ]
+      }
+    ],
+    "mt-buller": [
+      {
+        "from": "Mirimbah gate",
+        "to": "Mt Buller public day and overnight car parks",
+        "roads": [
+          "Mount Buller Tourist Road"
+        ],
+        "statusUrls": [
+          "https://traffic.transport.vic.gov.au/"
+        ],
+        "source": "https://www.mtbuller.com.au/winter/faqs",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.alpineresorts.vic.gov.au/",
+          "https://www.mtbuller.com.au/winter/resort-entry"
+        ],
+        "restrictions": [
+          {
+            "description": "Carry wheel chains above Mirimbah during the declared snow season and fit where directed.",
+            "source": "https://www.mtbuller.com.au/winter/faqs",
+            "checkedOn": "2026-11-22"
+          }
         ]
       }
     ],
@@ -3393,6 +4946,25 @@
         ]
       }
     ],
+    "mt-shasta-ski-park": [
+      {
+        "from": "I-5 exit 736",
+        "to": "Mt. Shasta Ski Park main parking",
+        "roads": [
+          "CA 89",
+          "Ski Park Highway"
+        ],
+        "statusUrls": [
+          "https://quickmap.dot.ca.gov/",
+          "https://www.skipark.com/winter/roads"
+        ],
+        "source": "https://www.skipark.com/winter/directions-parking",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://research.fs.usda.gov/sites/default/files/2024-02/psw-redbutte-redfirridge-er.pdf"
+        ]
+      }
+    ],
     "mt-spokane-ski-snowboard-park": [
       {
         "from": "Mead (US 2 / SR 206)",
@@ -3470,6 +5042,74 @@
         "additionalSources": [
           "https://skinakiska.com/contact-us/",
           "https://www.albertaparks.ca/parks/kananaskis/kananaskis-country/"
+        ]
+      }
+    ],
+    "nekoma-mountain": [
+      {
+        "from": "Bandai-Kawahigashi IC",
+        "to": "South Resort Center",
+        "roads": [
+          "Ban-etsu Expressway",
+          "Fukushima Prefectural Route 64"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.nekoma.co.jp/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.nekoma.co.jp/wp-content/uploads/2023/08/access_map_acces_south-en-1.jpg"
+        ]
+      },
+      {
+        "from": "Inawashiro-Bandaikogen IC",
+        "to": "South Resort Center",
+        "roads": [
+          "Ban-etsu Expressway",
+          "Fukushima Prefectural Route 7"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.nekoma.co.jp/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.nekoma.co.jp/wp-content/uploads/2023/08/access_map_acces_south-en-1.jpg"
+        ]
+      },
+      {
+        "from": "Inawashiro-Bandaikogen IC",
+        "to": "North Resort Center",
+        "roads": [
+          "Ban-etsu Expressway",
+          "National Route 115",
+          "National Route 459"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.nekoma.co.jp/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.nekoma.co.jp/wp-content/uploads/2023/08/access_map_access_north-en-1.jpg"
+        ]
+      },
+      {
+        "from": "Aizu-Wakamatsu IC",
+        "to": "North Resort Center",
+        "roads": [
+          "Ban-etsu Expressway",
+          "National Route 121",
+          "National Route 459"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.nekoma.co.jp/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.nekoma.co.jp/wp-content/uploads/2023/08/access_map_access_north-en-1.jpg"
         ]
       }
     ],
@@ -3614,6 +5254,37 @@
             "checkedOn": "2026-11-21"
           }
         ]
+      }
+    ],
+    "okemo-mountain-resort": [
+      {
+        "from": "Ludlow",
+        "to": "Clock Tower Base Area",
+        "roads": [
+          "VT 103",
+          "Okemo Ridge Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.okemo.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://fpr.vermont.gov/sites/fpr/files/documents/OkemoSF_LRMP_Draft_v.10.26.26.pdf"
+        ]
+      },
+      {
+        "from": "Ludlow (VT 103)",
+        "to": "Jackson Gore Base Area",
+        "roads": [
+          "VT 103",
+          "Jackson Gore Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.okemo.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22"
       }
     ],
     "ordino-arcalis": [
@@ -4086,6 +5757,62 @@
         ]
       }
     ],
+    "pico-mountain": [
+      {
+        "from": "Rutland (eastbound US 4)",
+        "to": "Pico main lot",
+        "roads": [
+          "US 4"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://picomountain.com/first-time-visitor",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/VT/VT_Pico_Peak_20210414_TM_geo.pdf"
+        ]
+      },
+      {
+        "from": "Killington (westbound US 4)",
+        "to": "Pico main lot",
+        "roads": [
+          "US 4"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://picomountain.com/first-time-visitor",
+        "checkedOn": "2026-11-22",
+        "passIds": [
+          "us-vt-sherburne-pass"
+        ],
+        "additionalSources": [
+          "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/VT/VT_Pico_Peak_20210414_TM_geo.pdf",
+          "https://www.fs.usda.gov/Internet/FSE_MEDIA/stelprdb5315846.pdf"
+        ]
+      }
+    ],
+    "pomerelle-mountain-resort": [
+      {
+        "from": "Albion (ID 77 approach)",
+        "to": "Pomerelle lodge parking",
+        "roads": [
+          "ID 77",
+          "Howell Canyon Road"
+        ],
+        "statusUrls": [
+          "https://511.idaho.gov/"
+        ],
+        "source": "https://www.pomerelle.com/conditions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://visitidaho.org/things-to-do/scenic-byways-backcountry-drives/city-of-rocks-backcountry-byway/",
+          "https://static.wixstatic.com/media/786061_0a547e7a21ef4a39888abb5349752297~mv2.jpg"
+        ]
+      }
+    ],
     "powder-king-mountain-resort": [
       {
         "from": "Prince George (northbound BC 97)",
@@ -4463,6 +6190,46 @@
         ]
       }
     ],
+    "saddleback": [
+      {
+        "from": "Farmington (ME 4 north)",
+        "to": "Saddleback Base Lodge lots",
+        "roads": [
+          "ME 4",
+          "Dallas Hill Road",
+          "Saddleback Mountain Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Maine"
+        ],
+        "source": "https://www.saddlebackmaine.com/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.saddlebackmaine.com/wp-content/uploads/2024/12/Trail-map-web-compress.pdf",
+          "https://dallasplantation.com/government/roads/"
+        ]
+      },
+      {
+        "from": "Rangeley (ME 4 east)",
+        "to": "Saddleback Base Lodge lots",
+        "roads": [
+          "ME 4",
+          "Dallas Hill Road",
+          "Saddleback Mountain Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Maine"
+        ],
+        "source": "https://www.saddlebackmaine.com/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.saddlebackmaine.com/wp-content/uploads/2024/12/Trail-map-web-compress.pdf",
+          "https://dallasplantation.com/government/roads/"
+        ]
+      }
+    ],
     "schweitzer-mountain-resort": [
       {
         "from": "Sandpoint (US 95)",
@@ -4547,6 +6314,46 @@
             "source": "https://www.pref.nagano.lg.jp/hokuken/doro/documents/r8-r9toukiheisa.pdf",
             "checkedOn": "2026-11-22"
           }
+        ]
+      }
+    ],
+    "showdown-montana": [
+      {
+        "from": "Neihart",
+        "to": "Showdown main parking",
+        "roads": [
+          "US 89",
+          "Showdown access road"
+        ],
+        "statusUrls": [
+          "https://www.511mt.net/",
+          "https://app.mdt.mt.gov/atms/public/rwis/301012"
+        ],
+        "source": "https://www.showdownmontana.com/lodge-mountain-info",
+        "checkedOn": "2026-11-22",
+        "passIds": [
+          "us-mt-kings-hill-pass"
+        ],
+        "additionalSources": [
+          "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/MT/MT_Kings_Hill_20110608_TM_geo.pdf",
+          "https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/785756"
+        ]
+      },
+      {
+        "from": "White Sulphur Springs",
+        "to": "Showdown main parking",
+        "roads": [
+          "US 89",
+          "Showdown access road"
+        ],
+        "statusUrls": [
+          "https://www.511mt.net/",
+          "https://app.mdt.mt.gov/atms/public/rwis/301012"
+        ],
+        "source": "https://www.showdownmontana.com/lodge-mountain-info",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/MT/MT_Kings_Hill_20110608_TM_geo.pdf"
         ]
       }
     ],
@@ -4662,6 +6469,98 @@
             "source": "https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/traveller-information/seasonal/winter-driving/winter-tire-and-chain-up-routes",
             "checkedOn": "2026-11-21"
           }
+        ]
+      }
+    ],
+    "ski-apache": [
+      {
+        "from": "Alto (NM 48)",
+        "to": "Ski Apache base lot",
+        "roads": [
+          "NM 48",
+          "NM 532 (Ski Run Road)"
+        ],
+        "statusUrls": [
+          "https://www.nmroads.com/"
+        ],
+        "source": "https://skiapache.com/travel/driving-to-ski-apache/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.dot.nm.gov/event/request-for-input-ski-run-road/"
+        ]
+      }
+    ],
+    "ski-land": [
+      {
+        "from": "Fox (northbound AK 6 / Steese Highway)",
+        "to": "Ski Land upper lodge and parking",
+        "roads": [
+          "AK 6 (Steese Highway)",
+          "Fairbanks Creek Road",
+          "Ski Land Road"
+        ],
+        "statusUrls": [
+          "https://511.alaska.gov/"
+        ],
+        "source": "https://skiland.org/contact.html",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.adfg.alaska.gov/index.cfm?adfg=viewinglocations.steesehighway",
+          "https://www.blm.gov/sites/blm.gov/files/docs/2021-09/Alaska_SteeseElliottHwys_Brochure.pdf",
+          "https://www.fnsb.gov/DocumentCenter/View/21190"
+        ]
+      }
+    ],
+    "ski-santa-fe": [
+      {
+        "from": "Santa Fe",
+        "to": "Ski Santa Fe main parking",
+        "roads": [
+          "NM 475 (Hyde Park Road)"
+        ],
+        "statusUrls": [
+          "https://www.nmroads.com/"
+        ],
+        "source": "https://www.skisantafe.com/getting-here/directions",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.dot.nm.gov/blog/2024/10/04/pavement-rehabilitation-project-on-n-m-475-hyde-park-rd-continues/",
+          "https://www.skisantafe.com/getting-here/parking"
+        ]
+      }
+    ],
+    "snow-king-mountain": [
+      {
+        "from": "Jackson town center",
+        "to": "Summit gondola and Sports & Events Center",
+        "roads": [
+          "Snow King Avenue"
+        ],
+        "statusUrls": [
+          "https://wyoroad.info/"
+        ],
+        "source": "https://snowkingmountain.com/mountain/trail-map/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://snowkingmountain.com/mountain/terrain-statistics/"
+        ]
+      },
+      {
+        "from": "Jackson town center",
+        "to": "Rafferty Center lot",
+        "roads": [
+          "Snow King Avenue"
+        ],
+        "statusUrls": [
+          "https://wyoroad.info/"
+        ],
+        "source": "https://snowkingmountain.com/mountain/trail-map/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://snowkingmountain.com/mountain/terrain-statistics/"
         ]
       }
     ],
@@ -5039,6 +6938,123 @@
         ]
       }
     ],
+    "stowe": [
+      {
+        "from": "Waterbury (I-89 exit 10)",
+        "to": "Mansfield Base",
+        "roads": [
+          "I-89",
+          "VT 100",
+          "VT 108 (Mountain Road)"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.stowe.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.stowe.com/the-mountain/about-the-mountain/trail-maps.aspx",
+          "https://vtrans.vermont.gov/notch"
+        ],
+        "restrictions": [
+          {
+            "description": "Smugglers’ Notch closes to general winter travel. Approach from Stowe Village; check VTrans notices.",
+            "source": "https://vtrans.vermont.gov/notch",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "Waterbury (I-89 exit 10)",
+        "to": "Spruce Peak base",
+        "roads": [
+          "I-89",
+          "VT 100",
+          "VT 108 (Mountain Road)"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.stowe.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.stowe.com/the-mountain/about-the-mountain/trail-maps.aspx",
+          "https://vtrans.vermont.gov/notch"
+        ],
+        "restrictions": [
+          {
+            "description": "Smugglers’ Notch closes to general winter travel. Approach from Stowe Village; check VTrans notices.",
+            "source": "https://vtrans.vermont.gov/notch",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "Waterbury (I-89 exit 10)",
+        "to": "Toll House area",
+        "roads": [
+          "I-89",
+          "VT 100",
+          "VT 108 (Mountain Road)"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.stowe.com/explore-the-resort/about-the-resort/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.stowe.com/the-mountain/about-the-mountain/trail-maps.aspx",
+          "https://vtrans.vermont.gov/notch"
+        ],
+        "restrictions": [
+          {
+            "description": "Smugglers’ Notch closes to general winter travel. Approach from Stowe Village; check VTrans notices.",
+            "source": "https://vtrans.vermont.gov/notch",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
+    "stratton-mountain-resort": [
+      {
+        "from": "Bondville (VT 30)",
+        "to": "Stratton Village base lots",
+        "roads": [
+          "VT 30",
+          "Stratton Mountain Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.stratton.com/plan-your-trip/getting-here/directions-to-stratton-mountain",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.stratton.com/plan-your-trip/getting-here/resort-parking"
+        ]
+      },
+      {
+        "from": "Bondville (VT 30)",
+        "to": "Sun Bowl Lodge",
+        "roads": [
+          "VT 30",
+          "Stratton Mountain Road",
+          "Sun Bowl Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.stratton.com/plan-your-trip/getting-here/resort-parking",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.stratton.com/plan-your-trip/getting-here/directions-to-stratton-mountain"
+        ]
+      }
+    ],
     "sugar-bowl-resort": [
       {
         "from": "Soda Springs (I-80 Exit 174)",
@@ -5114,6 +7130,101 @@
         "additionalSources": [
           "https://ohv.parks.ca.gov/?page_id=23055",
           "https://www.sugarbowl.com/conditions"
+        ]
+      }
+    ],
+    "sugarbush-resort": [
+      {
+        "from": "Rutland via US 4",
+        "to": "Lincoln Peak public base",
+        "roads": [
+          "US 4",
+          "VT 100",
+          "Sugarbush Access Road",
+          "Forest Drive"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.sugarbush.com/guest-services/directions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://links.imagerelay.com/cdn/1980/ql/7d66b14e89414d4cb778d19f33660efc/2025-26-Sugarbush_Trail_Map.pdf"
+        ]
+      },
+      {
+        "from": "Waterbury (I-89 exit 10)",
+        "to": "Lincoln Peak public base",
+        "roads": [
+          "I-89",
+          "US 2",
+          "VT 100",
+          "Sugarbush Access Road",
+          "Forest Drive"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.sugarbush.com/guest-services/directions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://links.imagerelay.com/cdn/1980/ql/7d66b14e89414d4cb778d19f33660efc/2025-26-Sugarbush_Trail_Map.pdf"
+        ]
+      },
+      {
+        "from": "Middlesex (I-89 exit 9)",
+        "to": "Lincoln Peak public base",
+        "roads": [
+          "I-89",
+          "VT 100B",
+          "VT 100",
+          "Sugarbush Access Road",
+          "Forest Drive"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.sugarbush.com/guest-services/directions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://links.imagerelay.com/cdn/1980/ql/7d66b14e89414d4cb778d19f33660efc/2025-26-Sugarbush_Trail_Map.pdf"
+        ]
+      },
+      {
+        "from": "Bethel (I-89 exit 3)",
+        "to": "Lincoln Peak public base",
+        "roads": [
+          "I-89",
+          "VT 107",
+          "VT 100",
+          "Sugarbush Access Road",
+          "Forest Drive"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.sugarbush.com/guest-services/directions",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://links.imagerelay.com/cdn/1980/ql/7d66b14e89414d4cb778d19f33660efc/2025-26-Sugarbush_Trail_Map.pdf"
+        ]
+      },
+      {
+        "from": "VT 100 at Sugarbush Access Road",
+        "to": "Mt. Ellen public base",
+        "roads": [
+          "Sugarbush Access Road",
+          "German Flats Road",
+          "Mt. Ellen Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont"
+        ],
+        "source": "https://www.sugarbush.com/mountain/terrain-and-maps",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.sugarbush.com/guest-services/directions",
+          "https://links.imagerelay.com/cdn/1980/ql/7d66b14e89414d4cb778d19f33660efc/2025-26-Sugarbush_Trail_Map.pdf"
         ]
       }
     ],
@@ -5275,6 +7386,33 @@
         ]
       }
     ],
+    "sundance-mountain-resort": [
+      {
+        "from": "Provo Canyon (US 189)",
+        "to": "Sundance Base Village",
+        "roads": [
+          "US 189",
+          "UT 92 (Alpine Loop Road)"
+        ],
+        "statusUrls": [
+          "https://www.udottraffic.utah.gov/"
+        ],
+        "source": "https://www.sundanceresort.com/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://timpanogosarea.udot.utah.gov/road-information/",
+          "https://timpanogosarea.udot.utah.gov/recreation/winter/"
+        ],
+        "restrictions": [
+          {
+            "description": "The upper Alpine Loop between Pine Hollow and Aspen Grove closed November 2 for winter. Sundance is reached from the Provo Canyon side.",
+            "source": "https://connect.udot.utah.gov/2026/10/29/udot-to-close-alpine-loop-for-winter-monday-nov-2/",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
     "sunday-river": [
       {
         "from": "Bethel and Newry (ME 26)",
@@ -5293,6 +7431,24 @@
         "additionalSources": [
           "https://cdn.sanity.io/files/k8yfdmw9/sunday-river/1be2ec5f3b43076338e9eb42415de10fb8e2b80f.jpg",
           "https://www.sundayriver.com/the-mountain/parking-and-shuttles"
+        ]
+      }
+    ],
+    "sunlight-mountain-resort": [
+      {
+        "from": "Glenwood Springs",
+        "to": "Sunlight base lot",
+        "roads": [
+          "Garfield County Road 117 (Four Mile Road)"
+        ],
+        "statusUrls": [
+          "https://www.cotrip.org/"
+        ],
+        "source": "https://sunlightmtn.com/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://sunlightmtn.com/explore/parking-shuttles/"
         ]
       }
     ],
@@ -5448,6 +7604,173 @@
         ],
         "additionalSources": [
           "https://www.codot.gov/programs/planning/assets/transportation-plans/rtp-dev-documents/southwest-2040-corridor-profiles.pdf"
+        ]
+      }
+    ],
+    "terry-peak": [
+      {
+        "from": "Sturgis (I-90 exit 30)",
+        "to": "Nevada Gulch Lodge lot",
+        "roads": [
+          "I-90",
+          "US 14A",
+          "US 85",
+          "Nevada Gulch Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      },
+      {
+        "from": "Sturgis (I-90 exit 30)",
+        "to": "Stewart Lodge lot",
+        "roads": [
+          "I-90",
+          "US 14A",
+          "US 85",
+          "Nevada Gulch Road",
+          "Stewart Slope Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      },
+      {
+        "from": "Rapid City via US 385",
+        "to": "Nevada Gulch Lodge lot",
+        "roads": [
+          "SD 44",
+          "US 385",
+          "US 85",
+          "US 14A",
+          "Nevada Gulch Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      },
+      {
+        "from": "Rapid City via US 385",
+        "to": "Stewart Lodge lot",
+        "roads": [
+          "SD 44",
+          "US 385",
+          "US 85",
+          "US 14A",
+          "Nevada Gulch Road",
+          "Stewart Slope Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      },
+      {
+        "from": "Deadwood (US 14A eastbound from Wyoming)",
+        "to": "Nevada Gulch Lodge lot",
+        "roads": [
+          "US 14A",
+          "US 85",
+          "Nevada Gulch Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      },
+      {
+        "from": "Deadwood (US 14A eastbound from Wyoming)",
+        "to": "Stewart Lodge lot",
+        "roads": [
+          "US 14A",
+          "US 85",
+          "Nevada Gulch Road",
+          "Stewart Slope Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      },
+      {
+        "from": "Newcastle via Cheyenne Crossing",
+        "to": "Nevada Gulch Lodge lot",
+        "roads": [
+          "US 85",
+          "US 14A",
+          "Nevada Gulch Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      },
+      {
+        "from": "Newcastle via Cheyenne Crossing",
+        "to": "Stewart Lodge lot",
+        "roads": [
+          "US 85",
+          "US 14A",
+          "Nevada Gulch Road",
+          "Stewart Slope Road"
+        ],
+        "statusUrls": [
+          "https://www.sd511.org/"
+        ],
+        "source": "https://terrypeak.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://terrypeak.com/day-lodges"
+        ]
+      }
+    ],
+    "the-highlands-at-harbor-springs": [
+      {
+        "from": "Harbor Springs local approach",
+        "to": "Highlands Day Lodge lot",
+        "roads": [
+          "Pleasantview Road",
+          "Highlands Drive"
+        ],
+        "statusUrls": [
+          "https://mdotjboss.state.mi.us/MiDrive/map"
+        ],
+        "source": "https://www.highlandsharborsprings.com/getting-here",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://cdn.sanity.io/files/ud45da4u/the-highlands/c93cf71aa8b4f9e05144bc1f985b11a220d375e7.pdf"
         ]
       }
     ],
@@ -5728,6 +8051,88 @@
           "https://www.oregon.gov/ODOT/Planning/TPOD/facility_plan/corridor/OR_35_mt_hood_corridor_plan_vol1_1999.pdf",
           "https://www.oregon.gov/odot/Programs/TDD%20Documents/Mt-Hood-Management-Plan.pdf",
           "https://timberlinelodge.com/things-to-do/skiing-snowboarding/"
+        ]
+      }
+    ],
+    "titus-mountain": [
+      {
+        "from": "Malone",
+        "to": "Titus Mountain lower visitor lot",
+        "roads": [
+          "Johnson Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://www.titusmountain.com/directions",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.titusmountain.com/trail-map"
+        ]
+      }
+    ],
+    "tremblant": [
+      {
+        "from": "Mont-Tremblant (QC 117)",
+        "to": "South Side public parking",
+        "roads": [
+          "QC 117",
+          "Montée Ryan"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/"
+        ],
+        "source": "https://medias.tremblant.ca/pdf/cartes/carte-acces-routier-tremblant.pdf",
+        "checkedOn": "2026-11-22",
+        "passIds": []
+      },
+      {
+        "from": "Lac-Supérieur",
+        "to": "North Side public parking",
+        "roads": [
+          "Chemin Duplessis"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/"
+        ],
+        "source": "https://medias.tremblant.ca/pdf/cartes/carte-acces-routier-tremblant.pdf",
+        "checkedOn": "2026-11-22",
+        "passIds": []
+      }
+    ],
+    "tsugaike-mountain-resort": [
+      {
+        "from": "Azumino / Hakuba",
+        "to": "Tsugaike Central Parking and gondola arrival",
+        "roads": [
+          "National Route 147",
+          "National Route 148"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.tsugaike.gr.jp/green/access",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.tsugaike.gr.jp/winter/wp-content/uploads/2025/02/parking.pdf",
+          "https://www.tsugaike.gr.jp/faq"
+        ]
+      },
+      {
+        "from": "Itoigawa",
+        "to": "Tsugaike Central Parking and gondola arrival",
+        "roads": [
+          "National Route 148"
+        ],
+        "statusUrls": [
+          "https://www.jartic.or.jp/"
+        ],
+        "source": "https://www.tsugaike.gr.jp/green/access",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.tsugaike.gr.jp/winter/wp-content/uploads/2025/02/parking.pdf",
+          "https://www.tsugaike.gr.jp/faq"
         ]
       }
     ],
@@ -6047,6 +8452,54 @@
         ]
       }
     ],
+    "willamette-pass": [
+      {
+        "from": "Oakridge (eastbound OR 58)",
+        "to": "Willamette Pass Lodge and day lots",
+        "roads": [
+          "OR 58"
+        ],
+        "statusUrls": [
+          "https://tripcheck.com/",
+          "https://www.tripcheck.com/Pages/Mountain-Passes/willamette-pass"
+        ],
+        "source": "https://www.willamettepass.ski/getting-here-parking/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.willamettepass.ski/wp-content/uploads/sites/13/2023/02/Studio-Project-3.png"
+        ],
+        "restrictions": [
+          {
+            "description": "Follow active ODOT chain and traction controls on the pass section.",
+            "source": "https://www.tripcheck.com/Pages/Mountain-Passes/willamette-pass",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "US 97 junction (westbound OR 58)",
+        "to": "Willamette Pass Lodge and day lots",
+        "roads": [
+          "OR 58"
+        ],
+        "statusUrls": [
+          "https://tripcheck.com/",
+          "https://www.tripcheck.com/Pages/Mountain-Passes/willamette-pass"
+        ],
+        "source": "https://www.willamettepass.ski/getting-here-parking/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.willamettepass.ski/wp-content/uploads/sites/13/2023/02/Studio-Project-3.png"
+        ],
+        "restrictions": [
+          {
+            "description": "Follow active ODOT chain and traction controls on the pass section.",
+            "source": "https://www.tripcheck.com/Pages/Mountain-Passes/willamette-pass",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
     "winter-park-resort": [
       {
         "from": "Empire Junction (I-70 exit 232)",
@@ -6162,6 +8615,21 @@
         "additionalSources": [
           "https://www.codot.gov/news/2026/november2026news/us-160-wolf-creek-pass-co-151-fully-open-through-winter",
           "https://www.codot.gov/travel/winter-driving"
+        ]
+      }
+    ],
+    "zao-onsen-ski-resort": [
+      {
+        "from": "Yamagata-Kaminoyama interchange (E13)",
+        "to": "Zao Onsen public bases",
+        "roads": [
+          "E13",
+          "Yamagata Prefectural Road 21"
+        ],
+        "source": "https://zaomountainresort.com/parking/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://zaomountainresort.com/wp-content/uploads/2026/11/2026_2027_ZAO_GUIDE.pdf"
         ]
       }
     ]
@@ -6447,6 +8915,16 @@
       "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/781220",
       "checkedOn": "2026-11-21"
     },
+    "us-mt-kings-hill-pass": {
+      "name": "Kings Hill Pass",
+      "road": "US 89",
+      "coordinates": [
+        -110.695212,
+        46.8410726
+      ],
+      "source": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/MT/MT_Kings_Hill_20110608_TM_geo.pdf",
+      "checkedOn": "2026-11-22"
+    },
     "us-mt-lost-trail-pass": {
       "name": "Lost Trail Pass",
       "road": "US 93",
@@ -6507,6 +8985,16 @@
       "source": "https://forecast.weather.gov/MapClick.php?lat=40.7516&lon=-111.6224",
       "checkedOn": "2026-11-21"
     },
+    "us-vt-sherburne-pass": {
+      "name": "Sherburne Pass",
+      "road": "US 4",
+      "coordinates": [
+        -72.8329,
+        43.6637
+      ],
+      "source": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/VT/VT_Pico_Peak_20210414_TM_geo.pdf",
+      "checkedOn": "2026-11-22"
+    },
     "us-wa-snoqualmie-pass-i90": {
       "name": "Snoqualmie Pass",
       "road": "I-90",
@@ -6536,6 +9024,16 @@
       ],
       "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1528074",
       "checkedOn": "2026-11-21"
+    },
+    "us-wy-granite-pass": {
+      "name": "Granite Pass",
+      "road": "US 14",
+      "coordinates": [
+        -107.50333,
+        44.64
+      ],
+      "source": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/WY/WY_Granite_Pass_20120626_TM_geo.pdf",
+      "checkedOn": "2026-11-22"
     },
     "us-wy-teton-pass": {
       "name": "Teton Pass",

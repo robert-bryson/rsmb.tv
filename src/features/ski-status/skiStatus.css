@@ -1166,3 +1166,93 @@
     .ski-typical-season { border-inline-start-color: Highlight; }
     .ski-status :is(button, a, select, input, summary, [tabindex]):focus-visible { outline-color: Highlight; }
 }
+
+.ski-driving-disclosure {
+    margin-block: 0.5rem;
+    border-block: 1px solid var(--ski-line);
+}
+.ski-driving-disclosure > summary, .ski-driving-group > summary {
+    min-height: var(--ski-target);
+    padding-block: 0.65rem;
+    cursor: pointer;
+    font-weight: 650;
+}
+.ski-driving-disclosure > summary:hover, .ski-driving-group > summary:hover { color: var(--ski-link); }
+.ski-driving-body {
+    display: grid;
+    gap: 0.8rem;
+    padding-block: 0.1rem 0.8rem;
+    font-size: 0.875rem;
+}
+.ski-driving-body h3 { margin-block-end: 0.25rem; font-weight: 650; }
+.ski-driving-body label { display: grid; gap: 0.25rem; }
+.ski-driving-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    align-items: end;
+    gap: 0.5rem;
+}
+.ski-driving-fields .ski-input { width: 100%; }
+.ski-driving-roads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    list-style: none;
+}
+.ski-driving-roads li {
+    border: 1px solid var(--ski-line);
+    border-radius: 0.35rem;
+    background: var(--ski-header);
+    padding: 0.25rem 0.45rem;
+}
+.ski-driving-note { color: var(--ski-muted); font-size: 0.8rem; }
+.ski-driving-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.9rem; }
+.ski-driving-actions a { display: inline-flex; min-height: var(--ski-target); align-items: center; }
+.ski-driving-body a, .ski-driving-map-card a {
+    color: var(--ski-link);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+.ski-driving-list { display: grid; gap: 0.65rem; }
+.ski-driving-reports {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.6rem;
+    border: 1px solid var(--ski-line);
+    border-radius: 0.45rem;
+    background: var(--ski-header);
+}
+.ski-driving-report {
+    padding: 0.5rem;
+    margin-block: 0.25rem;
+    border-inline-start: 3px solid var(--ski-line);
+}
+.ski-driving-report[data-status="active"][data-kind="closure"] { border-color: #ffaba6; }
+.ski-driving-report[data-status="active"][data-kind="restriction"] { border-color: #ffdf88; }
+.ski-driving-report-text { white-space: pre-line; }
+.ski-driving-report-heading { color: var(--ski-muted); font-size: 0.8rem; }
+.ski-driving-report-heading strong { color: var(--ski-text); }
+.ski-driving-arrival { display: grid; gap: 0.35rem; }
+.ski-driving-camera img { display: block; width: min(100%, 25rem); border-radius: 0.35rem; }
+.ski-driving-feature-list { display: grid; gap: 0.25rem; }
+.ski-driving-feature-list .ski-control { width: 100%; text-align: start; justify-content: start; }
+.ski-driving-map-card {
+    position: absolute;
+    inset-inline-start: 0.75rem;
+    bottom: 2.5rem;
+    z-index: 3;
+    width: min(25rem, calc(100% - 1.5rem));
+    max-height: calc(100% - 7rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    border: 1px solid var(--ski-line);
+    border-radius: 0.55rem;
+    background: var(--ski-header);
+    color: var(--ski-text);
+    padding: 0.7rem;
+    box-shadow: 0 0.3rem 1.3rem #0007;
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+}
+.ski-driving-map-heading { display: flex; align-items: start; justify-content: space-between; gap: 0.5rem; }
+.ski-driving-map-heading h2 { font-weight: 700; }

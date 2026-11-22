@@ -35,7 +35,7 @@ export default defineConfig({
         }] : []),
     ],
     webServer: skipWebServer ? undefined : {
-        env: { VITE_CARTO_API_KEY: 'browser-test-key', CARTO_API_KEY: '', VITE_SKI_CONDITIONS_LOCAL: '0' },
+        env: { VITE_CARTO_API_KEY: 'browser-test-key', CARTO_API_KEY: '', VITE_SKI_CONDITIONS_LOCAL: '0', VITE_SKI_DRIVING_LOCAL: '0' },
         command: `npm run build-flights && npx vite --host 127.0.0.1 --port ${port} --strictPort`,
         url: baseURL,
         reuseExistingServer: false,

@@ -1,6 +1,46 @@
 {
   "season": "2026",
   "resorts": {
+    "coronet-peak": {
+      "checkedOn": "2026-11-22",
+      "lodges": [
+        {
+          "name": "Coronet Peak Base Lodge",
+          "role": "Public slope-side services and lift ticket kiosks.",
+          "source": "https://www.coronetpeak.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Seven public car parks",
+          "location": "Coronet Peak access road",
+          "source": "https://www.coronetpeak.co.nz/getting-here-guide",
+          "checkedOn": "2026-11-22",
+          "policy": "Use the base drop zone and the free car-park shuttle."
+        }
+      ],
+      "shuttle": {
+        "description": "Book the Queenstown ski bus in advance. The mountain shuttle runs between the base and parking lots.",
+        "source": "https://www.coronetpeak.co.nz/getting-here-guide",
+        "checkedOn": "2026-11-22"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Downhill, night terrain and ski-area boundary",
+          "assetUrl": "https://www.coronetpeak.co.nz/_cf/h/cdn.prod.website-files.com/69d83bba1fb7149e2578fd8b/6a222afd9bb097d5fa8b32ee_coronet-peak-trail-map-2026.pdf",
+          "season": "2026",
+          "source": "https://www.coronetpeak.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        },
+        {
+          "coverage": "Base building and visitor facilities",
+          "assetUrl": "https://www.coronetpeak.co.nz/_cf/h/cdn.prod.website-files.com/69d83bba1fb7149e2578fd8b/6a222afc1f5c118ec5323f6d_cp-base-area-map.pdf",
+          "source": "https://www.coronetpeak.co.nz/mountain-info",
+          "checkedOn": "2026-11-22"
+        }
+      ]
+    },
     "corralco-resort-de-montana": {
       "checkedOn": "2026-11-21",
       "lodges": [
@@ -137,6 +177,88 @@
           "assetUrl": "https://www.fallscreek.com.au/wp-content/uploads/sites/67/2023/08/Falls-Village-Map-Update-2023_FINAL.pdf",
           "season": "2023",
           "source": "https://www.fallscreek.com.au/winter-maps/",
+          "checkedOn": "2026-11-22"
+        }
+      ]
+    },
+    "hotham": {
+      "checkedOn": "2026-11-22",
+      "lodges": [
+        {
+          "name": "Hotham Central",
+          "role": "Main village arrival and skier services.",
+          "source": "https://www.mthotham.com.au/Portals/0/Documents-2025/Maps/Driving%20to%20Hotham.pdf?ver=2WOxG98dwqPG-IG3YB-C9g%3D%3D",
+          "checkedOn": "2026-11-22"
+        },
+        {
+          "name": "Alpine Gateway",
+          "role": "Public shelter and advanced-terrain access.",
+          "source": "https://www.mthotham.com.au/Portals/0/Documents-2025/Maps/Driving%20to%20Hotham.pdf?ver=2WOxG98dwqPG-IG3YB-C9g%3D%3D",
+          "checkedOn": "2026-11-22"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Alpine Gateway multilevel car park",
+          "location": "Great Alpine Road",
+          "source": "https://www.mthotham.com.au/Portals/0/Documents-2025/Maps/Driving%20to%20Hotham.pdf?ver=2WOxG98dwqPG-IG3YB-C9g%3D%3D",
+          "checkedOn": "2026-11-22",
+          "policy": "Day parking. Resort entry permit applies during the declared season."
+        }
+      ],
+      "trailMaps": [
+        {
+          "coverage": "Hotham downhill terrain and lifts",
+          "assetUrl": "https://www.mthotham.com.au/Portals/0/OpenContent/Files/3049/h_25_Trail_Map_240425_rgb-1.jpg",
+          "source": "https://www.mthotham.com.au/mountain/explore/trail-maps",
+          "checkedOn": "2026-11-22"
+        },
+        {
+          "coverage": "Winter shared trails and Nordic links",
+          "assetUrl": "https://www.mthotham.com.au/Portals/0/Documents-2026/Mt%20Hotham_Activity_Guide_Shared%20Trails%202026.jpg?ver=wN1a0pU-0uT16Ls1w6qG7Q%3d%3d",
+          "season": "2026",
+          "source": "https://www.mthotham.com.au/mountain/explore/trail-maps",
+          "checkedOn": "2026-11-22"
+        }
+      ]
+    },
+    "mt-buller": {
+      "checkedOn": "2026-11-22",
+      "lodges": [
+        {
+          "name": "Mt Buller Village",
+          "role": "Public skier services and bus arrival.",
+          "source": "https://www.mtbuller.com.au/winter/resort-entry",
+          "checkedOn": "2026-11-22"
+        }
+      ],
+      "parking": [
+        {
+          "name": "Public day car parks",
+          "location": "Mt Buller above the Mirimbah gate",
+          "source": "https://www.mtbuller.com.au/winter/resort-entry",
+          "checkedOn": "2026-11-22",
+          "policy": "Vehicle resort entry permit and parking directions apply."
+        },
+        {
+          "name": "Overnight car parks",
+          "location": "Mt Buller designated overnight zones",
+          "source": "https://www.mtbuller.com.au/winter/resort-entry",
+          "checkedOn": "2026-11-22",
+          "policy": "Use the separate booked Ride Share to reach accommodation."
+        }
+      ],
+      "shuttle": {
+        "description": "Use the free day car park shuttle to the village. Overnight arrivals book a Ride Share.",
+        "source": "https://www.mtbuller.com.au/winter/resort-entry",
+        "checkedOn": "2026-11-22"
+      },
+      "trailMaps": [
+        {
+          "coverage": "Mt Buller downhill trails and lifts",
+          "assetUrl": "https://www.mtbuller.com.au/hubfs/2026_mountain_map_wo_overlays.pdf?hsLang=en-au",
+          "season": "2026",
+          "source": "https://www.mtbuller.com.au/winter/trails",
           "checkedOn": "2026-11-22"
         }
       ]

@@ -6,7 +6,7 @@ import { snowDepthAnalysis, snowDepthBands } from './skiMapOverlays';
 import { SkiIconButton } from './SkiIcon';
 import { SkiPassIcon } from './SkiPassIcon';
 
-export type SetSkiLayer = (key: 'color' | 'terrain' | 'skiTerrain' | 'snowDepth' | 'peaks', value?: string) => void;
+export type SetSkiLayer = (key: 'color' | 'terrain' | 'skiTerrain' | 'snowDepth' | 'peaks' | 'driving', value?: string) => void;
 
 interface Props {
     colors: MarkerMode;
@@ -16,6 +16,10 @@ interface Props {
     snowDepth: boolean;
     resortTerrain: boolean;
     peaks: boolean;
+    driving?: boolean;
+    drivingItems?: { id: string; label: string }[];
+    drivingCatalogStatus?: 'loading' | 'failed';
+    onDrivingItem?: (id: string) => void;
     conventions: readonly TerrainConvention[];
     onChange: SetSkiLayer;
     onClose: () => void;
@@ -32,7 +36,8 @@ function LayerToggle({ label, note, checked, onChange }: {
     </label>;
 }
 
-export function SkiLayerPanel({ colors, units, indyDiscounts, terrain, snowDepth, resortTerrain, peaks, conventions, onChange, onClose }: Props) {
+export function SkiLayerPanel({ colors, units, indyDiscounts, terrain, snowDepth, resortTerrain, peaks, driving = false,
+    drivingItems, drivingCatalogStatus, onDrivingItem, conventions, onChange, onClose }: Props) {
     const markerSelect = useRef<HTMLSelectElement>(null);
     useLayoutEffect(() => { markerSelect.current?.focus(); }, []);
     const legend = markerLegend(colors, units, indyDiscounts);
@@ -65,7 +70,19 @@ export function SkiLayerPanel({ colors, units, indyDiscounts, terrain, snowDepth
                 <LayerToggle label="Mountain peaks" checked={peaks} onChange={checked => onChange('peaks', checked ? undefined : '0')} />
                 <LayerToggle label="Snow depth" note="Contiguous U.S." checked={snowDepth}
                     onChange={checked => onChange('snowDepth', checked ? '1' : undefined)} />
+                <LayerToggle label="Driving" note="Mountain passes, road reports, cameras and parking" checked={driving}
+                    onChange={checked => onChange('driving', checked ? '1' : undefined)} />
             </fieldset>
+            {driving && drivingCatalogStatus && <p className="ski-layer-note" role="status">
+                {drivingCatalogStatus === 'loading' ? 'Loading driving information…' : 'Driving information unavailable.'}
+            </p>}
+            {driving && !drivingCatalogStatus && <details className="ski-driving-group">
+                <summary>Driving features in view</summary>
+                {drivingItems?.length ? <ul className="ski-driving-feature-list">
+                    {drivingItems.map(item => <li key={item.id}><button type="button" className="ski-control"
+                        onClick={() => onDrivingItem?.(item.id)}>{item.label}</button></li>)}
+                </ul> : <p className="ski-layer-note">Zoom in to find passes, road reports, cameras and parking.</p>}
+            </details>}
             {snowDepth && <SnowDepthKey units={units} />}
             {conventions.length > 0 && <TerrainKey conventions={conventions} />}
         </div>

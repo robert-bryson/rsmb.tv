@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useEffectEvent, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { administrativeBounds, type GeographicBounds } from '../../../shared/geography/administrativeBounds';
+import type { DrivingApproach } from '../../../shared/skiDrivingCatalog';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
 import { globeOverviewZoom, projectVisibleGlobeLocation } from '../../maps/globe';
@@ -10,12 +11,16 @@ import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
 import { filterSkiAreasInMapArea, skiAreaBounds, type SkiPassSelection, type SkiUnits } from './browse';
 import { skiAreaMapPoint, skiAreas, type SkiArea } from './catalog';
 import type { Conditions, ResortStatus } from './conditions';
+import { drivingHit, drivingMapData, mapDrivingLabel, syncDrivingMap, visibleDrivingZoom } from './drivingMapLayers';
+import { approachLine, drivingMapFeatures } from './drivingView';
+import { SkiDrivingMapCard } from './SkiDrivingMapCard';
+import type { SkiDriving } from './useSkiDriving';
 import type { MarkerMode } from './mapAppearance';
 import { skiMapAttribution } from './mapAttribution';
 import { resortFootprintLayer, resortTerrainLabel, resortTerrainSource, syncResortTerrain, visibleTerrainConventions } from './resortTerrain';
 import { resortTerrainGroups, resortTerrainMinZoom, type TerrainConvention } from './resortTerrainData';
 import { matchesSkiLocation, skiRegionName } from './skiGeography';
-import { captureSkiMapArea, encodeSkiMapArea, encodeSkiMapCamera, readSkiMapArea, skiMapMaxZoom, skiMapMinZoom, type SkiMapArea } from './skiMapArea';
+import { captureSkiMapArea, encodeSkiMapArea, encodeSkiMapCamera, readSkiMapArea, skiMapAreaContains, skiMapMaxZoom, skiMapMinZoom, type SkiMapArea } from './skiMapArea';
 import { addAreaLayers, addPassBadges, addResortImages, areaFeatures, filterPassBadges, loadPassImages, loadResortImages, markerLayers,
     pointLayer, resortIconLayer, selectionSource, sourceId } from './skiMapLayers';
 import { reliefMinZoom, reliefSource, revealSkiMapOverlay, snowDepthMaxZoom, snowDepthMinZoom, snowDepthSource, syncSkiMapOverlays,
@@ -39,6 +44,11 @@ const providerStyle = () => cartoVectorStyleUrl('dark-matter');
 export interface SkiTerrainRequest {
     id: string;
     previousView?: MapCamera;
+}
+
+export interface SkiDrivingRequest {
+    id: string;
+    bounds: GeographicBounds;
 }
 
 interface Props {
@@ -67,6 +77,10 @@ interface Props {
     willDockDetails: boolean;
     terrainRequest?: SkiTerrainRequest;
     locationRequest?: { place: string };
+    driving?: boolean;
+    drivingData?: SkiDriving;
+    drivingApproach?: DrivingApproach;
+    drivingRequest?: SkiDrivingRequest;
     camera?: MapCamera;
     navigationKey: string;
     restoreHistoryCamera: boolean;
@@ -98,13 +112,13 @@ function readViewport(map: maplibre.Map) {
     if (area) return { area, key, camera: mapCameraValue(map) };
 }
 
-function fitBounds(map: maplibre.Map, bounds: GeographicBounds, duration: number, overview?: () => maplibre.LngLatLike) {
+function fitBounds(map: maplibre.Map, bounds: GeographicBounds, duration: number, overview?: () => maplibre.LngLatLike, maxZoom = pointZoom) {
     const { clientWidth, clientHeight } = map.getContainer();
     const padding = Math.min(46, clientWidth / 4, clientHeight / 4);
     if (!padding) return;
     map.resize();
     if (bounds[0] === bounds[2] && bounds[1] === bounds[3]) {
-        map.easeTo({ center: [bounds[0], bounds[1]], zoom: pointZoom, duration });
+        map.easeTo({ center: [bounds[0], bounds[1]], zoom: maxZoom, duration });
         return;
     }
     if (bounds[2] - bounds[0] >= 180) {
@@ -116,7 +130,7 @@ function fitBounds(map: maplibre.Map, bounds: GeographicBounds, duration: number
         }
         return;
     }
-    map.fitBounds(bounds, { padding, maxZoom: pointZoom, duration });
+    map.fitBounds(bounds, { padding, maxZoom, duration });
 }
 
 function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number) {
@@ -170,6 +184,7 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<
 
 export default function SkiStatusMap({ areas, fitResults, searchResults, searchReportsPending, cameraAreas, cameraFitKey, selected, colors, units, passSelection, statuses, conditions, archive, terrain, snowDepth, resortTerrain, peaks,
     visible, layersModified, searchedArea, searchedAreaKey, initializeArea, willDockDetails, terrainRequest, locationRequest, camera, navigationKey, restoreHistoryCamera,
+    driving = false, drivingData, drivingApproach, drivingRequest,
     cameraReader, mapRegion, onCameraChange, onSearchArea, onClearArea, onSelect, onShowTerrain, onZoomLocation, onLayerChange }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const layersButton = useRef<HTMLButtonElement>(null);
@@ -185,6 +200,8 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
     const appliedTerrainRequest = useRef<Props['terrainRequest']>(undefined);
     const terrainAnimation = useRef<SkiTerrainRequest>(undefined);
     const appliedLocationRequest = useRef<Props['locationRequest']>(undefined);
+    const appliedDrivingRequest = useRef<Props['drivingRequest']>(undefined);
+    const drivingOpener = useRef<HTMLElement | null>(null);
     const hoverDismissal = useRef<number>(undefined);
     const pinSelection = useRef<string | undefined>(undefined);
     const lastTerrainKey = useRef('');
@@ -200,6 +217,7 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
     const [previousView, setPreviousView] = useState<MapCamera>();
     const [hovered, setHovered] = useState<SkiArea>();
     const [layersOpen, setLayersOpen] = useState(false);
+    const [drivingItemId, setDrivingItem] = useState<string>();
     const [terrainConventions, setTerrainConventions] = useState<readonly TerrainConvention[]>([]);
     if (!visible && layersOpen) setLayersOpen(false);
     const keepHoverOpen = useCallback(() => {
@@ -228,6 +246,26 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
     const showResortTerrain = visible && resortTerrain && terrainGroups.length > 0;
     const points = useMemo(() => areaFeatures(areas, colors, statuses, passSelection), [areas, colors, statuses, passSelection]);
     const selection = useMemo(() => areaFeatures(selected ? [selected] : [], colors, statuses, passSelection), [selected, colors, statuses, passSelection]);
+    const drivingFeatures = useMemo(() => visible && driving && drivingData ? drivingMapFeatures(drivingData) : [], [visible, driving, drivingData]);
+    const selectedDrivingItem = drivingFeatures.find(feature => feature.id === drivingItemId);
+    if (drivingItemId && !selectedDrivingItem) setDrivingItem(undefined);
+    const restoreDrivingFocus = useCallback(() => {
+        const opener = drivingOpener.current;
+        const target = opener?.isConnected && opener.checkVisibility?.() !== false ? opener : layersButton.current;
+        target?.focus({ preventScroll: true });
+        drivingOpener.current = null;
+    }, []);
+    useLayoutEffect(() => {
+        if (selectedDrivingItem || !drivingOpener.current) return;
+        if (visible && document.activeElement === document.body) restoreDrivingFocus();
+        else drivingOpener.current = null;
+    }, [selectedDrivingItem, visible, restoreDrivingFocus]);
+    const drivingGeoJson = useMemo(() => visible && driving
+        ? drivingMapData(drivingFeatures, approachLine(drivingApproach, drivingData?.catalog?.arrivals))
+        : undefined, [visible, driving, drivingFeatures, drivingApproach, drivingData?.catalog]);
+    const updateDrivingMap = useEffectEvent((map: maplibre.Map) => {
+        if (map.getLayer(pointLayer)) syncDrivingMap(map, drivingGeoJson);
+    });
     const current = useEffectEvent(() => ({ areasById, points, selection, selected, colors, visible, willDockDetails }));
     const initialCamera = useEffectEvent((element: HTMLElement) => {
         if (camera) return camera;
@@ -308,6 +346,13 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
         appliedLocationRequest.current = locationRequest;
         if (zoomToRequestedLocation) {
             fitLocation(map, locationRequest.place, previous ? duration : 0);
+            return;
+        }
+        const fitDriving = !(previous && historyChanged) && drivingRequest && drivingRequest !== appliedDrivingRequest.current
+            && driving && drivingApproach?.id === drivingRequest.id;
+        appliedDrivingRequest.current = drivingRequest;
+        if (fitDriving) {
+            fitBounds(map, drivingRequest.bounds, previous ? duration : 0, undefined, 14);
             return;
         }
         // Map movements publish their camera without reapplying it to the live map.
@@ -454,6 +499,7 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
                 setTerrainUnavailable(false);
                 setSnowDepthUnavailable(false);
                 syncOverlays(instance);
+                updateDrivingMap(instance);
                 setResortTerrainUnavailable(false);
                 syncCamera(instance);
                 settleViewport();
@@ -508,6 +554,11 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
             });
             instance.on('mousemove', event => {
                 if (instance.isMoving()) return;
+                if (drivingHit(instance, event.point, 0)) {
+                    canvas.style.cursor = 'pointer';
+                    clearHover();
+                    return;
+                }
                 const data = current();
                 const area = closestArea(instance, event.point, data.areasById);
                 const peak = area ? undefined : peakLabel(instance, event.point);
@@ -530,6 +581,14 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
                 if (event.originalEvent.detail > 1) return;
                 window.clearTimeout(markerClickTimer);
                 clickedMarker = undefined;
+                const item = drivingHit(instance, event.point, 6);
+                if (item) {
+                    drivingOpener.current = canvas;
+                    setLayersOpen(false);
+                    clearHover();
+                    setDrivingItem(item);
+                    return;
+                }
                 if (!instance.getSource(sourceId) || !instance.isSourceLoaded(sourceId)) return;
                 clearHover();
                 const data = current();
@@ -579,6 +638,7 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
             resortImages.current = undefined;
             passLayers.current = false;
             appliedCamera.current = undefined;
+            appliedDrivingRequest.current = undefined;
             terrainAnimation.current = undefined;
         };
     }, [attempt, cameraReader, mapRegion, dismissHover, keepHoverOpen]);
@@ -597,7 +657,13 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
             syncCamera(map);
             reportViewport(map);
         }
-    }, [camera, cameraAreas, cameraFitKey, navigationKey, restoreHistoryCamera, selected, searchedAreaKey, visible, terrainRequest, locationRequest]);
+    }, [camera, cameraAreas, cameraFitKey, navigationKey, restoreHistoryCamera, selected, searchedAreaKey, visible,
+        terrainRequest, locationRequest, driving, drivingApproach, drivingRequest]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (map) updateDrivingMap(map);
+    }, [drivingGeoJson]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -683,10 +749,25 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
         onSearchArea(latest.key);
     }
     const indyDiscounts = passSelection.passes?.length === 1 && passSelection.passes[0] === 'indy-discounts';
+    const containsDrivingPoint = layersOpen && driving && viewport ? skiMapAreaContains(viewport.area) : undefined;
+    const drivingItems = containsDrivingPoint ? drivingFeatures
+        .filter(feature => mapZoom >= visibleDrivingZoom(feature) && containsDrivingPoint(feature.point))
+        .map(feature => ({ id: feature.id, label: `${mapDrivingLabel(feature)} · ${feature.label}` })) : [];
+    function closeDrivingInfo() {
+        setDrivingItem(undefined);
+        restoreDrivingFocus();
+    }
+
     return <div className="ski-map" onBlur={event => {
         if (layersOpen && event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) setLayersOpen(false);
     }} onKeyDown={event => {
         if (event.key !== 'Escape') return;
+        if (selectedDrivingItem) {
+            event.preventDefault();
+            event.stopPropagation();
+            closeDrivingInfo();
+            return;
+        }
         if (layersOpen) {
             event.preventDefault();
             event.stopPropagation();
@@ -720,7 +801,16 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
             </div>
             {layersOpen && <SkiLayerPanel colors={colors} units={units} indyDiscounts={indyDiscounts}
                 terrain={terrain} snowDepth={snowDepth} resortTerrain={resortTerrain} peaks={peaks} conventions={terrainConventions}
-                onChange={onLayerChange} onClose={closeLayers} />}
+                driving={driving} drivingItems={drivingItems}
+                drivingCatalogStatus={drivingData?.catalogFailed ? 'failed' : drivingData?.catalog ? undefined : 'loading'} onDrivingItem={id => {
+                    drivingOpener.current = layersButton.current;
+                    setLayersOpen(false);
+                    setDrivingItem(id);
+                }}
+                onChange={(key, value) => {
+                    if (key === 'driving' && !value) setDrivingItem(undefined);
+                    onLayerChange(key, value);
+                }} onClose={closeLayers} />}
             {previousView && <SkiIconButton icon="back" label="Previous view" hint="Return to previous map view" showLabel
                 className="ski-previous-view" disabled={!interactive} onClick={() => {
                     const map = mapRef.current;
@@ -733,7 +823,8 @@ export default function SkiStatusMap({ areas, fitResults, searchResults, searchR
         <p id="ski-map-instructions" className="sr-only">Use the arrow keys to move the map. Use the zoom buttons or plus and minus keys to zoom.
             Select Search this area to limit the results to the visible map. Browse Results to select areas by name.</p>
         <div ref={container} tabIndex={-1} className="h-full w-full" data-testid="ski-status-map" data-map-state={state} />
-        {interactive && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
+        {selectedDrivingItem && <SkiDrivingMapCard feature={selectedDrivingItem} now={drivingData?.now ?? 0} onClose={closeDrivingInfo} />}
+        {interactive && !selectedDrivingItem && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
             && <SkiAreaPopup area={hovered} mapRef={mapRef} report={conditions.reports.get(hovered.id)} status={statuses.get(hovered.id) ?? 'unknown'}
                 now={conditions.now} onZoomLocation={onZoomLocation} onKeepOpen={keepHoverOpen} onDismiss={dismissHover} />}
         {(state !== 'ready' || showReliefError || showSnowDepthError || showSkiTerrainError) && <div

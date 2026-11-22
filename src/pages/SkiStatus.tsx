@@ -1,5 +1,7 @@
 import { lazy, Suspense, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
+import { drivingAreaProviders, type DrivingApproach } from '../../shared/skiDrivingCatalog';
+import { approachLine } from '../features/ski-status/drivingView';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
@@ -20,7 +22,7 @@ import { SkiIcon, SkiIconButton } from '../features/ski-status/SkiIcon';
 import { SkiPassIcon } from '../features/ski-status/SkiPassIcon';
 import { SkiProjectInfo } from '../features/ski-status/SkiProjectInfo';
 import { SkiShareButton } from '../features/ski-status/SkiShareButton';
-import type { SkiTerrainRequest } from '../features/ski-status/SkiStatusMap';
+import type { SkiDrivingRequest, SkiTerrainRequest } from '../features/ski-status/SkiStatusMap';
 import { readSkiFilters, skiLocationActions, skiLocationLabels, skiLocationModes, skiLocationParams,
     toggleSkiPassFilter, updateSavedSkiExclusions, writeSkiLocations, writeSkiPassProduct, type SkiStatusFilter } from '../features/ski-status/skiFilters';
 import { matchesSkiLocations, type SkiLocationFilters } from '../features/ski-status/skiGeography';
@@ -29,6 +31,7 @@ import { seasonMonths } from '../features/ski-status/seasons';
 import { downloadSkiAreaCsv, skiAreaCsv } from '../features/ski-status/skiCsv';
 import { useSkiArchive } from '../features/ski-status/useSkiArchive';
 import { useSkiConditions } from '../features/ski-status/useSkiConditions';
+import { useSkiDriving } from '../features/ski-status/useSkiDriving';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { usePersistedState } from '../hooks/usePersistedState';
@@ -39,6 +42,7 @@ import { SITE_URL } from '../utils/siteMetadata';
 import '../features/ski-status/skiStatus.css';
 
 const SkiStatusMap = lazy(moduleLoader(() => import('../features/ski-status/SkiStatusMap'), MAPLIBRE_STYLESHEET));
+const SkiDrivingDetails = lazy(() => import('../features/ski-status/SkiDrivingDetails'));
 const areaById = new Map(skiAreas.map(area => [area.id, area]));
 const clearable = ['q', ...Object.values(skiLocationParams), 'pass', 'product', 'skiDate', 'homeArea', 'skiing', 'night', 'inView', 'mapArea', 'seasonMonth'];
 
@@ -120,7 +124,17 @@ export default function SkiStatus() {
     const currentReports = scoped.filter(area => statuses.get(area.id) !== 'unknown').length;
     const [terrainRequest, setTerrainRequest] = useState<SkiTerrainRequest>();
     const [locationRequest, setLocationRequest] = useState<{ place: string }>();
+    const [drivingRequest, setDrivingRequest] = useState<SkiDrivingRequest>();
     const detailsOpen = Boolean(selected && searchParams.get('details') !== '0');
+    const driving = searchParams.get('driving') === '1';
+    const approachId = searchParams.get('approach') ?? undefined;
+    const [drivingDisclosure, setDrivingDisclosure] = useState<{ area: string; open: boolean }>();
+    const drivingExpanded = drivingDisclosure && drivingDisclosure.area === selected?.id
+        ? drivingDisclosure.open : Boolean(approachId);
+    const drivingVisible = driving && showMap;
+    const drivingData = useSkiDriving(drivingVisible || detailsOpen && drivingExpanded,
+        drivingVisible ? 'all' : selected && drivingAreaProviders[selected.id]);
+    const drivingApproach = drivingVisible && selected ? drivingData.catalog?.approaches[selected.id]?.find(route => route.id === approachId) : undefined;
     const searchInput = useRef<HTMLInputElement>(null);
     const cameraReader = useRef<(() => string | undefined) | null>(null);
     const mapSection = useRef<HTMLElement>(null);
@@ -146,7 +160,7 @@ export default function SkiStatus() {
             (mapSection.current?.querySelector<HTMLCanvasElement>('canvas') ?? mapSection.current)?.focus({ preventScroll: true });
         } else return;
         nextFocus.current = undefined;
-    }, [selected, detailsOpen, showMap, terrainRequest, locationRequest]);
+    }, [selected, detailsOpen, showMap, terrainRequest, locationRequest, drivingRequest]);
 
     function updateSkiParams(update: (params: URLSearchParams) => void, replace = false) {
         updateParams(params => {
@@ -178,6 +192,7 @@ export default function SkiStatus() {
 
     function zoomToLocation(place: string) {
         setTerrainRequest(undefined);
+        setDrivingRequest(undefined);
         setLocationRequest({ place });
         nextFocus.current = 'map';
         setView('map');
@@ -186,6 +201,7 @@ export default function SkiStatus() {
     function selectArea(id?: string, control?: HTMLElement) {
         setTerrainRequest(undefined);
         setLocationRequest(undefined);
+        setDrivingRequest(undefined);
         if (id) {
             sourceControl.current = control ?? null;
             nextFocus.current = 'details';
@@ -198,6 +214,7 @@ export default function SkiStatus() {
         if (id || selected) updateSkiParams(params => {
             if (id) params.set('area', id);
             else params.delete('area');
+            if (id !== selected?.id) params.delete('approach');
             params.delete('details');
         });
     }
@@ -210,13 +227,32 @@ export default function SkiStatus() {
     function showTerrain(request: SkiTerrainRequest, control?: HTMLElement) {
         if (control) sourceControl.current = control;
         setLocationRequest(undefined);
+        setDrivingRequest(undefined);
         setTerrainRequest(request);
         nextFocus.current = 'map';
         updateSkiParams(params => {
             params.set('area', request.id);
+            if (request.id !== selected?.id) params.delete('approach');
             params.set('view', 'map');
             params.delete('details');
             params.delete('skiTerrain');
+        });
+    }
+
+    function showDrivingApproach(approach: DrivingApproach) {
+        const points = approachLine(approach, drivingData.catalog?.arrivals).flat();
+        if (!points.length) return;
+        const [lon, lat] = points[0];
+        const bounds = points.reduce<SkiDrivingRequest['bounds']>(([west, south, east, north], [x, y]) =>
+            [Math.min(west, x), Math.min(south, y), Math.max(east, x), Math.max(north, y)], [lon, lat, lon, lat]);
+        setTerrainRequest(undefined);
+        setLocationRequest(undefined);
+        setDrivingRequest({ id: approach.id, bounds });
+        nextFocus.current = 'map';
+        updateSkiParams(params => {
+            params.set('view', 'map');
+            params.set('driving', '1');
+            params.set('approach', approach.id);
         });
     }
 
@@ -458,9 +494,10 @@ export default function SkiStatus() {
                             selected={selected} colors={colors} units={units} passSelection={passSelection} statuses={statuses} conditions={conditions}
                             archive={archive}
                             terrain={terrain} snowDepth={snowDepth} resortTerrain={resortTerrain} peaks={peaks} visible={showMap} searchedArea={searchedArea}
-                            layersModified={colors !== defaultColors || terrain || snowDepth || !resortTerrain || !peaks}
+                            layersModified={colors !== defaultColors || terrain || snowDepth || !resortTerrain || !peaks || driving}
                             searchedAreaKey={searchedArea ? mapAreaParam : null} initializeArea={legacyArea}
                             terrainRequest={terrainRequest} locationRequest={locationRequest} willDockDetails={!wide && !detailsOpen}
+                            driving={driving} drivingData={drivingData} drivingApproach={drivingApproach} drivingRequest={drivingRequest}
                             camera={camera} navigationKey={location.key} restoreHistoryCamera={restoreHistoryCamera}
                             cameraReader={cameraReader} mapRegion={mapSection} onCameraChange={commitMapCamera}
                             onSearchArea={commitMapArea} onClearArea={clearMapArea} onSelect={selectArea} onShowTerrain={showTerrain}
@@ -491,7 +528,20 @@ export default function SkiStatus() {
                 <SkiAreaDetails area={selected} sectionRef={detailSection} units={units} onClose={closeDetails} conditions={conditions}
                     archive={archive?.get(selected.id)}
                     product={product} skiDate={skiDate} homeAreaId={homeAreaId} onShowTerrain={canShowTerrain ? () => showTerrain({ id: selected.id }) : undefined}
-                    onZoomLocation={zoomToLocation} />
+                    onZoomLocation={zoomToLocation} driving={<details className="ski-driving-disclosure" open={drivingExpanded} onToggle={event => {
+                        if (event.target === event.currentTarget) {
+                            const open = event.currentTarget.open;
+                            if (open !== drivingExpanded) setDrivingDisclosure({ area: selected.id, open });
+                        }
+                    }}>
+                        <summary>Driving access</summary>
+                        {drivingExpanded && <ErrorBoundary fallback={<p>Driving information unavailable.</p>}>
+                            <Suspense fallback={<p role="status">Loading driving information…</p>}>
+                                <SkiDrivingDetails area={selected} units={units} data={drivingData} approachId={approachId}
+                                    onApproach={id => { setDrivingRequest(undefined); setParam('approach', id); }} onFit={showDrivingApproach} />
+                            </Suspense>
+                        </ErrorBoundary>}
+                    </details>} />
             </aside>}
         </div>
         <SkiFilterDialog dialog={filterDialog} filters={filters} resultCount={matching.length} units={units}

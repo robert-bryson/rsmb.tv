@@ -57,6 +57,22 @@ resource "aws_s3_bucket_lifecycle_configuration" "temperature_data" {
       days = 365
     }
   }
+
+  dynamic "rule" {
+    for_each = toset(["reports", "cameras"])
+    content {
+      id     = "expire-old-ski-driving-${rule.value}"
+      status = "Enabled"
+
+      filter {
+        prefix = "ski-status/driving/${rule.value}-"
+      }
+
+      expiration {
+        days = 30
+      }
+    }
+  }
 }
 
 # CORS for browser-side access (station lookup, etc.)

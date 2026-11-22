@@ -1,0 +1,43 @@
+name: Sync Ski Driving
+
+on:
+  schedule:
+    - cron: '2-57/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: sync-ski-driving
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.ref == 'refs/heads/main' && vars.AWS_SKI_DRIVING_SYNC_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      AWS_REGION: us-east-1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install configured npm version
+        run: npm install --global "$(node -p "require('./package.json').packageManager")"
+      - run: npm ci
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_SKI_DRIVING_SYNC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Publish driving snapshots
+        env:
+          UDOT_API_KEY: ${{ secrets.UDOT_API_KEY }}
+        run: |
+          node --import tsx/esm projects/ski-status/scripts/sync-driving.ts \
+            --bucket rsmbtv-temperature-data --directory "${RUNNER_TEMP}/ski-driving"

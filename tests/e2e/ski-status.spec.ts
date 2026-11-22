@@ -5,6 +5,7 @@ import { expect, test, type JSHandle, type Locator, type Page, type Response, ty
 import type { GeoJSONSource, Map as MapLibreMap, MapGeoJSONFeature, MapSourceDataEvent, StyleSpecification } from 'maplibre-gl';
 import sharp from 'sharp';
 import packageMetadata from '../../package.json' with { type: 'json' };
+import areas from '../../projects/ski-status/data/areas.json' with { type: 'json' };
 import locations from '../../projects/ski-status/data/locations.json' with { type: 'json' };
 import resortBases from '../../projects/ski-status/data/resort-bases.json' with { type: 'json' };
 import resortPeaks from '../../projects/ski-status/data/resort-peaks.json' with { type: 'json' };
@@ -1887,7 +1888,9 @@ test('uses contrasting logo backings and explains missing operating reports on h
     await expect(preview).toContainText('Skiing status unknown');
     await expect(preview.getByText('No verified operating report for today.')).toBeVisible();
     const conditions = preview.getByRole('link', { name: 'Check official conditions' });
-    await expect(conditions).toHaveAttribute('href', 'https://www.stowe.com/the-mountain/mountain-conditions/terrain-and-lift-status');
+    const stoweConditions = areas.find(area => area.id === 'stowe')?.reportUrl;
+    expect(stoweConditions).toMatch(/^https:\/\/www\.stowe\.com\//);
+    await expect(conditions).toHaveAttribute('href', stoweConditions!);
     await conditions.hover();
     await expect(conditions).toBeVisible();
     await renderer.dispose();
@@ -2776,4 +2779,175 @@ test('keeps phone results and comparisons usable when the basemap fails', async 
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
     expect(await comparison(page).evaluate(region => region.scrollWidth)).toBeGreaterThan(320);
     await renderer!.dispose();
+});
+
+test('selects a directional parking approach and opens a driving marker with the keyboard on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await prepare(page);
+    const requests: string[] = [];
+    await page.route('**/ski-status/driving/manifest.json', route => {
+        requests.push(route.request().url());
+        return route.fulfill({ status: 503, headers: { 'access-control-allow-origin': '*' } });
+    });
+    await page.goto(`${path}?status=all&view=map&area=the-summit-at-snoqualmie`);
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    const details = resort(page, 'The Summit at Snoqualmie');
+    const disclosure = details.getByText('Driving access', { exact: true });
+    await expect(disclosure).toBeVisible();
+    expect(requests).toHaveLength(0);
+    await disclosure.focus();
+    await page.keyboard.press('Enter');
+    await details.getByLabel('Arrival', { exact: true }).selectOption({ label: 'Summit East upper lot' });
+    await details.getByLabel('Approach', { exact: true }).selectOption({ label: 'I-90 westbound Exit 54' });
+    await expect(details.getByText('Road status unknown.', { exact: true })).toBeVisible();
+    const directions = details.getByRole('link', { name: 'Get directions', exact: true });
+    await expect(directions).toHaveAttribute('href', /destination=47\.390996%2C-121\.396572/);
+    await details.getByRole('button', { name: 'Show approach on map', exact: true }).click();
+    await expect.poll(() => mapCamera(page)?.zoom ?? 0).toBeGreaterThan(11);
+    expect(new URL(page.url()).searchParams.get('approach')).toBe('summit-east-westbound');
+    expect(new URL(page.url()).searchParams.get('driving')).toBe('1');
+    await expect(page.getByTestId('ski-status-map').locator('canvas')).toBeFocused();
+    await page.getByRole('button', { name: 'Layers', exact: true }).click();
+    const layers = page.getByRole('dialog', { name: 'Map layers', exact: true });
+    await layers.getByText('Driving features in view', { exact: true }).click();
+    const entrance = layers.getByRole('button', { name: 'Parking entrance · Summit East upper lot', exact: true });
+    await entrance.focus();
+    await page.keyboard.press('Enter');
+    const card = page.getByRole('dialog', { name: 'Summit East upper lot', exact: true });
+    await expect(card.getByRole('link', { name: 'Get directions' })).toBeVisible();
+    await expect(card.getByRole('button', { name: 'Close driving information' })).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(card).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Layers', exact: true })).toBeFocused();
+    const shared = page.url();
+    await page.goto(shared);
+    await expect(resort(page, 'The Summit at Snoqualmie').getByLabel('Approach', { exact: true })).toHaveValue('summit-east-westbound');
+});
+
+test('shows a stale mountain-pass observation without an active closure', async ({ page }) => {
+    await prepare(page);
+    const checkedAt = new Date(Date.now() - 25 * 60_000).toISOString();
+    const snapshot = JSON.stringify({ version: 1, provider: 'wsdot', checkedAt, entries: [{
+        id: 'pass-stevens-conditions', road: 'US 2', direction: 'both', kind: 'condition',
+        title: 'Stevens Pass', description: 'Eastbound traction tires advised.', observedAt: checkedAt,
+        point: [-121.093333, 47.745], source: 'https://wsdot.com/travel/real-time/mountainpasses/Stevens',
+    }] });
+    const file = `reports-${createHash('sha256').update(snapshot).digest('hex')}.json`;
+    const headers = { 'access-control-allow-origin': '*' };
+    await page.route('**/ski-status/driving/manifest.json', route => route.fulfill({ headers, json: {
+        version: 1, updatedAt: checkedAt, providers: { wsdot: {
+            reports: { file, status: 'available' }, cameras: { status: 'unconfigured' },
+        } },
+    } }));
+    await page.route(`**/ski-status/driving/${file}`, route => route.fulfill({ headers, contentType: 'application/json', body: snapshot }));
+    await page.goto(`${path}?status=all&view=table&area=stevens-pass&approach=stevens-pass-eastbound`);
+    const details = resort(page, 'Stevens Pass');
+    await expect(details.getByText('Eastbound traction tires advised.', { exact: true })).toBeVisible();
+    await expect(details.getByText('Road status unknown.', { exact: true })).toBeVisible();
+    await expect(details.getByText('Last reported', { exact: true })).toBeVisible();
+    await expect(details.getByText('Closure', { exact: true })).toHaveCount(0);
+    await expect(details.getByRole('link', { name: 'WSDOT', exact: true })).toHaveAttribute('href', /mountainpasses\/Stevens/);
+});
+
+test('returns focus when an open driving report expires and keeps it closed after recovery', async ({ page }) => {
+    const checkedAt = '2026-11-22T12:00:00.000Z';
+    await page.clock.install({ time: new Date(checkedAt) });
+    await prepare(page);
+    const snapshot = JSON.stringify({ version: 1, provider: 'drivebc', checkedAt, entries: [{
+        id: 'test-closure', road: 'BC 99', direction: 'north', kind: 'closure', title: 'Highway 99 test closure',
+        point: [-122.959, 50.116], source: 'https://www.drivebc.ca/',
+    }] });
+    const file = `reports-${createHash('sha256').update(snapshot).digest('hex')}.json`;
+    const headers = { 'access-control-allow-origin': '*' };
+    let available = true;
+    let checks = 0;
+    await page.route('**/ski-status/driving/manifest.json', route => {
+        checks++;
+        return available ? route.fulfill({ headers, json: { version: 1, updatedAt: checkedAt, providers: { drivebc: {
+            reports: { file, status: 'available' }, cameras: { status: 'unconfigured' },
+        } } } }) : route.fulfill({ status: 503, headers });
+    });
+    await page.route(`**/ski-status/driving/${file}`, route => route.fulfill({ headers, contentType: 'application/json', body: snapshot }));
+    await page.goto(`${path}?status=all&driving=1&camera=-122.959,50.116,12,0,0`);
+    const map = page.getByTestId('ski-status-map');
+    await expect(map).toHaveAttribute('data-map-state', 'ready');
+    const layersButton = page.getByRole('button', { name: 'Layers', exact: true });
+    await layersButton.click();
+    const features = page.getByText('Driving features in view', { exact: true });
+    await features.click();
+    const marker = page.getByRole('button', { name: 'Closure · Highway 99 test closure' });
+    await marker.press('Enter');
+    const card = page.getByRole('dialog', { name: 'Highway 99 test closure' });
+    await expect(card.getByRole('button', { name: 'Close driving information' })).toBeFocused();
+
+    available = false;
+    await page.clock.fastForward(300_001);
+    await expect(card).toBeHidden();
+    await expect(layersButton).toBeFocused();
+
+    available = true;
+    await page.clock.fastForward(300_001);
+    await expect.poll(() => checks).toBe(3);
+    await layersButton.click();
+    await features.click();
+    await expect(marker).toBeVisible();
+    await expect(card).toBeHidden();
+});
+
+test('requests a DriveBC camera image only when a user opens it', async ({ page }) => {
+    await prepare(page);
+    const checkedAt = new Date(Date.now() - 60_000).toISOString();
+    const photo = 'https://www.drivebc.ca/images/519.jpg?t=42';
+    const snapshot = JSON.stringify({ version: 1, provider: 'drivebc', checkedAt, entries: [{
+        id: '519', road: 'BC 99', name: 'Whistler Village Gate - N', view: 'north', point: [-122.959218, 50.116028],
+        source: 'https://www.drivebc.ca/cameras/519', image: photo, imageUpdatedAt: checkedAt,
+        credit: 'DriveBC, Province of British Columbia',
+    }] });
+    const file = `cameras-${createHash('sha256').update(snapshot).digest('hex')}.json`;
+    const headers = { 'access-control-allow-origin': '*' };
+    await page.route('**/ski-status/driving/manifest.json', route => route.fulfill({ headers, json: {
+        version: 1, updatedAt: checkedAt, providers: { drivebc: {
+            reports: { status: 'unconfigured' }, cameras: { file, status: 'available' },
+        } },
+    } }));
+    await page.route(`**/ski-status/driving/${file}`, route => route.fulfill({ headers, contentType: 'application/json', body: snapshot }));
+    const requested: string[] = [];
+    await page.route(photo, route => {
+        requested.push(route.request().url());
+        return route.fulfill({ status: 503 });
+    });
+    await page.goto(`${path}?status=all&view=table&area=whistler-blackcomb&approach=whistler-village-northbound`);
+    const details = resort(page, 'Whistler Blackcomb');
+    await details.getByText('Road cameras (1)', { exact: true }).click();
+    await expect(details.getByRole('link', { name: 'View on DriveBC' })).toHaveAttribute('href', 'https://www.drivebc.ca/cameras/519');
+    expect(requested).toHaveLength(0);
+    await details.getByRole('button', { name: 'Show image' }).click();
+    await expect(details.getByText('Camera image unavailable.')).toBeVisible();
+    expect(requested).toHaveLength(1);
+});
+
+test('renders the selected connector and makes its parking marker clickable on the map', async ({ page }) => {
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const search = page.getByRole('searchbox', { name: 'Search areas' });
+    await search.fill('The Summit at Snoqualmie');
+    await result(page, 'The Summit at Snoqualmie').click();
+    const details = resort(page, 'The Summit at Snoqualmie');
+    await details.getByText('Driving access', { exact: true }).click();
+    await details.getByLabel('Arrival', { exact: true }).selectOption('summit-east');
+    await details.getByRole('button', { name: 'Show approach on map', exact: true }).click();
+
+    const entrance = [-121.396572, 47.390996] as [number, number];
+    await expect.poll(() => renderer.evaluate((map, point) => {
+        if (map.isMoving() || !map.getLayer('ski-driving-local') || !map.getLayer('ski-driving-connector')) return;
+        const pixels = map.project(point);
+        return map.queryRenderedFeatures(pixels, { layers: ['ski-driving-local'] })[0]?.properties.id;
+    }, entrance)).toBe('parking:summit-east');
+    expect(await renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-driving-connector'] }).length)).toBeGreaterThan(0);
+    const pixels = await renderer.evaluate((map, point) => {
+        const { x, y } = map.project(point);
+        return { x, y };
+    }, entrance);
+    await page.getByTestId('ski-status-map').locator('canvas').click({ position: pixels });
+    await expect(page.getByRole('dialog', { name: 'Summit East upper lot' })).toBeVisible();
 });

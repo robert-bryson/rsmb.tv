@@ -4,31 +4,47 @@ import { resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { Plugin } from 'vite';
 import { skiConditionsDirectory, skiConditionsRefreshWaitMs } from '../shared/skiConditionsCache.ts';
+import { drivingDirectory, drivingRefreshMs } from '../shared/skiDriving.ts';
 
 const exec = promisify(execFile);
-const refreshInterval = 60 * 60_000;
 const retryInterval = 5 * 60_000;
 
-async function waitForManifest(refresh: Promise<void>) {
+async function waitForManifest(refresh: Promise<void>, waitMs: number) {
     let deadline: ReturnType<typeof setTimeout> | undefined;
     try {
-        await Promise.race([refresh, new Promise<void>(resolve => { deadline = setTimeout(resolve, skiConditionsRefreshWaitMs); })]);
+        await Promise.race([refresh, new Promise<void>(resolve => { deadline = setTimeout(resolve, waitMs); })]);
     } finally {
         clearTimeout(deadline);
     }
 }
 
 export function skiConditionsDevPlugin(mode: string): Plugin {
+    const rockies = mode === 'rockies';
+    return skiFeedDevPlugin({
+        name: 'conditions', enabled: mode === '1' || rockies, directory: skiConditionsDirectory(rockies),
+        args: rockies ? ['--rockies-pilot'] : [], refreshInterval: 60 * 60_000, waitMs: skiConditionsRefreshWaitMs,
+    });
+}
+
+export function skiDrivingDevPlugin(enabled: boolean, udotKey?: string): Plugin {
+    return skiFeedDevPlugin({
+        name: 'driving', enabled, directory: drivingDirectory, args: [], refreshInterval: drivingRefreshMs,
+        waitMs: 17_000, env: udotKey ? { ...process.env, UDOT_API_KEY: udotKey } : process.env,
+    });
+}
+
+function skiFeedDevPlugin({ name, enabled, directory, args, refreshInterval, waitMs, env }: {
+    name: 'conditions' | 'driving'; enabled: boolean; directory: string; args: string[]; refreshInterval: number;
+    waitMs: number; env?: NodeJS.ProcessEnv;
+}): Plugin {
     return {
-        name: 'ski-conditions-dev',
+        name: `ski-${name}-dev`,
         apply: 'serve',
         configureServer(server) {
-            if (mode !== '1' && mode !== 'rockies') return;
-            const rockies = mode === 'rockies';
-            const manifestRoute = `/${skiConditionsDirectory(rockies)}/manifest.json`;
+            if (!enabled) return;
+            const manifestRoute = `/${directory}/manifest.json`;
             const manifestPath = resolve(server.config.root, manifestRoute.slice(1));
-            const args = ['--import', 'tsx/esm', 'projects/ski-status/scripts/sync-conditions.ts'];
-            if (rockies) args.push('--rockies-pilot');
+            const command = ['--import', 'tsx/esm', `projects/ski-status/scripts/sync-${name}.ts`, ...args];
             let refresh: Promise<void> | undefined;
             let lastAttempt = -Infinity;
 
@@ -42,8 +58,8 @@ export function skiConditionsDevPlugin(mode: string): Plugin {
                 if (refresh) return refresh;
                 if (now - lastAttempt < retryInterval) return;
                 lastAttempt = now;
-                refresh = exec(process.execPath, args, { cwd: server.config.root }).then(() => undefined, error => {
-                    server.config.logger.warn(`Could not refresh local ski conditions. ${error.message}`);
+                refresh = exec(process.execPath, command, { cwd: server.config.root, env }).then(() => undefined, error => {
+                    server.config.logger.warn(`Could not refresh local ski ${name}. ${error.message}`);
                 }).finally(() => { refresh = undefined; });
                 return refresh;
             }
@@ -53,7 +69,7 @@ export function skiConditionsDevPlugin(mode: string): Plugin {
                     next();
                     return;
                 }
-                void waitForManifest(refreshIfDue()).then(() => next(), next);
+                void waitForManifest(refreshIfDue(), waitMs).then(() => next(), next);
             });
         },
     };

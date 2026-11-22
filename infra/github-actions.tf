@@ -1,6 +1,13 @@
 locals {
   github_oidc_host = "token.actions.githubusercontent.com"
   github_oidc_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${local.github_oidc_host}"
+  ski_conditions_objects = [
+    "ski-status/manifest.json", "ski-status/manifest-*.json",
+    "ski-status/reports-*.json", "ski-status/forecasts-*.json", "ski-status/history/*",
+  ]
+  ski_driving_objects = [
+    "ski-status/driving/manifest.json", "ski-status/driving/reports-*.json", "ski-status/driving/cameras-*.json",
+  ]
   github_sync_jobs = {
     temperatures = {
       objects  = ["stateRecords.json", "countyRecords.json", "climateTrends.json", "summary.json", "recentRecords.json", "stations.json", "daily/*", "cache/*"]
@@ -13,8 +20,13 @@ locals {
       actions  = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
     }
     ski-status = {
-      objects  = ["ski-status/*"]
-      prefixes = ["ski-status/*"]
+      objects  = local.ski_conditions_objects
+      prefixes = local.ski_conditions_objects
+      actions  = ["s3:GetObject", "s3:PutObject"]
+    }
+    ski-driving = {
+      objects  = local.ski_driving_objects
+      prefixes = local.ski_driving_objects
       actions  = ["s3:GetObject", "s3:PutObject"]
     }
   }
@@ -64,7 +76,7 @@ resource "aws_iam_role_policy" "github_data_sync" {
         Action   = each.value.actions
         Resource = [for key in each.value.objects : "${aws_s3_bucket.temperature_data.arn}/${key}"]
       },
-      ], each.key == "ski-status" ? [] : [{
+      ], startswith(each.key, "ski-") ? [] : [{
         Sid      = "InvalidateProjectCDN"
         Effect   = "Allow"
         Action   = ["cloudfront:CreateInvalidation"]
@@ -74,7 +86,7 @@ resource "aws_iam_role_policy" "github_data_sync" {
 }
 
 output "github_data_sync_role_arns" {
-  description = "Set the matching AWS_TEMPERATURE_SYNC_ROLE_ARN, AWS_TORNADO_SYNC_ROLE_ARN, and AWS_SKI_STATUS_SYNC_ROLE_ARN repository variables after deployment."
+  description = "Set AWS_TEMPERATURE_SYNC_ROLE_ARN, AWS_TORNADO_SYNC_ROLE_ARN, AWS_SKI_STATUS_SYNC_ROLE_ARN, and AWS_SKI_DRIVING_SYNC_ROLE_ARN after deployment."
   value       = { for job, role in aws_iam_role.github_data_sync : job => role.arn }
 }
 

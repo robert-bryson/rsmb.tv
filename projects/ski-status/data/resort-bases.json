@@ -283,12 +283,12 @@
     },
     "blue-mountain-resort-on": {
       "coordinates": [
-        -80.31319,
-        44.502185
+        -80.311297,
+        44.504501
       ],
-      "name": "Silver Bullet Express",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=c5f70b639b76f6496d08a74e0691d5d71836cb4d"
+      "name": "Village Base – P2 day lot",
+      "source": "https://www.bluemountain.ca/discover-blue/getting-here",
+      "kind": "entrance"
     },
     "bluewood": {
       "coordinates": [

@@ -136,6 +136,23 @@
     ]
   },
   {
+    "id": "jay-peak-vt",
+    "name": "Jay Peak",
+    "coordinates": [
+      -72.52611,
+      44.92444
+    ],
+    "elevationFt": 3861,
+    "locationSource": "https://pubs.usgs.gov/pp/1200us/report.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "jay-peak-resort",
+        "source": "https://jaypeakresort.com/sites/default/files/2026-02/JPR_TrailMap_Winter_2025%2B2026_ToPRINT.pdf"
+      }
+    ]
+  },
+  {
     "id": "jp-jp01-niseko-annupuri",
     "name": "Mount Niseko Annupuri",
     "coordinates": [
@@ -267,6 +284,22 @@
       {
         "areaId": "mammoth-mountain",
         "source": "https://sc.mammothmountain.com/-/media/project/mammoth/library/pdfs/maps/26-27_mmsa_trailmap_brochure_web.pdf?rev=e44cbca1bfb94399b96059f2901e4b6a"
+      }
+    ]
+  },
+  {
+    "id": "mont-brome-qc",
+    "name": "Mont Brome",
+    "coordinates": [
+      -72.63792,
+      45.28915
+    ],
+    "locationSource": "https://toponymie.gouv.qc.ca/ct/ToposWeb/Fiche.aspx?no_seq=8593",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "bromont-montagne-dexperiences",
+        "source": "https://www.bromontmontagne.com/wp-content/uploads/2026/01/Carte_Ski_Web_10x6-2026-VF.pdf"
       }
     ]
   },
@@ -503,6 +536,23 @@
       {
         "areaId": "park-city-mountain",
         "source": "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "pico-peak-vt",
+    "name": "Pico Peak",
+    "coordinates": [
+      -72.83667,
+      43.63944
+    ],
+    "elevationFt": 3957,
+    "locationSource": "https://pubs.usgs.gov/pp/1200us/report.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "pico-mountain",
+        "source": "https://picomountain.com/client_media/files/mountain_maps/PicoWinterTrailMap2627.pdf"
       }
     ]
   },
@@ -860,6 +910,22 @@
       {
         "areaId": "mt-hood-meadows",
         "source": "https://cms.skihood.com/uploads/Trail_Map_20x17_2026_27_map_APPROVED_fd40289331.jpg"
+      }
+    ]
+  },
+  {
+    "id": "us-ut-brian-head",
+    "name": "Brian Head",
+    "coordinates": [
+      -112.83133,
+      37.68109
+    ],
+    "locationSource": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/UT/UT_Brian_Head_20200205_TM_geo.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "brian-head-resort",
+        "source": "https://www.brianhead.com/wp-content/uploads/sites/7/2026/08/2026-27-BHR-Map-Illustration-20x10-1.png"
       }
     ]
   },

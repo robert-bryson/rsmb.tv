@@ -1,20 +1,27 @@
 # ski-status tasks
 
-Use the guide for procedures and acceptance checks. Find completed work in the dated reviews. [Project guide](readme.md), [Review index](../../docs/README.md#reviews)
+Use the project guide for procedures. Find completed checks in the dated reviews. [Project guide](readme.md), [Review index](../../docs/README.md#reviews)
 
 ## Release checks
-
-The first hosted release has priority. The November 22 check found revision `0ec3dfd` on production and preview. The public manifest returned HTTP 403. [Hosted evidence](../../docs/reviews/2026-11-22-ski-status-code-review.md#hosted-release)
-The November 21 mirror build and rewrite tests passed. [Local evidence](../../docs/reviews/2026-11-21-ski-status-release-asset-and-map-review.md#verification)
 
 - [ ] Copy the versioned runtime files to the release HTTPS mirror. Set `SKI_ASSETS_BASE_URL` in Amplify. [Release assets](readme.md#release-assets)
 - [ ] Apply the updated Amplify rewrite and build the candidate revision. [Preview setup](../../docs/release-validation.md#ski-status-build-assets)
 - [ ] Run the validator on the hosted preview. Match the report to the candidate revision and Amplify job. Check the terrain byte ranges and Heavenly tooltips. [Release checks](readme.md#release-checks)
-- [ ] Deploy the ski-status sync role. Set `AWS_SKI_STATUS_SYNC_ROLE_ARN`. Run **Sync Ski Status** on `main`. Check the active manifest and the archived previous manifest. [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-status-sync)
+- [ ] Run **Sync Ski Status** on `main` with the deployed role. Check the active and previous manifests. [OIDC procedure](../../docs/github-actions-oidc.md#enable-ski-status-sync)
 
-## Next feature
+## Driving map
 
-- [ ] Show verified winter approaches in resort details and on the map. Show each named pass once. Link to official road status and winter restrictions. [Access routes](readme.md#access-routes-and-webcams)
+### Hosted checks
+
+- [ ] Run **Sync Ski Driving** on `main` with the deployed role. Verify the public manifest and its snapshots. [OIDC procedure](../../docs/github-actions-oidc.md#enable-ski-driving-sync)
+- [ ] Check **Driving coverage** on the hosted map. Verify the provider status after a failed check and after recovery. [Rollout checks](driving-map-plan.md#implementation-order-and-acceptance-checks)
+
+### Source and route checks
+
+- [ ] Check WSDOT alert fields with an access code. Verify each matched road section up to its exit. [Washington sources](driving-map-plan.md#official-sources-and-pilot-corridors)
+- [ ] Compare credentialed UDOT events with the official map. Check direction, mileposts, and the affected section. [Utah sources](driving-map-plan.md#official-sources-and-pilot-corridors)
+- [ ] Check a TripCheck sample and the reuse terms. Add verified Oregon coverage and parking entrances by corridor. [Oregon sources](driving-map-plan.md#official-sources-and-pilot-corridors)
+- [ ] Evaluate a route provider for driving distance and time. Check route coverage and closure handling. [Travel estimate checks](driving-map-plan.md#implementation-order-and-acceptance-checks)
 
 ## Rockies report pilot
 
@@ -26,8 +33,9 @@ The recorded spot checks matched Lake Louise and Banff Sunshine. Mt. Norquay ret
 
 ## Catalog and visitor data
 
-On November 22, 315 of 527 conventional downhill areas had all six comparison fields. The North American list had 459 candidates with open decisions.
-Use the latest batch checkpoint to resume the acreage review and dated retries. [Data quality log](research/data-quality-log.md)
+Use the latest batch checkpoint to resume the acreage review and dated retries. [Coverage counts](readme.md#catalog), [Data quality log](research/data-quality-log.md)
+
+### Area records
 
 - [ ] Complete the largest downhill areas first. Fill the six comparison fields. Record units, scope, source, and check date. [Batch order](.agents/skills/ski-status-data-quality/SKILL.md#choose-a-batch), [Catalog coverage](readme.md#catalog)
 - [ ] Verify official conditions links for areas without a report. Check that each link covers the area. [Catalog](readme.md#catalog)
@@ -35,9 +43,15 @@ Use the latest batch checkpoint to resume the acreage review and dated retries. 
 - [ ] Verify the endpoints of a lift-served descent at Amihari Onsen. Use them to record vertical. [Measurement rules](readme.md#comparable-mountain-statistics)
 - [ ] Review North American candidates by region. Record each decision and source. Update the regional counts. [Candidate log](research/north-america-2026-11-16.csv), [Regional counts](research/north-america-2026-11-16-summary.csv)
 - [ ] Verify Wikipedia articles for the exact ski area. [Catalog](readme.md#catalog)
+
+### Season and weather records
+
 - [ ] Record actual opening and closing dates. Check at least three recent seasons when operators give both dates. Verify opening-day terrain and breaks in operation. [Season date rules](readme.md#opening-and-closing-dates)
 - [ ] Record current and past snowfall totals from operators. Fill gaps in monthly snowfall and snow depth. Give the measurement site, period, and source for each series. [Snow history](readme.md#season-and-snowfall)
-- [ ] Verify visitor entrances and public lodges. Check their services, trail maps, parking, shuttles, day tickets, and cameras. [Visitor data](readme.md#recurring-data-batches), [Base points](../../docs/reviews/2026-11-20-ski-status-map-and-resort-data-review.md#terrain-and-base-points)
+
+### Visitor and map records
+
+- [ ] Verify visitor entrances and public lodges. Check services, maps, parking, shuttles, fares, and cameras. [Visitor data](readme.md#recurring-data-batches), [Base points](../../docs/reviews/2026-11-20-ski-status-map-and-resort-data-review.md#terrain-and-base-points)
 - [ ] Verify roads from the main highways to each public base. Add spur roads, named passes, and official road status links. [Road data](readme.md#access-routes-and-webcams)
 - [ ] Check official trail maps for named summits. Verify the summit locations before you add markers. [Peak records](readme.md#mountain-peaks)
 - [ ] Find and bundle verified official marks for missing resort icons. Test the icon on the map, in Results, and in details. [Icon procedure](.agents/skills/ski-status-data-quality/SKILL.md#resort-icons)
@@ -47,10 +61,8 @@ Use the latest batch checkpoint to resume the acreage review and dated retries. 
 - [ ] Test three tasks in resort details. Find today's and tomorrow's conditions. Compare resorts for a weekend. Plan a trip with season history and pass access.
 - [ ] Build a season calendar from verified daily reports. Remove duplicate observations. Check coverage before you add terrain, snow, and temperature. [Calendar design](readme.md#season-conditions-calendar)
 - [ ] Extend the weather panel to more resorts. Fill missing observations and forecast fields. Test local dates, units, and missing values. [Forecast design](readme.md#resort-conditions-and-5-day-forecast)
-- [ ] Show straight-line distance, driving distance, and drive time from a selected origin. [Access routes](readme.md#access-routes-and-webcams)
 - [ ] Add verified lodge locations to the map. Show the services at each location. [Visitor information](readme.md#inspect-and-compare-areas)
 - [ ] Show published run access, length, maximum slope, and grooming status. [Terrain guide](readme.md#runs-and-lifts-at-resort-zoom)
-- [ ] Link to agency cameras. Test a map layer for nearby cameras. [Webcams](readme.md#access-routes-and-webcams)
 - [ ] Store visited areas on the device. Add a filter and a backup format. [Visited areas](readme.md#visited-areas)
 
 ## Recurring checks

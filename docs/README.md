@@ -49,6 +49,7 @@ An alt description states the visible content. A caption can supply other inform
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Generate global and U.S. pins, validate location details, and check publication |
 | [ski-status guide](../projects/ski-status/readme.md) | Use the map and table. Maintain the catalog and verify releases. |
+| [ski-status driving access rollout](../projects/ski-status/driving-map-plan.md) | Check agency data and extend the reviewed driving corridors. |
 | [ski-status tasks](../projects/ski-status/TODO.md) | Track release checks, data gaps, and planned work. |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
@@ -59,6 +60,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-22 | [ski-status driving access review](reviews/2026-11-22-ski-status-driving-review.md) |
 | 2026-11-22 | [ski-status code, data, and release review](reviews/2026-11-22-ski-status-code-review.md) |
 | 2026-11-21 | [ski-status map area search](reviews/2026-11-21-ski-status-map-area-search.md) |
 | 2026-11-21 | [ski-status release assets and map review](reviews/2026-11-21-ski-status-release-asset-and-map-review.md) |

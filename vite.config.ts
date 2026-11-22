@@ -10,7 +10,8 @@ import { tripContentPlugin } from './scripts/trip-content-plugin.ts'
 import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
 import { publicAssetsPlugin } from './scripts/public-assets-plugin.ts'
 import { siteSearchPlugin } from './scripts/site-search-plugin.ts'
-import { skiConditionsDevPlugin } from './scripts/ski-conditions-dev-plugin.ts'
+import { skiConditionsDevPlugin, skiDrivingDevPlugin } from './scripts/ski-conditions-dev-plugin.ts'
+import { skiDrivingDataPlugin } from './scripts/ski-driving-data-plugin.ts'
 import { skiAssetsRoot } from './scripts/ski-asset-files.ts'
 import { skiAssetsPlugin } from './scripts/ski-assets-plugin.ts'
 import { skiVisitorDataPlugin } from './scripts/ski-visitor-data-plugin.ts'
@@ -25,6 +26,9 @@ export default defineConfig(({ mode, command }) => {
   const skiConditionsMode = command === 'serve' && mode !== 'test'
     ? process.env.VITE_SKI_CONDITIONS_LOCAL ?? localEnv.VITE_SKI_CONDITIONS_LOCAL ?? '1'
     : '0';
+  const skiDrivingMode = command === 'serve' && mode !== 'test'
+    ? process.env.VITE_SKI_DRIVING_LOCAL ?? localEnv.VITE_SKI_DRIVING_LOCAL ?? '1'
+    : '0';
   if (command === 'build' && mode !== 'trip-test' && mode !== 'test' && !cartoKey) {
     throw new Error('Set CARTO_API_KEY (a browser-restricted CARTO Basemaps key) before building the site.');
   }
@@ -36,6 +40,7 @@ export default defineConfig(({ mode, command }) => {
     __BUILD_REVISION__: JSON.stringify(process.env.AWS_COMMIT_ID || process.env.GITHUB_SHA || 'local'),
     'import.meta.env.VITE_CARTO_API_KEY': JSON.stringify(cartoKey),
     'import.meta.env.VITE_SKI_CONDITIONS_LOCAL': JSON.stringify(skiConditionsMode),
+    'import.meta.env.VITE_SKI_DRIVING_LOCAL': JSON.stringify(skiDrivingMode),
   },
   plugins: [
     mdx({
@@ -53,7 +58,9 @@ export default defineConfig(({ mode, command }) => {
       includeInBuild: command === 'build' && mode !== 'trip-test' && mode !== 'test',
     }),
     skiVisitorDataPlugin(),
+    skiDrivingDataPlugin(),
     skiConditionsDevPlugin(skiConditionsMode),
+    skiDrivingDevPlugin(skiDrivingMode === '1', process.env.UDOT_API_KEY ?? localEnv.UDOT_API_KEY),
     tailwindcss(),
   ],
   assetsInclude: ['**/*.glb'],

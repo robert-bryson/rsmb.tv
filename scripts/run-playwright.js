@@ -93,7 +93,13 @@ async function main() {
 
     const vite = spawn(process.execPath, [viteBin, '--host', '127.0.0.1', '--port', String(port), '--strictPort'], {
         stdio: ['ignore', 'pipe', 'pipe'],
-        env: { ...process.env, VITE_CARTO_API_KEY: 'browser-test-key', CARTO_API_KEY: '', VITE_SKI_CONDITIONS_LOCAL: '0' },
+        env: {
+            ...process.env,
+            VITE_CARTO_API_KEY: 'browser-test-key',
+            CARTO_API_KEY: '',
+            VITE_SKI_CONDITIONS_LOCAL: '0',
+            VITE_SKI_DRIVING_LOCAL: '0',
+        },
         shell: false,
     });
     vite.stdout.pipe(process.stdout);

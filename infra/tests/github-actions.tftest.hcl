@@ -47,9 +47,30 @@ run "github_sync_permissions" {
   assert {
     condition = (
       length(jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement) == 2 &&
-      jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement[1].Resource == ["${aws_s3_bucket.temperature_data.arn}/ski-status/*"] &&
+      toset(jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement[0].Condition.StringLike["s3:prefix"]) == toset([
+        "ski-status/manifest.json", "ski-status/manifest-*.json", "ski-status/reports-*.json", "ski-status/forecasts-*.json", "ski-status/history/*",
+      ]) &&
+      toset(jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement[1].Resource) == toset([
+        for key in ["manifest.json", "manifest-*.json", "reports-*.json", "forecasts-*.json", "history/*"] :
+        "${aws_s3_bucket.temperature_data.arn}/ski-status/${key}"
+      ]) &&
       jsondecode(aws_iam_role_policy.github_data_sync["ski-status"].policy).Statement[1].Action == ["s3:GetObject", "s3:PutObject"]
     )
     error_message = "Ski status must read and write only its snapshot prefix."
+  }
+
+  assert {
+    condition = (
+      length(jsondecode(aws_iam_role_policy.github_data_sync["ski-driving"].policy).Statement) == 2 &&
+      toset(jsondecode(aws_iam_role_policy.github_data_sync["ski-driving"].policy).Statement[0].Condition.StringLike["s3:prefix"]) == toset([
+        "ski-status/driving/manifest.json", "ski-status/driving/reports-*.json", "ski-status/driving/cameras-*.json",
+      ]) &&
+      toset(jsondecode(aws_iam_role_policy.github_data_sync["ski-driving"].policy).Statement[1].Resource) == toset([
+        for key in ["manifest.json", "reports-*.json", "cameras-*.json"] :
+        "${aws_s3_bucket.temperature_data.arn}/ski-status/driving/${key}"
+      ]) &&
+      jsondecode(aws_iam_role_policy.github_data_sync["ski-driving"].policy).Statement[1].Action == ["s3:GetObject", "s3:PutObject"]
+    )
+    error_message = "Ski driving must list, read, and write only its own snapshot prefix."
   }
 }

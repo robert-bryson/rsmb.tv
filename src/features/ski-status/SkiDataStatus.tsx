@@ -1,10 +1,14 @@
+import { drivingProviders, drivingProviderNames } from '../../../shared/skiDriving';
+import { drivingProviderSources } from '../../../shared/skiDrivingCatalog';
 import { isSpecialtySkiing, skiAreas, type SkiArea } from './catalog';
 import { isCurrentForecast, isSkiingStatus, reportAgeLabel, skiDayStatus } from './conditions';
 import { skiResortAccess } from './resortAccessData';
+import { drivingCameras, drivingReports, roadReportState } from './drivingView';
 import { skiResortIcon, skiSnowHistory } from './resortDetailsData';
 import { resortTerrainGroups } from './resortTerrainData';
 import { seasonCalendar } from './seasons';
 import type { SkiConditions } from './useSkiConditions';
+import { useSkiDriving } from './useSkiDriving';
 
 const number = new Intl.NumberFormat('en');
 const timestamp = new Intl.DateTimeFormat('en', {
@@ -165,11 +169,43 @@ function CoverageSection({ id, title, total, rows, note }: {
     </section>;
 }
 
+function DrivingCoverage() {
+    const driving = useSkiDriving(true, 'all');
+    const catalog = driving.catalog;
+    const approaches = catalog ? Object.values(catalog.approaches).flat() : [];
+    const arrivals = catalog ? Object.values(catalog.arrivals) : [];
+    const unmappedLots = [...skiResortAccess].reduce((count, [area, access]) => count + (access.parking ?? [])
+        .filter(lot => !arrivals.some(arrival => arrival.areaId === area && arrival.parkingRecord === lot.name)).length, 0);
+    const labels = { current: 'Current', stale: 'Stale', unavailable: 'Unavailable', unconfigured: 'Official links only', checking: 'Checking…' };
+    return <section aria-labelledby="ski-admin-driving" aria-busy={!catalog && !driving.catalogFailed}>
+        <h3 id="ski-admin-driving">Driving coverage</h3>
+        {catalog ? <p>{number.format(approaches.length)} approaches · {number.format(approaches.filter(route => route.segments?.length).length)} with a matchable road section ·
+            {' '}{number.format(arrivals.length)} mapped entrances · {number.format(unmappedLots)} parking records without a mapped entrance</p>
+            : <p>{driving.catalogFailed ? 'Driving catalog unavailable.' : 'Loading driving catalog…'}</p>}
+        <ul className="ski-driving-list">
+            {drivingProviders.map(provider => {
+                const reports = drivingReports(driving, provider);
+                const cameras = drivingCameras(driving, provider);
+                const feed = driving.feed.providers[provider];
+                return <li key={provider}>
+                    <a href={drivingProviderSources[provider]}>{drivingProviderNames[provider]}</a> · {labels[roadReportState(driving, provider)]}
+                    <p className="ski-driving-note">
+                        {feed?.reports && <>Last checked <SnapshotTime value={feed.reports.data.checkedAt} /> · </>}
+                        {reports.filter(report => report.state === 'stale').length} stale of {reports.length} reports · {cameras.length} cameras
+                        {cameras.length > 0 && !cameras[0].available && ' (last verified)'}
+                    </p>
+                </li>;
+            })}
+        </ul>
+    </section>;
+}
+
 export default function SkiDataStatus({ conditions }: { conditions: SkiConditions }) {
     const total = skiAreas.length;
     return <div className="ski-admin">
         <p>{number.format(total)} ski areas across {number.format(countries)} countries.</p>
         <LiveConditions conditions={conditions} />
+        <DrivingCoverage />
         <div className="ski-admin-coverage-grid">
             <CoverageSection id="ski-admin-mountain" title="Mountain statistics" total={downhillAreas.length} rows={mountainCoverage}
                 note={`${number.format(downhillAreas.length)} downhill areas, including areas with Nordic trails.`} />

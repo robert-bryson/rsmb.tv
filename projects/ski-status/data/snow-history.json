@@ -3736,5 +3736,21 @@
       "period": "Published average 415 in; averaging period and instrument location are unspecified",
       "annualCm": 1054.1
     }
+  },
+  "mount-bohemia": {
+    "snowfall": {
+      "label": "Mount Bohemia",
+      "source": "https://www.visitkeweenaw.com/outdoors/winter-activities/mount-bohemia/",
+      "location": "Mount Bohemia ski terrain",
+      "annualCm": 693.42
+    }
+  },
+  "mont-sainte-anne": {
+    "snowfall": {
+      "label": "Mont-Sainte-Anne",
+      "source": "https://mont-sainte-anne.com/en/mont-sainte-anne-mountain-statistics/",
+      "location": "Mont-Sainte-Anne downhill mountain",
+      "annualCm": 530
+    }
   }
 }

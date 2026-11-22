@@ -30,7 +30,7 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
             fs.cpSync(path.join(repoRoot, entry), path.join(root, entry), {
                 recursive: true,
                 filter: source => !generatedContent.includes(source)
-                    && (!source.startsWith(skiResearch) || /^resort-access-\d{4}(?:-\d{2})?\.json$/.test(path.basename(source))),
+                    && (!source.startsWith(skiResearch) || /^(?:resort-access-\d{4}(?:-\d{2})?|road-approaches)\.json$/.test(path.basename(source))),
             });
         }
         fs.symlinkSync(path.join(repoRoot, 'node_modules'), path.join(root, 'node_modules'), 'junction');
@@ -75,6 +75,7 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
         const bundledCode = scripts.join('\n');
         expect(bundledCode).toContain('Opening story paragraph.');
         expect(bundledCode).toContain('Adult Niseko United All Mountain one-day pass');
+        expect(bundledCode).toContain('summit-east-westbound');
         expect(bundledCode).not.toContain('unfinished-draft');
         expect(bundledCode).not.toContain('Unfinished draft must stay private');
         expect(fs.existsSync(path.join(root, 'src/content/posts.json'))).toBe(false);

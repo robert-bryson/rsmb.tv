@@ -33,3 +33,23 @@ run "private_origins" {
     error_message = "CloudFront must sign origin requests with SigV4."
   }
 }
+
+run "driving_snapshot_retention" {
+  command = plan
+
+  plan_options {
+    target = [aws_s3_bucket_lifecycle_configuration.temperature_data]
+  }
+
+  assert {
+    condition = {
+      for rule in aws_s3_bucket_lifecycle_configuration.temperature_data.rule :
+      one(rule.filter).prefix => one(rule.expiration).days
+      if rule.status == "Enabled" && startswith(rule.id, "expire-old-ski-driving-")
+      } == {
+      "ski-status/driving/reports-" = 30
+      "ski-status/driving/cameras-" = 30
+    }
+    error_message = "Only driving report and camera snapshots must expire after 30 days."
+  }
+}

@@ -14,7 +14,6 @@ export type ConditionsStore = {
 };
 
 const exec = promisify(execFile);
-const prefix = 'ski-status/';
 const runAws = async (args: string[]) => (await exec('aws', ['--no-cli-pager', ...args])).stdout;
 
 async function readBounded(path: string, limit: number) {
@@ -25,6 +24,7 @@ async function readBounded(path: string, limit: number) {
 
 export async function withConditionsStore<T>(
     directory: string, bucket: string | undefined, publish: (store: ConditionsStore) => Promise<T>, aws = runAws,
+    prefix = 'ski-status/',
 ) {
     await mkdir(directory, { recursive: true });
     const lock = join(directory, 'conditions.pid.lock');

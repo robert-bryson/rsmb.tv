@@ -82,6 +82,21 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "baldy-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer publishes no blackout dates. Check reservation and pass pickup with the operator.",
+      "source": "https://www.indyskipass.com/our-resorts/baldy-mountain-resort",
+      "checkedOn": "2026-11-22"
+    },
+    {
       "areaId": "bear-valley-mountain-resort",
       "products": [
         "indy-base",
@@ -301,6 +316,21 @@
       "note": "Present the pass at the resort ticket window. The resort confirms redemption without blackout dates.",
       "source": "https://skiblackmountain.org/indy-pass",
       "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "bluewood",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer lists no blackout dates. Resort requires Indy Pass and photo ID at its lodge Guest Services window.",
+      "source": "https://bluewood.com/indy-pass-at-bluewood",
+      "checkedOn": "2026-11-22"
     },
     {
       "areaId": "bolton-valley-resort",
@@ -647,6 +677,21 @@
       "source": "https://www.eaglepointresort.com/eagle-point-resort-announces-2026-27-winter-season-closure-following-cottonwood-fire/",
       "checkedOn": "2026-11-21",
       "note": "The resort is closed for the 2026/27 winter season after the Cottonwood Fire."
+    },
+    {
+      "areaId": "eaglecrest-ski-area",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer lists no blackout dates. Operator directs Indy redemption to the outside Ticket Office windows with photo ID.",
+      "source": "https://www.indyskipass.com/our-resorts/eaglecrest",
+      "checkedOn": "2026-11-22"
     },
     {
       "areaId": "greek-peak-mountain-resort",
@@ -1268,6 +1313,21 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "showdown-montana",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer reports no blackout dates. Verify the public redemption procedure with the operator.",
+      "source": "https://www.indyskipass.com/our-resorts/showdown-montana",
+      "checkedOn": "2026-11-22"
+    },
+    {
       "areaId": "silver-mountain-resort",
       "products": [
         "indy-base",
@@ -1439,6 +1499,21 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "sunlight-mountain-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Indy lists no Base blackouts. Verify reservation and lift-ticket pickup details with Sunlight. Learn to Turn has separate terms.",
+      "source": "https://www.indyskipass.com/our-resorts/sunlight-mountain-resort",
+      "checkedOn": "2026-11-22"
+    },
+    {
       "areaId": "tamarack-resort",
       "products": [
         "indy-base",
@@ -1452,6 +1527,21 @@
       "note": "Indy lists no blackout dates. Check the resort’s separate Indy redemption procedure.",
       "source": "https://www.indyskipass.com/our-resorts/tamarack-mountain-resort",
       "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "titus-mountain",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "none",
+      "note": "The issuer lists no blackout dates. Operator specifies two days, photo ID and in-person customer-service check-in without a reservation.",
+      "source": "https://www.titusmountain.com/general-6",
+      "checkedOn": "2026-11-22"
     },
     {
       "areaId": "trollhaugen-ski-area",

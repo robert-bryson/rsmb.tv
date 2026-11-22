@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, type Ref } from 'react';
+import { lazy, Suspense, useState, type ReactNode, type Ref } from 'react';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { conditionColumns, mountainColumns, formatElevation, formatSkiStat, formatSnowDepth, formatTemperature, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
@@ -72,6 +72,7 @@ interface Props {
     product?: PassProduct;
     skiDate?: string;
     homeAreaId?: string;
+    driving?: ReactNode;
 }
 
 function ReportedTerrain({ report, area, now }: { report: ResortReport; area: SkiArea; now: number }) {
@@ -157,7 +158,7 @@ function OperatorForecast({ report, area, units, now }: { report: ResortReport; 
     </details>;
 }
 
-export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain, onZoomLocation, conditions, archive, product, skiDate, homeAreaId }: Props) {
+export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain, onZoomLocation, conditions, archive, product, skiDate, homeAreaId, driving }: Props) {
     const stats = detailColumns.flatMap(({ key, label }) => {
         const value = formatSkiStat(area, key, units);
         return value === undefined && key.startsWith('mapped') ? [] : [{ key, label, value }];
@@ -227,6 +228,7 @@ export function SkiAreaDetails({ area, units, sectionRef, onClose, onShowTerrain
             {report?.forecastDays && <OperatorForecast report={report} area={area} units={units} now={now} />}
             {report?.terrain && <ReportedTerrain report={report} area={area} now={now} />}
         </section>}
+        {driving}
         <ErrorBoundary key={area.id} fallback={<p className="text-sm text-zinc-300">Visitor information unavailable.</p>}>
             <Suspense fallback={null}><SkiVisitorInformation areaId={area.id} archivedMaps={archive?.trailMaps} /></Suspense>
         </ErrorBoundary>
