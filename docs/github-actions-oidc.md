@@ -51,8 +51,9 @@ The existing IAM user and secrets remain available during the transition.
 2. To enable Utah data, set `UDOT_API_KEY` in repository Actions secrets.
 3. Run **Sync Ski Driving** from `main`.
 4. Open the manifest on the public data origin. [Public manifest](https://data.rsmb.tv/ski-status/driving/manifest.json)
-5. Open a report and a camera snapshot from the manifest.
-6. Check provider status and freshness in **Driving coverage** on the hosted map.
+5. Download each report and camera snapshot in the manifest.
+6. Compare each snapshot's SHA-256 checksum with its file name.
+7. Open **Driving coverage** on the hosted map. Check each provider status and the time of its last successful check.
 
 [Driving publication](../projects/ski-status/readme.md#publish-driving-feeds), [Sync workflow](../.github/workflows/sync-ski-driving.yml)
 

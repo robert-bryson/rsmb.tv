@@ -3752,5 +3752,38 @@
       "location": "Mont-Sainte-Anne downhill mountain",
       "annualCm": 530
     }
+  },
+  "blue-knob-all-season-resort": {
+    "snowfall": {
+      "label": "Blue Knob All Season Resort",
+      "source": "https://www.indyskipass.com/our-resorts/blue-knob-all-season-resort",
+      "location": "Blue Knob ski area",
+      "annualCm": 314.96
+    }
+  },
+  "loup-loup-ski-bowl": {
+    "snowfall": {
+      "label": "Loup Loup Ski Bowl",
+      "source": "https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl",
+      "location": "Loup Loup Ski Bowl",
+      "annualCm": 218.44
+    }
+  },
+  "whitecap-mountains-resort": {
+    "snowfall": {
+      "label": "Whitecap Mountains Resort",
+      "source": "https://whitecapresort.com/winter/trail-map-snow-report",
+      "location": "Whitecap Mountains Resort",
+      "annualCm": 508
+    }
+  },
+  "whiteface": {
+    "snowfall": {
+      "label": "Whiteface Mountain",
+      "source": "https://whiteface.com/mountain/mountain-stats/",
+      "location": "Whiteface Mountain",
+      "period": "2016/17–2025/26",
+      "annualCm": 494.54
+    }
   }
 }

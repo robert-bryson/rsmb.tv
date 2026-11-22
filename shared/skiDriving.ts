@@ -163,10 +163,12 @@ export function drivingBulletinMatches(bulletin: DrivingBulletin, segment: Drivi
     return Boolean(segment.line && overlapsRoadSection(bulletin, segment.line));
 }
 
-export function drivingBulletinState(bulletin: DrivingBulletin, now: number, checkedAt: string, available: boolean) {
-    const age = now - Date.parse(checkedAt);
+export function drivingBulletinState(bulletin: DrivingBulletin, feed: Pick<DrivingReports, 'provider' | 'checkedAt'>, now: number, available: boolean) {
+    const age = now - Date.parse(feed.checkedAt);
     if (!available || age < 0 || age >= drivingStaleMs) return 'stale';
-    if (bulletin.advisory || (bulletin.endsAt && Date.parse(bulletin.endsAt) <= now)) return 'advisory';
+    // Caltrans publishes actual closure status separately from the planned end time.
+    const confirmedCaltransWork = feed.provider === 'caltrans' && bulletin.kind !== 'condition' && !bulletin.awaitingStart;
+    if (bulletin.advisory || (!confirmedCaltransWork && bulletin.endsAt && Date.parse(bulletin.endsAt) <= now)) return 'advisory';
     if (bulletin.startsAt && Date.parse(bulletin.startsAt) > now) return 'scheduled';
     if (bulletin.awaitingStart) return 'advisory';
     if (bulletin.kind === 'condition') {

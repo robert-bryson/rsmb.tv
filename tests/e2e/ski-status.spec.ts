@@ -2849,6 +2849,42 @@ test('shows a stale mountain-pass observation without an active closure', async 
     await expect(details.getByRole('link', { name: 'WSDOT', exact: true })).toHaveAttribute('href', /mountainpasses\/Stevens/);
 });
 
+test('rechecks the road feed on reopening driving access and labels an outage', async ({ page }) => {
+    await prepare(page);
+    const checkedAt = '2026-11-22T12:00:00.000Z';
+    await page.clock.setFixedTime(new Date(checkedAt));
+    const body = JSON.stringify({ version: 1, provider: 'drivebc', checkedAt, entries: [] });
+    const file = `reports-${createHash('sha256').update(body).digest('hex')}.json`;
+    const headers = { 'access-control-allow-origin': '*' };
+    let finishCheck!: () => void;
+    const pending = new Promise<void>(resolve => { finishCheck = resolve; });
+    let checks = 0;
+    await page.route('**/ski-status/driving/manifest.json', async route => {
+        if (++checks === 1) return route.fulfill({ headers, json: { version: 1, updatedAt: checkedAt, providers: { drivebc: {
+            reports: { file, status: 'available' }, cameras: { status: 'unconfigured' },
+        } } } });
+        await pending;
+        return route.fulfill({ headers, status: 503 });
+    });
+    await page.route(`**/ski-status/driving/${file}`, route => route.fulfill({ headers, contentType: 'application/json', body }));
+    await page.goto(`${path}?status=all&view=table&area=whistler-blackcomb&approach=whistler-village-northbound`);
+    const details = resort(page, 'Whistler Blackcomb');
+    const reports = details.getByRole('region', { name: 'Road reports' });
+    const summary = details.getByText('Driving access', { exact: true });
+    await expect(reports.getByText('No matching reports for the mapped section and direction.')).toBeVisible();
+    await summary.click();
+    await expect(reports).toBeHidden();
+    await summary.click();
+    try {
+        await expect(reports.getByRole('status')).toHaveText('Checking road reports…');
+        await expect.poll(() => checks).toBe(2);
+    } finally {
+        finishCheck();
+    }
+    await expect(reports.getByRole('status')).toHaveText('Road status unknown.');
+    await expect(reports.getByText('Last successful check', { exact: false })).toBeVisible();
+});
+
 test('returns focus when an open driving report expires and keeps it closed after recovery', async ({ page }) => {
     const checkedAt = '2026-11-22T12:00:00.000Z';
     await page.clock.install({ time: new Date(checkedAt) });

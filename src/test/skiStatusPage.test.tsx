@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import SkiStatus from '../pages/SkiStatus';
 import { loadConditionsFeed, type ConditionsFeed } from '../features/ski-status/conditions-feed';
@@ -87,6 +87,27 @@ it('keeps local exclusions when a user edits the locations in a shared view', as
     fireEvent.click(filters.getByRole('button', { name: 'Remove Exclude Japan' }));
     expect(filters.queryByRole('button', { name: 'Remove Exclude Japan' })).toBeNull();
     expect(JSON.parse(localStorage.getItem(preference)!)).toEqual(['continent:Europe', 'region:US:CA']);
+});
+
+it('clears the selected driving approach when a location filter removes its resort', async () => {
+    function CurrentSearch() {
+        return <output aria-label="URL search">{useLocation().search}</output>;
+    }
+
+    render(<MemoryRouter initialEntries={['/projects/ski-status/map?view=results&status=all&area=whaleback&approach=old-route']}>
+        <CurrentSearch />
+        <SkiStatus />
+    </MemoryRouter>);
+    expect(screen.getByRole('region', { name: 'Whaleback Mountain' })).toBeVisible();
+    const dialog = document.querySelector<HTMLDialogElement>('#ski-filters')!;
+    Object.defineProperty(dialog, 'showModal', { value: () => { dialog.open = true; } });
+    fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+    fireEvent.change(within(dialog).getByLabelText('Choose a location'), { target: { value: 'region:US:NH' } });
+    await act(async () => fireEvent.click(within(dialog).getByRole('button', { name: 'Exclude' })));
+    const search = new URLSearchParams(screen.getByLabelText('URL search').textContent);
+    expect(search.has('area')).toBe(false);
+    expect(search.has('approach')).toBe(false);
+    expect(screen.queryByRole('region', { name: 'Whaleback Mountain' })).toBeNull();
 });
 
 it('waits for reports and presents the current ski areas when the feed arrives', async () => {

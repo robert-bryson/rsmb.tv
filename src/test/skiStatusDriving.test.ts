@@ -118,15 +118,17 @@ describe('road bulletin scope and freshness', () => {
     });
 
     it('separates a current event from a future event and an old observation', () => {
-        expect(drivingBulletinState(bulletin, now, checkedAt, true)).toBe('active');
-        expect(drivingBulletinState({ ...bulletin, startsAt: '2026-11-22T13:00:00Z' }, now, checkedAt, true)).toBe('scheduled');
-        expect(drivingBulletinState({ ...bulletin, advisory: true }, now, checkedAt, true)).toBe('advisory');
-        expect(drivingBulletinState({ ...bulletin, advisory: true, startsAt: '2026-11-22T13:00:00Z' }, now, checkedAt, true)).toBe('advisory');
-        expect(drivingBulletinState({ ...bulletin, startsAt: '2026-11-22T13:00:00Z', endsAt: checkedAt }, now, checkedAt, true)).toBe('advisory');
-        expect(drivingBulletinState({ ...bulletin, endsAt: '2026-11-22T12:00:00Z' }, now, checkedAt, true)).toBe('advisory');
-        expect(drivingBulletinState({ ...bulletin, kind: 'condition', observedAt: '2026-11-22T02:00:00Z' }, now, checkedAt, true)).toBe('stale');
-        expect(drivingBulletinState(bulletin, now, '2026-11-22T11:45:00Z', true)).toBe('stale');
-        expect(drivingBulletinState(bulletin, now, checkedAt, false)).toBe('stale');
+        const feed = { provider: 'wsdot', checkedAt } as const;
+        const state = (entry: DrivingBulletin) => drivingBulletinState(entry, feed, now, true);
+        expect(state(bulletin)).toBe('active');
+        expect(state({ ...bulletin, startsAt: '2026-11-22T13:00:00Z' })).toBe('scheduled');
+        expect(state({ ...bulletin, advisory: true })).toBe('advisory');
+        expect(state({ ...bulletin, advisory: true, startsAt: '2026-11-22T13:00:00Z' })).toBe('advisory');
+        expect(state({ ...bulletin, startsAt: '2026-11-22T13:00:00Z', endsAt: checkedAt })).toBe('advisory');
+        expect(state({ ...bulletin, endsAt: '2026-11-22T12:00:00Z' })).toBe('advisory');
+        expect(state({ ...bulletin, kind: 'condition', observedAt: '2026-11-22T02:00:00Z' })).toBe('stale');
+        expect(drivingBulletinState(bulletin, { ...feed, checkedAt: '2026-11-22T11:45:00Z' }, now, true)).toBe('stale');
+        expect(drivingBulletinState(bulletin, feed, now, false)).toBe('stale');
     });
 
     it('keeps a nearby opposite-direction alert out of matching reports after refresh and outage', () => {

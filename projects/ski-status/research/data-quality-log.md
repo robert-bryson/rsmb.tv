@@ -1405,3 +1405,129 @@ The whitespace check passed. 231 focused tests passed, including roads, resort d
 Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-37-2026-11-22T041931Z`.
 
 White Pine and Manning Park lead batch 38.
+
+## Batch 38 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 341 | 346 |
+| Seasonal visitor records | 244 | 251 |
+| Verified visitor points | 71 | 72 |
+| Resorts with parking | 228 | 235 |
+| Resorts with official maps | 235 | 242 |
+| Resorts with adult fares or bounds | 120 | 125 |
+| Resorts with operator cameras | 155 | 160 |
+| 2026/27 areas with planned dates | 213 | 216 |
+| Areas with Indy product rules | 73 | 77 |
+| Areas with all four Indy products | 68 | 72 |
+| Areas with winter approaches | 175 | 185 |
+| Documented winter approaches | 415 | 433 |
+| Named road crossings | 41 | 42 |
+| Verified summit records | 66 | 68 |
+| Bundled resort icons | 133 | 141 |
+| Catalog entrance pins | 62 | 63 |
+
+The whitespace check passed. 231 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 8 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| White Pine Resort | Added the signed Pinedale approach and confirmed the day base, public fare and season plan. | Verify Fortification Mountain’s summit and first lift-served skiing. |
+| Manning Park | Added three approaches, the Allison Pass crossing, three trail maps and named camera views. | Confirm the season-specific Indy dates, eastern crossing, fare and start date. |
+| Togari Onsen Snow Resort | Added both signed highway approaches and recovered Japanese and English map originals. | Confirm local turns and the 2026/27 schedule, map, shuttle and fare. |
+| Kaunertal Glacier | Added both toll-road arrivals, the access restrictions, fare table and archived winter panorama. | Verify actual first skiing, comparative descent and geographic summit points. |
+| Station touristique Stoneham | Added the chemin du Hibou arrival, four camera views, official map and 2026/27 day prices. | Verify the highway turns, first skiing, newer print edition and RCR rules. |
+| Yuzawa Nakazato Snow Resort | Added the signed winter access to both lots, the parking fees, season window, adult fare and two maps. | Confirm first skiing, public cameras and an operator geocoded arrival. |
+| Kandatsu Snow Resort | Added the interchange arrival, both parking policies, planned dates and adult day-rate table. | Verify local road turns, a complete print map and the first ski day. |
+| Hunter Mountain | Added the main and North winter approaches, operator arrival pin and Hunter’s geographic summit. | Retrieve public winter map and logo originals, sample a fare and confirm first skiing. |
+| Attitash Mountain Resort | Added two US 302 arrivals, parking and a free inter-base shuttle. Verified the published acreage lower bound. | Retrieve the current map and logo, verify western road coverage and confirm first skiing. |
+| Smugglers' Notch Resort | Added both winter approaches, the notch closure, day prices and the Madonna geographic summit. | Confirm first skiing, current print maps and the Sterling and Morse summit matches. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-38-2026-11-22T043416Z`.
+
+The run reached 50 distinct cases. Hakuba Iwatake leads the next ranked batch.
+
+## Run summary · 2026-11-22 · Batches 34–38
+
+Reviewed 50 distinct catalog resorts in five batches of 10. The run ranked missing-road reviews and dated retries by published skiable acreage. It reached the requested limit with 197 other ranked cases due. Hakuba Iwatake leads the next batch. The next dated retry from these 50 cases is November 24 for Lake Songhua’s first lift-served ski day.
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Downhill areas with all six mountain statistics | 315 | 316 |
+| Areas with winter approaches | 135 | 185 |
+| Documented winter approaches | 327 | 433 |
+| Named road crossings | 39 | 42 |
+| Verified summit records | 63 | 68 |
+| Areas with verified summits | 41 | 46 |
+| Seasonal visitor records | 212 | 251 |
+| Areas with visitor lodges | 211 | 250 |
+| Areas with parking records | 196 | 235 |
+| Areas with official map records | 204 | 242 |
+| Areas with adult day fares or bounds | 109 | 125 |
+| Areas with annual snowfall | 186 | 188 |
+| Areas with operator cameras | 143 | 160 |
+| Checked conditions links | 319 | 346 |
+| Areas with 2026/27 planned dates | 205 | 216 |
+| Areas with observed 2026/27 first ski days | 34 | 34 |
+| Areas with Indy product rules | 71 | 77 |
+| Bundled resort icons | 98 | 141 |
+
+The road review covered all 50 cases. Added Granite Pass, Sherburne Pass and Allison Pass. The catalog gained five geographic summits.
+All five batches passed the whitespace check and 19 terrain and candidate tests each. Each batch also passed 231 focused tests. Chromium verified all 43 added runtime icons on the map, in Results and in resort details, and checked the map fallback.
+
+All 55 files across the five batch snapshots matched their SHA-256 checksums.
+
+| Batch | NAS snapshot | Files |
+| --- | --- | ---: |
+| 34 | `N:\projects\ski-status\data-quality\batch-34-2026-11-22T035715Z` | 10 |
+| 35 | `N:\projects\ski-status\data-quality\batch-35-2026-11-22T040434Z` | 9 |
+| 36 | `N:\projects\ski-status\data-quality\batch-36-2026-11-22T041146Z` | 11 |
+| 37 | `N:\projects\ski-status\data-quality\batch-37-2026-11-22T041931Z` | 13 |
+| 38 | `N:\projects\ski-status\data-quality\batch-38-2026-11-22T043416Z` | 12 |
+
+The NAS archive contains 66 original trail maps, 36 original marks and 72 icon variants. All 174 files and the manifest matched their SHA-256 checksums. The app archive index accepted all maps and icon variants. All 43 runtime PNGs match their archived details variants, including seven reused marks from earlier archives.
+
+`N:\projects\ski-status\assets\manifests\2026-11-22T043447Z.json`
+
+Direct downloads for several operator map or logo originals remain blocked, including at Mount Bohemia, Stowe, Gore, Hunter and Attitash. Nekoma and Kandatsu publish map layers and still need full print originals. Other follow-ups include exact entrances and road points, actual ski dates, comparable snow histories, camera reuse and season-specific pass terms.
+
+The 20 px marker and 42 px details previews were inspected on the app background. Higher-contrast or more compact official marks remain open for Terry Peak, Ski Land, Antelope Butte, Donner Ski Ranch, Tsugaike, Mont Édouard, The Highlands, Harper Mountain, Manning Park and Yuzawa Nakazato.
+
+## Batch 39 · 2026-11-22
+
+| Coverage | Before | After |
+| --- | ---: | ---: |
+| Checked conditions links | 346 | 352 |
+| Seasonal visitor records | 251 | 258 |
+| Verified visitor points | 72 | 73 |
+| Resorts with parking | 235 | 242 |
+| Resorts with official maps | 242 | 249 |
+| Resorts with adult fares or bounds | 125 | 126 |
+| Resorts with operator cameras | 160 | 165 |
+| Areas with annual snowfall | 188 | 192 |
+| Areas with Indy product rules | 77 | 80 |
+| Areas with all four Indy products | 72 | 75 |
+| Areas with winter approaches | 185 | 195 |
+| Documented winter approaches | 433 | 459 |
+| Named road crossings | 42 | 43 |
+| Verified summit records | 68 | 69 |
+| Bundled resort icons | 141 | 149 |
+| Catalog entrance pins | 63 | 64 |
+
+The whitespace check passed. 231 focused tests passed, including roads, resort data, seasons and assets. 19 terrain and candidate tests passed. Chromium in Vite test mode verified 8 new runtime PNGs across the map, Results and details, and loaded the fallback symbol.
+
+| Resort | Result | Remaining check |
+| --- | --- | --- |
+| Hakuba Iwatake Snow Field | Added three published highway arrivals, verified Hakuba Valley’s inventory and preserved the Japanese map. | Confirm the final turns, 2026/27 map and first skiing. |
+| Afton Alps | Recorded five parking arrivals, the lower base services and the illustrated base map. | Retrieve the alpine PDF and official mark and verify an opening date and adult fare. |
+| Blue Knob All Season Resort | Documented the Pavia arrival, printable map, winter camera link and the Indy profile’s six statistics. | Check winter access from the north, the first ski day and current fare. |
+| Bolton Valley Resort | Verified both I-89 approaches to the main base and Timberline and recovered three official maps. | Confirm actual first skiing, exact descent endpoints and map summit positions. |
+| Buffalo Ski Club | Verified the three lodge arrivals and replaced the historical acreage with the current 175-acre profile. | Confirm season opening, adult guest price, elevations and Base blackout dates. |
+| Devil's Head Resort | Added the Bluff Road approach, public base and official trail map. | Check season-specific ticket rates, elevations and first skiing. |
+| Loup Loup Ski Bowl | Added both WA 20 approaches, the Loup Loup Pass road crossing and the operator’s arrival coordinates. | Confirm first skiing, current fare and geographic summit points. |
+| Sandia Peak Ski Area | Added both NM 536 arrivals, free base parking, the official map and the advertised $9 advance minimum. | Confirm dated prices, acreage scope, first skiing and the summit point. |
+| Whitecap Mountains Resort | Added the WIS 77 and County Highway E arrival, printable three-mountain map and snowfall average. | Reconcile acreage and run counts and confirm the current day price. |
+| Whiteface Mountain | Added four NY 86 base arrivals, free lots, a geographic summit, and a ten-season snowfall average. | Verify first skiing, the two remaining geography matches and direct map and mark downloads. |
+
+Snapshot verified by SHA-256 at `N:\projects\ski-status\data-quality\batch-39-2026-11-22T053154Z`.
+
+Hakuba Goryu leads batch 40.

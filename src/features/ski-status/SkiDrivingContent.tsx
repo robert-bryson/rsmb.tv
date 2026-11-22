@@ -28,7 +28,7 @@ export function DrivingReport({ report: { entry, state, provider } }: { report: 
         {entry.mileposts && <p>Mileposts {entry.mileposts.join(' to ')}</p>}
         {entry.description && entry.description !== entry.title && <p className="ski-driving-report-text">{entry.description}</p>}
         {entry.startsAt && <p>Starts <DrivingTime value={entry.startsAt} zone={zone} /></p>}
-        {entry.endsAt && <p>Agency end time <DrivingTime value={entry.endsAt} zone={zone} /></p>}
+        {entry.endsAt && <p>{provider === 'caltrans' ? 'Planned end' : 'Agency end time'} <DrivingTime value={entry.endsAt} zone={zone} /></p>}
         <p className="ski-driving-note">
             {entry.observedAt ? <>Reported <DrivingTime value={entry.observedAt} zone={zone} /> · </> : <>Report time unknown · </>}
             <DrivingLink href={entry.source}>{drivingProviderNames[provider]}</DrivingLink>

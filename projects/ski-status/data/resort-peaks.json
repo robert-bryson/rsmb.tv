@@ -119,6 +119,23 @@
     ]
   },
   {
+    "id": "hunter-mountain-ny",
+    "name": "Hunter Mountain",
+    "coordinates": [
+      -74.230833,
+      42.177778
+    ],
+    "elevationFt": 4040,
+    "locationSource": "https://pubs.usgs.gov/pp/1200us/report.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "hunter-mountain",
+        "source": "https://www.huntermtn.com/-/aemasset/sitecore/hunter/maps/20250505_HU_summer-trail_map_001.pdf"
+      }
+    ]
+  },
+  {
     "id": "james-peak-powder-mountain",
     "name": "James Peak",
     "coordinates": [
@@ -267,6 +284,23 @@
       {
         "areaId": "big-sky-resort",
         "source": "https://cdn.sanity.io/files/8ts88bij/big-sky/b60b44b9f074e91b58345e424f3237dd7f5d60e7.pdf"
+      }
+    ]
+  },
+  {
+    "id": "madonna-peak-vt",
+    "name": "Madonna Peak",
+    "coordinates": [
+      -72.75846,
+      44.56144
+    ],
+    "elevationFt": 3668,
+    "locationSource": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/VT/VT_Mount_Mansfield_20150706_TM_geo.pdf",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "smugglers-notch-resort",
+        "source": "https://www.smuggs.com/wp-content/uploads/2024/11/trailmap_2425.pdf"
       }
     ]
   },
@@ -894,6 +928,23 @@
       {
         "areaId": "discovery-ski-area",
         "source": "https://www.skidiscovery.com/wp-content/uploads/2017/11/DIS-1021-7_FY18_2017BacksideMap_cropped_HR.pdf"
+      }
+    ]
+  },
+  {
+    "id": "us-ny-whiteface-mountain",
+    "name": "Whiteface Mountain",
+    "coordinates": [
+      -73.9026456,
+      44.3658804
+    ],
+    "elevationFt": 4867,
+    "locationSource": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/973364",
+    "checkedOn": "2026-11-22",
+    "trailMaps": [
+      {
+        "areaId": "whiteface",
+        "source": "https://whiteface.com/wp-content/uploads/sites/3/2025/12/Whiteface-Mountain-Trail-Map-2025-26.pdf"
       }
     ]
   },

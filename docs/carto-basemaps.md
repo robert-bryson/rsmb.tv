@@ -1,7 +1,6 @@
 # CARTO basemaps
 
-All in-repository map projects share [cartoBasemaps.ts](../src/maps/cartoBasemaps.ts).
-Trips, ADV Atlas, both temperature maps, Tornado Tracks, Pins, ski-status, and CARTO globe styles use this configuration.
+The repository maps share one CARTO configuration. Trips, ADV Atlas, both temperature maps, Tornado Tracks, Pins, ski-status, and the CARTO globe styles use it. [Shared configuration](../src/maps/cartoBasemaps.ts)
 The flights globe also retains its local NASA imagery choices.
 
 ## Key configuration
@@ -27,7 +26,7 @@ Browser tile requests necessarily expose this key.
 Do not supply a CARTO platform or administrative credential.
 CARTO documents website restrictions and separate development keys in its [basemap authentication guide](https://docs.carto.com/faqs/carto-basemaps).
 
-For local development, place a localhost development key in the ignored `.env.local` file:
+For local development, put a localhost key in `.env.local`.
 
 ```dotenv
 CARTO_API_KEY=your-development-basemap-key
@@ -35,12 +34,10 @@ CARTO_API_KEY=your-development-basemap-key
 
 Raster maps without a key use neutral tiles and show **Basemap unavailable**.
 They do not send unauthenticated CARTO requests.
-Pins and ski-status use the hosted Dark Matter vector style through `cartoVectorStyleUrl`.
-They restore the globe projection and sky when the active background style loads.
-CARTO currently serves this vector style without a key, so local previews include the actual basemap.
-The helper includes a configured key when one is available.
-The existing `cartoVectorStyle` helper retains its neutral fallback for maps that require configured keys.
-See CARTO's [vector migration guidance](https://docs.carto.com/faqs/carto-basemaps#should-i-move-from-raster-to-vector-basemaps).
+Pins and ski-status load the hosted Dark Matter vector style through `cartoVectorStyleUrl`.
+The helper adds a key to the style URL when the builder gives one.
+The maps restore the globe projection and sky after the background style loads.
+Maps that require a key use `cartoVectorStyle`, which supplies a neutral style when the key is missing. [CARTO vector migration](https://docs.carto.com/faqs/carto-basemaps#should-i-move-from-raster-to-vector-basemaps)
 Browser tests supply `browser-test-key` and intercept provider responses.
 Never use production credentials in browser traces or fixtures.
 
@@ -57,8 +54,7 @@ In ski-status, open **Layers**. Turn on **Terrain relief** for Mapterhorn elevat
 The shading starts to appear at zoom level 4. CARTO supplies the basemap and labels. [Mapterhorn tile guide](https://mapterhorn.com/data-access/)
 
 Trip styles are **Muted**, **Street**, and **Light**.
-The legacy `terrain` identifier remains internal for compatibility; its label now describes the CARTO light style.
-It no longer claims to provide topographic contours.
+The app uses the internal `terrain` identifier for the CARTO light style to preserve saved settings.
 
 CARTO and OpenStreetMap attribution remains visible on each map.
 See [CARTO attribution requirements](https://carto.com/attribution/).
@@ -105,7 +101,7 @@ These tests do not verify a production account or its allowed websites.
 Live production authorization depends on the configured key and its allowed website origins.
 Fixed Night textures verify style selection. They do not verify the NASA image content.
 
-Run the focused checks:
+Run the focused checks.
 
 ```bash
 npx vitest run src/test/cartoBasemaps.test.ts scripts/__tests__/cartoBuildConfig.test.ts

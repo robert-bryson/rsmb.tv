@@ -15,18 +15,17 @@ If CI fails, the workflow skips the release job. The previous deployment continu
 
 ## Browser checks
 
-- The same commit ID and Amplify job ID at the start and end of validation. The validator requests `deployment.json` directly. A redirect fails the check.
-- Direct visits to the homepage, About, Posts, Projects, Flights, recent temperatures, state temperatures, county temperatures, Tornado Tracks, and ski-status.
-- JavaScript, CSS, JSON, GeoJSON, and image response types. An HTML fallback at an asset URL fails the release.
-- Configured first-party response headers from `customHttp.yml`, including security policy and path-specific cache rules, on documents and requested assets.
-- Decoding every responsive project-preview image, including AVIF and WebP variants.
-- Temperature schemas and version 2 monthly thresholds, flight route/airport schemas, matching tornado annual summary/index contracts, and requested yearly tornado geometry.
-- Application errors, failed required requests, map worker errors, and usable Flights, temperature, and tornado map startup.
-- Ski terrain at Heavenly. The validator turns on **Ski terrain** in **Layers**.
-  It downloads the archive from the preview and checks its SHA-256 checksum against the terrain index.
-  Each range must return HTTP `206`, the expected `Content-Range`, and the correct bytes.
-  The validator opens the Heavenly Gondola and Cloud 9 tooltips.
-  It records the verified range count in `skiTerrainRanges`.
+The validator checks the deployed site.
+
+- It requests `deployment.json` directly at the start and end. Both responses must give the same commit ID and Amplify job ID. A redirect fails the check.
+- It opens the homepage, About, Posts, Projects, Flights, the temperature maps, Tornado Tracks, and ski-status directly.
+- It checks the response type for JavaScript, CSS, JSON, GeoJSON, and images. An HTML response at an asset URL fails the check.
+- It checks the response headers for documents and requested assets against `customHttp.yml`.
+- It decodes each responsive project preview, including AVIF and WebP images.
+- It checks the temperature schemas and monthly threshold version. It checks flight routes and airports. It compares the tornado annual summary with the index. It checks the requested yearly tornado geometry.
+- It checks for page errors, failed requests for required files, and worker errors. It checks that the Flights, temperature, and tornado maps start.
+- It downloads the ski terrain archive. It checks the SHA-256 checksum against the terrain index. It checks the `206` status, `Content-Range` header, and bytes for each range request.
+- It turns on **Ski terrain** at Heavenly. It opens the Heavenly Gondola and Cloud 9 tooltips. It records the range count in `skiTerrainRanges`.
 
 The validator disables browser HTTP caching. The header checks inspect network responses.
 Chromium can omit HTTP Strict Transport Security (HSTS) when it reuses a cached worker response.
@@ -71,7 +70,7 @@ The November repair updated 226 temperature archives, the station catalog, and t
 2. Set `AMPLIFY_APP_ID` and `AWS_RELEASE_ROLE_ARN` from the infrastructure outputs. Check that `RELEASE_VALIDATION_BUCKET` points to the data bucket. Give GitHub Actions permission to advance `release-preview`.
 3. Check that the preview uses the production content and data settings. Add the preview origin to the CARTO browser key's allowed origins. Terraform defines the data bucket's preview origin.
 4. Review the twelve open historical threshold differences in the backfill audit. Publish corrected data through **Sync Temperatures → repair_monthly_archives**. This job reads the original archives. The release validator requires monthly threshold version 2. [Backfill audit](performance/2026-11-05-temperature-full-backfill.json)
-5. Run CI for the candidate commit on `main`. Inspect the `release-validation` report, the matching public proof, and both Amplify jobs. Check that a missing, expired, or mismatched proof stops the production build.
+5. Run CI for the candidate commit on `main`. Inspect the `release-validation` report. Check the public proof and both Amplify jobs. Verify that production stops when the proof is missing, expired, or for a different build.
 
 The previous production deployment serves requests if preview validation fails. Correct the data or hosting configuration. Run CI again. A failed production build requires a new gated release.
 

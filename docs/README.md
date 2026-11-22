@@ -60,6 +60,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-22 | [Ski-status road report and catalog review](reviews/2026-11-22-ski-status-road-report-review.md) |
 | 2026-11-22 | [ski-status driving access review](reviews/2026-11-22-ski-status-driving-review.md) |
 | 2026-11-22 | [ski-status code, data, and release review](reviews/2026-11-22-ski-status-code-review.md) |
 | 2026-11-21 | [ski-status map area search](reviews/2026-11-21-ski-status-map-area-search.md) |

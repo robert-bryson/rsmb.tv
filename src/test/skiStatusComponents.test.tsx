@@ -265,7 +265,7 @@ describe('ski-status area details', () => {
 
     it('keeps the qualified map search available when there is no verified article', () => {
         const area = skiAreas.find(area => area.id === 'hunter-mountain')!;
-        render(<SkiResortLinks area={{ ...area, id: 'unverified-area' }} />);
+        render(<SkiResortLinks area={{ ...area, id: 'unverified-area', location: { ...area.location, base: undefined } }} />);
         const group = within(screen.getByRole('group', { name: 'Resort links' }));
         expect(group.getByRole('link', { name: 'Search Google Maps' })).toHaveAttribute('href', expect.stringContaining('ski+area'));
         expect(group.getAllByRole('link')).toHaveLength(1);

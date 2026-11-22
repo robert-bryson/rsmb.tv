@@ -318,6 +318,21 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "blue-knob-all-season-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "The 2026/27 issuer profile shows no blackouts. Confirm walk-up capacity and site redemption.",
+      "source": "https://www.indyskipass.com/our-resorts/blue-knob-all-season-resort",
+      "checkedOn": "2026-11-22"
+    },
+    {
       "areaId": "bluewood",
       "products": [
         "indy-base",
@@ -758,6 +773,36 @@
       "checkedOn": "2026-11-21"
     },
     {
+      "areaId": "kandatsu-snow-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer lists no blackout dates. Verify the preferential pickup procedure and any product-specific exception locally.",
+      "source": "https://www.indyskipass.com/our-resorts/kandatsu-snow-resort",
+      "checkedOn": "2026-11-22"
+    },
+    {
+      "areaId": "kaunertal-glacier",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer lists no blackout dates. Confirm glacier pickup and whether the issued pass qualifies at the road toll booth.",
+      "source": "https://www.indyskipass.com/our-resorts/kaunertal-glacier",
+      "checkedOn": "2026-11-22"
+    },
+    {
       "areaId": "les-7-laux",
       "products": [
         "indy-base",
@@ -796,6 +841,21 @@
       "note": "Operator publishes no blackouts or advance reservations. Complete Indy registration, bring ID to the Indy window and buy a $5 RFID card on the first visit if needed.",
       "source": "https://losttrail.com/indypass/",
       "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "loup-loup-ski-bowl",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer gives no blackouts and lists both alpine and Nordic. Verify redemption and whether Nordic access is separate.",
+      "source": "https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl",
+      "checkedOn": "2026-11-22"
     },
     {
       "areaId": "loveland-ski-area",
@@ -1544,6 +1604,21 @@
       "checkedOn": "2026-11-22"
     },
     {
+      "areaId": "togari-onsen-snow-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer lists no blackouts. Check the local ticket office and pickup procedure.",
+      "source": "https://www.indyskipass.com/our-resorts/togari-onsen-snow-resort",
+      "checkedOn": "2026-11-22"
+    },
+    {
       "areaId": "trollhaugen-ski-area",
       "access": "included",
       "days": 2,
@@ -1586,6 +1661,36 @@
       "note": "Indy lists no Base blackouts. Verify where and how to redeem.",
       "source": "https://www.indyskipass.com/our-resorts/white-pine-resort",
       "checkedOn": "2026-11-21"
+    },
+    {
+      "areaId": "whitecap-mountains-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer lists no blackouts. Verify Whitecap’s exact walk-up redemption and ticket availability.",
+      "source": "https://www.indyskipass.com/our-resorts/whitecap-mountains-resort",
+      "checkedOn": "2026-11-22"
+    },
+    {
+      "areaId": "yuzawa-nakazato-snow-resort",
+      "products": [
+        "indy-base",
+        "indy-base-addon",
+        "indy-plus",
+        "indy-plus-addon"
+      ],
+      "access": "included",
+      "days": 2,
+      "reservation": "check",
+      "note": "Issuer lists no blackout dates. Confirm the on-site Indy desk.",
+      "source": "https://www.indyskipass.com/our-resorts/yuzawa-nakazato-snow-resort",
+      "checkedOn": "2026-11-22"
     }
   ]
 }

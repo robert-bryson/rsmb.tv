@@ -5,13 +5,18 @@ import type { DrivingFeed } from './driving-feed';
 
 const loadCatalog = () => import('virtual:ski-driving-data').then(module => module.default);
 type LoadState = 'idle' | 'checking' | 'available' | 'unavailable';
+type FeedScope = DrivingProvider | 'all' | undefined;
 
-export function useSkiDriving(enabled: boolean, provider?: DrivingProvider | 'all') {
+export function useSkiDriving(enabled: boolean, provider?: FeedScope) {
+    const scope = enabled ? provider : undefined;
     const [catalog, setCatalog] = useState<DrivingCatalog>();
     const [catalogFailed, setCatalogFailed] = useState(false);
     const [now, setNow] = useState(Date.now);
     const [feed, setFeed] = useState<DrivingFeed>({ providers: {} });
-    const [loadState, setLoadState] = useState<{ provider: DrivingProvider | 'all'; status: 'available' | 'unavailable' }>();
+    const [loadState, setLoadState] = useState<{ scope: FeedScope; status: LoadState }>(() => ({
+        scope, status: scope ? 'checking' : 'idle',
+    }));
+    if (scope !== loadState.scope) setLoadState({ scope, status: scope ? 'checking' : 'idle' });
     const current = useRef(feed);
     const catalogLoaded = Boolean(catalog);
 
@@ -25,12 +30,11 @@ export function useSkiDriving(enabled: boolean, provider?: DrivingProvider | 'al
     }, [enabled, catalogLoaded]);
 
     useEffect(() => {
-        if (!enabled || !provider) return;
-        const activeProvider = provider;
+        if (!scope) return;
         const controller = new AbortController();
         const { signal } = controller;
         let refresh: ReturnType<typeof setTimeout>;
-        const requested = provider === 'all' ? drivingProviders : [provider];
+        const requested = scope === 'all' ? drivingProviders : [scope];
         async function load() {
             try {
                 const { loadDrivingFeed } = await import('./driving-feed');
@@ -39,9 +43,9 @@ export function useSkiDriving(enabled: boolean, provider?: DrivingProvider | 'al
                 if (signal.aborted) return;
                 current.current = next;
                 setFeed(next);
-                setLoadState({ provider: activeProvider, status: 'available' });
+                setLoadState({ scope, status: 'available' });
             } catch {
-                if (!signal.aborted) setLoadState({ provider: activeProvider, status: 'unavailable' });
+                if (!signal.aborted) setLoadState({ scope, status: 'unavailable' });
             } finally {
                 if (!signal.aborted) {
                     setNow(Date.now());
@@ -59,10 +63,8 @@ export function useSkiDriving(enabled: boolean, provider?: DrivingProvider | 'al
             window.clearInterval(clock);
             document.removeEventListener('visibilitychange', tick);
         };
-    }, [enabled, provider]);
-    const feedStatus: LoadState = enabled && provider
-        ? loadState?.provider === provider ? loadState.status : 'checking'
-        : 'idle';
+    }, [scope]);
+    const feedStatus = loadState.status;
     return useMemo(() => ({ catalog, catalogFailed, feed, feedStatus, now }), [catalog, catalogFailed, feed, feedStatus, now]);
 }
 

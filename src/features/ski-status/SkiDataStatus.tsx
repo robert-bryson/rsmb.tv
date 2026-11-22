@@ -190,7 +190,7 @@ function DrivingCoverage() {
                 return <li key={provider}>
                     <a href={drivingProviderSources[provider]}>{drivingProviderNames[provider]}</a> · {labels[roadReportState(driving, provider)]}
                     <p className="ski-driving-note">
-                        {feed?.reports && <>Last checked <SnapshotTime value={feed.reports.data.checkedAt} /> · </>}
+                        {feed?.reports && <>Last successful check <SnapshotTime value={feed.reports.data.checkedAt} /> · </>}
                         {reports.filter(report => report.state === 'stale').length} stale of {reports.length} reports · {cameras.length} cameras
                         {cameras.length > 0 && !cameras[0].available && ' (last verified)'}
                     </p>

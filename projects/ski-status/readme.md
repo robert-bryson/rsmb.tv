@@ -3,7 +3,7 @@
 ski-status maps North American ski areas and worldwide pass destinations.
 Use the comparison table for mountain statistics. Open an operator link to check current conditions.
 
-[Find an area](#use-ski-status) · [Maintain the catalog](#catalog) · [Run tests](#local-checks) · [Publish conditions](#conditions-publication) · [Publish driving feeds](#publish-driving-feeds) · [Project tasks](TODO.md)
+[Find an area](#use-ski-status) · [Maintain the catalog](#catalog) · [Run tests](#local-checks) · [Publish conditions](#conditions-publication) · [Plan a drive](#driving-access) · [Project tasks](TODO.md)
 
 ## Use ski-status
 
@@ -77,7 +77,7 @@ Select a marker on the map. To use the keyboard, open **Driving features in view
 
 Open **Driving access** in the resort details. Select an arrival and an approach. Select **Show approach on map** to fit the reviewed road sections.
 Select **Get directions** to open the selected entrance in Google Maps.
-Shared links include the layer and selected approach. [Driving data and coverage](#driving-data-and-coverage)
+Shared links include the layer and selected approach. A location filter clears the approach when it removes the selected resort. [Driving data and coverage](#driving-data-and-coverage)
 
 Select the information icon at the bottom right of the map. It shows the source credits and data license.
 Download the catalog points, base points, or terrain from this panel.
@@ -122,7 +122,7 @@ There were 129 areas with Ikon access and 98 with Epic access.
 There were 297 areas with included Indy access and 34 with Mountain Collective access.
 
 All 588 areas have at least one published statistic. The catalog has 527 conventional downhill areas, including areas with Nordic trails. Of these, 316 have all six main comparison fields. Mapped terrain values cover 538 areas.
-There are 336 direct Wikipedia links, 18 verified Google Maps destinations, and 133 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md), [Icon index](data/runtime-icons.json)
+There are 336 direct Wikipedia links, 18 verified Google Maps destinations, and 149 bundled resort icons. [Catalog review](../../docs/reviews/2026-11-21-ski-status-catalog-coverage.md), [Data quality batches](research/data-quality-log.md), [Icon index](data/runtime-icons.json)
 
 | Published field | Areas |
 | --- | ---: |
@@ -140,8 +140,8 @@ There are 336 direct Wikipedia links, 18 verified Google Maps destinations, and 
 | Difficulty breakdown | 294 |
 | Season window | 68 |
 | Official conditions link | 553 |
-| Planned season dates | 217 |
-| Average annual snowfall | 188 |
+| Planned season dates | 220 |
+| Average annual snowfall | 192 |
 | Average monthly snowfall | 65 |
 | Monthly snow depth series | 81 |
 
@@ -322,6 +322,7 @@ Run the project tests with V8 coverage. Use the same test filters and source pat
 
 ```bash
 npm run test:coverage -- src/test/ski scripts/__tests__/ski \
+  src/test/useSkiDriving.test.ts scripts/ski-driving.test.ts scripts/ski-driving-feed.test.ts \
   scripts/__tests__/syncSkiStatus.test.ts scripts/__tests__/lakeLouiseConditions.test.ts \
   scripts/__tests__/mammothConditions.test.ts scripts/__tests__/releaseSkiTerrain.test.ts \
   --coverage.include='src/features/ski-status/**' \
@@ -432,10 +433,10 @@ Use a separate access file for each local ski season. Vite checks the files and 
 The site includes the fields that **Visitor information** displays. Research notes stay in the repository.
 The panel shows map editions when the source gives them. Camera links open the published image, player, or operator page. [2026/27 resort access](research/resort-access-2026-27.json), [2026 resort access](research/resort-access-2026.json)
 
-On November 22, 2026, seasonal access records included lodge or day facility details for 243 resorts.
-There are 71 checked resort map points. These points include both entrances and lift bases.
-There are 228 resorts with parking records and 235 with official trail maps.
-There are 120 resorts with adult day prices or price bounds. There are 155 with operator cameras. [Batch coverage](research/data-quality-log.md)
+On November 22, 2026, seasonal access records included lodge or day facility details for 257 resorts.
+There are 73 checked resort map points. These points include both entrances and lift bases.
+There are 242 resorts with parking records and 249 with official trail maps.
+There are 126 resorts with adult day prices or price bounds. There are 165 with operator cameras. [Batch coverage](research/data-quality-log.md)
 
 ```text
 Follow projects/ski-status/.agents/skills/ski-status-data-quality/SKILL.md.
@@ -510,7 +511,7 @@ The 2026/27 Ikon Pass shares seven days across the four Aspen Snowmass mountains
 
 Indy Add-On access requires verification of an unrestricted home season pass. Select a home area to apply the exclusion. The app shows the requirement in the pass terms. [Indy Add-On rules](https://www.indyskipass.com/this-is-indy/how-it-works)
 
-73 Indy areas have verified product rules, including 68 with rules for all four products. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [2026/27 Indy rules](data/pass-rules/indy-2026-27.json), [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
+80 Indy areas have verified product rules, including 75 with rules for all four products. Cannon, Pats Peak, and Red Lodge publish dated Base blackouts. Cannon recommends advance reservations. Pats Peak requires advance reservations. Mt. Hood Meadows, Ragged Mountain, and St. Johann have verified Indy+ terms. [2026/27 Indy rules](data/pass-rules/indy-2026-27.json), [Cannon Indy terms](https://www.cannonmt.com/indy-pass), [Pats Peak Indy terms](https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/), [Red Lodge pass terms](https://www.redlodgemountain.com/season-passes/), [Mt. Hood Meadows Indy terms](https://www.skihood.com/explore/indy-pass), [Ragged tickets](https://www.raggedmountainresort.com/all-tickets/), [St. Johann Indy terms](https://www.bergbahnen-stjohann.at/en/indy-pass-skiing-in-st-johann-in-tirol.html)
 
 Ski Arlberg requires a direct booking with a lodging partner. The app shows this requirement with the shared three-day allowance. [Ski Arlberg pass terms](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
@@ -533,7 +534,7 @@ Each checked report expires at the end of its local ski day. Alberta uses UTC−
 
 ### Opening and closing dates
 
-The season file has 196 records of actual dates for 62 areas. It has plans for 217 areas. 33 records include terrain or conditions from opening day. For 2026/27, 34 areas have recorded first ski days and 213 have at least one scheduled date. [Season dates and sources](data/seasons.json)
+The season file has 197 records of actual dates for 63 areas. It has plans for 220 areas. 33 records include terrain or conditions from opening day. For 2026/27, 34 areas have recorded first ski days and 216 have at least one scheduled date. [Season dates and sources](data/seasons.json)
 
 Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
 
@@ -701,6 +702,70 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 
 Check the hosted preview and sync results before release. [Hosted checks](../../docs/reviews/2026-11-21-ski-status-engineering-review.md#hosted-checks)
 
+## Driving access
+
+### Access routes and webcams
+
+Collect winter road approaches during each resort review. Put the roads and named mountain passes in travel order.
+Record the winter entrance, parking rules, and official road status links. [Road approach procedure](.agents/skills/ski-status-data-quality/SKILL.md#road-approaches)
+
+Run `npx --no-install vitest run src/test/skiStatusRoadApproaches.test.ts` after a road data change. The test checks catalog IDs, route records, sources, and pass references. [Road data checks](../../src/test/skiStatusRoadApproaches.test.ts)
+The research file has 459 approaches for 195 areas and 43 named passes. [Road approach records](research/road-approaches.json)
+
+Use the rollout plan for the next corridor checks. [Driving access rollout](driving-map-plan.md)
+
+### Driving data and coverage
+
+The app combines the research records with reviewed corridors. The map shows each named pass once.
+The catalog has 14 mapped entrances at seven resorts in Washington, British Columbia, Utah, Oregon, and California.
+Each entrance has an operator source and a check date. Its connector joins the signed junction to the entrance.
+Each connector lists its OpenStreetMap way IDs. [Entrance catalog](data/driving-corridors.json), [OpenStreetMap credit and license](https://www.openstreetmap.org/copyright)
+
+Use the operator's parking link for fees, reservations, accessible parking, drop-offs, and shuttles.
+Enter origin coordinates under **Straight-line distance**. The app measures the distance to the selected entrance on the device.
+
+| Feed | Coverage |
+| --- | --- |
+| WSDOT | Read public alerts, Snoqualmie and Stevens Pass observations, and camera links. The app shows the alerts as advisories. Use the agency map for current closures and restrictions. [WSDOT traveler information](https://www.wsdot.wa.gov/traffic/api/) |
+| DriveBC | Read Highway 99 events and camera links. Select **Show image** to load an eligible image up to one hour old. [Open511 data and license](https://api.open511.gov.bc.ca/help), [Highway camera catalog](https://catalogue.data.gov.bc.ca/dataset/bc-highway-cams) |
+| UDOT | Read Cottonwood Canyons events and camera links when the collector has a developer key. [Developer API](https://www.udottraffic.utah.gov/help/endpoint/event), [Canyon road information](https://cottonwoodcanyons.udot.utah.gov/road-information/) |
+| ODOT TripCheck | Official road and camera links. Live collection requires a TripCheck subscription and a feed check. [TripCheck API](https://tripcheck.com/Pages/API) |
+| Caltrans | Read chain controls, closures, and camera links for I-80 and CA 89. The app uses the agency's start and end flags for current work. [Closure fields](https://cwwp2.dot.ca.gov/documentation/lcs/lcs-field-description.html), [QuickMap](https://quickmap.dot.ca.gov/) |
+
+The app matches reports by road, direction, and affected section. **No matching reports** applies to the reviewed section and direction.
+Open **Nearby reports** to read other agency bulletins. Use the official road link to check the whole route.
+The panel shows **Checking** when you reopen driving access or change provider scope. The app keeps the last verified snapshot during the check.
+The app labels reports **Last reported** when a check fails or when the snapshot is at least 15 minutes old.
+Pass and chain-control observations expire after six hours. **Last successful check** shows when the collector obtained the report snapshot.
+Open the admin panel from **About**. Use **Driving coverage** to check provider status, report age, and mapped sections.
+
+### Publish driving feeds
+
+The development server collects feeds when you open driving information. It stores snapshots in `.cache/ski-driving`.
+Set `VITE_SKI_DRIVING_LOCAL=0` to use the hosted feed. Run the local collector with this command.
+
+```sh
+node --import tsx/esm projects/ski-status/scripts/sync-driving.ts
+```
+
+The manifest gives each report and camera snapshot a SHA-256 checksum and a provider status.
+The collector rejects a WSDOT report if a record has an invalid ID, name, or point.
+If a collection fails, the manifest keeps the previous snapshot link when available. The app marks that snapshot **Last reported**.
+Each run checks reports. The collector reuses valid DriveBC camera snapshots for 30 minutes. It reuses other valid camera inventories for six hours.
+Set `UDOT_API_KEY` in the collector environment to enable Utah data. The browser loads snapshots from the data origin.
+
+Follow the OIDC setup to deploy the role and run **Sync Ski Driving** on `main`. The workflow requests a run every five minutes. GitHub can delay a scheduled run. [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-driving-sync), [GitHub schedule behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
+
+The collector writes the manifest after it writes the snapshots. If all report checks fail, the run publishes their status and exits with an error.
+S3 expires report and camera snapshots after 30 days. The manifest has a 60-second cache lifetime.
+
+Run the driving tests after a route or provider change.
+
+```sh
+npx --no-install vitest run src/test/skiStatusDriving.test.ts src/test/useSkiDriving.test.ts \
+  scripts/ski-driving.test.ts scripts/ski-driving-feed.test.ts
+```
+
 ## Planned features
 
 
@@ -737,62 +802,6 @@ Extend the conditions panel to more resorts. Add current weather and five-day fo
 - Use the app's unit setting for temperature, snow depth, elevation, and wind speed. Keep precipitation chance as a percentage. Give the source name and a link to each report or forecast.
 - Show forecasts and measured snowfall with separate labels. Apply the [report and forecast rules](#report-and-forecast-rules) for stale and missing values. Show **Unknown** for missing data and **N/A** for fields that do not apply. Keep reported zeros.
 - Test complete, partial, and stale reports. Check that the forecast starts on the resort's local date and that changing units preserves unknown values and zeros. Check that the panel can open for an area with no reports.
-
-### Access routes and webcams
-
-Collect winter road approaches during each resort review. Put the roads and named mountain passes in travel order.
-Record the winter entrance, parking rules, and official road status links. [Road approach procedure](.agents/skills/ski-status-data-quality/SKILL.md#road-approaches)
-
-Run `npx --no-install vitest run src/test/skiStatusRoadApproaches.test.ts` after a road data change. The test checks catalog IDs, route records, sources, and pass references. [Road data checks](../../src/test/skiStatusRoadApproaches.test.ts)
-The research file has 415 approaches for 175 areas and 41 named passes. [Road approach records](research/road-approaches.json)
-
-Use the rollout plan for the next corridor checks. [Driving access rollout](driving-map-plan.md)
-
-### Driving data and coverage
-
-The app shows the road list, named passes, and source links for each reviewed approach. The map shows each named pass once.
-The launch catalog contains 14 mapped entrances. It includes seven resorts in Washington, British Columbia, Utah, Oregon, and California.
-Each entrance has an operator source and check date. Its connector joins the signed junction to the entrance. Each connector lists its OpenStreetMap way IDs. [Entrance catalog](data/driving-corridors.json), [OpenStreetMap credit and license](https://www.openstreetmap.org/copyright)
-
-Use the operator's parking link for fees, reservations, accessible parking, drop-offs, and shuttles.
-Enter origin coordinates under **Straight-line distance**. The app measures the distance to the selected entrance on the device.
-
-| Feed | Coverage |
-| --- | --- |
-| WSDOT | Read public alerts, Snoqualmie and Stevens Pass observations, and camera links. Use the official map for current closures and restrictions. The app shows the public alerts as advisories. [WSDOT traveler information](https://www.wsdot.wa.gov/traffic/api/) |
-| DriveBC | Read Highway 99 events and camera links. Select **Show image** to load an eligible image up to one hour old. [Open511 data and license](https://api.open511.gov.bc.ca/help), [Highway camera catalog](https://catalogue.data.gov.bc.ca/dataset/bc-highway-cams) |
-| UDOT | Read Cottonwood Canyons events and camera links when the collector has a developer key. [Developer API](https://www.udottraffic.utah.gov/help/endpoint/event), [Canyon road information](https://cottonwoodcanyons.udot.utah.gov/road-information/) |
-| ODOT TripCheck | Official road and camera links. Live collection requires a TripCheck subscription and a feed check. [TripCheck API](https://tripcheck.com/Pages/API) |
-| Caltrans | Chain-control observations, reported closures, and camera links for the I-80 and CA 89 pilot. [Caltrans data portal](https://cwwp2.dot.ca.gov/), [Lane closures](https://cwwp2.dot.ca.gov/lane-closure.html), [QuickMap](https://quickmap.dot.ca.gov/) |
-
-The app matches reports by road, direction, and affected section. **No matching reports** applies to the reviewed section and direction. Check **Nearby reports** for other agency bulletins.
-The app marks reports **Last reported** when a check fails or is at least 15 minutes old. Pass and chain-control observations expire after six hours.
-Open **Driving coverage** in the admin panel to check feed status, report age, and mapped sections. Open the admin panel from **About**.
-
-### Publish driving feeds
-
-The development server collects feeds when you open driving information. It stores snapshots in `.cache/ski-driving`.
-Set `VITE_SKI_DRIVING_LOCAL=0` to use the hosted feed. Run this command to collect a local snapshot.
-
-```sh
-node --import tsx/esm projects/ski-status/scripts/sync-driving.ts
-```
-
-The manifest gives each report and camera snapshot a SHA-256 checksum and a provider status.
-If a collection fails, the manifest keeps the previous snapshot link when available. The app marks that snapshot **Last reported**.
-Each run checks reports. The collector reuses valid DriveBC camera snapshots for 30 minutes. It reuses other valid camera inventories for six hours.
-Set `UDOT_API_KEY` in the collector environment to enable Utah data. The browser loads snapshots from the data origin.
-
-Follow the OIDC setup to deploy the role and run **Sync Ski Driving** on `main`. The workflow requests a run every five minutes. GitHub can delay a scheduled run. [OIDC setup](../../docs/github-actions-oidc.md#enable-ski-driving-sync), [GitHub schedule behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
-
-The collector writes the manifest after it writes the snapshots. If all report checks fail, the run publishes their status and exits with an error.
-S3 expires report and camera snapshots after 30 days. The manifest has a 60-second cache lifetime.
-
-Run the driving tests after a route or provider change.
-
-```sh
-npx --no-install vitest run src/test/skiStatusDriving.test.ts scripts/ski-driving.test.ts scripts/ski-driving-feed.test.ts
-```
 
 ### Visited areas
 

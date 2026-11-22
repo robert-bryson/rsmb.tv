@@ -17,13 +17,13 @@ Hosted checks require a deployed build. Device checks require the named physical
 | --- | --- | --- |
 | Next local validation | [Automated checks](#automated-checks) | Local test environment |
 | Before the next hosted release | [Release checks](#next-release-checks) and [Pins hosting](#hosted-release) | Deployed origin and analytics account |
+| Before the ski-status release | [Ski-status release checks](projects/ski-status/TODO.md#release-checks) | Asset mirror, hosted preview, and AWS roles |
 | Before closing device checks | [Physical devices](#physical-devices) | Named hardware or assistive technology |
 | Before publishing a story | [Content publication](#content-publication) and [source checks](#published-story-checks) | Owner confirmation and source files |
 | Before historical signal publication | [Temperature publication](#historical-signal-publication) | Approved data and methodology |
 | Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
 | Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
 | Content additions | [Project content](#project-content) | Reviewed content and assets |
-| Before the ski-status release | [Release checks](projects/ski-status/TODO.md#release-checks) and [driving publication](projects/ski-status/TODO.md#driving-map) | Release asset mirror, hosted preview, and AWS roles |
 | Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks

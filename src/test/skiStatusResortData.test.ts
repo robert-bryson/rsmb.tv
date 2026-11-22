@@ -153,6 +153,10 @@ describe('ski-status resort data', () => {
         const hunter = linksFor('hunter-mountain');
         expect(hunter.searchesMaps).toBe(false);
         expect(hunter.wikipedia).toBe('https://en.wikipedia.org/wiki/Hunter_Mountain_(ski_area)');
+        const hunterWithoutListing = { ...skiAreas.find(area => area.id === 'hunter-mountain')!, id: 'area-with-entrance' };
+        const entrance = skiAreaExternalLinks(hunterWithoutListing);
+        expect(entrance.searchesMaps).toBe(false);
+        expect(new URL(entrance.maps).searchParams.get('query')).toBe('42.2048167,-74.2099667');
         const washington = linksFor('crystal-mountain');
         const michigan = linksFor('crystal-mountain-mi');
         expect(washington.maps).not.toBe(michigan.maps);

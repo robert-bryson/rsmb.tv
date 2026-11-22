@@ -122,7 +122,16 @@
       }
     },
     "statsUrl": "https://www.aftonalps.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.aftonalps.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+    "reportUrl": "https://www.aftonalps.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx",
+    "statSources": [
+      {
+        "source": "https://www.aftonalps.com/the-mountain/about-the-mountain/trail-map.aspx",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres"],
+        "note": "The operator’s current alpine map page gives 300 acres of winter terrain."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "alpe-cimbra",
@@ -1012,7 +1021,16 @@
       }
     },
     "statsUrl": "https://www.attitash.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.attitash.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+    "reportUrl": "https://www.attitash.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx",
+    "statSources": [
+      {
+        "source": "https://www.attitash.com/the-mountain/about-the-mountain/mountain-info.aspx",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "acres", "acresQualifier", "liftCount", "trailCount"],
+        "note": "Operator publishes a 311+ acre lower bound for both ski sectors, lift-served elevations 600–2,350 ft, eight lifts and 76 trails."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "bad-kleinkirchheim",
@@ -2025,11 +2043,17 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/blue-knob-all-season-resort",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/blue-knob-all-season-resort",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Issuer lists 300 acres, 2,074–3,142 ft, 1,068 ft vertical, six lifts, and 34 runs."
       }
     ],
     "reportUrl": "https://blueknob.com/trail-map-conditions/",
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "blue-mountain-resort",
@@ -2174,7 +2198,7 @@
     "locality": "Bolton Valley",
     "website": "https://www.boltonvalley.com",
     "statsUrl": "https://www.indyskipass.com/our-resorts/bolton-valley-resort",
-    "reportUrl": "https://www.boltonvalley.com/winter/trail-maps-snow-reports/",
+    "reportUrl": "https://www.boltonvalley.com/winter/trail-maps-snow-reports/snow-reports/",
     "liftCount": 6,
     "trailCount": 71,
     "verticalFt": 1704,
@@ -2191,10 +2215,17 @@
       {
         "source": "https://www.boltonvalley.com/the-resort/about-us/",
         "checkedOn": "2026-11-19",
-        "fields": ["acres", "nordicKm", "baseFt", "summitFt"],
+        "fields": ["nordicKm"],
         "note": "Base is the main resort base and summit is Vista Peak. Nordic length is the groomed subset of the Nordic and backcountry network."
+      },
+      {
+        "source": "https://www.boltonvalley.com/the-resort/about-us/",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "acres", "liftCount", "trailCount"],
+        "note": "Operator gives the main base and Vista Peak elevations, 300 alpine acres, six lifts and 71 trails."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "bosques-de-monterreal",
@@ -2899,16 +2930,16 @@
     "nightSkiing": true,
     "terrainParks": false,
     "reportUrl": "https://www.buffaloskicenter.com/trail-conditions/",
-    "acres": 300,
+    "acres": 175,
     "statSources": [
       {
-        "source": "https://www.buffaloskicenter.com/history/",
-        "checkedOn": "2026-11-20",
-        "fields": ["acres"],
-        "note": "The club describes 300 acres across its three ski areas."
+        "source": "https://www.indyskipass.com/our-resorts/buffalo-ski-club",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "The current Indy profile gives 175 published ski acres, seven lifts, 38 trails and 464 ft vertical. The operator history describes the combined site as 300 acres with an earlier inventory."
       }
     ],
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "burke-mountain-resort",
@@ -4815,7 +4846,16 @@
     "liftCount": 8,
     "trailCount": 30,
     "verticalFt": 500,
-    "reportUrl": "https://www.devilsheadresort.com/ski-resort-mountain-sauk-merrimac-wi-wisconsin/snow-report/"
+    "reportUrl": "https://www.devilsheadresort.com/ski-resort-mountain-sauk-merrimac-wi-wisconsin/snow-report/",
+    "statSources": [
+      {
+        "source": "https://www.devilsheadresort.com/ski-resort-mountain-sauk-merrimac-wi-wisconsin/mountain-stats/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "verticalFt", "trailCount", "liftCount"],
+        "note": "Operator lists 300 skiable acres, 500 ft vertical, 30 trails, six quads and two carpets."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "devils-thumb-ranch",
@@ -6535,9 +6575,15 @@
         "checkedOn": "2026-11-21",
         "fields": ["downhillKm"],
         "note": "Sum of the resort’s listed course lengths and reported course-level mix."
+      },
+      {
+        "source": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_iwatake_en",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Hakuba Valley gives 125 ha of course area, 750–1,289 m, a 539 m span, one gondola and eight chairs, and 13 courses."
       }
     ],
-    "reportCheckedOn": "2026-11-21"
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "hakuba-norikura-onsen",
@@ -7372,7 +7418,16 @@
       }
     },
     "statsUrl": "https://www.huntermtn.com/the-mountain/about-the-mountain/mountain-info.aspx",
-    "reportUrl": "https://www.huntermtn.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+    "reportUrl": "https://www.huntermtn.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx",
+    "statSources": [
+      {
+        "source": "https://www.huntermtn.com/the-mountain/about-the-mountain/mountain-info.aspx",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator four-face ski-area figures. The public downhill elevation is 3,200 ft and the geographic summit is 4,040 ft."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "hurricane-ridge",
@@ -7815,7 +7870,7 @@
     "nightSkiing": true,
     "terrainParks": false,
     "reportUrl": "https://www.kandatsu.com/today/",
-    "reportCheckedOn": "2026-11-20",
+    "reportCheckedOn": "2026-11-22",
     "acres": 321.2,
     "summitFt": 3281,
     "statSources": [
@@ -7949,7 +8004,7 @@
       }
     ],
     "reportUrl": "https://www.kaunertaler-gletscher.at/kaunertaler-gletscher/nowbox.html",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "baseFt": 7152,
     "summitFt": 10213,
     "highestLiftTerminalFt": 10213
@@ -9264,7 +9319,7 @@
     "nightSkiing": false,
     "terrainParks": true,
     "reportUrl": "https://skitheloup.org/mountain/conditions-weather/",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "acres": 300,
     "baseFt": 4020,
     "summitFt": 5260,
@@ -9280,7 +9335,13 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt", "grades"]
+        "fields": ["grades"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "baseFt", "summitFt", "verticalFt", "liftCount", "trailCount"],
+        "note": "Indy reports 300 alpine acres, 4,020–5,260 ft, 1,240 ft vertical, three lifts and 14 trails across the downhill ski bowl."
       }
     ]
   },
@@ -9695,11 +9756,12 @@
     "statSources": [
       {
         "source": "https://manningpark.com/maps-stats/",
-        "checkedOn": "2026-11-19",
-        "fields": ["acres", "liftCount", "baseFt", "summitFt"],
-        "note": "Alpine lift total includes the carpet, T-bar, rope tow and two chairs."
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator Alpine Area Stats gives 346 acres (140 ha), 4,451–5,868 ft, 1,417 ft vertical, 35 runs, two chairs, a carpet, a T-bar and a rope tow."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "manning-park-xc",
@@ -14842,7 +14904,8 @@
         "fields": ["liftCount", "trailCount", "baseFt", "summitFt", "verticalFt"]
       }
     ],
-    "reportUrl": "https://sandia.ski/snow-report/"
+    "reportUrl": "https://sandia.ski/snow-report/",
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "saskadena-six-ski-area",
@@ -16163,7 +16226,8 @@
         "checkedOn": "2026-11-21",
         "fields": ["acres", "baseFt", "summitFt", "grades"]
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "snow-creek",
@@ -16967,7 +17031,16 @@
       }
     },
     "statsUrl": "https://ski-stoneham.com/en/skiing-riding/mountain-stats/",
-    "reportUrl": "https://ski-stoneham.com/en/skiing-riding/snow-report/snow-conditions/"
+    "reportUrl": "https://ski-stoneham.com/en/skiing-riding/snow-report/snow-conditions/",
+    "statSources": [
+      {
+        "source": "https://ski-stoneham.com/en/skiing-riding/mountain-stats/",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "acres", "verticalFt", "liftCount", "trailCount"],
+        "note": "Operator: 248–593 m (814–1,946 ft), 345 m (1,132 ft) vertical, 135.8 ha ski area (335.6 acres rounded), four chairs plus two carpets and 43 day trails."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "steamboat-ski-resort",
@@ -18418,7 +18491,7 @@
       }
     ],
     "reportUrl": "https://togari.jp/winter/",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "baseFt": 1312,
     "summitFt": 2756,
     "grades": {
@@ -19392,7 +19465,7 @@
       }
     ],
     "reportUrl": "https://www.whitepineresort.com/plan#conditions",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "baseFt": 8500,
     "grades": {
       "unit": "percent",
@@ -19452,9 +19525,16 @@
       {
         "source": "https://www.indyskipass.com/our-resorts/whitecap-mountains-resort",
         "checkedOn": "2026-11-21",
-        "fields": ["acres", "baseFt", "summitFt"]
+        "fields": ["acres"]
+      },
+      {
+        "source": "https://www.indyskipass.com/our-resorts/whitecap-mountains-resort",
+        "checkedOn": "2026-11-22",
+        "fields": ["baseFt", "summitFt", "verticalFt", "liftCount"],
+        "note": "Issuer gives 1,350–1,750 ft, 400 ft vertical and seven lifts for the three mountains."
       }
-    ]
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "whiteface",
@@ -19486,7 +19566,16 @@
         "Expert": 32
       },
       "of": "terrain"
-    }
+    },
+    "statSources": [
+      {
+        "source": "https://whiteface.com/mountain/mountain-stats/",
+        "checkedOn": "2026-11-22",
+        "fields": ["acres", "trailCount", "liftCount", "baseFt", "summitFt", "verticalFt", "highestLiftTerminalFt"],
+        "note": "Operator gives 299 downhill acres excluding 35 acres of the Slides, 97 trails, 11 lifts and a 1,220 ft base. 3,430 ft is the skiable descent from the 4,650 ft Slides; lift service ends at 4,386 ft. The geographic summit is 4,867 ft."
+      }
+    ],
+    "reportCheckedOn": "2026-11-22"
   },
   {
     "id": "whitefish-mountain-resort",
@@ -20054,7 +20143,7 @@
     "nightSkiing": false,
     "terrainParks": false,
     "reportUrl": "https://www.yuzawa-nakazato.com/winter/",
-    "reportCheckedOn": "2026-11-21",
+    "reportCheckedOn": "2026-11-22",
     "acres": 326,
     "baseFt": 1503,
     "summitFt": 2303,

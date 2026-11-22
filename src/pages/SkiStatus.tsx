@@ -322,6 +322,7 @@ export default function SkiStatus() {
             if (selectedArea && !matchesSkiLocations(selectedArea, next)) {
                 params.delete('area');
                 params.delete('details');
+                params.delete('approach');
             }
         });
     }

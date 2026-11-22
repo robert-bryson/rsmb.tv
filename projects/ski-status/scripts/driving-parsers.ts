@@ -6,7 +6,7 @@ import { isoTime } from '../../../src/features/ski-status/schemas.ts';
 import { conditionsXmlRoot } from './conditions-xml.ts';
 
 const source = drivingProviderSources;
-const highwayPattern = /\b(?:I[- ]|US[- ]|SR[- ])\d+[A-Z]?\b/i;
+const highwayPattern = /\b(?:I|US|SR|Interstate|State Route)[ -]*\d+[A-Z]?\b/i;
 const idValue = z.union([z.number().int().nonnegative(), z.string().trim().min(1).max(130)]);
 type Region = [west: number, south: number, east: number, north: number];
 const windows: Record<DrivingProvider, Region[]> = {
@@ -93,7 +93,7 @@ export function drivingLocalTime(value: string, zone: string) {
     if (candidates.length === 1) return new Date(candidates[0]).toISOString();
 }
 
-function placemarks(xml: string) {
+function placemarks(xml: string, allowIncomplete = false) {
     const root = conditionsXmlRoot(xml.replace(/^\uFEFF/, ''), 'WSDOT');
     if (root?.localName !== 'kml' || !root.getElementsByTagNameNS('*', 'Document').length) throw Error('Expected a WSDOT KML document');
     return Array.from(root.getElementsByTagNameNS('*', 'Placemark')).flatMap(marker => {
@@ -103,7 +103,9 @@ function placemarks(xml: string) {
         const locationText = location?.textContent?.trim();
         const coordinates = locationText && point(locationText.split(',').slice(0, 2).map(value => value.trim() ? Number(value) : NaN));
         const description = marker.getElementsByTagNameNS('*', 'description')[0]?.textContent ?? '';
-        return rawId && name && coordinates ? [{ id: rawId, name, point: coordinates, description }] : [];
+        if (rawId && name && coordinates) return [{ id: rawId, name, point: coordinates, description }];
+        if (allowIncomplete) return [];
+        throw Error('WSDOT report is missing a valid placemark ID, name, or point');
     });
 }
 
@@ -150,7 +152,7 @@ function agencyLink(value: string | undefined, host: string, fallback: string) {
 }
 
 export function wsdotCameras(xml: string): DrivingCamera[] {
-    return placemarks(xml).flatMap(({ id, name, point, description }) => {
+    return placemarks(xml, true).flatMap(({ id, name, point, description }) => {
         const road = highwayPattern.exec(name)?.[0];
         if (!road || !inRegion('wsdot', road, point)) return [];
         const image = /\bsrc="([^"]+)"/i.exec(description)?.[1];
@@ -351,6 +353,7 @@ export function udotEvents(input: unknown): DrivingBulletin[] {
     });
 }
 
+const agencyFlag = z.enum(['true', 'false']);
 const caClosure = z.object({
     index: idValue,
     location: z.object({
@@ -367,9 +370,9 @@ const caClosure = z.object({
     closure: z.object({
         facility: z.string(), typeOfClosure: z.string(), typeOfWork: z.string(), lanesClosed: z.string(),
         durationOfClosure: z.string().optional(),
-        closureTimestamp: z.object({ closureStartEpoch: z.string(), closureEndEpoch: z.string(), isClosureEndIndefinite: z.string() }),
-        code1097: z.object({ isCode1097: z.string(), code1097Timestamp: z.object({ code1097Epoch: z.string() }).optional() }),
-        code1098: z.object({ isCode1098: z.string() }), code1022: z.object({ isCode1022: z.string() }),
+        closureTimestamp: z.object({ closureStartEpoch: z.string(), closureEndEpoch: z.string(), isClosureEndIndefinite: agencyFlag }),
+        code1097: z.object({ isCode1097: agencyFlag, code1097Timestamp: z.object({ code1097Epoch: z.string() }).optional() }),
+        code1098: z.object({ isCode1098: agencyFlag }), code1022: z.object({ isCode1022: agencyFlag }),
     }),
 });
 export function caltransClosures(input: unknown, now = Date.now()): DrivingBulletin[] {
@@ -385,10 +388,12 @@ export function caltransClosures(input: unknown, now = Date.now()): DrivingBulle
         if (!coordinates) return [];
         const direction = normalizeDrivingDirection(travelFlowDirection);
         const started = code1097.isCode1097 === 'true';
-        const observedAt = unixSeconds(Number(code1097.code1097Timestamp?.code1097Epoch));
-        const startsAt = (started ? observedAt : undefined) ?? unixSeconds(Number(closureTimestamp.closureStartEpoch));
-        const endsAt = closureTimestamp.isClosureEndIndefinite === 'true' ? undefined : unixSeconds(Number(closureTimestamp.closureEndEpoch));
-        if (!startsAt || (!started && endsAt && Date.parse(endsAt) <= now)) return [];
+        const observedAt = started ? unixSeconds(Number(code1097.code1097Timestamp?.code1097Epoch)) : undefined;
+        const scheduledStart = unixSeconds(Number(closureTimestamp.closureStartEpoch));
+        const indefinite = closureTimestamp.isClosureEndIndefinite === 'true';
+        const endsAt = indefinite ? undefined : unixSeconds(Number(closureTimestamp.closureEndEpoch));
+        if (!started && (!scheduledStart || (endsAt && Date.parse(endsAt) <= now))) return [];
+        const validSchedule = indefinite || (endsAt && scheduledStart && endsAt > scheduledStart);
         const first = readMilepost(begin.beginMilepost);
         const last = readMilepost(end.endMilepost);
         const mileposts: [number, number] | undefined = sameRoad && first !== undefined && last !== undefined ? [first, last] : undefined;
@@ -396,13 +401,13 @@ export function caltransClosures(input: unknown, now = Date.now()): DrivingBulle
         const kind = throughLanes && closure.typeOfClosure === 'Full' ? 'closure' : 'restriction';
         const description = clean([begin.beginLocationName, end.endLocationName].filter(Boolean).join(' to ')
             + `\n${closure.facility} · ${closure.typeOfWork}\nLanes affected: ${closure.lanesClosed}`);
+        const unclearTime = started ? observedAt && Date.parse(observedAt) > now : !validSchedule;
         return [{
             id: `lcs-${index}`, road, point: coordinates, mileposts, direction, kind,
             title: `${road} ${closure.facility.toLowerCase()} work`,
-            description, observedAt, startsAt, endsAt, source: source.caltrans,
+            description, observedAt, startsAt: started ? observedAt : scheduledStart, endsAt, source: source.caltrans,
             awaitingStart: started ? undefined : true,
-            advisory: (!throughLanes || !direction || closure.durationOfClosure === 'Intermittent'
-                || (closureTimestamp.isClosureEndIndefinite !== 'true' && (!endsAt || endsAt <= startsAt))) ? true : undefined,
+            advisory: (!throughLanes || !direction || closure.durationOfClosure === 'Intermittent' || unclearTime) ? true : undefined,
         }];
     });
 }

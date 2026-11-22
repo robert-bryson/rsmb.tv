@@ -1057,12 +1057,12 @@
     },
     "hunter-mountain": {
       "coordinates": [
-        -74.208297,
-        42.204526
+        -74.2099667,
+        42.2048167
       ],
-      "name": "Mapped lift base",
-      "kind": "lift-base",
-      "source": "https://openskimap.org/?obj=0220b9172bf819d9b5fbd07c2f2218a8cfabb864"
+      "name": "Hunter Main arrival",
+      "source": "https://www.huntermtn.com/explore-the-resort/about-the-resort/getting-here.aspx",
+      "kind": "entrance"
     },
     "hyland-hills": {
       "coordinates": [
@@ -2943,6 +2943,15 @@
       ],
       "name": "White Pass Day Lodge and downhill parking",
       "source": "https://skiwhitepass.com/the-mountain/getting-here-around",
+      "kind": "entrance"
+    },
+    "loup-loup-ski-bowl": {
+      "coordinates": [
+        -119.910983,
+        48.394417
+      ],
+      "name": "Wolf Den Day Lodge winter arrival",
+      "source": "https://skitheloup.org/plan-your-visit/getting-here/",
       "kind": "entrance"
     }
   }

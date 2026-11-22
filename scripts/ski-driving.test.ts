@@ -34,15 +34,26 @@ describe('road agency adapters', () => {
         })]);
         const alert = pass.replace('ID 11', 'ID 51').replace('<name>Snoqualmie Pass I-90</name>', '<name>Eastbound I-90 lane closure</name>');
         expect(wsdotAlerts(alert)).toEqual([expect.objectContaining({ advisory: true, direction: 'east', road: 'I-90' })]);
+        expect(wsdotAlerts(alert.replace('Eastbound I-90', 'Eastbound I90'))).toEqual([
+            expect.objectContaining({ advisory: true, direction: 'east', road: 'I90' }),
+        ]);
         expect(wsdotPasses(pass.replace('3:30 AM', '13:30 AM'))[0].observedAt).toBeUndefined();
         expect(() => wsdotAlerts('<!DOCTYPE kml><kml/>')).toThrow(/document type/);
+    });
+
+    it.each([{ name: 'alerts', parse: wsdotAlerts }, { name: 'pass conditions', parse: wsdotPasses }])(
+        'checks all required placemark fields for WSDOT $name', ({ parse }) => {
+        expect(parse('<kml><Document/></kml>')).toEqual([]);
+        expect(() => parse(pass.replace('ID 11', 'invalid'))).toThrow(/placemark/);
+        expect(() => parse(pass.replace('<name>Snoqualmie Pass I-90</name>', ''))).toThrow(/placemark/);
+        expect(() => parse(pass.replace('-121.405833,47.41', 'invalid,47.41'))).toThrow(/placemark/);
     });
 
     it('preserves DriveBC lane status and scheduled direction', () => {
         const [closure] = driveBcEvents({ events: [event] });
         expect(closure).toMatchObject({ kind: 'closure', direction: 'north', startsAt: '2026-11-22T11:00:00.000Z',
             endsAt: '2026-11-22T18:00:00.000Z' });
-        expect(drivingBulletinState(closure, Date.parse(now), now, true)).toBe('active');
+        expect(drivingBulletinState(closure, { provider: 'drivebc', checkedAt: now }, Date.parse(now), true)).toBe('active');
         const [uncertain] = driveBcEvents({ events: [{ ...event, schedule: { recurring_schedules: [] } }] });
         expect(uncertain).toMatchObject({ advisory: true });
         const [weekdayClosure] = driveBcEvents({ events: [{ ...event, description: 'Closed weekdays only.' }] });
@@ -100,7 +111,7 @@ describe('road agency adapters', () => {
             statusData: { status: 'R-0', statusDescription: 'No chain controls', statusTimestamp: { statusDate: '2026-11-21', statusTime: '10:00:00' } },
         } }] });
         expect(chain).toMatchObject({ kind: 'condition', direction: 'north', observedAt: '2026-11-21T18:00:00.000Z' });
-        expect(drivingBulletinState(chain, Date.parse(now), now, true)).toBe('stale');
+        expect(drivingBulletinState(chain, { provider: 'caltrans', checkedAt: now }, Date.parse(now), true)).toBe('stale');
     });
 
     it('reads UDOT route geometry and milepost labels and keeps recurring closures advisory', () => {
@@ -142,10 +153,25 @@ describe('road agency adapters', () => {
         expect(parse({ ...work.closure, facility: 'Connector' })[0]).toMatchObject({ kind: 'restriction', advisory: true });
         expect(parse({ ...work.closure, code1098: { isCode1098: 'true' } })).toEqual([]);
         expect(parse({ ...work.closure, code1022: { isCode1022: 'true' } })).toEqual([]);
+        expect(() => parse({ ...work.closure, code1098: { isCode1098: 'unknown' } })).toThrow();
+        const feed = { provider: 'caltrans', checkedAt: now } as const;
         const [scheduled] = parse({ ...work.closure, code1097: { isCode1097: 'false', code1097Timestamp: { code1097Epoch: '' } },
             closureTimestamp: { ...work.closure.closureTimestamp, closureStartEpoch: epoch(300) } });
-        expect(drivingBulletinState(scheduled, Date.parse(now), now, true)).toBe('scheduled');
-        expect(drivingBulletinState(scheduled, Date.parse(now) + 600_000, now, true)).toBe('advisory');
+        expect(drivingBulletinState(scheduled, feed, Date.parse(now), true)).toBe('scheduled');
+        expect(drivingBulletinState(scheduled, feed, Date.parse(now) + 600_000, true)).toBe('advisory');
+
+        const [overdue] = parse({ ...work.closure,
+            closureTimestamp: { ...work.closure.closureTimestamp, closureEndEpoch: epoch(-600) } });
+        expect(overdue).toMatchObject({ endsAt: '2026-11-22T11:50:00.000Z', startsAt: '2026-11-22T11:51:40.000Z' });
+        expect(drivingBulletinState(overdue, feed, Date.parse(now), true)).toBe('active');
+        expect(drivingBulletinState(overdue, feed, Date.parse(now) + 900_000, true)).toBe('stale');
+
+        const [confirmedWithoutTime] = parse({ ...work.closure, code1097: { isCode1097: 'true', code1097Timestamp: { code1097Epoch: '' } },
+            closureTimestamp: { ...work.closure.closureTimestamp, closureStartEpoch: epoch(300) } });
+        expect(confirmedWithoutTime.startsAt).toBeUndefined();
+        expect(drivingBulletinState(confirmedWithoutTime, feed, Date.parse(now), true)).toBe('active');
+        const [futureStart] = parse({ ...work.closure, code1097: { isCode1097: 'true', code1097Timestamp: { code1097Epoch: epoch(300) } } });
+        expect(drivingBulletinState(futureStart, feed, Date.parse(now), true)).toBe('advisory');
     });
 });
 

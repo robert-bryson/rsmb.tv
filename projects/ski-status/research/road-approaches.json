@@ -56,6 +56,93 @@
         ]
       }
     ],
+    "afton-alps": [
+      {
+        "from": "Peller Avenue at the Afton State Park entrance",
+        "to": "Highlands parking",
+        "roads": [
+          "Peller Avenue South"
+        ],
+        "statusUrls": [
+          "https://511mn.org/"
+        ],
+        "source": "https://www.aftonalps.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.dot.state.mn.us/maps/gdma/data/maps/township/washington/denmark.pdf",
+          "https://scene7.vailresorts.com/is/image/vailresorts/20221115_AA_BaseAreaMap_001?fit=constrain,1&hei=1242&resMode=sharp2&wid=1920"
+        ]
+      },
+      {
+        "from": "Peller Avenue at the Afton State Park entrance",
+        "to": "Alpine parking",
+        "roads": [
+          "Peller Avenue South"
+        ],
+        "statusUrls": [
+          "https://511mn.org/"
+        ],
+        "source": "https://www.aftonalps.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.dot.state.mn.us/maps/gdma/data/maps/township/washington/denmark.pdf",
+          "https://scene7.vailresorts.com/is/image/vailresorts/20221115_AA_BaseAreaMap_001?fit=constrain,1&hei=1242&resMode=sharp2&wid=1920"
+        ]
+      },
+      {
+        "from": "Peller Avenue at the Afton State Park entrance",
+        "to": "Alps parking",
+        "roads": [
+          "Peller Avenue South"
+        ],
+        "statusUrls": [
+          "https://511mn.org/"
+        ],
+        "source": "https://www.aftonalps.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.dot.state.mn.us/maps/gdma/data/maps/township/washington/denmark.pdf",
+          "https://scene7.vailresorts.com/is/image/vailresorts/20221115_AA_BaseAreaMap_001?fit=constrain,1&hei=1242&resMode=sharp2&wid=1920"
+        ]
+      },
+      {
+        "from": "Peller Avenue at the Afton State Park entrance",
+        "to": "Landing Zone parking",
+        "roads": [
+          "Peller Avenue South"
+        ],
+        "statusUrls": [
+          "https://511mn.org/"
+        ],
+        "source": "https://www.aftonalps.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.dot.state.mn.us/maps/gdma/data/maps/township/washington/denmark.pdf",
+          "https://scene7.vailresorts.com/is/image/vailresorts/20221115_AA_BaseAreaMap_001?fit=constrain,1&hei=1242&resMode=sharp2&wid=1920"
+        ]
+      },
+      {
+        "from": "Peller Avenue at the Afton State Park entrance",
+        "to": "Meadows parking",
+        "roads": [
+          "Peller Avenue South"
+        ],
+        "statusUrls": [
+          "https://511mn.org/"
+        ],
+        "source": "https://www.aftonalps.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.dot.state.mn.us/maps/gdma/data/maps/township/washington/denmark.pdf",
+          "https://scene7.vailresorts.com/is/image/vailresorts/20221115_AA_BaseAreaMap_001?fit=constrain,1&hei=1242&resMode=sharp2&wid=1920"
+        ]
+      }
+    ],
     "alpental": [
       {
         "from": "North Bend (eastbound I-90 exit 52)",
@@ -424,6 +511,41 @@
         "checkedOn": "2026-11-22",
         "additionalSources": [
           "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/2026-2027/2627-trail-maps/2627aspenmain-maplayeredfinalweb.pdf"
+        ]
+      }
+    ],
+    "attitash-mountain-resort": [
+      {
+        "from": "Bartlett (US 302)",
+        "to": "Attitash Base day parking",
+        "roads": [
+          "US 302"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/New%20Hampshire"
+        ],
+        "source": "https://www.attitash.com/explore-the-resort/about-the-resort/attitash-basecamp",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.attitash.com/explore-the-resort/about-the-resort/getting-here.aspx"
+        ]
+      },
+      {
+        "from": "Bartlett (US 302)",
+        "to": "Bear Peak Base Lodge parking",
+        "roads": [
+          "US 302",
+          "Grand Summit Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/New%20Hampshire"
+        ],
+        "source": "https://www.attitash.com/explore-the-resort/about-the-resort/attitash-basecamp",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.attitash.com/explore-the-resort/about-the-resort/getting-here.aspx"
         ]
       }
     ],
@@ -858,6 +980,28 @@
         "passIds": []
       }
     ],
+    "blue-knob-all-season-resort": [
+      {
+        "from": "I-99 Exit 7 via Pavia",
+        "to": "Blue Knob summit ski base",
+        "roads": [
+          "I-99",
+          "PA 869",
+          "Forest Road",
+          "Ski Access Road",
+          "Overland Pass"
+        ],
+        "statusUrls": [
+          "https://www.511pa.com/"
+        ],
+        "source": "https://blueknob.com/directions/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-parks/find-a-park/blue-knob-state-park",
+          "https://elibrary.dcnr.pa.gov/PDFProvider.ashx?PromptToSave=False&Size=1547742&ViewerMode=2&action=PDFStream&chksum=&docID=1737759&docName=ampgroundMap&nativeExt=pdf&overlay=0&revision=4"
+        ]
+      }
+    ],
     "blue-mountain-resort-on": [
       {
         "from": "Collingwood via Mountain Road",
@@ -976,6 +1120,86 @@
         "passIds": [],
         "additionalSources": [
           "https://media.bogusbasin.org/uploads/2025/11/24193534/RGB_ParkingLotMap_2025.pdf"
+        ]
+      }
+    ],
+    "bolton-valley-resort": [
+      {
+        "from": "Waterbury (I-89 Exit 10)",
+        "to": "Bolton Valley main base and Nordic Center",
+        "roads": [
+          "I-89",
+          "VT 100",
+          "US 2",
+          "Bolton Valley Access Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.boltonvalley.com/plan-your-trip/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.boltonvalley.com/wp-content/uploads/2025/11/Bolton-BC-and-Nordic-map-2025-2026-web-a1-1.pdf",
+          "https://www.boltonvalley.com/tix/"
+        ]
+      },
+      {
+        "from": "Waterbury (I-89 Exit 10)",
+        "to": "Timberline Lodge",
+        "roads": [
+          "I-89",
+          "VT 100",
+          "US 2",
+          "Bolton Valley Access Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.boltonvalley.com/plan-your-trip/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.boltonvalley.com/wp-content/uploads/2025/11/Bolton-BC-and-Nordic-map-2025-2026-web-a1-1.pdf",
+          "https://www.boltonvalley.com/tix/"
+        ]
+      },
+      {
+        "from": "Richmond (I-89 Exit 11)",
+        "to": "Bolton Valley main base and Nordic Center",
+        "roads": [
+          "I-89",
+          "US 2",
+          "Bolton Valley Access Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.boltonvalley.com/plan-your-trip/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.boltonvalley.com/wp-content/uploads/2025/11/Bolton-BC-and-Nordic-map-2025-2026-web-a1-1.pdf",
+          "https://www.boltonvalley.com/tix/"
+        ]
+      },
+      {
+        "from": "Richmond (I-89 Exit 11)",
+        "to": "Timberline Lodge",
+        "roads": [
+          "I-89",
+          "US 2",
+          "Bolton Valley Access Road"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/"
+        ],
+        "source": "https://www.boltonvalley.com/plan-your-trip/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.boltonvalley.com/wp-content/uploads/2025/11/Bolton-BC-and-Nordic-map-2025-2026-web-a1-1.pdf",
+          "https://www.boltonvalley.com/tix/"
         ]
       }
     ],
@@ -1348,6 +1572,56 @@
         "passIds": [],
         "additionalSources": [
           "https://brundage.com/content/uploads/2023/12/Updated_brundage-parking-map.pdf"
+        ]
+      }
+    ],
+    "buffalo-ski-club": [
+      {
+        "from": "Colden",
+        "to": "Tamarack Lodge",
+        "roads": [
+          "NY 240"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://www.buffaloskicenter.com/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.buffaloskicenter.com/wp-content/uploads/2019/11/BSC-map-111319.pdf"
+        ]
+      },
+      {
+        "from": "Colden",
+        "to": "Sitzmarker Lodge",
+        "roads": [
+          "Lower East Hill Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://www.buffaloskicenter.com/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.buffaloskicenter.com/wp-content/uploads/2019/11/BSC-map-111319.pdf"
+        ]
+      },
+      {
+        "from": "Colden",
+        "to": "Buffalo Lodge",
+        "roads": [
+          "Lower East Hill Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://www.buffaloskicenter.com/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.buffaloskicenter.com/wp-content/uploads/2019/11/BSC-map-111319.pdf"
         ]
       }
     ],
@@ -1845,6 +2119,28 @@
         "passIds": [],
         "additionalSources": [
           "https://www.deervalley.com/explore-the-mountain/guest-services"
+        ]
+      }
+    ],
+    "devil-s-head-resort": [
+      {
+        "from": "WI 113 near Merrimac",
+        "to": "Devil’s Head winter base parking",
+        "roads": [
+          "WI 113",
+          "County Highway DL",
+          "Bluff Road"
+        ],
+        "statusUrls": [
+          "https://511wi.gov/"
+        ],
+        "source": "https://townofmerrimac.net/wp-content/uploads/2025/09/2025.07.16-PNZ-Minutes-SIGNED.pdf",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.saukcity.net/vertical/sites/%7B4E3188F1-DD40-422F-A8CE-A991AFA87553%7D/uploads/Sauk_Prairie_Area_Map_updated_2020_6120490-MAP-GSST807254-03.pdf",
+          "https://www.devilsheadresort.com/wp-content/uploads/2023/05/IMG_4516-scaled-1.jpeg",
+          "https://www.visitmadison.com/listings/devils-head-resort/176811/"
         ]
       }
     ],
@@ -2439,6 +2735,50 @@
         ]
       }
     ],
+    "hakuba-iwatake": [
+      {
+        "from": "Nagano interchange",
+        "to": "Iwatake gondola central parking",
+        "roads": [
+          "E18 (Joshin-etsu Expressway)",
+          "Nagano South Bypass",
+          "National Route 19",
+          "Nagano Prefectural Route 31 (Olympic Road)"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://iwatake-mountain-resort.com/access",
+        "checkedOn": "2026-11-22"
+      },
+      {
+        "from": "Azumino interchange",
+        "to": "Iwatake gondola central parking",
+        "roads": [
+          "E19 (Nagano Expressway)",
+          "Northern Alps Panorama Road",
+          "National Route 148"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://iwatake-mountain-resort.com/access",
+        "checkedOn": "2026-11-22"
+      },
+      {
+        "from": "Itoigawa interchange",
+        "to": "Iwatake gondola central parking",
+        "roads": [
+          "E8 (Hokuriku Expressway)",
+          "National Route 148"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://iwatake-mountain-resort.com/access",
+        "checkedOn": "2026-11-22"
+      }
+    ],
     "harper-mountain": [
       {
         "from": "Kamloops (BC 5)",
@@ -2757,6 +3097,42 @@
         ]
       }
     ],
+    "hunter-mountain": [
+      {
+        "from": "Hunter village (NY 23A)",
+        "to": "Hunter Main Parking Lot",
+        "roads": [
+          "NY 23A",
+          "Ski Bowl Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://www.huntermtn.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.huntermtn.com/-/aemasset/sitecore/hunter/maps/20250505_HU_summer-trail_map_001.pdf"
+        ]
+      },
+      {
+        "from": "NY 23A west of the Hunter Main entrance",
+        "to": "Hunter North Parking Lot",
+        "roads": [
+          "NY 23A",
+          "Deming Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://www.huntermtn.com/explore-the-resort/about-the-resort/getting-here.aspx",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.huntermtn.com/-/aemasset/sitecore/hunter/maps/20250505_HU_summer-trail_map_001.pdf"
+        ]
+      }
+    ],
     "ischgl-samnaun": [
       {
         "from": "Pians / Landeck (S 16)",
@@ -2974,6 +3350,87 @@
         "additionalSources": [
           "https://dot.ca.gov/caltrans-near-me/district-9/district-9-news/2026_3_23-158-and-270-reopen",
           "https://roads.dot.ca.gov/?roadnumber=158"
+        ]
+      }
+    ],
+    "kandatsu-snow-resort": [
+      {
+        "from": "Yuzawa interchange (E17)",
+        "to": "Kandatsu GROUNDBASE day lots",
+        "roads": [
+          "E17 (Kan-etsu Expressway)",
+          "Kandatsu resort access road"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://www.kandatsu.com/access/",
+        "checkedOn": "2026-11-22"
+      }
+    ],
+    "kaunertal-glacier": [
+      {
+        "from": "Prutz via Feichten",
+        "to": "Ochsenalmbahn valley-station lot",
+        "roads": [
+          "L 18 (Kaunertalstraße)",
+          "Kaunertaler Gletscherstraße"
+        ],
+        "statusUrls": [
+          "https://www.tirol.gv.at/verkehr/strassenbau-und-strassenerhaltung/webcams/webcams-bezirk-landeck/l-18-kaunertalstrasse/",
+          "https://www.kaunertaler-gletscher.at/strassenbericht.html"
+        ],
+        "source": "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/service-und-informations/faq.html",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.kaunertaler-gletscher.at/media/2025_2026_kt_fo_winter_de_kleiner_lo8.pdf",
+          "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/tickets-und-prices/toll-glacier-road.html",
+          "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/service-und-informations/opening-hours.html"
+        ],
+        "restrictions": [
+          {
+            "description": "Glacier road closed to driving from 17:00 to 07:00.",
+            "source": "https://www.kaunertaler-gletscher.at/strassenbericht.html",
+            "checkedOn": "2026-11-22"
+          },
+          {
+            "description": "€32 car day toll for up to five non-skiers. Valid ski passes include the toll.",
+            "source": "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/tickets-und-prices/toll-glacier-road.html",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "Prutz via Feichten",
+        "to": "Weißsee Glacier Centre lot",
+        "roads": [
+          "L 18 (Kaunertalstraße)",
+          "Kaunertaler Gletscherstraße"
+        ],
+        "statusUrls": [
+          "https://www.tirol.gv.at/verkehr/strassenbau-und-strassenerhaltung/webcams/webcams-bezirk-landeck/l-18-kaunertalstrasse/",
+          "https://www.kaunertaler-gletscher.at/strassenbericht.html"
+        ],
+        "source": "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/service-und-informations/faq.html",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.kaunertaler-gletscher.at/media/2025_2026_kt_fo_winter_de_kleiner_lo8.pdf",
+          "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/tickets-und-prices/toll-glacier-road.html",
+          "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/service-und-informations/opening-hours.html"
+        ],
+        "restrictions": [
+          {
+            "description": "Glacier road closed to driving from 17:00 to 07:00.",
+            "source": "https://www.kaunertaler-gletscher.at/strassenbericht.html",
+            "checkedOn": "2026-11-22"
+          },
+          {
+            "description": "€32 car day toll for up to five non-skiers. Valid ski passes include the toll.",
+            "source": "https://www.kaunertaler-gletscher.at/en/kaunertal-glacier/tickets-und-prices/toll-glacier-road.html",
+            "checkedOn": "2026-11-22"
+          }
         ]
       }
     ],
@@ -3804,6 +4261,48 @@
         ]
       }
     ],
+    "loup-loup-ski-bowl": [
+      {
+        "from": "Twisp via the Methow Valley",
+        "to": "Wolf Den Day Lodge main lot",
+        "roads": [
+          "WA 20",
+          "Forest Road 4200",
+          "Forest Road 4200-100"
+        ],
+        "statusUrls": [
+          "https://wsdot.com/travel/real-time/mountainpasses/loup-loup"
+        ],
+        "source": "https://skitheloup.org/plan-your-visit/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [
+          "us-wa-loup-loup-pass"
+        ],
+        "additionalSources": [
+          "https://www.recreation.gov/camping/poi/274167",
+          "https://lawfilestestext.leg.wa.gov/lawtest/WACPDF/WAC%20220%20%20TITLE/WAC%20220%20-410%20%20CHAPTER/WAC%20220%20-410%20%20CHAPTER%20COMBINEDCHAPTER.pdf"
+        ]
+      },
+      {
+        "from": "Okanogan via the Okanogan Valley",
+        "to": "Wolf Den Day Lodge main lot",
+        "roads": [
+          "WA 20",
+          "Forest Road 4200",
+          "Forest Road 4200-100"
+        ],
+        "statusUrls": [
+          "https://wsdot.com/travel/real-time/mountainpasses/loup-loup"
+        ],
+        "source": "https://skitheloup.org/plan-your-visit/getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.recreation.gov/camping/poi/274167",
+          "https://lawfilestestext.leg.wa.gov/lawtest/WACPDF/WAC%20220%20%20TITLE/WAC%20220%20-410%20%20CHAPTER/WAC%20220%20-410%20%20CHAPTER%20COMBINEDCHAPTER.pdf"
+        ]
+      }
+    ],
     "loveland-ski-area": [
       {
         "from": "Georgetown (I-70 westbound)",
@@ -4128,6 +4627,61 @@
             "source": "https://dot.ca.gov/travel/winter-driving-tips/chain-controls",
             "checkedOn": "2026-11-21"
           }
+        ]
+      }
+    ],
+    "manning-park": [
+      {
+        "from": "Hope",
+        "to": "Manning Park Alpine Day Lodge parking",
+        "roads": [
+          "BC 3",
+          "Gibson Pass Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://bcparks.ca/ec-manning-park/",
+        "checkedOn": "2026-11-22",
+        "passIds": [
+          "ca-bc-allison-pass"
+        ],
+        "additionalSources": [
+          "https://manningpark.com/wp-content/uploads/2026/04/Nordic-Trail-Map-2020-21.pdf",
+          "https://archive.news.gov.bc.ca/releases/news_releases_2020-2024/2023MOTI0213-002018.htm"
+        ]
+      },
+      {
+        "from": "Princeton",
+        "to": "Manning Park Alpine Day Lodge parking",
+        "roads": [
+          "BC 3",
+          "Gibson Pass Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://bcparks.ca/ec-manning-park/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://manningpark.com/wp-content/uploads/2026/04/Nordic-Trail-Map-2020-21.pdf",
+          "https://archive.news.gov.bc.ca/releases/news_releases_2020-2024/2023MOTI0213-002018.htm"
+        ]
+      },
+      {
+        "from": "BC 3 at the Manning Park resort turnoff",
+        "to": "Manning Park Resort Lodge and Nordic Centre",
+        "roads": [
+          "Gibson Pass Road"
+        ],
+        "statusUrls": [
+          "https://www.drivebc.ca/"
+        ],
+        "source": "https://manningpark.com/wp-content/uploads/2026/04/Nordic-Trail-Map-2020-21.pdf",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://bcparks.ca/ec-manning-park/"
         ]
       }
     ],
@@ -6230,6 +6784,41 @@
         ]
       }
     ],
+    "sandia-peak-ski-area": [
+      {
+        "from": "Albuquerque",
+        "to": "Sandia Peak ski base",
+        "roads": [
+          "I-40",
+          "NM 14",
+          "NM 536"
+        ],
+        "statusUrls": [
+          "https://www.nmroads.com/"
+        ],
+        "source": "https://sandia.ski/visit/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.fs.usda.gov/sites/nfs/files/legacy-media/cibola/Sandia%20Crest%20Trails%20and%20Trailheads%20Map.pdf"
+        ]
+      },
+      {
+        "from": "Santa Fe via Turquoise Trail",
+        "to": "Sandia Peak ski base",
+        "roads": [
+          "NM 14",
+          "NM 536"
+        ],
+        "statusUrls": [
+          "https://www.nmroads.com/"
+        ],
+        "source": "https://sandia.ski/visit/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://www.fs.usda.gov/sites/nfs/files/legacy-media/cibola/Sandia%20Crest%20Trails%20and%20Trailheads%20Map.pdf"
+        ]
+      }
+    ],
     "schweitzer-mountain-resort": [
       {
         "from": "Sandpoint (US 95)",
@@ -6530,6 +7119,60 @@
         ]
       }
     ],
+    "smugglers-notch-resort": [
+      {
+        "from": "Winooski (I-89) via Jeffersonville",
+        "to": "Village day parking",
+        "roads": [
+          "I-89",
+          "VT 15",
+          "VT 108"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont",
+          "https://vtrans.vermont.gov/notch"
+        ],
+        "source": "https://www.smuggs.com/resort-info/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.smuggs.com/wp-content/uploads/2024/11/trailmap_2425.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter approach is through Jeffersonville. The VT 108 notch segment to Stowe closes for winter.",
+            "source": "https://vtrans.vermont.gov/sites/aot/files/factbooks/AOT%20Fact%20Book%202022%20-%20Compressed.pdf",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "Winooski (I-89) via Jeffersonville",
+        "to": "Upper Mountain day parking",
+        "roads": [
+          "I-89",
+          "VT 15",
+          "VT 108"
+        ],
+        "statusUrls": [
+          "https://newengland511.org/region/Vermont",
+          "https://vtrans.vermont.gov/notch"
+        ],
+        "source": "https://www.smuggs.com/resort-info/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.smuggs.com/wp-content/uploads/2024/11/trailmap_2425.pdf"
+        ],
+        "restrictions": [
+          {
+            "description": "Winter approach is through Jeffersonville. The VT 108 notch segment to Stowe closes for winter.",
+            "source": "https://vtrans.vermont.gov/sites/aot/files/factbooks/AOT%20Fact%20Book%202022%20-%20Compressed.pdf",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
     "snow-king-mountain": [
       {
         "from": "Jackson town center",
@@ -6819,6 +7462,24 @@
             "source": "https://cottonwoodcanyons.udot.utah.gov/traction-law/",
             "checkedOn": "2026-11-21"
           }
+        ]
+      }
+    ],
+    "station-touristique-stoneham": [
+      {
+        "from": "Stoneham-et-Tewkesbury",
+        "to": "Stoneham ski base lots",
+        "roads": [
+          "Chemin du Hibou"
+        ],
+        "statusUrls": [
+          "https://www.quebec511.info/en/"
+        ],
+        "source": "https://ski-stoneham.com/en/join-us/contact-getting-here/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://ski-stoneham.com/wp-content/uploads/2020/11/sto_carte_sto_2021.pdf"
         ]
       }
     ],
@@ -8072,6 +8733,42 @@
         ]
       }
     ],
+    "togari-onsen-snow-resort": [
+      {
+        "from": "Toyota-Iiyama interchange (E18)",
+        "to": "Earth Dragon Field main base parking",
+        "roads": [
+          "E18 (Joshin-etsu Expressway)",
+          "National Route 117"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://togari.jp/winter/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://togari.jp/theclubtogari/wp_coret/wp-content/uploads/2026/01/%E4%BC%9A%E5%93%A1%E6%A1%88%E5%86%85%E7%8A%B6%EF%BC%882026%E5%B9%B41%E6%9C%884%E6%97%A5%E6%94%B9%E5%AE%9A%E7%89%88%EF%BC%89-1.pdf",
+          "https://togari.jp/winter/core_w/wp-content/uploads/2025/12/TOGARI_Field-Map-2025_EN.pdf"
+        ]
+      },
+      {
+        "from": "Toyota-Iiyama interchange (E18)",
+        "to": "Sky Dragon Field parking",
+        "roads": [
+          "E18 (Joshin-etsu Expressway)",
+          "National Route 117"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://togari.jp/winter/access/",
+        "checkedOn": "2026-11-22",
+        "additionalSources": [
+          "https://togari.jp/theclubtogari/wp_coret/wp-content/uploads/2026/01/%E4%BC%9A%E5%93%A1%E6%A1%88%E5%86%85%E7%8A%B6%EF%BC%882026%E5%B9%B41%E6%9C%884%E6%97%A5%E6%94%B9%E5%AE%9A%E7%89%88%EF%BC%89-1.pdf",
+          "https://togari.jp/winter/core_w/wp-content/uploads/2025/12/TOGARI_Field-Map-2025_EN.pdf"
+        ]
+      }
+    ],
     "tremblant": [
       {
         "from": "Mont-Tremblant (QC 117)",
@@ -8361,6 +9058,121 @@
         ]
       }
     ],
+    "white-pine-resort": [
+      {
+        "from": "Pinedale (US 191)",
+        "to": "White Pine Base Lodge lot",
+        "roads": [
+          "US 191",
+          "Fremont Lake Road",
+          "Skyline Drive",
+          "White Pine Road"
+        ],
+        "statusUrls": [
+          "https://wyoroad.info/"
+        ],
+        "source": "https://www.whitepineresort.com/plan",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.blm.gov/visit/fremont-lake-roadskyline-drive"
+        ]
+      }
+    ],
+    "whitecap-mountains-resort": [
+      {
+        "from": "WIS 77 near Iron Belt",
+        "to": "Whitecap day-lodge entrance",
+        "roads": [
+          "WIS 77",
+          "County Highway E"
+        ],
+        "statusUrls": [
+          "https://511wi.gov/"
+        ],
+        "source": "https://whitecapresort.com/about-us/contact-us",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://trust.dot.state.wi.us/ftp/dtsd/hcci/plansandproposals/2017/04April_11/20170411028plan.pdf",
+          "https://whitecapresort.com/images//WhitecapMountains-Big.pdf"
+        ]
+      }
+    ],
+    "whiteface": [
+      {
+        "from": "Lake Placid",
+        "to": "Main Base Lodge lots",
+        "roads": [
+          "NY 86"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://whiteface.com/plan-your-visit/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://whiteface.com/mountain/free-parking-shuttle/",
+          "https://extapps.dec.ny.gov/docs/lands_forests_pdf/whiteface01.pdf"
+        ]
+      },
+      {
+        "from": "Lake Placid",
+        "to": "Bear Den Learning Center parking",
+        "roads": [
+          "NY 86",
+          "Bear Den Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://whiteface.com/plan-your-visit/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://whiteface.com/mountain/free-parking-shuttle/",
+          "https://extapps.dec.ny.gov/docs/lands_forests_pdf/whiteface01.pdf"
+        ]
+      },
+      {
+        "from": "Wilmington (NY 9N approach)",
+        "to": "Main Base Lodge lots",
+        "roads": [
+          "NY 9N",
+          "NY 86"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://whiteface.com/plan-your-visit/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://whiteface.com/mountain/free-parking-shuttle/",
+          "https://extapps.dec.ny.gov/docs/lands_forests_pdf/whiteface01.pdf"
+        ]
+      },
+      {
+        "from": "Wilmington (NY 9N approach)",
+        "to": "Bear Den Learning Center parking",
+        "roads": [
+          "NY 9N",
+          "NY 86",
+          "Bear Den Road"
+        ],
+        "statusUrls": [
+          "https://511ny.org/"
+        ],
+        "source": "https://whiteface.com/plan-your-visit/directions/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://whiteface.com/mountain/free-parking-shuttle/",
+          "https://extapps.dec.ny.gov/docs/lands_forests_pdf/whiteface01.pdf"
+        ]
+      }
+    ],
     "whitefish-mountain-resort": [
       {
         "from": "Whitefish",
@@ -8618,6 +9430,58 @@
         ]
       }
     ],
+    "yuzawa-nakazato-snow-resort": [
+      {
+        "from": "Yuzawa interchange (E17)",
+        "to": "P1 Ski Center lot",
+        "roads": [
+          "E17 (Kan-etsu Expressway)",
+          "Niigata Prefectural Route 540",
+          "Niigata Prefectural Route 361"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://www.yuzawa-nakazato.com/winter/access/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.yuzawa-nakazato.com/winter/gerende/course/"
+        ],
+        "restrictions": [
+          {
+            "description": "Use winter tires or chains. The resort directs motorists to these roads in winter.",
+            "source": "https://www.yuzawa-nakazato.com/winter/access/",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      },
+      {
+        "from": "Yuzawa interchange (E17)",
+        "to": "P2 Mountain Terrace lot",
+        "roads": [
+          "E17 (Kan-etsu Expressway)",
+          "Niigata Prefectural Route 540",
+          "Niigata Prefectural Route 361"
+        ],
+        "statusUrls": [
+          "https://www.road-info-prvs.mlit.go.jp/roadinfo/pc/"
+        ],
+        "source": "https://www.yuzawa-nakazato.com/winter/access/",
+        "checkedOn": "2026-11-22",
+        "passIds": [],
+        "additionalSources": [
+          "https://www.yuzawa-nakazato.com/winter/gerende/course/"
+        ],
+        "restrictions": [
+          {
+            "description": "Use winter tires or chains. The resort directs motorists to these roads in winter.",
+            "source": "https://www.yuzawa-nakazato.com/winter/access/",
+            "checkedOn": "2026-11-22"
+          }
+        ]
+      }
+    ],
     "zao-onsen-ski-resort": [
       {
         "from": "Yamagata-Kaminoyama interchange (E13)",
@@ -8664,6 +9528,16 @@
       ],
       "source": "https://apps.gov.bc.ca/pub/bcgnws/names/35184.html",
       "checkedOn": "2026-11-21"
+    },
+    "ca-bc-allison-pass": {
+      "name": "Allison Pass",
+      "road": "BC 3",
+      "coordinates": [
+        -120.86778,
+        49.11639
+      ],
+      "source": "https://apps.gov.bc.ca/pub/bcgnws/names/1058.html",
+      "checkedOn": "2026-11-22"
     },
     "ca-bc-pine-pass": {
       "name": "Pine Pass",
@@ -8993,6 +9867,16 @@
         43.6637
       ],
       "source": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/USTopo/PDF/VT/VT_Pico_Peak_20210414_TM_geo.pdf",
+      "checkedOn": "2026-11-22"
+    },
+    "us-wa-loup-loup-pass": {
+      "name": "Loup Loup Pass",
+      "road": "WA 20",
+      "coordinates": [
+        -119.88722,
+        48.38861
+      ],
+      "source": "https://edits.nationalmap.gov/apps/gaz-domestic/public/gaz-record/1522522",
       "checkedOn": "2026-11-22"
     },
     "us-wa-snoqualmie-pass-i90": {

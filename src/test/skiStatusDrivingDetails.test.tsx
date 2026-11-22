@@ -4,7 +4,7 @@ import catalog from 'virtual:ski-driving-data';
 import type { DrivingProvider } from '../../shared/skiDriving';
 import { skiAreas } from '../features/ski-status/catalog';
 import type { DrivingFeed } from '../features/ski-status/driving-feed';
-import { DrivingCameraDetails } from '../features/ski-status/SkiDrivingContent';
+import { DrivingCameraDetails, DrivingReport } from '../features/ski-status/SkiDrivingContent';
 import SkiDrivingDetails from '../features/ski-status/SkiDrivingDetails';
 import type { SkiDriving } from '../features/ski-status/useSkiDriving';
 
@@ -54,7 +54,17 @@ describe('driving access details', () => {
             approachId="stevens-pass-eastbound" onApproach={vi.fn()} onFit={vi.fn()} />);
         const reports = screen.getByRole('region', { name: 'Road reports' });
         expect(within(reports).getByText('Check WSDOT for current closures and restrictions.')).toBeVisible();
+        expect(within(reports).getByText('Last successful check', { exact: false })).toBeVisible();
         expect(within(reports).queryByText(/No matching reports/)).toBeNull();
+    });
+
+    it('labels the Caltrans estimate as a planned end while the closure is active', () => {
+        render(<DrivingReport report={{ state: 'active', provider: 'caltrans', entry: {
+            id: 'test-closure', road: 'I-80', title: 'Mainline work', point: [-120.34, 39.33], kind: 'closure',
+            source: 'https://quickmap.dot.ca.gov/', startsAt: checkedAt, endsAt: checkedAt,
+        } }} />);
+        expect(screen.getByText('Closure', { exact: true })).toBeVisible();
+        expect(within(screen.getByText('Planned end')).getByText(/Nov 22/)).toHaveAttribute('datetime', checkedAt);
     });
 
     it('makes an image request only on demand and lets the user retry a failed request', () => {

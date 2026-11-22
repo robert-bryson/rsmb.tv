@@ -106,7 +106,9 @@
     "jackson-hole-mountain-resort-2026-schedule": "https://www.jacksonhole.com/events/opening-day-winter",
     "jigatake-2026-schedule": "https://www.kita-alps.jp/ski.html",
     "june-mountain-2026-schedule": "https://www.junemountain.com/things-to-do/opening-day",
+    "kandatsu-snow-resort-2026-schedule": "https://www.kandatsu.com/price/",
     "kashimayari-2026-schedule": "https://www.kashimayari.net/snow/tickets/",
+    "kaunertal-glacier-2026-schedule": "https://www.kaunertaler-gletscher.at/en/",
     "keystone-resort-2026-opening": "https://news.vailresorts.com/keystone-opening-2026",
     "kicking-horse-2026-schedule": "https://kickinghorseresort.com/winter-hours/",
     "killington-2026-opening": "https://killington.com/press-releases/killington-resort-opens-november-17-kicking-off-winter-202627-in-new-england",
@@ -260,6 +262,8 @@
     "willamette-pass-2026-schedule": "https://www.willamettepass.ski/hours-of-operation/",
     "winter-park-resort-2026-opening": "https://www.winterparkresort.com/~/link.aspx?_id=1D9EE77BEE5D4E7ABE38FE0410CE91A9&_z=z",
     "wolf-creek-ski-area-2026-opening": "https://wolfcreekski.com/snowreport/sr-10-31-26-2p/",
+    "yuzawa-nakazato-snow-resort-2025-observed": "https://www.yuzawa-nakazato.com/winter/",
+    "yuzawa-nakazato-snow-resort-2026-schedule": "https://www.yuzawa-nakazato.com/winter/fee/",
     "zao-onsen-ski-resort-2026-schedule": "https://yamagatakanko.com/business/topics/detail_31.html",
     "zermatt-matterhorn": "https://www.matterhornparadise.ch/en/experience/skiing"
   },
@@ -2084,6 +2088,18 @@
       ]
     },
     {
+      "areaId": "kandatsu-snow-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "closesOn": "2027-04-11",
+          "source": "kandatsu-snow-resort-2026-schedule",
+          "note": "Operator schedules public preseason lifts beginning December 11 and the spring period through April 11."
+        }
+      ]
+    },
+    {
       "areaId": "kashimayari",
       "planned": [
         {
@@ -2092,6 +2108,18 @@
           "closesOn": "2027-03-22",
           "source": "kashimayari-2026-schedule",
           "note": "Operator lists the winter operating period for the Family Park ski area."
+        }
+      ]
+    },
+    {
+      "areaId": "kaunertal-glacier",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-10-17",
+          "closesOn": "2027-05-17",
+          "source": "kaunertal-glacier-2026-schedule",
+          "note": "October 17 is the operator’s first-runs announcement. May 17 is the weather-dependent end of the season in its opening-hours page."
         }
       ]
     },
@@ -4360,6 +4388,26 @@
           "openingTerrain": {
             "lifts": 3
           }
+        }
+      ]
+    },
+    {
+      "areaId": "yuzawa-nakazato-snow-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "closesOn": "2027-03-28",
+          "source": "yuzawa-nakazato-snow-resort-2026-schedule",
+          "note": "Dates published on the operator’s current lift fare page."
+        }
+      ],
+      "actual": [
+        {
+          "season": "2025/26",
+          "closesOn": "2026-03-29",
+          "note": "Operator posted the end of the 2025/26 winter operation on March 29, 2026.",
+          "source": "yuzawa-nakazato-snow-resort-2025-observed"
         }
       ]
     },

@@ -11,7 +11,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 - **Flights** — A 3D globe with flight routes, recorded travel time, airport and country statistics, shared views, and saved keyboard-shortcut preferences.
 - **Temperature Records** — Filter recent station records by state, scope, and margin. Check snapshot freshness and coverage, compare county and state extremes, and explore standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
-- **ski-status** maps ski areas and pass access. Compare mountain statistics and check operator reports. [Project guide](projects/ski-status/readme.md)
+- **ski-status** maps ski areas and pass access. Compare mountain statistics. Check operator reports and winter driving approaches. [Project guide](projects/ski-status/readme.md)
 - **Projects** — Search names, descriptions, and technologies. Filter by category and share the selected view. Open maps, demos, and source repositories from the cards.
 - **Site search** — A compact header field searches articles, projects, technologies, captions, and other pages. Results highlight matching words.
 - **Posts** — Writing and trip reports from Google documents. Browse by type, topic, and location. Includes RSS and social images.
@@ -59,13 +59,13 @@ npm ci
 npm run dev
 ```
 
-If generated content is already available, start Vite directly for interface work:
+Start Vite directly when the generated content is available.
 
 ```bash
 npx vite --host 0.0.0.0 --port 5173 --strictPort
 ```
 
-Open [localhost:5173](http://localhost:5173/).
+Open the local site. [localhost:5173](http://localhost:5173/)
 This command skips trip preparation, content imports, and flight generation.
 Use `npm run dev` when those inputs need an update.
 Use `npm run sync-blogs:dev` to refresh document text without processing photos again.
@@ -78,8 +78,8 @@ Set a localhost CARTO Basemaps key as `CARTO_API_KEY` in `.env.local` for local 
 Amplify uses its configured `CARTO_API_KEY`. CI uses content fixtures and requires no production credentials.
 See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attribution, and test behavior.
 
-Release builds also need the ski-status terrain archive and runtime icons.
-Use the mounted asset share or set `SKI_ASSETS_BASE_URL` to the HTTPS build mirror. [Ski-status build assets](projects/ski-status/readme.md#release-assets)
+Release builds need the ski-status terrain archive and runtime icons.
+Use the mounted asset share. If the builder has no share, set `SKI_ASSETS_BASE_URL` to the HTTPS mirror. [Ski-status build assets](projects/ski-status/readme.md#release-assets)
 
 Selected links prepare their destinations after pointer hover or keyboard focus.
 Set `VITE_INTENT_PREFETCH` to `all`, `pages`, or `off` before building.

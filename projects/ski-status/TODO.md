@@ -1,31 +1,32 @@
 # ski-status tasks
 
-Use the project guide for procedures. Find completed checks in the dated reviews. [Project guide](readme.md), [Review index](../../docs/README.md#reviews)
+Use the project guide for procedures. Read the dated reviews for test results. [Project guide](readme.md), [Review index](../../docs/README.md#reviews)
 
 ## Release checks
 
+### Hosted preview
+
 - [ ] Copy the versioned runtime files to the release HTTPS mirror. Set `SKI_ASSETS_BASE_URL` in Amplify. [Release assets](readme.md#release-assets)
-- [ ] Apply the updated Amplify rewrite and build the candidate revision. [Preview setup](../../docs/release-validation.md#ski-status-build-assets)
+- [ ] Apply the updated Amplify rewrite. Build the candidate revision. [Preview setup](../../docs/release-validation.md#ski-status-build-assets)
 - [ ] Run the validator on the hosted preview. Match the report to the candidate revision and Amplify job. Check the terrain byte ranges and Heavenly tooltips. [Release checks](readme.md#release-checks)
+
+### Hosted data feeds
+
 - [ ] Run **Sync Ski Status** on `main` with the deployed role. Check the active and previous manifests. [OIDC procedure](../../docs/github-actions-oidc.md#enable-ski-status-sync)
+- [ ] Run **Sync Ski Driving** on `main` with the deployed role. Verify the public manifest and its snapshots. [OIDC procedure](../../docs/github-actions-oidc.md#enable-ski-driving-sync)
+- [ ] Check the provider status in **Driving coverage**. During an outage, confirm that the resort panel shows **Last reported**. Check both views after a successful refresh. [Rollout checks](driving-map-plan.md#implementation-order-and-acceptance-checks)
 
 ## Driving map
-
-### Hosted checks
-
-- [ ] Run **Sync Ski Driving** on `main` with the deployed role. Verify the public manifest and its snapshots. [OIDC procedure](../../docs/github-actions-oidc.md#enable-ski-driving-sync)
-- [ ] Check **Driving coverage** on the hosted map. Verify the provider status after a failed check and after recovery. [Rollout checks](driving-map-plan.md#implementation-order-and-acceptance-checks)
-
-### Source and route checks
 
 - [ ] Check WSDOT alert fields with an access code. Verify each matched road section up to its exit. [Washington sources](driving-map-plan.md#official-sources-and-pilot-corridors)
 - [ ] Compare credentialed UDOT events with the official map. Check direction, mileposts, and the affected section. [Utah sources](driving-map-plan.md#official-sources-and-pilot-corridors)
 - [ ] Check a TripCheck sample and the reuse terms. Add verified Oregon coverage and parking entrances by corridor. [Oregon sources](driving-map-plan.md#official-sources-and-pilot-corridors)
+- [ ] Verify county, route, direction, and postmile limits on the California approaches. Compare a matching closure and a bulletin past the turn. [California sources](driving-map-plan.md#official-sources-and-pilot-corridors)
 - [ ] Evaluate a route provider for driving distance and time. Check route coverage and closure handling. [Travel estimate checks](driving-map-plan.md#implementation-order-and-acceptance-checks)
 
 ## Rockies report pilot
 
-The recorded spot checks matched Lake Louise and Banff Sunshine. Mt. Norquay returned HTTP 500. [Rockies spot checks](../../docs/reviews/2026-11-21-ski-status-engineering-review.md#rockies-spot-checks)
+Lake Louise and Banff Sunshine matched the operator reports in the last spot check. Mt. Norquay returned HTTP 500. [Rockies spot checks](../../docs/reviews/2026-11-21-ski-status-engineering-review.md#rockies-spot-checks)
 
 - [ ] Confirm the storage and display terms for Banff Sunshine and Mt. Norquay. [Report sources](readme.md#sources-and-pilot)
 - [ ] Recheck the Mt. Norquay XML feed. If it responds, compare its counts with the operator's report. [Report sources](readme.md#sources-and-pilot)
@@ -33,7 +34,7 @@ The recorded spot checks matched Lake Louise and Banff Sunshine. Mt. Norquay ret
 
 ## Catalog and visitor data
 
-Use the latest batch checkpoint to resume the acreage review and dated retries. [Coverage counts](readme.md#catalog), [Data quality log](research/data-quality-log.md)
+Start with the latest batch checkpoint. Check the recorded retry dates. [Coverage counts](readme.md#catalog), [Data quality log](research/data-quality-log.md)
 
 ### Area records
 
@@ -58,7 +59,7 @@ Use the latest batch checkpoint to resume the acreage review and dated retries. 
 
 ## Product backlog
 
-- [ ] Test three tasks in resort details. Find today's and tomorrow's conditions. Compare resorts for a weekend. Plan a trip with season history and pass access.
+- [ ] Test three tasks in resort details. Find today's and tomorrow's conditions. Compare resorts for a weekend. Plan a trip with season history and pass access. [Interface review](../../docs/reviews/2026-11-20-ski-status-interface-review.md)
 - [ ] Build a season calendar from verified daily reports. Remove duplicate observations. Check coverage before you add terrain, snow, and temperature. [Calendar design](readme.md#season-conditions-calendar)
 - [ ] Extend the weather panel to more resorts. Fill missing observations and forecast fields. Test local dates, units, and missing values. [Forecast design](readme.md#resort-conditions-and-5-day-forecast)
 - [ ] Add verified lodge locations to the map. Show the services at each location. [Visitor information](readme.md#inspect-and-compare-areas)
@@ -75,7 +76,7 @@ Use the latest batch checkpoint to resume the acreage review and dated retries. 
 
 - [ ] Find operator policies for uphill travel. Record a source for each area.
 - [ ] Evaluate a comparison of lift tickets, rentals, and dining prices. Check which sources publish dates and terms.
-- [ ] Time a comparison of acreage, vertical drop, and lift count. [Interface review](../../docs/reviews/2026-11-20-ski-status-interface-review.md)
+- [ ] Measure how long it takes to compare acreage, vertical drop, and lift count. [Interface review](../../docs/reviews/2026-11-20-ski-status-interface-review.md)
 - [ ] Test a side-by-side view of terrain and mountain statistics. Use the same zoom for both maps. [Map display](readme.md#map-display)
 - [ ] Test terrain overlays at resort-specific zoom levels. Keep a default for other areas. Compare 3D terrain and imagery at close zooms. [Map display](readme.md#map-display)
 - [ ] Check sources for snowfall, slope angle, and freezing level layers. Check snow depth coverage outside the contiguous United States. Record reuse terms. [Report rules](readme.md#report-and-forecast-rules)

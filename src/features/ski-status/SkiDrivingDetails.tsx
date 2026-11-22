@@ -21,7 +21,7 @@ function RoadReports({ data, area, approach, provider }: { data: SkiDriving; are
             ? 'No matching reports for the mapped section and direction.'
             : 'Use the agency to check this approach.'}</p>}
         {feedState !== 'current' && <p role="status">{message}</p>}
-        <p className="ski-driving-note">{checkedAt && <>Last checked <DrivingTime value={checkedAt} zone={drivingProviderZones[provider]} /> · </>}
+        <p className="ski-driving-note">{checkedAt && <>Last successful check <DrivingTime value={checkedAt} zone={drivingProviderZones[provider]} /> · </>}
             <DrivingLink href={drivingProviderSources[provider]}>{drivingProviderNames[provider]} road information</DrivingLink></p>
         {exact.map(report => <DrivingReport key={report.entry.id} report={report} />)}
         {nearby.length > 0 && <details className="ski-driving-group">

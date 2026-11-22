@@ -43,7 +43,7 @@ export function drivingReports(data: SkiDriving, provider: DrivingProvider): Dri
     const reports = feed?.reports?.data;
     if (!reports) return [];
     const available = roadReportState(data, provider) === 'current';
-    return reports.entries.map(entry => ({ entry, provider, state: drivingBulletinState(entry, data.now, reports.checkedAt, available) }));
+    return reports.entries.map(entry => ({ entry, provider, state: drivingBulletinState(entry, reports, data.now, available) }));
 }
 
 export function drivingCameras(data: SkiDriving, provider: DrivingProvider): DrivingCameraView[] {
