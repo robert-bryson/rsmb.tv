@@ -64,7 +64,7 @@
     "test:temperatures:browser": "playwright test --config playwright.temperature.config.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.1174.0",
+    "@aws-sdk/client-cloudfront": "^3.1175.0",
     "maplibre-gl": "^6.19.0",
     "photoswipe": "^5.4.4",
     "photoswipe-dynamic-caption-plugin": "^1.2.7",
